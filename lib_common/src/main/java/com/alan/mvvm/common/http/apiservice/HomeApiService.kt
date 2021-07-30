@@ -1,6 +1,6 @@
 package com.alan.mvvm.common.http.apiservice
 
-import com.alan.mvvm.common.http.model.BaseResponse
+import com.alan.mvvm.common.http.baseresp.BaseResponse
 import retrofit2.http.GET
 
 /**

@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.tencent.bugly:nativecrashreport:3.8.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/26ecca0113091c433a1b69832d5634d1/jetified-nativecrashreport-3.8.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/26ecca0113091c433a1b69832d5634d1/jetified-nativecrashreport-3.8.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/26ecca0113091c433a1b69832d5634d1/jetified-nativecrashreport-3.8.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/05660330f6fb5edf3fe8ff07f7cfd167/jetified-nativecrashreport-3.8.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/05660330f6fb5edf3fe8ff07f7cfd167/jetified-nativecrashreport-3.8.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/05660330f6fb5edf3fe8ff07f7cfd167/jetified-nativecrashreport-3.8.0/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tencent.bugly/nativecrashreport/3.8.0/2c65215a2e1be8eed7f85a12a6ca48b36dc8ff3/nativecrashreport-3.8.0-javadoc.jar!/" />

@@ -105,7 +105,8 @@ dependencies {
 
     if (!ProjectBuildConfig.isAppMode) {
         // 有业务组件时 把这个去掉 这里只是为了使用base里的依赖库
-        implementation project(path: ':module_home')
+        implementation project(path: ':module_main')
+        implementation project(path: ':module_my')
     } else {
         implementation project(path: ':lib_common')
     }

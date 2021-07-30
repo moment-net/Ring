@@ -2,16 +2,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.alan.module.home">
 
-    <application>
-        <!--  Main 首页  -->
-        <activity android:name="com.alan.module.home.activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name="com.alan.module.home.activity.InternalPagerActivity" />
-    </application>
-
 </manifest>

@@ -14,7 +14,10 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/lib_base" />
             <option value="$PROJECT_DIR$/lib_common" />
+            <option value="$PROJECT_DIR$/module_chat" />
             <option value="$PROJECT_DIR$/module_home" />
+            <option value="$PROJECT_DIR$/module_main" />
+            <option value="$PROJECT_DIR$/module_my" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

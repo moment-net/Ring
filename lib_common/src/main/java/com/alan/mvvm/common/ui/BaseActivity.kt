@@ -23,7 +23,7 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : BaseFrameAct
      * @return Unit
      */
     override fun setStatusBar() {
-        val themeColor = ContextCompat.getColor(this, R.color.common_theme)
+        val themeColor = ContextCompat.getColor(this, R.color.white)
         StatusBarUtil.setColor(this, themeColor, 0)
     }
 

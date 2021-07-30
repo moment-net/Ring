@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.alan.module.my">
+
+    <application>
+        <!--  Main 首页  -->
+        <!--        <activity android:name="com.alan.module.main.activity.InternalPagerActivity" />-->
+    </application>
+</manifest>
