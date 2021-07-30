@@ -53,6 +53,7 @@ object DependencyConfig {
         const val AutoService = "1.0"                       // 自动生成SPI暴露服务文件
         const val Coil = "1.3.0"                            // Kotlin图片加载框架
         const val KlogVersion = "1.6.0"                     // Klog日志框架
+        const val ShapeViewVersion = "1.0.1"                // ShapeView框架
 
         // 第三方SDK--------------------------------------------------------------
         const val TencentBugly = "3.3.9"                    // 腾讯Bugly 异常上报
@@ -132,6 +133,7 @@ object DependencyConfig {
         const val CoilSVG = "io.coil-kt:coil-svg:${Version.Coil}"
         const val CoilVideo = "io.coil-kt:coil-video:${Version.Coil}"
         const val KLog = "com.github.zhaokaiqiang.klog:library:${Version.KlogVersion}"
+        const val ShapeView = "com.github.leifu1107:ShapeView:${Version.ShapeViewVersion}"
     }
 
     /**

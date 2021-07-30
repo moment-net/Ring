@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.alan.module.main.viewmodel.LoginPhoneViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.LoginPhoneActivity">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="@dimen/dimen40"
+            android:padding="@dimen/dimen5"
+            android:src="@drawable/icon_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_phone_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="@dimen/dimen60"
+            android:text="绑定手机号"
+            android:textColor="@color/_3A3A3A"
+            android:textSize="@dimen/sp20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_back" />
+
+        <TextView
+            android:id="@+id/tv_agreement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="2dp"
+            android:text="根据法律法规要求，需要绑定手机号"
+            android:textColor="@color/_9D9797"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_phone_title" />
+
+        <leifu.shapelibrary.ShapeView
+            android:id="@+id/et_phone"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="32dp"
+            android:hint="请输入手机号"
+            android:imeOptions="actionDone"
+            android:inputType="phone|number"
+            android:maxLength="11"
+            android:maxLines="1"
+            android:paddingStart="17dp"
+            android:paddingEnd="17dp"
+            android:singleLine="true"
+            android:text="@={viewmodel.lvPhone}"
+            android:textColor="@color/_3A3A3A"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_agreement"
+            app:isEditText="true"
+            app:sGravity="left"
+            app:sCorners="4dp"
+            app:sSolidColor="@color/_F1F1F1"
+            app:sStrokeWidth="0dp" />
+
+
+        <ImageView
+            android:id="@+id/iv_clear"
+            android:layout_width="30dp"
+            android:layout_height="46dp"
+            android:layout_marginEnd="17dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_login_clear"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/et_phone"
+            app:layout_constraintEnd_toEndOf="@+id/et_phone"
+            app:layout_constraintTop_toTopOf="@+id/et_phone" />
+
+
+        <TextView
+            android:id="@+id/textView28"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="未注册的手机号验证通过后将自动注册"
+            android:textColor="@color/_B2AAAA"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_phone" />
+
+        <leifu.shapelibrary.ShapeView
+            android:id="@+id/tv_commit"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="32dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:text="获取短信验证码"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView28"
+            app:sUseSelector="true"
+            app:sDisableColor="@color/_B8B8B8"
+            app:sCorners="4dp"
+            app:sNormalColor="@color/_FFBD2A"
+            app:sStrokeWidth="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

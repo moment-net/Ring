@@ -1,10 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: io.coil-kt:coil-video:1.3.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7735c70cbd17bb23e1c0f93fc744d6b2/jetified-coil-video-1.3.0/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5f847374453dbad5280a95b8f2882ee4/jetified-coil-video-1.3.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5f847374453dbad5280a95b8f2882ee4/jetified-coil-video-1.3.0/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5f847374453dbad5280a95b8f2882ee4/jetified-coil-video-1.3.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/38fa83e26f9ebab62e67edd92d57b82c/jetified-coil-video-1.3.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/38fa83e26f9ebab62e67edd92d57b82c/jetified-coil-video-1.3.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/38fa83e26f9ebab62e67edd92d57b82c/jetified-coil-video-1.3.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.coil-kt/coil-video/1.3.0/c190d55cfb55b11de12739e817452ab1ae1a39e0/coil-video-1.3.0-javadoc.jar!/" />

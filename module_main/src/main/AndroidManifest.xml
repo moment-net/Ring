@@ -3,18 +3,23 @@
     package="com.alan.module.main">
 
     <application>
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".activity.SelectTargetActivity"></activity>
+        <activity android:name=".activity.LoginWxActivity" />
+        <activity android:name=".activity.LoginCodeActivity" />
+        <activity android:name=".activity.LoginPhoneActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity
+            android:name=".activity.SplashActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Main 首页 -->
-        <activity android:name=".activity.MainActivity">
-
-        </activity>
+        </activity> <!-- Main 首页 -->
+        <activity android:name=".activity.MainActivity" />
     </application>
 
 </manifest>

@@ -37,6 +37,10 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
+    buildFeatures {
+        dataBinding = true
+    }
+
     buildTypes {
         // 对应 ALPHA 版本
         debug {

@@ -7,16 +7,12 @@ apply from: '../base_lib.gradle'
 import com.alan.mvvm.buildsrc.*
 
 android {
+    resourcePrefix "common_"
 
     defaultConfig {
         resValue "string", "BUGLY_APP_ID", ""
     }
 
-    buildFeatures {
-        viewBinding = true
-    }
-
-    resourcePrefix "common_"
 }
 
 dependencies {

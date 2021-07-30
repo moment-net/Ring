@@ -1,10 +1,17 @@
 package com.alan.module.main.activity
 
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.alan.module.main.databinding.ActivitySplashBinding
 import com.alan.module.main.viewmodel.SplashViewModel
+import com.alan.mvvm.base.utils.jumpARoute
+import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 /**
@@ -32,7 +39,12 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
      * 订阅数据
      */
     override fun initObserve() {
-
+        lifecycleScope.launch(Dispatchers.IO) {
+            delay(3000)
+            withContext(Dispatchers.Main) {
+                jumpARoute(RouteUrl.MainModule.RING_ACTIVITY_LOGIN);
+            }
+        }
     }
 
     /**

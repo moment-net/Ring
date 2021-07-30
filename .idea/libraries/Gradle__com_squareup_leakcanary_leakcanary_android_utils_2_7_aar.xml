@@ -1,10 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.squareup.leakcanary:leakcanary-android-utils:2.7@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b98c06301c19041bc04cd1485f21068b/jetified-leakcanary-android-utils-2.7/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f9bfbf65ca6c5301185f36d279310dae/jetified-leakcanary-android-utils-2.7/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f9bfbf65ca6c5301185f36d279310dae/jetified-leakcanary-android-utils-2.7/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f9bfbf65ca6c5301185f36d279310dae/jetified-leakcanary-android-utils-2.7/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3db54faade129b3d92bf8453b754cc54/jetified-leakcanary-android-utils-2.7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3db54faade129b3d92bf8453b754cc54/jetified-leakcanary-android-utils-2.7/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/3db54faade129b3d92bf8453b754cc54/jetified-leakcanary-android-utils-2.7/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.leakcanary/leakcanary-android-utils/2.7/b29829aac9c69fbc3d76e726011995321264e7b9/leakcanary-android-utils-2.7-javadoc.jar!/" />

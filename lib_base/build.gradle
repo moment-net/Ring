@@ -8,12 +8,9 @@ apply plugin: 'dagger.hilt.android.plugin'
 import com.alan.mvvm.buildsrc.*
 
 android {
-
-    buildFeatures {
-        viewBinding = true
-    }
-
     resourcePrefix "base_"
+
+
 }
 
 dependencies {
@@ -56,6 +53,7 @@ dependencies {
     api DependencyConfig.GitHub.CoilSVG
     api DependencyConfig.GitHub.CoilVideo
     api DependencyConfig.GitHub.KLog
+    api DependencyConfig.GitHub.ShapeView
 
     api DependencyConfig.SDK.TencentBugly
     api DependencyConfig.SDK.TencentBuglyNative

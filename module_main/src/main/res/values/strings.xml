@@ -1,1 +1,3 @@
-<resources></resources>
+<resources>
+    <string name="string_agreement">已阅读并同意 用户协议 和 隐私政策</string>
+</resources>

@@ -22,16 +22,4 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
-    val data = MutableLiveData<String>()
-
-    /**
-     * 模拟获取数据
-     */
-    fun getData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            mRepository.getData()
-                .catch { Log.d("qqq", "getData: $it") }
-                .collect { data.postValue(it) }
-        }
-    }
 }

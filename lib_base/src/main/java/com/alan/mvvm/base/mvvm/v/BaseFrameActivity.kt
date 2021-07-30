@@ -3,11 +3,11 @@ package com.alan.mvvm.base.mvvm.v
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
-import com.alibaba.android.arouter.launcher.ARouter
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.*
 import com.alan.mvvm.base.utils.network.AutoRegisterNetListener
 import com.alan.mvvm.base.utils.network.NetworkStateChangeListener
+import com.alibaba.android.arouter.launcher.ARouter
 
 /**
  * 作者：alan
