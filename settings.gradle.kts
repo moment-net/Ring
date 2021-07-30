@@ -3,7 +3,7 @@ include(
     ":lib_base",
     ":lib_common",
     ":module_main",
+    ":module_home",
+    ":module_chat",
     ":module_my"
 )
-include(":module_chat")
-include(":module_home")
