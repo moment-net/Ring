@@ -1,9 +1,7 @@
 package com.alan.module.main.activity
 
 
-import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
