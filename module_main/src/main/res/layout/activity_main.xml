@@ -4,35 +4,77 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/_F6F6FB"
     tools:context="com.alan.module.main.activity.MainActivity"
     tools:ignore="ResourceName">
 
-    <TextView
-        android:id="@+id/vTvHello"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_main"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rg_main"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dimen72"
+        android:layout_marginStart="@dimen/dimen8"
+        android:layout_marginEnd="@dimen/dimen8"
+        android:layout_marginBottom="@dimen/dimen8"
+        android:background="@drawable/icon_main_bottom_bg"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <Button
-        android:id="@+id/goToNextBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="进入ViewPager2示例"
-        android:textAllCaps="false"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vTvHello"
-        tools:ignore="HardcodedText" />
+
+        <RadioButton
+            android:id="@+id/rb_home"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/select_main_home"
+            android:drawableBottom="@drawable/select_main_up"
+            android:gravity="center"
+            android:text="首页"
+            android:textColor="@drawable/select_color_main"
+            android:textSize="@dimen/sp10" />
+
+
+        <RadioButton
+            android:id="@+id/rb_chat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/select_main_chat"
+            android:drawableBottom="@drawable/select_main_up"
+            android:gravity="center"
+            android:text="聊天"
+            android:textColor="@drawable/select_color_main"
+            android:textSize="@dimen/sp10" />
+
+        <RadioButton
+            android:id="@+id/rb_my"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/select_main_my"
+            android:drawableBottom="@drawable/select_main_up"
+            android:gravity="center"
+            android:text="我的"
+            android:textColor="@drawable/select_color_main"
+            android:textSize="@dimen/sp10" />
+
+
+    </RadioGroup>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,7 @@
 package com.alan.mvvm.base.mvvm.m
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 
 /**
  * 作者：alan
@@ -21,6 +18,8 @@ open class BaseRepository {
      * @return Flow<T>
      */
     protected fun <T> request(requestBlock: suspend FlowCollector<T>.() -> Unit): Flow<T> {
-        return flow(block = requestBlock).flowOn(Dispatchers.IO)
+        return flow(block = requestBlock).flowOn(Dispatchers.IO).catch {
+
+        }
     }
 }

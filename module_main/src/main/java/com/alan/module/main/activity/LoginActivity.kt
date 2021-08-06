@@ -25,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * 时间：2021/7/30
  * 备注：登录页面
  */
-@Route(path = RouteUrl.MainModule.RING_ACTIVITY_LOGIN)
+@Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_LOGIN)
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
@@ -45,7 +45,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 toast("请先勾选协议再登录")
                 return@clickDelay
             }
-            jumpARoute(RouteUrl.MainModule.RING_ACTIVITY_PHONE);
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_PHONE);
         }
 
         llWx.clickDelay {
@@ -53,7 +53,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 toast("请先勾选协议再登录")
                 return@clickDelay
             }
-            jumpARoute(RouteUrl.MainModule.RING_ACTIVITY_PHONE);
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN);
         }
     }
 

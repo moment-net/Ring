@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.app.ApplicationLifecycle
 import com.alan.mvvm.base.app.InitDepend
@@ -13,6 +14,9 @@ import com.alan.mvvm.base.utils.SpUtils
 import com.alan.mvvm.base.utils.network.NetworkStateClient
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.auto.service.AutoService
+import com.scwang.smart.refresh.footer.ClassicsFooter
+import com.scwang.smart.refresh.header.MaterialHeader
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.socks.library.KLog
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.smtt.export.external.TbsCoreSettings
@@ -31,6 +35,29 @@ class CommonApplication : ApplicationLifecycle {
         // 全局CommonApplication
         @SuppressLint("StaticFieldLeak")
         lateinit var mCommonApplication: CommonApplication
+
+        init {
+            SmartRefreshLayout.setDefaultRefreshInitializer { _, layout ->
+                layout.apply {
+                    setEnableOverScrollDrag(true)
+                    setEnableScrollContentWhenLoaded(false)
+                    setEnableAutoLoadMore(true)
+                    setEnableOverScrollBounce(true)
+                    setFooterHeight(60f)
+                }
+            }
+            SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout ->
+                layout.apply {
+                    setPrimaryColorsId(R.color.white, R.color._3A3A3A)
+                }
+                MaterialHeader(context).setColorSchemeColors(
+                    ContextCompat.getColor(context, R.color._3A3A3A)
+                )
+            }
+            SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
+                ClassicsFooter(context).setFinishDuration(0)
+            }
+        }
     }
 
     /**

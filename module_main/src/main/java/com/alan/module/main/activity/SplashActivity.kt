@@ -42,7 +42,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
         lifecycleScope.launch(Dispatchers.IO) {
             delay(3000)
             withContext(Dispatchers.Main) {
-                jumpARoute(RouteUrl.MainModule.RING_ACTIVITY_LOGIN);
+                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN);
             }
         }
     }

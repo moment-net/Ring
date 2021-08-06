@@ -1,7 +1,5 @@
 package com.alan.module.main.activity
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.activity.viewModels
 import com.alan.module.main.databinding.ActivityLoginWxBinding
 import com.alan.mvvm.base.mvvm.vm.EmptyViewModel
@@ -15,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * 时间：2021/7/30
  * 备注：注册信息
  */
-@Route(path = RouteUrl.MainModule.RING_ACTIVITY_WXINFO)
+@Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_WXINFO)
 @AndroidEntryPoint
 class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, EmptyViewModel>() {
 

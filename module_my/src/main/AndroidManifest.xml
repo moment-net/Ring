@@ -3,7 +3,17 @@
     package="com.alan.module.my">
 
     <application>
-        <!--  Main 首页  -->
-        <!--        <activity android:name="com.alan.module.main.activity.InternalPagerActivity" />-->
+        <activity android:name=".activity.FollowActivity"></activity>
+        <activity android:name=".activity.WithdrawActivity" />
+        <activity android:name=".activity.WithdrawDetailActivity" />
+        <activity android:name=".activity.PayRecordActivity" />
+        <activity android:name=".activity.BillActivity" />
+        <activity android:name=".activity.WalletActivity" />
+        <activity android:name=".activity.PayResultActivity" />
+        <activity android:name=".activity.MyDiamondActivity" />
+        <activity android:name=".activity.SystemMessageActivity" />
+        <activity android:name=".activity.MessageActivity" />
+        <activity android:name=".activity.PersonInfoActivity" />
     </application>
+
 </manifest>

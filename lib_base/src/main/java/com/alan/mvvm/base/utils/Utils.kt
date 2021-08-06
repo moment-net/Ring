@@ -1,10 +1,11 @@
 package com.alan.mvvm.base.utils
 
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.alibaba.android.arouter.launcher.ARouter
 import com.alan.mvvm.base.BaseApplication
+import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
@@ -44,6 +45,13 @@ fun sendEvent(event: Any) = EventBusUtils.postEvent(event)
  */
 fun jumpARoute(routerUrl: String) {
     ARouter.getInstance().build(routerUrl).navigation()
+}
+
+/**
+ * 阿里路由带参数跳转
+ */
+fun jumpARoute(routerUrl: String, bundle: Bundle) {
+    ARouter.getInstance().build(routerUrl).with(bundle).navigation()
 }
 
 /**************************************************************************************************/

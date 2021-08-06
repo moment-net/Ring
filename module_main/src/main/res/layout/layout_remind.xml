@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen480"
+    android:background="@drawable/shape_white10"
+    android:padding="@dimen/dimen20">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/maintextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="名称："
+                android:textColor="@color/black50"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="@dimen/dimen92"
+                android:layout_height="@dimen/dimen92"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_placeholder" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="今天小李要喝三杯水李要喝三杯水"
+                android:textColor="@color/black80"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/iv_avatar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/maintextview" />
+
+            <leifu.shapelibrary.ShapeView
+                android:id="@+id/tv_voice"
+                android:layout_width="@dimen/dimen182"
+                android:layout_height="@dimen/dimen38"
+                android:layout_marginTop="10dp"
+                android:paddingStart="@dimen/dimen40"
+                android:paddingTop="0dp"
+                android:paddingEnd="@dimen/dimen40"
+                android:paddingBottom="0dp"
+                android:text="15s"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
+                app:sCorners="20dp"
+                app:sGravity="left"
+                app:sSolidColor="@color/_FFBD2A"
+                app:sStrokeColor="@color/_3A3A3A"
+                app:sStrokeWidth="0dp" />
+
+            <ImageView
+                android:id="@+id/iv_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/anim_voice"
+                android:src="@drawable/icon_voice_four"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_voice"
+                app:layout_constraintStart_toStartOf="@+id/tv_voice"
+                app:layout_constraintTop_toTopOf="@+id/tv_voice" />
+
+            <TextView
+                android:id="@+id/maintextview7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="重复："
+                android:textColor="@color/black50"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_voice" />
+
+            <TextView
+                android:id="@+id/tv_repeat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="不重复"
+                android:textColor="@color/black80"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/maintextview7" />
+
+            <TextView
+                android:id="@+id/maintextview9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="时间："
+                android:textColor="@color/black50"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_repeat" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="23:00"
+                android:textColor="@color/black80"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/maintextview9" />
+
+            <TextView
+                android:id="@+id/maintextview11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="日期："
+                android:textColor="@color/black50"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+
+            <TextView
+                android:id="@+id/tv_data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="2021年12月23日"
+                android:textColor="@color/black80"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/maintextview11" />
+
+
+            <leifu.shapelibrary.ShapeView
+                android:id="@+id/tv_commit"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dimen40"
+                android:layout_marginTop="30dp"
+                android:padding="0dp"
+                android:text="订阅提醒"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_data"
+                app:sCorners="8dp"
+                app:sSolidColor="@color/_FF4F4F"
+                app:sStrokeColor="@color/_3A3A3A"
+                app:sStrokeWidth="0dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

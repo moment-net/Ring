@@ -8,23 +8,88 @@ package com.alan.mvvm.common.constant
 object RouteUrl {
     object MainModule {
         //首页
-        const val RING_ACTIVITY_MAIN: String = "/main/main";
+        const val ACTIVITY_MAIN_MAIN: String = "/main/main";
 
         //登录
-        const val RING_ACTIVITY_LOGIN: String = "/main/login";
+        const val ACTIVITY_MAIN_LOGIN: String = "/main/login";
 
         //登陆手机号
-        const val RING_ACTIVITY_PHONE: String = "/main/phone"
+        const val ACTIVITY_MAIN_PHONE: String = "/main/phone"
 
         //登陆获取验证码
-        const val RING_ACTIVITY_CODE: String = "/main/code"
+        const val ACTIVITY_MAIN_CODE: String = "/main/code"
 
         //登陆微信信息
-        const val RING_ACTIVITY_WXINFO: String = "/main/wx"
+        const val ACTIVITY_MAIN_WXINFO: String = "/main/wx"
+
+        //他的提醒
+        const val ACTIVITY_MAIN_TAREMIND: String = "/main/taremind"
+
+        //我的提醒
+        const val ACTIVITY_MAIN_MYREMIND: String = "/main/myremind"
+
+        //选择标签
+        const val ACTIVITY_MAIN_TARGET: String = "/main/target"
+    }
+
+    object HomeModule {
+        //管家详情页面
+        const val ACTIVITY_HOME_MANAGER: String = "/home/manager";
+
+        //更换铃声
+        const val ACTIVITY_HOME_RING: String = "/home/ring";
+
+        //设置提醒
+        const val ACTIVITY_HOME_REMIND: String = "/home/remind";
+    }
+
+    object ChatModule {
+        //首页
+        const val ACTIVITY_CHAT_DETAIL: String = "/chat/detail";
+
 
     }
 
     object MyModule {
-        const val RING_ACTIVITY_MY: String = "/my/my";
+        //设置页面
+        const val ACTIVITY_MY_SET: String = "/my/set";
+
+        //消息页面
+        const val ACTIVITY_MY_MSG: String = "/my/msg";
+
+        //系统消息页面
+        const val ACTIVITY_MY_SYSTEMMSG: String = "/my/systemmsg";
+
+        //个人信息页面
+        const val ACTIVITY_MY_PERSONINFO: String = "/my/personinfo";
+
+        //关注页面
+        const val ACTIVITY_MY_FOCUS: String = "/my/focus";
+
+        //我的钻石
+        const val ACTIVITY_MY_DIAMOND: String = "/my/diamond";
+
+        //我的账单
+        const val ACTIVITY_MY_BILL: String = "/my/bill";
+
+        //我的钱包
+        const val ACTIVITY_MY_WALLET: String = "/my/wallet";
+
+        //消费记录
+        const val ACTIVITY_MY_PAYRECORD: String = "/my/payrecord";
+
+        //支付结果
+        const val ACTIVITY_MY_PAYRESULT: String = "/my/payresult";
+
+        //提现
+        const val ACTIVITY_MY_WITHDRAW: String = "/my/withdraw";
+
+        //提现详情
+        const val ACTIVITY_MY_WITHDRAWDETAIL: String = "/my/withdrawdetail";
+    }
+
+    object WebModule {
+        //WEB浏览器页面
+        const val ACTIVITY_WEB_WEB: String = "/web/web";
     }
 }

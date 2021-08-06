@@ -3,7 +3,9 @@
     package="com.alan.module.main">
 
     <application>
-        <activity android:name=".activity.SelectTargetActivity"></activity>
+        <activity android:name=".activity.TaRemindActivity"></activity>
+        <activity android:name=".activity.MyRemindActivity" />
+        <activity android:name=".activity.SelectTargetActivity" />
         <activity android:name=".activity.LoginWxActivity" />
         <activity android:name=".activity.LoginCodeActivity" />
         <activity android:name=".activity.LoginPhoneActivity" />

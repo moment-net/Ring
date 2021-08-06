@@ -1,7 +1,5 @@
 package com.alan.module.main.activity
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.activity.viewModels
 import com.alan.module.main.databinding.ActivityLoginCodeBinding
 import com.alan.mvvm.base.mvvm.vm.EmptyViewModel
@@ -16,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * 时间：2021/7/30
  * 备注：
  */
-@Route(path = RouteUrl.MainModule.RING_ACTIVITY_CODE)
+@Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_CODE)
 @AndroidEntryPoint
 class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, EmptyViewModel>() {
 

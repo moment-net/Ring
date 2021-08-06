@@ -1,11 +1,8 @@
 package com.alan.module.main.activity
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.activity.viewModels
 import com.alan.module.main.databinding.ActivityLoginPhoneBinding
 import com.alan.module.main.viewmodel.LoginPhoneViewModel
-import com.alan.mvvm.base.mvvm.vm.EmptyViewModel
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -16,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * 时间：2021/7/30
  * 备注：
  */
-@Route(path = RouteUrl.MainModule.RING_ACTIVITY_PHONE)
+@Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_PHONE)
 @AndroidEntryPoint
 class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneViewModel>() {
 

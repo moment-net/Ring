@@ -56,9 +56,9 @@ class DINetworkModule {
     @Provides
     fun provideMainRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
+            .client(okHttpClient)
             .baseUrl(NetBaseUrlConstant.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
             .build()
     }
 }

@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
  * 时间：2021/7/30
  * 备注：
  */
-@Route(path = RouteUrl.MainModule.RING_ACTIVITY_MAIN)
+@Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_TARGET)
 @AndroidEntryPoint
 class SelectTargetActivity : BaseActivity<ActivitySelectTargetBinding, SelectTargetViewModel>() {
 

@@ -31,7 +31,6 @@ abstract class BaseFrameActivity<VB : ViewBinding, VM : BaseViewModel> : AppComp
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mBinding.root)
-        AppManagerUtils.instance.addActivity(this)
         //处理保存的状态
         mStatusHelper?.onRestoreInstanceStatus(savedInstanceState)
         // ARouter 依赖注入
@@ -100,6 +99,5 @@ abstract class BaseFrameActivity<VB : ViewBinding, VM : BaseViewModel> : AppComp
             this
         )
         super.onDestroy()
-        AppManagerUtils.instance.removeActivity(this)
     }
 }

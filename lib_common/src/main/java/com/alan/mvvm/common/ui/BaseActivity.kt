@@ -1,14 +1,16 @@
 package com.alan.mvvm.common.ui
 
+import android.os.Build
 import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
-import com.jaeger.library.StatusBarUtil
 import com.alan.mvvm.base.mvvm.v.BaseFrameActivity
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.ActivityStackManager
 import com.alan.mvvm.base.utils.AndroidBugFixUtils
 import com.alan.mvvm.common.R
+import com.jaeger.library.StatusBarUtil
 
 /**
  * 作者：alan
@@ -23,8 +25,12 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : BaseFrameAct
      * @return Unit
      */
     override fun setStatusBar() {
-        val themeColor = ContextCompat.getColor(this, R.color.white)
+        val themeColor = ContextCompat.getColor(this, R.color.transparent)
         StatusBarUtil.setColor(this, themeColor, 0)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+        }
     }
 
     override fun onResume() {
