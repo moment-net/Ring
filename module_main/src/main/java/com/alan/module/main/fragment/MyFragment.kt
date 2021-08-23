@@ -4,12 +4,12 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import coil.load
-import coil.transform.RoundedCornersTransformation
 import com.alan.module.main.R
 import com.alan.module.main.databinding.FragmentMyBinding
 import com.alan.module.main.viewmodel.MyViewModel
+import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.jumpARoute
@@ -51,18 +51,14 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
         clDiamond.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_DIAMOND) }
         clWallet.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_WALLET) }
 
-//        ivAvatar.load("") {
-//            transformations(RoundedCornersTransformation(), RoundedCornersTransformation())
-//        }
         initScrollView()
-
-        ivAvatar.load(R.drawable.icon_placeholder) {
-            transformations(
-                RoundedCornersTransformation()
-//                CircleCropBorderTransformation(10f,10f,10f,10f,10f,ContextCompat.getColor(requireContext(),
-//                    R.color.black)),
-            )
-        }
+        CoilUtils.loadRoundBorder(
+            ivAvatar,
+            "",
+            15f,
+            2f,
+            ContextCompat.getColor(requireContext(), R.color.white)
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

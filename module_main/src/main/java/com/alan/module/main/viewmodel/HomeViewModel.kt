@@ -3,8 +3,8 @@ package com.alan.module.main.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.alan.mvvm.common.http.model.CommonRepository
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch

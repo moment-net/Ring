@@ -2,12 +2,7 @@ package com.alan.mvvm.base.mvvm.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.utils.StateLayoutEnum
-import com.socks.library.KLog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlin.jvm.Throws
 
 /**
  * 作者：alan
@@ -19,7 +14,7 @@ abstract class BaseViewModel : ViewModel() {
     /**
      * 控制状态视图的LiveData
      */
-    val stateViewLD = MutableLiveData<StateLayoutEnum>()
+    val ld_state = MutableLiveData<StateLayoutEnum>()
 
     /**
      * 更改状态视图的状态
@@ -51,10 +46,10 @@ abstract class BaseViewModel : ViewModel() {
 
         // 修改状态
         when {
-            hide -> stateViewLD.postValue(StateLayoutEnum.HIDE)
-            loading -> stateViewLD.postValue(StateLayoutEnum.LOADING)
-            error -> stateViewLD.postValue(StateLayoutEnum.ERROR)
-            noData -> stateViewLD.postValue(StateLayoutEnum.NO_DATA)
+            hide -> ld_state.postValue(StateLayoutEnum.HIDE)
+            loading -> ld_state.postValue(StateLayoutEnum.LOADING)
+            error -> ld_state.postValue(StateLayoutEnum.ERROR)
+            noData -> ld_state.postValue(StateLayoutEnum.NO_DATA)
         }
     }
 }

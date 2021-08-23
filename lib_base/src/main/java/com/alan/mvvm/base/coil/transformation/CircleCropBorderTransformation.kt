@@ -1,4 +1,4 @@
-package com.alan.mvvm.base.coil
+package com.alan.mvvm.base.coil.transformation
 
 import android.graphics.*
 import androidx.annotation.Px
@@ -13,22 +13,18 @@ import coil.transform.Transformation
 import kotlin.math.roundToInt
 
 class CircleCropBorderTransformation(
-    @Px private val topLeft: Float = 0f,
-    @Px private val topRight: Float = 0f,
-    @Px private val bottomLeft: Float = 0f,
-    @Px private val bottomRight: Float = 0f,
+    @Px private val radius: Float = 0f,
     @Px private val borderWidth: Float = 0f,
     @Px private val borderColor: Int = 0
 ) : Transformation {
 
-    constructor(@Px radius: Float) : this(radius, radius, radius, radius)
 
     init {
-        require(topLeft >= 0 && topRight >= 0 && bottomLeft >= 0 && bottomRight >= 0) { "All radii must be >= 0." }
+        require(radius >= 0 && borderWidth >= 0) { "All radii must be >= 0." }
     }
 
     override fun key() =
-        "${CircleCropBorderTransformation::class.java.name}-$topLeft,$topRight,$bottomLeft,$bottomRight"
+        "${CircleCropBorderTransformation::class.java.name}-$radius,$borderWidth,$borderColor"
 
     override suspend fun transform(pool: BitmapPool, input: Bitmap, size: Size): Bitmap {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
@@ -57,6 +53,23 @@ class CircleCropBorderTransformation(
         output.applyCanvas {
             drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
 
+            val radii = floatArrayOf(
+                radius,
+                radius,
+                radius,
+                radius,
+                radius,
+                radius,
+                radius,
+                radius
+            )
+            paint.style = Paint.Style.FILL
+            paint.color = borderColor
+            val rectBg = RectF(0f, 0f, width.toFloat(), height.toFloat())
+            val pathBg = Path().apply { addRoundRect(rectBg, radii, Path.Direction.CW) }
+            drawPath(pathBg, paint)
+
+
             val matrix = Matrix()
             matrix.setTranslate(
                 (outputWidth - input.width) / 2f,
@@ -66,25 +79,14 @@ class CircleCropBorderTransformation(
             shader.setLocalMatrix(matrix)
             paint.shader = shader
 
-            val radii = floatArrayOf(
-                topLeft,
-                topLeft,
-                topRight,
-                topRight,
-                bottomRight,
-                bottomRight,
-                bottomLeft,
-                bottomLeft
+
+            val rect = RectF(
+                borderWidth,
+                borderWidth,
+                width.toFloat() - borderWidth,
+                height.toFloat() - borderWidth
             )
-            val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
             val path = Path().apply { addRoundRect(rect, radii, Path.Direction.CW) }
-            drawPath(path, paint)
-            paint.setColor(borderColor)
-            paint.setDither(true)
-            paint.setAntiAlias(true)
-            paint.setColor(borderColor)
-            paint.setStyle(Paint.Style.STROKE)
-            paint.setStrokeWidth(borderWidth)
             drawPath(path, paint)
         }
 
@@ -94,23 +96,21 @@ class CircleCropBorderTransformation(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         return other is CircleCropBorderTransformation &&
-                topLeft == other.topLeft &&
-                topRight == other.topRight &&
-                bottomLeft == other.bottomLeft &&
-                bottomRight == other.bottomRight
+                radius == other.radius &&
+                borderWidth == other.borderWidth &&
+                borderColor == other.borderColor
     }
 
     override fun hashCode(): Int {
-        var result = topLeft.hashCode()
-        result = 31 * result + topRight.hashCode()
-        result = 31 * result + bottomLeft.hashCode()
-        result = 31 * result + bottomRight.hashCode()
+        var result = radius.hashCode()
+        result = 31 * result + borderWidth.hashCode()
+        result = 31 * result + borderColor.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "CircleCropBorderTransformation(topLeft=$topLeft, topRight=$topRight, " +
-                "bottomLeft=$bottomLeft, bottomRight=$bottomRight)"
+        return "CircleCropBorderTransformation(radius=$radius, borderWidth=$borderWidth, " +
+                "borderColor=$borderColor)"
     }
 
     /** Guard against null bitmap configs. */

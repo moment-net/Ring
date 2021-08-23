@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.app.ApplicationLifecycle
 import com.alan.mvvm.base.app.InitDepend
+import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.constant.VersionStatus
 import com.alan.mvvm.base.utils.ProcessUtils
 import com.alan.mvvm.base.utils.SpUtils
@@ -93,6 +94,7 @@ class CommonApplication : ApplicationLifecycle {
             worker.add { initMMKV() }
             worker.add { initARouter() }
             worker.add { initKlog() }
+            worker.add { initCoil() }
             main.add { initNetworkStateClient() }
         }
         worker.add { initTencentBugly() }
@@ -187,4 +189,12 @@ class CommonApplication : ApplicationLifecycle {
         return "KLog -->> init complete"
     }
 
+    /**
+     * Coil 初始化
+     */
+    private fun initCoil(): String {
+        // 初始化
+        CoilUtils.initCoil()
+        return "CoilUtils -->> init complete"
+    }
 }

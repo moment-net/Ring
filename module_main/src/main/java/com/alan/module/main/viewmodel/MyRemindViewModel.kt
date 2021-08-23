@@ -28,7 +28,7 @@ class MyRemindViewModel @Inject constructor(private val mRepository: CommonRepos
     fun getName(positon: Int) = viewModelScope.launch {
         mRepository.getData()
             .onStart {
-                changeStateView()
+                changeStateView(true)
             }
             .catch {
 
