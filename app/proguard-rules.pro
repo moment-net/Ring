@@ -208,8 +208,8 @@
 
 #--------------------------------2.项目中的-------------------------------
 #实体类不参与混淆
--keep class com.moment.freedomspeak.** { *; }
--keep class com.moment.modulemain.** { *; }
+-keep class com.moment.ring.** { *; }
+-keep class com.moment.module.main.** { *; }
 
 
 #---------------------------------3.与js互相调用的类------------------------
@@ -893,3 +893,6 @@ native <methods>;
 -keep class com.tencent.tbs.** {
     *;
 }
+
+#easyphotos
+-keep class com.huantansheng.easyphotos.models.** { *; }

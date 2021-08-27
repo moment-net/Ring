@@ -1,9 +1,18 @@
 <component name="libraryTable">
   <library name="Gradle: com.squareup.curtains:curtains:1.0.1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b346eb5c5c674747eab8d318956b8ff8/jetified-curtains-1.0.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b346eb5c5c674747eab8d318956b8ff8/jetified-curtains-1.0.1/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b346eb5c5c674747eab8d318956b8ff8/jetified-curtains-1.0.1/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e51801b82eab7a8e9c4e4c787f7792f1/transformed/jetified-curtains-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a1adf9c780868dc5c04c0cc4f1c15006/transformed/jetified-curtains-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6a6e59e0a87ad034cbd3d6df32c8379a/transformed/jetified-curtains-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/c8b0d578a1547bc99c1b529686ee4f26/transformed/jetified-curtains-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a76a416c89527173849373fcb0bd79e3/transformed/jetified-curtains-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5caf2d0351dce391e85c19647082fd23/transformed/jetified-curtains-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4f453edfed8d49ff369082d765647de4/transformed/jetified-curtains-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/562a7ac1ae744106d2e4f80d6945c8d1/transformed/jetified-curtains-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/889d864a88031a774bcc9cb36b412fca/transformed/jetified-curtains-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e5d47dde5d3e7d119e3473ae250c386d/transformed/jetified-curtains-1.0.1/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e5d47dde5d3e7d119e3473ae250c386d/transformed/jetified-curtains-1.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e5d47dde5d3e7d119e3473ae250c386d/transformed/jetified-curtains-1.0.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.curtains/curtains/1.0.1/add3786f162ada0ec25e07108130b683cd8fec4a/curtains-1.0.1-javadoc.jar!/" />

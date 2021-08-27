@@ -147,7 +147,7 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
         //2更新用户信息
         SpHelper.updateUserInfo(loginBean)
         //3上传JPUSH设备ID
-//        viewModel.requestDevicesRegister()
+        mViewModel.requestDevicesRegister()
         //4跳转首页时取消倒计时
 
         //5跳转逻辑

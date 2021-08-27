@@ -1,5 +1,6 @@
 package com.alan.mvvm.common.helper
 
+import com.alan.module.im.EMClientHelper
 import com.alan.mvvm.base.http.responsebean.LoginBean
 import com.alan.mvvm.base.http.responsebean.ThridLoginBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
@@ -87,6 +88,7 @@ object SpHelper {
         setLogin(false)
         setToken("")
         setUserInfo(null)
+        EMClientHelper.logoutEM(null)
     }
 
 

@@ -2,11 +2,13 @@ package com.alan.mvvm.common.http.model
 
 import com.alan.mvvm.base.http.apiservice.HomeApiService
 import com.alan.mvvm.base.http.callback.RequestCallback
+import com.alan.mvvm.base.http.responsebean.FileBean
 import com.alan.mvvm.base.http.responsebean.LoginBean
 import com.alan.mvvm.base.http.responsebean.PhoneBean
 import com.alan.mvvm.base.http.responsebean.ThridLoginBean
 import com.alan.mvvm.base.mvvm.m.BaseRepository
 import com.tencent.bugly.crashreport.biz.UserInfoBean
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
 
@@ -72,6 +74,18 @@ class CommonRepository @Inject constructor() : BaseRepository() {
         requestBody: RequestBody,
         callback: RequestCallback<String>
     ) = request(mApi, callback) { mApi.requestEditUserInfo(requestBody) }
+
+
+    suspend fun requestDevicesRegister(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestDevicesRegister(requestBody) }
+
+
+    suspend fun requestUploadPic(
+        part: MultipartBody.Part,
+        callback: RequestCallback<FileBean>
+    ) = request(mApi, callback) { mApi.requestUploadPic(part) }
 
 
 }

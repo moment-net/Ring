@@ -9,6 +9,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.alibaba.arouter'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'com.huawei.agconnect'
 
 android {
     compileSdkVersion ProjectBuildConfig.compileSdkVersion
@@ -20,14 +21,30 @@ android {
         targetSdkVersion ProjectBuildConfig.targetSdkVersion
         versionCode ProjectBuildConfig.versionCode
         versionName ProjectBuildConfig.versionName
+//        multiDexEnabled = true
         testInstrumentationRunner DependencyConfig.AndroidX.AndroidJUnitRunner
         multiDexKeepProguard file("multidexKeep.pro")
+//        flavorDimensions "versionCode"
 
         ndk {
             // 设置支持的SO库架构
             //abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
         }
+
+        //极光推送key
+        manifestPlaceholders = [
+                JPUSH_CHANNEL: "moment",
+                JPUSH_APPKEY : "681b4ee25715ed9fa415e426",
+                JPUSH_PKGNAME: "${applicationId}",
+                XIAOMI_APPID:"MI-2882303761518745008",
+                XIAOMI_APPKEY:"MI-5811874578008",
+                OPPO_APPKEY:"OP-3217d0b2165a4c40b20a2ea1fb70b83b",
+                OPPO_APPID:"OP-30394955",
+                OPPO_APPSECRET:"OP-eb52fddb5b8b42628f600e09412f6ad7",
+                VIVO_APPKEY:"6a6fdb8106f423a5ae982001c6fed921",
+                VIVO_APPID:"104943129",
+        ]
     }
 
 
@@ -48,6 +65,18 @@ android {
 //            storePassword props['KEYSTORE_PASSWORD']
 //        }
 //    }
+//
+//    productFlavors {
+//        moment{}
+//        yingyongbao{}
+////        _360{}
+//        xiaomi{}
+//        huawei{}
+//    }
+//    productFlavors.all { flavor ->
+//        flavor.manifestPlaceholders = [ JPUSH_CHANNEL:name ]
+//    }
+
 
     buildTypes {
         // 对应 ALPHA 版本

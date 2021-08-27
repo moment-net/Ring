@@ -330,7 +330,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             //2更新用户信息
             SpHelper.updateUserInfo(loginBean)
             //3上传JPUSH设备ID
-//            viewModel.requestDevicesRegister()
+            mViewModel.requestDevicesRegister()
             //4跳转逻辑
             if (loginBean?.isNewUser!!) {
                 val bundle = Bundle().apply {
@@ -350,7 +350,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             //2更新用户信息
             SpHelper.updateUserInfo(thridLoginBean)
             //3上传JPUSH设备ID
-//            viewModel.requestDevicesRegister()
+            mViewModel.requestDevicesRegister()
             //4跳转逻辑
             if (thridLoginBean!!.user!!.bindPhone) {
                 finish()

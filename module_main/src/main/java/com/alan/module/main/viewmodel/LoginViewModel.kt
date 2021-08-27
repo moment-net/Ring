@@ -2,13 +2,17 @@ package com.alan.module.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import cn.jpush.android.api.JPushInterface
 import com.alan.module.im.EMClientHelper
+import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.http.callback.RequestCallback
+import com.alan.mvvm.base.http.requestbean.DeviceRegisterBean
 import com.alan.mvvm.base.http.requestbean.LoginRequestBean
 import com.alan.mvvm.base.http.requestbean.LoginThirdRequestBean
 import com.alan.mvvm.base.http.requestbean.PhoneCheckRequestBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.DeviceUtil
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.exception.BaseHttpException
@@ -81,6 +85,30 @@ class LoginViewModel @Inject constructor(private val mRepository: CommonReposito
                     onFailed = {
                         toast(it.errorMessage)
                         ldFailed.value = 3
+                    }
+                ))
+        }
+    }
+
+    /**
+     * 设备注册
+     */
+    fun requestDevicesRegister() {
+        val requestBean = DeviceRegisterBean(
+            "2",
+            JPushInterface.getRegistrationID(BaseApplication.mContext),
+            DeviceUtil.getBrand(),
+            DeviceUtil.getImei(BaseApplication.mContext),
+            DeviceUtil.getAndroidID(BaseApplication.mContext),
+            DeviceUtil.getMacAddress()
+        )
+
+        viewModelScope.launch {
+            mRepository.requestDevicesRegister(RequestUtil.getPostBody(requestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                    },
+                    onFailed = {
                     }
                 ))
         }

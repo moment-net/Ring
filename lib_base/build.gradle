@@ -60,14 +60,23 @@ dependencies {
     api DependencyConfig.GitHub.Banner
     api DependencyConfig.GitHub.XPopup
     api DependencyConfig.GitHub.PickerView
-    api DependencyConfig.GitHub.OneLogin
+    api DependencyConfig.GitHub.EasyPhotos
+
 
     api DependencyConfig.SDK.WeChat
     api DependencyConfig.SDK.TencentBugly
     api DependencyConfig.SDK.TencentBuglyNative
     api DependencyConfig.SDK.TencentTBSX5
+    api DependencyConfig.SDK.OneLogin
     api DependencyConfig.SDK.IMChat
     api DependencyConfig.SDK.IMCall
+    api DependencyConfig.SDK.JPush
+    api DependencyConfig.SDK.JCore
+    api DependencyConfig.SDK.HWHms
+    api DependencyConfig.SDK.HWplugin
+    api DependencyConfig.SDK.Xiaomiplugin
+    api DependencyConfig.SDK.Oppoplugin
+    api DependencyConfig.SDK.Vivoplugin
 
     kapt DependencyConfig.GitHub.ARouteCompiler
     kapt DependencyConfig.GitHub.EventBusAPT

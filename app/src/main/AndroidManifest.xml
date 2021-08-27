@@ -63,39 +63,6 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <!--bugly end-->
 
-    <!-- 魅族推送配置 start-->
-    <!-- 兼容 flyme5.0 以下版本，魅族内部集成 pushSDK 必填，不然无法收到消息-->
-    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" />
-    <permission
-        android:name="${applicationId}.push.permission.MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="${applicationId}.push.permission.MESSAGE" />
-    <!-- 兼容 flyme3.0 配置权限-->
-    <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
-    <permission
-        android:name="${applicationId}.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-    <!-- 魅族推送配置 end-->
-
-    <!-- Oppo推送配置（如果应用无透传权限，则不用配置） start -->
-    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
-    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" />
-    <!-- Oppo推送配置 end -->
-
-    <!-- Mi推送配置 start -->
-    <permission
-        android:name="${applicationId}.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="${applicationId}.permission.MIPUSH_RECEIVE" />
-    <!-- Mi推送配置 end -->
-
-
-    <!--用于申请调用A-GPS模块-->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission
-        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
-        tools:ignore="ProtectedPermissions" />
 
     <!--Android 11-第三方应用无法拉起微信适配
         在应用的AndroidManifest.xml添加如下<queries>标签
@@ -132,7 +99,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:taskAffinity="com.moment.freedomspeak"
+            android:taskAffinity="${applicationId}"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -146,9 +113,6 @@
             android:exported="true"
             android:launchMode="singleTop" />
 
-        <!--        <meta-data-->
-        <!--            android:name="UMENG_CHANNEL"-->
-        <!--            android:value="${UMENG_CHANNEL_VALUE}" />-->
 
     </application>
 

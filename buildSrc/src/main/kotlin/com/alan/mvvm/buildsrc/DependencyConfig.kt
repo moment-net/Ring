@@ -52,12 +52,13 @@ object DependencyConfig {
         const val PermissionX = "1.4.0"                     // 权限申请
         const val LeakCanary = "2.7"                        // 检测内存泄漏
         const val AutoService = "1.0"                       // 自动生成SPI暴露服务文件
-        const val Coil = "1.3.0"                            // Kotlin图片加载框架
+        const val Coil = "1.3.2"                            // Kotlin图片加载框架
         const val KlogVersion = "1.6.0"                     // Klog日志框架
         const val ShapeViewVersion = "1.0.1"                // ShapeView框架
         const val BannerVersion = "2.1.5"                   // Banner框架
         const val XPopupVersion = "2.5.6"                   // XPopupDialog框架
         const val PickerViewVersion = "4.1.9"               // PickerView框架
+        const val EasyPhotoVersion = "3.1.3"                // EasyPhoto框架
         const val OneLoginVersion = "2.5.1"                 // 极验框架
 
         // 第三方SDK--------------------------------------------------------------
@@ -66,6 +67,13 @@ object DependencyConfig {
         const val TencentBuglyNative = "3.8.0"              // Bugly native异常上报
         const val TencentTBSX5 = "43939"                    // 腾讯X5WebView
         const val IMVersion = "3.8.4"                       // 环信版本
+        const val JPushVersion = "4.1.5"                    // 极光推送版本
+        const val JCoreVersion = "2.9.0"                    // 极光推送版本
+        const val HWHMSVersion = "5.3.0.301"                // 华为推送版本
+        const val HWPushVersion = "4.1.5"                   // 华为推送版本
+        const val XiaomiPushVersion = "4.1.5"               // 小米推送版本
+        const val OppoPushVersion = "4.1.5"                 // oppo推送版本
+        const val VivoPushVersion = "4.1.5"                 // vivo推送版本
     }
 
     /**
@@ -151,8 +159,7 @@ object DependencyConfig {
         const val Banner = "com.bigkoo:convenientbanner:${Version.BannerVersion}"
         const val XPopup = "com.github.li-xiaojun:XPopup:${Version.XPopupVersion}"
         const val PickerView = "com.contrarywind:Android-PickerView:${Version.PickerViewVersion}"
-        const val OneLogin = "com.geetest.android:onelogin:${Version.OneLoginVersion}"
-
+        const val EasyPhotos = "com.github.HuanTanSheng:EasyPhotos:${Version.EasyPhotoVersion}"
     }
 
     /**
@@ -164,8 +171,16 @@ object DependencyConfig {
         const val TencentBuglyNative =
             "com.tencent.bugly:nativecrashreport:${Version.TencentBuglyNative}"
         const val TencentTBSX5 = "com.tencent.tbs.tbssdk:sdk:${Version.TencentTBSX5}"
+        const val OneLogin = "com.geetest.android:onelogin:${Version.OneLoginVersion}"
         const val IMChat = "io.hyphenate:hyphenate-chat:${Version.IMVersion}"
         const val IMCall = "io.hyphenate:ease-call-kit:${Version.IMVersion}"
+        const val JPush = "cn.jiguang.sdk:jpush:${Version.JPushVersion}"
+        const val JCore = "cn.jiguang.sdk:jcore:${Version.JCoreVersion}"
+        const val HWHms = "com.huawei.hms:push:${Version.HWHMSVersion}"
+        const val HWplugin = "cn.jiguang.sdk.plugin:huawei:${Version.HWPushVersion}"
+        const val Xiaomiplugin = "cn.jiguang.sdk.plugin:xiaomi:${Version.XiaomiPushVersion}"
+        const val Oppoplugin = "cn.jiguang.sdk.plugin:oppo:${Version.OppoPushVersion}"
+        const val Vivoplugin = "cn.jiguang.sdk.plugin:vivo:${Version.VivoPushVersion}"
 
     }
 }

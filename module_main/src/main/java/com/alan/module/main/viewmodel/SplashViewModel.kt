@@ -2,8 +2,13 @@ package com.alan.module.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import cn.jpush.android.api.JPushInterface
+import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.http.callback.RequestCallback
+import com.alan.mvvm.base.http.requestbean.DeviceRegisterBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.DeviceUtil
+import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +37,7 @@ class SplashViewModel @Inject constructor(private val mRepository: CommonReposit
                     onSuccess = {
                         ldResult.value = true
                         SpHelper.updateUserInfo(it.data)
+                        requestDevicesRegister()
                     },
                     onFailed = {
                         ldResult.value = false
@@ -41,5 +47,30 @@ class SplashViewModel @Inject constructor(private val mRepository: CommonReposit
         }
     }
 
+
+    /**
+     * 设备注册
+     */
+    fun requestDevicesRegister() {
+        val requestBean = DeviceRegisterBean(
+            "2",
+            JPushInterface.getRegistrationID(BaseApplication.mContext),
+            DeviceUtil.getBrand(),
+            DeviceUtil.getImei(BaseApplication.mContext),
+            DeviceUtil.getAndroidID(BaseApplication.mContext),
+            DeviceUtil.getMacAddress()
+        )
+
+        viewModelScope.launch {
+            mRepository.requestDevicesRegister(
+                RequestUtil.getPostBody(requestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                    },
+                    onFailed = {
+                    }
+                ))
+        }
+    }
 
 }

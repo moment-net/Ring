@@ -1,15 +1,14 @@
 package com.alan.mvvm.base.http.apiservice
 
 import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.FileBean
 import com.alan.mvvm.base.http.responsebean.LoginBean
 import com.alan.mvvm.base.http.responsebean.PhoneBean
 import com.alan.mvvm.base.http.responsebean.ThridLoginBean
 import com.tencent.bugly.crashreport.biz.UserInfoBean
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 /**
  * 作者：alan
@@ -93,14 +92,23 @@ interface HomeApiService {
     @POST("user/edit")
     suspend fun requestEditUserInfo(@Body requestBody: RequestBody): BaseResponse<String>
 
-//    /**
-//     * 上传图片
-//     *
-//     * @return
-//     */
-//    @Multipart
-//    @POST("user/common/uploadImage")
-//    suspend fun requestUploadPic(@Part img: Part): BaseResponse<FileBean>
+    /**
+     * 极光推送设备注册
+     */
+    @POST("device/register")
+    suspend fun requestDevicesRegister(@Body requestBody: RequestBody): BaseResponse<String>
+
+
+    /**
+     * 上传图片
+     *
+     * @return
+     */
+    @Multipart
+    @POST("user/common/uploadImage")
+    suspend fun requestUploadPic(@Part img: MultipartBody.Part): BaseResponse<FileBean>
+
+
 //
 //
 //    /**
@@ -654,12 +662,6 @@ interface HomeApiService {
 //    @GET("questionanswer/questionstatus")
 //    suspend fun requestQuestionStatus(@Query("questionId") questionId: String): BaseResponse
 //
-//    /**
-//     * 极光推送设备注册
-//     */
-//    
-//    @POST("device/register")
-//    suspend fun requestDevicesRegister(@Body requestBody:RequestBody): BaseResponse
 //
 //    /**
 //     * 获取在线问题队列
