@@ -12,7 +12,6 @@ import com.alan.module.main.viewmodel.MyViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
-import com.alan.mvvm.base.utils.ImageSelectUtil
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.ui.BaseFragment
@@ -33,8 +32,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun FragmentMyBinding.initView() {
         ivSet.clickDelay {
-            this@MyFragment.activity?.let { ImageSelectUtil.singlePic(it) }
-//            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_SET)
+            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_SET)
         }
         ivMsg.clickDelay {
             jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MSG)

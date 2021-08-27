@@ -3,6 +3,8 @@ package com.alan.module.main.activity
 import androidx.activity.viewModels
 import com.alan.module.main.databinding.ActivityLoginWxBinding
 import com.alan.module.main.viewmodel.LoginWxViewModel
+import com.alan.mvvm.base.ktx.clickDelay
+import com.alan.mvvm.base.utils.ImageSelectUtil
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -26,7 +28,9 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
      * 初始化View
      */
     override fun ActivityLoginWxBinding.initView() {
-
+        ivAvator.clickDelay {
+            this@LoginWxActivity?.let { ImageSelectUtil.singlePic(it) }
+        }
     }
 
     /**
