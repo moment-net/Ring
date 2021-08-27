@@ -2,7 +2,7 @@ package com.alan.mvvm.base.app
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
+import com.socks.library.KLog
 import java.util.*
 
 /**
@@ -22,7 +22,7 @@ class LoadModuleProxy : ApplicationLifecycle {
      */
     override fun onAttachBaseContext(context: Context) {
         mLoader.forEach {
-            Log.d("ApplicationInit", it.toString())
+            KLog.d("ApplicationInit", it.toString())
             it.onAttachBaseContext(context)
         }
     }

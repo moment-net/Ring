@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="string_agreement">已阅读并同意 用户协议 和 隐私政策</string>
+    <string name="string_phone_login">使用手机短信登录</string>
+    <string name="string_phone_bind">绑定手机号</string>
+    <string name="string_phone_bing_info">根据法律法规要求，需要绑定手机号</string>
+    <string name="string_login_register">未注册的手机号验证通过后将自动注册</string>
+    <string name="string_message_send">验证码已通过短信发送至</string>
+    <string name="string_input_code">请输入验证码</string>
 </resources>

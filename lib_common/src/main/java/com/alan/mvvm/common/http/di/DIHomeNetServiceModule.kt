@@ -1,6 +1,6 @@
 package com.alan.mvvm.common.http.di
 
-import com.alan.mvvm.common.http.apiservice.HomeApiService
+import com.alan.mvvm.base.http.apiservice.HomeApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -3,8 +3,8 @@ package com.alan.mvvm.common
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat
+import com.alan.module.im.EMClientHelper
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.app.ApplicationLifecycle
 import com.alan.mvvm.base.app.InitDepend
@@ -95,6 +95,7 @@ class CommonApplication : ApplicationLifecycle {
             worker.add { initARouter() }
             worker.add { initKlog() }
             worker.add { initCoil() }
+            main.add { initChatSdk() }
             main.add { initNetworkStateClient() }
         }
         worker.add { initTencentBugly() }
@@ -134,12 +135,12 @@ class CommonApplication : ApplicationLifecycle {
         QbSdk.initX5Environment(BaseApplication.mContext, object : PreInitCallback {
 
             override fun onCoreInitFinished() {
-                Log.d("ApplicationInit", " TBS X5 init finished")
+                KLog.d("ApplicationInit", " TBS X5 init finished")
             }
 
             override fun onViewInitFinished(p0: Boolean) {
                 // 初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核
-                Log.d("ApplicationInit", " TBS X5 init is $p0")
+                KLog.d("ApplicationInit", " TBS X5 init is $p0")
             }
         })
     }
@@ -196,5 +197,14 @@ class CommonApplication : ApplicationLifecycle {
         // 初始化
         CoilUtils.initCoil()
         return "CoilUtils -->> init complete"
+    }
+
+    /**
+     * 环信 初始化
+     */
+    private fun initChatSdk(): String {
+        // 初始化
+        EMClientHelper.init(BaseApplication.mContext)
+        return "ChatSDK -->> init complete"
     }
 }

@@ -2,10 +2,10 @@ package com.alan.mvvm.base
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.multidex.MultiDexApplication
 import com.alan.mvvm.base.app.ActivityLifecycleCallbacksImpl
 import com.alan.mvvm.base.app.LoadModuleProxy
+import com.socks.library.KLog
 import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
@@ -88,7 +88,7 @@ open class BaseApplication : MultiDexApplication() {
                 jobs?.forEach { it.await() }
             }
         }
-        Log.d("ApplicationInit", "初始化完成 $measureTimeMillis ms")
+        KLog.d("ApplicationInit", "初始化完成 $measureTimeMillis ms")
     }
 
     override fun onTerminate() {

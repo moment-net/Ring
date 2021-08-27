@@ -6,5 +6,6 @@ include(
     ":module_home",
     ":module_chat",
     ":module_my",
-    ":module_web"
+    ":module_web",
+    ":module_im"
 )

@@ -58,11 +58,14 @@ object DependencyConfig {
         const val BannerVersion = "2.1.5"                   // Banner框架
         const val XPopupVersion = "2.5.6"                   // XPopupDialog框架
         const val PickerViewVersion = "4.1.9"               // PickerView框架
+        const val OneLoginVersion = "2.5.1"                 // 极验框架
 
         // 第三方SDK--------------------------------------------------------------
+        const val WeChat = "6.6.4"                          // 腾讯开放平台微信
         const val TencentBugly = "3.3.9"                    // 腾讯Bugly 异常上报
         const val TencentBuglyNative = "3.8.0"              // Bugly native异常上报
         const val TencentTBSX5 = "43939"                    // 腾讯X5WebView
+        const val IMVersion = "3.8.4"                       // 环信版本
     }
 
     /**
@@ -148,14 +151,21 @@ object DependencyConfig {
         const val Banner = "com.bigkoo:convenientbanner:${Version.BannerVersion}"
         const val XPopup = "com.github.li-xiaojun:XPopup:${Version.XPopupVersion}"
         const val PickerView = "com.contrarywind:Android-PickerView:${Version.PickerViewVersion}"
+        const val OneLogin = "com.geetest.android:onelogin:${Version.OneLoginVersion}"
+
     }
 
     /**
      * SDK相关依赖
      */
     object SDK {
+        const val WeChat = "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:${Version.WeChat}"
         const val TencentBugly = "com.tencent.bugly:crashreport:${Version.TencentBugly}"
-        const val TencentBuglyNative = "com.tencent.bugly:nativecrashreport:${Version.TencentBuglyNative}"
+        const val TencentBuglyNative =
+            "com.tencent.bugly:nativecrashreport:${Version.TencentBuglyNative}"
         const val TencentTBSX5 = "com.tencent.tbs.tbssdk:sdk:${Version.TencentTBSX5}"
+        const val IMChat = "io.hyphenate:hyphenate-chat:${Version.IMVersion}"
+        const val IMCall = "io.hyphenate:ease-call-kit:${Version.IMVersion}"
+
     }
 }

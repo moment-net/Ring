@@ -4,7 +4,6 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Process
-import kotlin.jvm.Throws
 
 /**
  * 作者：alan
@@ -63,10 +62,14 @@ object ProcessUtils {
      * @return Boolean
      * @throws PackageManager.NameNotFoundException if a package with the given name cannot be found on the system.
      */
-    @Throws(PackageManager.NameNotFoundException::class)
     fun isMainProcess(context: Context): Boolean {
-        val processId = Process.myPid()
-        val mainProcessName = getMainProcessName(context)
-        return isPidOfProcessName(context, processId, mainProcessName)
+        try {
+            val processId: Int = Process.myPid()
+            val mainProcessName = getMainProcessName(context)
+            return isPidOfProcessName(context, processId, mainProcessName)
+        } catch (e: Exception) {
+
+        }
+        return false
     }
 }

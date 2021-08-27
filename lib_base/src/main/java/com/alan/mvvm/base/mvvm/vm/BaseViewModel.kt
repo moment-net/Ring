@@ -19,8 +19,8 @@ abstract class BaseViewModel : ViewModel() {
     /**
      * 更改状态视图的状态
      *
-     * @param hide Boolean 是否进行隐藏状态视图
      * @param loading Boolean 是否显示加载中视图
+     * @param hide Boolean 是否隐藏加载中视图
      * @param error Boolean 是否显示错误视图
      * @param noData Boolean 是否显示没有数据视图
      * @return Unit
@@ -28,15 +28,15 @@ abstract class BaseViewModel : ViewModel() {
      */
     @Throws(IllegalArgumentException::class)
     protected fun changeStateView(
-        hide: Boolean = false,
         loading: Boolean = false,
+        hide: Boolean = false,
         error: Boolean = false,
         noData: Boolean = false
     ) {
         // 对参数进行校验
         var count = 0
-        if (hide) count++
         if (loading) count++
+        if (hide) count++
         if (error) count++
         if (noData) count++
         when {
@@ -46,8 +46,8 @@ abstract class BaseViewModel : ViewModel() {
 
         // 修改状态
         when {
-            hide -> ld_state.postValue(StateLayoutEnum.HIDE)
             loading -> ld_state.postValue(StateLayoutEnum.LOADING)
+            hide -> ld_state.postValue(StateLayoutEnum.HIDE)
             error -> ld_state.postValue(StateLayoutEnum.ERROR)
             noData -> ld_state.postValue(StateLayoutEnum.NO_DATA)
         }

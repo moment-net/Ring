@@ -57,7 +57,6 @@
         android:paddingLeft="17dp"
         android:paddingRight="17dp"
         android:singleLine="true"
-        android:text="@={viewmodel.lv_code}"
         android:textColor="@color/_3A3A3A"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"

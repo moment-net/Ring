@@ -1,7 +1,7 @@
 package com.alan.module.my.adapter
 
 import com.alan.module.my.R
-import com.alan.mvvm.common.http.responsebean.MessageBean
+import com.alan.mvvm.base.http.responsebean.MessageBean
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 

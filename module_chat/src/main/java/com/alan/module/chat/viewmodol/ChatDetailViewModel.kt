@@ -1,14 +1,10 @@
 package com.alan.module.chat.viewmodol
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,10 +24,13 @@ class ChatDetailViewModel @Inject constructor(private val mRepository: CommonRep
      * 模拟获取数据
      */
     fun getData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            mRepository.getData()
-                .catch { Log.d("qqq", "getData: $it") }
-                .collect { data.postValue(it) }
+        viewModelScope.launch() {
+//            mRepository.getData(callback = RequestCallback(
+//                onStart = {},
+//                onSuccess = {},
+//                onFailed = {},
+//                onFinally = {}
+//            ))
         }
     }
 }

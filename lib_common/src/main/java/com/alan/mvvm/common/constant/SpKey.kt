@@ -6,5 +6,12 @@ package com.alan.mvvm.common.constant
  * 备注：本地存储的键 放在此类中
  */
 object SpKey {
+    //是否登录
+    const val KEY_ISLOGIN: String = "key_islogin";
 
+    //登录token
+    const val KEY_TOKEN: String = "key_token";
+
+    //用户信息
+    const val KEY_USERINFO: String = "key_userinfo";
 }

@@ -60,10 +60,14 @@ dependencies {
     api DependencyConfig.GitHub.Banner
     api DependencyConfig.GitHub.XPopup
     api DependencyConfig.GitHub.PickerView
+    api DependencyConfig.GitHub.OneLogin
 
+    api DependencyConfig.SDK.WeChat
     api DependencyConfig.SDK.TencentBugly
     api DependencyConfig.SDK.TencentBuglyNative
     api DependencyConfig.SDK.TencentTBSX5
+    api DependencyConfig.SDK.IMChat
+    api DependencyConfig.SDK.IMCall
 
     kapt DependencyConfig.GitHub.ARouteCompiler
     kapt DependencyConfig.GitHub.EventBusAPT

@@ -2,7 +2,8 @@ package com.alan.mvvm.common.http.di
 
 import com.alan.mvvm.base.BuildConfig
 import com.alan.mvvm.base.constant.VersionStatus
-import com.alan.mvvm.common.http.apiservice.NetBaseUrlConstant
+import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
+import com.alan.mvvm.common.http.interceptor.CookiesInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,6 +44,7 @@ class DINetworkModule {
             .readTimeout(20L * 1000L, TimeUnit.MILLISECONDS)
             .writeTimeout(20L * 1000L, TimeUnit.MILLISECONDS)
             .addInterceptor(logInterceptor)
+            .addInterceptor(CookiesInterceptor())
             .build()
     }
 
@@ -57,7 +59,7 @@ class DINetworkModule {
     fun provideMainRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(NetBaseUrlConstant.BASE_URL)
+            .baseUrl(HttpBaseUrlConstant.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

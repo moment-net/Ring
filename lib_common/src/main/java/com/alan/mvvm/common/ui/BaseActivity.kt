@@ -1,7 +1,6 @@
 package com.alan.mvvm.common.ui
 
 import android.os.Build
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
@@ -9,8 +8,12 @@ import com.alan.mvvm.base.mvvm.v.BaseFrameActivity
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.ActivityStackManager
 import com.alan.mvvm.base.utils.AndroidBugFixUtils
+import com.alan.mvvm.base.utils.StateLayoutEnum
 import com.alan.mvvm.common.R
+import com.alan.mvvm.common.dialog.DialogHelper
 import com.jaeger.library.StatusBarUtil
+import com.lxj.xpopup.core.BasePopupView
+import com.socks.library.KLog
 
 /**
  * 作者：alan
@@ -18,6 +21,7 @@ import com.jaeger.library.StatusBarUtil
  * 备注：Activity基类
  */
 abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : BaseFrameActivity<VB, VM>() {
+    lateinit var loadingDialog: BasePopupView
 
     /**
      * 设置状态栏
@@ -31,11 +35,37 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : BaseFrameAct
             window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
         }
+
+        mViewModel.ld_state.observe(this) {
+            when {
+                it == StateLayoutEnum.LOADING -> {
+                    showDialog()
+                }
+                it == StateLayoutEnum.HIDE -> {
+                    dismissDialog()
+                }
+                it == StateLayoutEnum.ERROR -> {
+                }
+                it == StateLayoutEnum.NO_DATA -> {
+                }
+            }
+        }
     }
+
+    fun showDialog() {
+        loadingDialog = DialogHelper.showLoadingDialog(this)
+    }
+
+    fun dismissDialog() {
+        if (loadingDialog != null) {
+            loadingDialog.dismiss()
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()
-        Log.d("ActivityLifecycle", "ActivityStack: ${ActivityStackManager.activityStack}")
+        KLog.d("ActivityLifecycle", "ActivityStack: ${ActivityStackManager.activityStack}")
     }
 
     override fun onDestroy() {
