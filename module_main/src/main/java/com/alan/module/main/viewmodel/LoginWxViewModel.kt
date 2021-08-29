@@ -1,10 +1,14 @@
 package com.alan.module.main.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.http.requestbean.EditRequestBean
+import com.alan.mvvm.base.http.requestbean.LoginThirdRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
+import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,20 +25,24 @@ import javax.inject.Inject
 class LoginWxViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
+    var ldSuccess = MutableLiveData<Any>()
+    var ldFailer = MutableLiveData<Any>()
+
 
     /**
-     * 获取个人信息
+     * 更改个人信息
      */
     fun requestEditUserInfo(
         userName: String,
         desc: String,
         url: String,
         gender: Int,
+        birthday: String,
         hometown: String,
         address: String
     ) {
         val requestBean = EditRequestBean(
-            userName, desc, url, gender, hometown = hometown, address = address
+            userName, desc, url, gender, birthday, hometown = hometown, address = address
         )
 
         viewModelScope.launch {
@@ -42,8 +50,11 @@ class LoginWxViewModel @Inject constructor(private val mRepository: CommonReposi
                 RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
+                        toast(it.msg)
+                        requestUserInfo(SpHelper.getUserInfo()?.userId!!)
                     },
                     onFailed = {
+                        toast(it.errorMessage)
                     }
                 ))
         }
@@ -51,7 +62,7 @@ class LoginWxViewModel @Inject constructor(private val mRepository: CommonReposi
 
 
     /**
-     * 更改个人信息
+     * 获取个人信息
      */
     fun requestUserInfo(userId: String) {
         viewModelScope.launch {
@@ -59,6 +70,7 @@ class LoginWxViewModel @Inject constructor(private val mRepository: CommonReposi
                 userId,
                 callback = RequestCallback(
                     onSuccess = {
+                        SpHelper.updateUserInfo(it.data)
                     },
                     onFailed = {
                     }
@@ -70,19 +82,38 @@ class LoginWxViewModel @Inject constructor(private val mRepository: CommonReposi
     /**
      * 上传图片
      */
-    fun requestDevicesRegister(url: String) {
+    fun requestUploadPic(url: String) {
         val file = File(url)
         viewModelScope.launch {
             mRepository.requestUploadPic(
                 RequestUtil.getPostPart(file),
                 callback = RequestCallback(
                     onSuccess = {
+                        ldSuccess.value = it.data!!
                     },
                     onFailed = {
+                        toast(it.errorMessage)
                     }
                 ))
         }
     }
 
+
+    /**
+     * 微信绑定
+     */
+    fun requestBindWX(requestBean: LoginThirdRequestBean) {
+        viewModelScope.launch {
+            mRepository.requestBindThird(RequestUtil.getPostBody(requestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldSuccess.value = it.data!!
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    }
+                ))
+        }
+    }
 
 }

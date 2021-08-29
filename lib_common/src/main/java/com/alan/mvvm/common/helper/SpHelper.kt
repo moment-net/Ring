@@ -68,6 +68,9 @@ object SpHelper {
      */
     fun updateUserInfo(obj: Any?) {
         when (obj) {
+            is UserInfoBean -> {
+                setUserInfo(obj)
+            }
             is LoginBean -> {
                 setLogin(true)
                 setToken(obj.token?.token ?: "")

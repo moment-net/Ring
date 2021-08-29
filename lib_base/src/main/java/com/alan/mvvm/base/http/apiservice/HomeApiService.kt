@@ -1,10 +1,7 @@
 package com.alan.mvvm.base.http.apiservice
 
 import com.alan.mvvm.base.http.baseresp.BaseResponse
-import com.alan.mvvm.base.http.responsebean.FileBean
-import com.alan.mvvm.base.http.responsebean.LoginBean
-import com.alan.mvvm.base.http.responsebean.PhoneBean
-import com.alan.mvvm.base.http.responsebean.ThridLoginBean
+import com.alan.mvvm.base.http.responsebean.*
 import com.tencent.bugly.crashreport.biz.UserInfoBean
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -108,6 +105,21 @@ interface HomeApiService {
     @POST("user/common/uploadImage")
     suspend fun requestUploadPic(@Part img: MultipartBody.Part): BaseResponse<FileBean>
 
+
+    /**
+     * 获取target信息
+     *
+     * @return
+     */
+    @GET("user/targetlist")
+    suspend fun requestTargetList(): BaseResponse<TargetBean>
+
+
+    /**
+     * 用户选择target
+     */
+    @POST("user/target")
+    suspend fun requestSaveTarget(@Body requestBody: RequestBody): BaseResponse<String>
 
 //
 //

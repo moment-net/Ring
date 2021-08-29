@@ -48,7 +48,7 @@ open class BaseRepository {
             )
             KLog.e("http", "结果==>response:${response}")
             if (!response.httpIsSuccess) {
-                throw  BaseHttpException(response.resultCode, response.msg ?: "", null)
+                throw  BaseHttpException(response.resultCode, response.msg, null)
             }
             emit(response)
         }
@@ -59,7 +59,7 @@ open class BaseRepository {
             }
             .onCompletion { cause ->
                 KLog.e("http", "onCompletion==>cause:${cause}")
-                callback?.onFinally?.invoke()
+                callback.onFinally?.invoke()
             }.collect {
                 KLog.e("http", "collect==>it:${it}")
                 callback.onSuccess?.invoke(it)
