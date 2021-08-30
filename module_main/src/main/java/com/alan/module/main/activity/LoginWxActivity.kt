@@ -28,7 +28,6 @@ import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.bigkoo.pickerview.builder.TimePickerBuilder
-import com.bigkoo.pickerview.listener.OnTimeSelectListener
 import com.huantansheng.easyphotos.EasyPhotos
 import com.huantansheng.easyphotos.models.album.entity.Photo
 import com.permissionx.guolindev.PermissionX
@@ -225,10 +224,10 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
         tvCommit.clickDelay {
             requestEditUserInfo()
         }
-        tvBirthday.clickDelay {
+        tvBirthdayValue.clickDelay {
             changeBirthday()
         }
-        tvHometown.clickDelay {
+        tvHometownValue.clickDelay {
             changeAddress()
         }
 
@@ -288,6 +287,13 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
                     mBinding.tvBind.setText("已绑定微信")
                     mBinding.tvBind.setEnabled(false)
                 }
+
+                is UserInfoBean -> {
+                    //用户信息更新
+                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_TARGET)
+                    finish()
+                }
+
             }
         }
 

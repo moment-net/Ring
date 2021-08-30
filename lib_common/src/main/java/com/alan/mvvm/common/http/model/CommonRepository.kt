@@ -92,7 +92,7 @@ class CommonRepository @Inject constructor() : BaseRepository() {
 
     suspend fun requestSaveTarget(
         requestBody: RequestBody,
-        callback: RequestCallback<String>
+        callback: RequestCallback<TargetInfoBean>
     ) = request(mApi, callback) { mApi.requestSaveTarget(requestBody) }
 
 }

@@ -151,7 +151,7 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
         //4跳转首页时取消倒计时
 
         //5跳转逻辑
-        if (loginBean?.isNewUser!!) {
+        if (loginBean?.newUser!!) {
             val bundle = Bundle().apply {
                 putInt("type", type)
             }

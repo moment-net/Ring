@@ -71,6 +71,7 @@ class LoginWxViewModel @Inject constructor(private val mRepository: CommonReposi
                 callback = RequestCallback(
                     onSuccess = {
                         SpHelper.updateUserInfo(it.data)
+                        ldSuccess.value = it.data!!
                     },
                     onFailed = {
                     }

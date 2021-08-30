@@ -19,7 +19,7 @@ import javax.inject.Inject
  * @property mRepository CommonRepository 仓库层 通过Hilt注入
  */
 @HiltViewModel
-class SelectTargetViewModel @Inject constructor(private val mRepository: CommonRepository) :
+class SelectTypeViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
     val ldSuccess = MutableLiveData<Any>()
@@ -41,8 +41,8 @@ class SelectTargetViewModel @Inject constructor(private val mRepository: CommonR
     }
 
 
-    fun requestSaveTarget(like: ArrayList<String>) {
-        var requestBean = TargetBean(like = like)
+    fun requestSaveTarget(type: ArrayList<String>) {
+        var requestBean = TargetBean(type = type)
         viewModelScope.launch {
             mRepository.requestSaveTarget(
                 RequestUtil.getPostBody(requestBean),

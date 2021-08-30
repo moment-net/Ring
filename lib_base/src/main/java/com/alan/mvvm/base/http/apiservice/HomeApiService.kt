@@ -111,15 +111,21 @@ interface HomeApiService {
      *
      * @return
      */
-    @GET("user/targetlist")
+    @GET("user/taglist")
     suspend fun requestTargetList(): BaseResponse<TargetBean>
 
 
     /**
      * 用户选择target
      */
-    @POST("user/target")
-    suspend fun requestSaveTarget(@Body requestBody: RequestBody): BaseResponse<String>
+    @POST("user/editmealtag")
+    suspend fun requestSaveTarget(@Body requestBody: RequestBody): BaseResponse<TargetInfoBean>
+
+    /**
+     * 用户查看target
+     */
+    @POST("user/mealtag")
+    suspend fun requestTarget(@Query("userId") userId: String): BaseResponse<TargetInfoBean>
 
 //
 //

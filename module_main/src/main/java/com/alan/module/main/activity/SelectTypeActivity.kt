@@ -3,8 +3,8 @@ package com.alan.module.main.activity
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.alan.module.main.R
-import com.alan.module.main.databinding.ActivitySelectTargetBinding
-import com.alan.module.main.viewmodel.SelectTargetViewModel
+import com.alan.module.main.databinding.ActivitySelectTypeBinding
+import com.alan.module.main.viewmodel.SelectTypeViewModel
 import com.alan.mvvm.base.http.responsebean.TargetBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.utils.jumpARoute
@@ -20,9 +20,9 @@ import leifu.shapelibrary.ShapeView
  * 时间：2021/7/30
  * 备注：
  */
-@Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_TARGET)
+@Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_TYPE)
 @AndroidEntryPoint
-class SelectTargetActivity : BaseActivity<ActivitySelectTargetBinding, SelectTargetViewModel>() {
+class SelectTypeActivity : BaseActivity<ActivitySelectTypeBinding, SelectTypeViewModel>() {
     var viewList = arrayListOf<ShapeView>()
     var allList = arrayListOf<String>()
     var targetList = arrayListOf<String>()
@@ -30,12 +30,12 @@ class SelectTargetActivity : BaseActivity<ActivitySelectTargetBinding, SelectTar
     /**
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
      */
-    override val mViewModel by viewModels<SelectTargetViewModel>()
+    override val mViewModel by viewModels<SelectTypeViewModel>()
 
     /**
      * 初始化View
      */
-    override fun ActivitySelectTargetBinding.initView() {
+    override fun ActivitySelectTypeBinding.initView() {
         tvJump.clickDelay { jumpNext() }
         tvNext.clickDelay {
             if (targetList.size != 2) {
@@ -97,7 +97,7 @@ class SelectTargetActivity : BaseActivity<ActivitySelectTargetBinding, SelectTar
         mViewModel.ldSuccess.observe(this) {
             when (it) {
                 is TargetBean -> {
-                    allList = it.like!!
+                    allList = it.type!!
                     for (index in 0..allList.size) {
                         viewList.get(index).setText(allList.get(index))
                         viewList.get(index).visibility
@@ -119,7 +119,7 @@ class SelectTargetActivity : BaseActivity<ActivitySelectTargetBinding, SelectTar
 
 
     fun jumpNext() {
-        jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_TYPE)
+        jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
     }
 
 

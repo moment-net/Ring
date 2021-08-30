@@ -28,8 +28,11 @@ object RouteUrl {
         //我的提醒
         const val ACTIVITY_MAIN_MYREMIND: String = "/main/myremind"
 
-        //选择标签
+        //选择标签喜好
         const val ACTIVITY_MAIN_TARGET: String = "/main/target"
+
+        //选择标签类型
+        const val ACTIVITY_MAIN_TYPE: String = "/main/type"
     }
 
     object HomeModule {

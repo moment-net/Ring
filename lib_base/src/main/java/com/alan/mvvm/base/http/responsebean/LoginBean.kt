@@ -5,5 +5,6 @@ import java.io.Serializable
 data class LoginBean(
     var token: TokenBean? = null,
     var user: UserInfoBean? = null,
-    var isNewUser: Boolean = false,
+    var newUser: Boolean = false,
+    var needInvite: Int = 0,
 ) : Serializable

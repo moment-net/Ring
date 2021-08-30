@@ -332,7 +332,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             //3上传JPUSH设备ID
             mViewModel.requestDevicesRegister()
             //4跳转逻辑
-            if (loginBean?.isNewUser!!) {
+            if (loginBean?.newUser!!) {
                 val bundle = Bundle().apply {
                     putInt("type", 1)
                 }
