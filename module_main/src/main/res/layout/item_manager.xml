@@ -3,128 +3,146 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_home_manager10">
+    android:background="@drawable/shape_home_manager12">
 
 
     <ImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="@dimen/dimen72"
-        android:layout_height="@dimen/dimen72"
+        android:layout_width="@dimen/dimen132"
+        android:layout_height="@dimen/dimen132"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/icon_placeholder" />
 
     <ImageView
         android:id="@+id/iv_online"
-        android:layout_width="@dimen/dimen34"
-        android:layout_height="@dimen/dimen18"
+        android:layout_width="@dimen/dimen32"
+        android:layout_height="@dimen/dimen23"
+        android:layout_marginStart="103dp"
+        android:layout_marginTop="7dp"
+        android:src="@drawable/icon_home_online"
         app:layout_constraintStart_toStartOf="@+id/iv_avatar"
-        app:layout_constraintTop_toTopOf="@+id/iv_avatar"
-        app:srcCompat="@drawable/icon_home_online" />
-
-    <TextView
-        android:id="@+id/tv_voice"
-        android:layout_width="@dimen/dimen65"
-        android:layout_height="@dimen/dimen30"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/icon_home_voic"
-        android:drawableStart="@drawable/icon_home_play"
-        android:drawablePadding="@dimen/dimen10"
-        android:gravity="center_vertical"
-        android:paddingStart="@dimen/dimen16"
-        android:text="15'"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-        app:layout_constraintTop_toTopOf="@+id/iv_avatar" />
-
-    <TextView
-        android:id="@+id/main_textview7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:text="钻石/天"
-        android:textColor="@color/_676767"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_voice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_voice" />
-
-    <TextView
-        android:id="@+id/tv_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="2dp"
-        android:text="150"
-        android:textColor="@color/_FF852A"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_voice"
-        app:layout_constraintEnd_toStartOf="@+id/main_textview7"
-        app:layout_constraintTop_toTopOf="@+id/tv_voice" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="10dp"
+        android:includeFontPadding="false"
         android:text="番茄会害羞"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+        android:textColor="@color/_221800"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-        app:layout_constraintTop_toBottomOf="@+id/tv_voice" />
+        app:layout_constraintTop_toTopOf="@+id/iv_avatar" />
 
-    <ImageView
-        android:id="@+id/iv_gender"
+    <leifu.shapelibrary.ShapeView
+        android:id="@+id/tv_age"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_name"
-        app:layout_constraintStart_toEndOf="@+id/tv_name"
-        app:layout_constraintTop_toTopOf="@+id/tv_name"
-        app:srcCompat="@drawable/icon_bing_girl" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_tag"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dimen20"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_avatar" />
-
-    <TextView
-        android:id="@+id/tv_schedule"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="16dp"
-        android:drawableStart="@drawable/icon_home_schedule"
-        android:drawablePadding="@dimen/dimen5"
-        android:text="每周一、二、四、六  8:00-22:00在线"
-        android:textColor="@color/_3A3A3A"
+        android:layout_marginTop="8dp"
+        android:drawableStart="@drawable/icon_home_girl"
+        android:drawablePadding="@dimen/dimen3"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:paddingStart="@dimen/dimen5"
+        android:paddingTop="0dp"
+        android:paddingEnd="@dimen/dimen5"
+        android:paddingBottom="0dp"
+        android:text="19岁  准格尔"
+        android:textColor="@color/_FF517A"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_info"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_tag" />
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        app:sCorners="3dp"
+        app:sSizeHeight="@dimen/dimen20"
+        app:sSolidColor="@color/_1AFF517A"
+        app:sStrokeWidth="0dp" />
+
+    <leifu.shapelibrary.ShapeView
+        android:id="@+id/tv_state"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen20"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:gravity="center_vertical"
+        android:includeFontPadding="false"
+        android:paddingStart="@dimen/dimen5"
+        android:paddingTop="0dp"
+        android:paddingEnd="@dimen/dimen5"
+        android:paddingBottom="0dp"
+        android:text="“饭后思考人生中”"
+        android:textColor="@color/_FF6800"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/tv_age"
+        app:sCorners="3dp"
+        app:sSolidColor="@color/_26FF6800"
+        app:sStrokeWidth="0dp" />
+
+    <leifu.shapelibrary.ShapeView
+        android:id="@+id/tv_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen20"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:includeFontPadding="false"
+        android:paddingStart="@dimen/dimen5"
+        android:paddingTop="0dp"
+        android:paddingEnd="@dimen/dimen5"
+        android:paddingBottom="0dp"
+        android:text="大胃王"
+        android:gravity="center_vertical"
+        android:textColor="@color/_CCFF6800"
+        android:textSize="11sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/tv_state"
+        app:sCorners="3dp"
+        app:sSolidColor="@color/white"
+        app:sStrokeColor="@color/_FF6800"
+        app:sStrokeWidth="0.5dp" />
+
+    <leifu.shapelibrary.ShapeView
+        android:id="@+id/tv_like"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen20"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:includeFontPadding="false"
+        android:paddingStart="@dimen/dimen5"
+        android:paddingTop="0dp"
+        android:paddingEnd="@dimen/dimen5"
+        android:paddingBottom="0dp"
+        android:text="川菜"
+        android:textColor="@color/_CCFF6800"
+        android:textSize="11sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tag"
+        app:sCorners="3dp"
+        app:sSolidColor="@color/white"
+        app:sStrokeColor="@color/_FF6800"
+        app:sStrokeWidth="0.5dp" />
 
     <TextView
-        android:id="@+id/tv_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:text="查看管家简历"
-        android:textColor="@color/_803A3A3A"
+        android:id="@+id/tv_voice"
+        android:layout_width="62dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/icon_home_voice_bg"
+        android:gravity="center"
+        android:text="14s"
         android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_schedule"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_schedule" />
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+        app:layout_constraintStart_toStartOf="@+id/iv_avatar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

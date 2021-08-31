@@ -4,7 +4,6 @@ import com.alan.mvvm.base.http.apiservice.HomeApiService
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.http.responsebean.*
 import com.alan.mvvm.base.mvvm.m.BaseRepository
-import com.tencent.bugly.crashreport.biz.UserInfoBean
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -95,4 +94,12 @@ class CommonRepository @Inject constructor() : BaseRepository() {
         callback: RequestCallback<TargetInfoBean>
     ) = request(mApi, callback) { mApi.requestSaveTarget(requestBody) }
 
+
+    suspend fun requestMealList(
+        map: MutableMap<String, String>,
+        callback: RequestCallback<ArrayList<CookerBean>>
+    ) = request(mApi, callback) { mApi.requestMealList(map) }
+
+
 }
+

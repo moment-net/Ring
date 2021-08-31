@@ -13,7 +13,7 @@ object HttpBaseUrlConstant {
         get() {
             if (BuildConfig.DEBUG) {
                 //测试环境
-                return "http://59.110.143.77:8070/api/"
+                return "http://59.110.143.77:9060/api/"
             } else {
                 //正式环境
                 return "http://freedomspeakapp.moment-network.com/api/"

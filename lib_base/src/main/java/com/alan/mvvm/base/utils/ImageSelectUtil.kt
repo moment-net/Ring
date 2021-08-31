@@ -8,6 +8,7 @@ object ImageSelectUtil {
 
     /**
      * 选择图片
+     * 内部已做权限处理
      */
     fun singlePic(activity: Activity) {
         EasyPhotos.createAlbum(activity, true, false, CoilEngine)

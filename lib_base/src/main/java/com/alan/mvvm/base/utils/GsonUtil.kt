@@ -2,6 +2,7 @@ package com.alan.mvvm.base.utils
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import java.util.*
 
@@ -54,14 +55,14 @@ object GsonUtil {
      * @param cls
      * @return
      */
-    fun <T> jsonToList(gsonString: String?, cls: Class<T>?): List<T>? {
-        var list: List<T>? = null
-        if (gson != null) {
-            //根据泛型返回解析指定的类型,TypeToken<List<T>>{}.getType()获取返回类型
-            list = gson!!.fromJson(gsonString, object : TypeToken<List<T>?>() {}.type)
-        }
-        return list
-    }
+//    fun <T> jsonToList(gsonString: String?, cls: Class<T>?): List<T>? {
+//        var list: List<T>? = null
+//        if (gson != null) {
+//            //根据泛型返回解析指定的类型,TypeToken<List<T>>{}.getType()获取返回类型
+//            list = gson!!.fromJson(gsonString, object : TypeToken<List<T>?>() {}.type)
+//        }
+//        return list
+//    }
 
     /**
      * json字符串转成list
@@ -69,14 +70,14 @@ object GsonUtil {
      * @param cls
      * @return
      */
-//    fun <T> jsonToList(json: String?, cls: Class<T>?): List<T> {
-//        val mList = ArrayList<T>()
-//        val array = JsonParser().parse(json).asJsonArray
-//        for (elem in array) {
-//            mList.add(gson!!.fromJson(elem, cls))
-//        }
-//        return mList
-//    }
+    fun <T> jsonToList(json: String?, cls: Class<T>?): List<T> {
+        val mList = ArrayList<T>()
+        val array = JsonParser.parseString(json).asJsonArray
+        for (elem in array) {
+            mList.add(gson!!.fromJson(elem, cls))
+        }
+        return mList
+    }
 
     /**
      * json字符串转成list中有map的

@@ -50,7 +50,6 @@ class LoginWxViewModel @Inject constructor(private val mRepository: CommonReposi
                 RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        toast(it.msg)
                         requestUserInfo(SpHelper.getUserInfo()?.userId!!)
                     },
                     onFailed = {

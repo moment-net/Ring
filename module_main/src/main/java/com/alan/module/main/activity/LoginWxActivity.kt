@@ -7,13 +7,16 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Message
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import coil.load
 import com.alan.module.main.databinding.ActivityLoginWxBinding
 import com.alan.module.main.viewmodel.LoginWxViewModel
+import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.requestbean.LoginThirdRequestBean
 import com.alan.mvvm.base.http.responsebean.FileBean
 import com.alan.mvvm.base.http.responsebean.LoginBean
@@ -231,6 +234,24 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
             changeAddress()
         }
 
+        etName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s?.length!! > 0) {
+                    tvCommit.setEnabled(true);
+                } else {
+                    tvCommit.setEnabled(false);
+                }
+
+                tvLimit.setText("${s?.length!!}/15");
+            }
+        })
+
 
         if (type == 1) {
             mBinding.llBind.setVisibility(View.VISIBLE)
@@ -274,6 +295,7 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
                 is FileBean -> {
                     //上传图片
                     imgUrl = it.fileName
+                    CoilUtils.loadCircle(mBinding.ivAvator, it.fileUrl)
                 }
 
                 is LoginBean -> {
@@ -330,7 +352,6 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
         val timePickerBuilder = TimePickerBuilder(this) { date: Date?, v: View? ->
             birthday = getTime(date)
             mBinding.tvBirthdayValue.setText(birthday)
-            requestEditUserInfo()
         }
             .setRangDate(startDate, endDate)
             .setDate(getData(2020, 5, 4))
@@ -349,7 +370,7 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
                 }
             }
         } else {
-            timePickerBuilder.setDate(getData(1999, 5, 20))
+            timePickerBuilder.setDate(getData(2000, 1, 1))
         }
         val pvTime = timePickerBuilder.build()
         pvTime.show()
@@ -375,9 +396,8 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
                 ImageSelectUtil.REQUESTCODE -> {
                     //照片的回调
                     val selectList =
-                        intent.getParcelableArrayListExtra<Photo>(EasyPhotos.RESULT_PHOTOS);
+                        data?.getParcelableArrayListExtra<Photo>(EasyPhotos.RESULT_PHOTOS);
                     val url: String = selectList?.get(0)?.path ?: ""
-                    mBinding.ivAvator.load(url)
                     requestUploadPic(url)
                 }
             }
@@ -408,7 +428,15 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
             toast("请选择性别")
             return
         }
-        mViewModel.requestEditUserInfo(userName, "", imgUrl ?: "", gender, birthday ?: "", "", "")
+        mViewModel.requestEditUserInfo(
+            userName,
+            "",
+            imgUrl ?: "",
+            gender,
+            birthday ?: "",
+            "",
+            address ?: ""
+        )
     }
 
 

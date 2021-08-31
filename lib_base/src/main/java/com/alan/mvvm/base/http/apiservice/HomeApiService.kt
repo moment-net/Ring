@@ -2,7 +2,6 @@ package com.alan.mvvm.base.http.apiservice
 
 import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.*
-import com.tencent.bugly.crashreport.biz.UserInfoBean
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
@@ -126,6 +125,13 @@ interface HomeApiService {
      */
     @POST("user/mealtag")
     suspend fun requestTarget(@Query("userId") userId: String): BaseResponse<TargetInfoBean>
+
+
+    /**
+     * 首页饭友推荐
+     */
+    @GET("meal/list")
+    suspend fun requestMealList(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<CookerBean>>
 
 //
 //

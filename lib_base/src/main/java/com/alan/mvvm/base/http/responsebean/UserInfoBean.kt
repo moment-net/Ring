@@ -37,5 +37,12 @@ data class UserInfoBean(
     val audioDesc: String = "",
     val greeting: GreetBean? = null,
     val headsetStatus: String = "",
-    val onlineRoom: ChannelBean? = null
+    val onlineRoom: ChannelBean? = null,
+    val age: Int,
+    val bindApple: Boolean = false,
+    val eduRight: Int,
+    val hasHeadset: Boolean,
+    val needInvite: Int,
+    val starSign: String
+
 ) : Serializable

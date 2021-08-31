@@ -2,6 +2,7 @@ package com.alan.module.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,19 +19,27 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
-    val data = MutableLiveData<String>()
+    val ldData = MutableLiveData<Any>()
 
     /**
-     * 模拟获取数据
+     * 获取首页列表
      */
-    fun getData() {
+    fun requestList(curson: Int) {
+        var map = hashMapOf<String, String>()
+        map.put("cursor", "${curson}")
+        map.put("count", "20")
         viewModelScope.launch() {
-//            mRepository.getData(callback = RequestCallback(
-//                onStart = {},
-//                onSuccess = {},
-//                onFailed = {},
-//                onFinally = {}
-//            ))
+            mRepository.requestMealList(
+                map,
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = it
+                    },
+                    onFailed = {
+                        ldData.value = it
+                    },
+                )
+            )
         }
     }
 }

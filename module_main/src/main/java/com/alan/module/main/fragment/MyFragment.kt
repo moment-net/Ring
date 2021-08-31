@@ -14,6 +14,7 @@ import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.ui.BaseFragment
 import com.socks.library.KLog
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,4 +84,21 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
     override fun initRequestData() {
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        setUserInfo()
+    }
+
+    fun setUserInfo() {
+        var userInfo = SpHelper.getUserInfo()
+        CoilUtils.loadCircle(mBinding.ivAvatar, userInfo?.avatar ?: "")
+        mBinding.ivGender.setImageResource(if (userInfo?.gender == 1) R.drawable.icon_bing_boy else R.drawable.icon_bing_girl)
+        mBinding.tvName.setText(userInfo?.userName)
+        mBinding.tvFollowNum.setText("${userInfo?.fansCount}")
+        mBinding.tvFocusNum.setText("${userInfo?.followCount}")
+
+    }
+
+
 }

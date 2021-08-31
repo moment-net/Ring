@@ -1,9 +1,17 @@
 package com.alan.module.my.viewmodol
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.alan.mvvm.base.http.callback.RequestCallback
+import com.alan.mvvm.base.http.requestbean.EditRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.RequestUtil
+import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -16,7 +24,71 @@ import javax.inject.Inject
 class PersonInfoViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
-    val data = MutableLiveData<String>()
+    val ldSuccess = MutableLiveData<Any>()
 
+    /**
+     * 更改个人信息
+     */
+    fun requestEditUserInfo(
+        userName: String,
+        url: String,
+        birthday: String,
+        address: String
+    ) {
+        val requestBean = EditRequestBean(
+            userName, avatar = url, birthday = birthday, address = address
+        )
+
+        viewModelScope.launch {
+            mRepository.requestEditUserInfo(
+                RequestUtil.getPostBody(requestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                        requestUserInfo(SpHelper.getUserInfo()?.userId!!)
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    }
+                ))
+        }
+    }
+
+
+    /**
+     * 获取个人信息
+     */
+    fun requestUserInfo(userId: String) {
+        viewModelScope.launch {
+            mRepository.requestUserInfo(
+                userId,
+                callback = RequestCallback(
+                    onSuccess = {
+                        SpHelper.updateUserInfo(it.data)
+                        ldSuccess.value = it.data!!
+                    },
+                    onFailed = {
+                    }
+                ))
+        }
+    }
+
+    /**
+     * 上传图片
+     */
+    fun requestUploadPic(url: String) {
+        val file = File(url)
+        viewModelScope.launch {
+            mRepository.requestUploadPic(
+                RequestUtil.getPostPart(file),
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldSuccess.value = it.data!!
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    }
+                ))
+        }
+    }
 
 }

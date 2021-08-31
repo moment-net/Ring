@@ -7,7 +7,7 @@ data class BaseResponse<T>(
     var msg: String = "",
     var data: T,
     var hasMore: Boolean,
-    val cursor: String?,
+    val cursor: Int = 0,
     val cursorString: String?,
     val token: String?
 ) : Serializable {
