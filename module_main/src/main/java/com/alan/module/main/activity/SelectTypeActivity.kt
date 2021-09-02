@@ -1,11 +1,13 @@
 package com.alan.module.main.activity
 
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.alan.module.main.R
 import com.alan.module.main.databinding.ActivitySelectTypeBinding
 import com.alan.module.main.viewmodel.SelectTypeViewModel
 import com.alan.mvvm.base.http.responsebean.TargetBean
+import com.alan.mvvm.base.http.responsebean.TargetInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
@@ -38,7 +40,7 @@ class SelectTypeActivity : BaseActivity<ActivitySelectTypeBinding, SelectTypeVie
     override fun ActivitySelectTypeBinding.initView() {
         tvJump.clickDelay { jumpNext() }
         tvNext.clickDelay {
-            if (targetList.size != 2) {
+            if (targetList.size == 0) {
                 return@clickDelay
             }
             mViewModel.requestSaveTarget(targetList)
@@ -98,12 +100,12 @@ class SelectTypeActivity : BaseActivity<ActivitySelectTypeBinding, SelectTypeVie
             when (it) {
                 is TargetBean -> {
                     allList = it.type!!
-                    for (index in 0..allList.size) {
+                    for (index in 0..allList.size - 1) {
                         viewList.get(index).setText(allList.get(index))
-                        viewList.get(index).visibility
+                        viewList.get(index).visibility = View.VISIBLE
                     }
                 }
-                it == 1 -> {
+                is TargetInfoBean -> {
                     jumpNext()
                 }
             }
@@ -124,14 +126,14 @@ class SelectTypeActivity : BaseActivity<ActivitySelectTypeBinding, SelectTypeVie
 
 
     fun check(positon: Int, tv: ShapeView) {
-        if (targetList.size == 2) {
-            toast("已经达到上限")
-            return
-        }
         if (targetList.contains(allList.get(positon))) {
             tv.setShapeSolidColor(ContextCompat.getColor(this, R.color._083A3A3A)).setUseShape()
             targetList.remove(allList.get(positon))
         } else {
+            if (targetList.size == 2) {
+                toast("已经达到上限")
+                return
+            }
             tv.setShapeSolidColor(ContextCompat.getColor(this, R.color._FFBD2A)).setUseShape()
             targetList.add(allList.get(positon))
         }

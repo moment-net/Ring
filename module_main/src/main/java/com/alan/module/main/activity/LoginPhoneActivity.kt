@@ -64,7 +64,7 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
 
                 override fun onClick(view: View) {
                     val bundle = Bundle().apply {
-                        putString("webUrl", HttpBaseUrlConstant.BASE_H5URL + "page/user-agreement")
+                        putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/user-agreement")
                         putString("webTitle", "用户协议")
                     }
                     jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
@@ -79,7 +79,7 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
 
                 override fun onClick(view: View) {
                     val bundle = Bundle().apply {
-                        putString("webUrl", HttpBaseUrlConstant.BASE_H5URL + "page/privacy-policy")
+                        putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/privacy-policy")
                         putString("webTitle", "用户协议")
                     }
                     jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)

@@ -15,10 +15,10 @@ import leifu.shapelibrary.ShapeView
 class ManagerAdapter : BaseQuickAdapter<CookerBean, BaseViewHolder>(R.layout.item_manager) {
 
     override fun convert(holder: BaseViewHolder, item: CookerBean) {
-        CoilUtils.loadRound(holder.getView(R.id.iv_avatar), item.user.avatar, 3f)
+        CoilUtils.loadRound(holder.getView(R.id.iv_avatar), item.user.avatar!!, 3f)
         holder.setText(R.id.tv_name, item.user.userName)
         var tvAge = holder.getView<ShapeView>(R.id.tv_age)
-        var address = item.user.address.split("-")[2]
+        var address = item.user.address!!.split("-")[2]
         tvAge.setText("${item.user.age}岁  ${address}")
         if (item.user.gender == 1) {
             tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_boy, 0, 0, 0)
@@ -31,7 +31,7 @@ class ManagerAdapter : BaseQuickAdapter<CookerBean, BaseViewHolder>(R.layout.ite
         }
 
         holder.setText(R.id.tv_state, item.title)
-        if (item.user.onlineStatus) {
+        if (item.user.onlineStatus!!) {
             holder.setGone(R.id.iv_online, false)
         } else {
             holder.setGone(R.id.iv_online, true)

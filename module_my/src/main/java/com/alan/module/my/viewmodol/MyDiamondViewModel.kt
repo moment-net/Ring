@@ -1,9 +1,12 @@
 package com.alan.module.my.viewmodol
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -16,7 +19,34 @@ import javax.inject.Inject
 class MyDiamondViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
-    val data = MutableLiveData<String>()
+    val ldSuccess = MutableLiveData<Any>()
 
+
+    fun requestDiamond() {
+        viewModelScope.launch {
+            mRepository.requestDiamond(callback = RequestCallback(
+                onSuccess = {
+                    ldSuccess.value = it.data!!
+                },
+                onFailed = {
+
+                }
+            ))
+        }
+    }
+
+
+    fun requestGoodsList() {
+        viewModelScope.launch {
+            mRepository.requestGoodsList(
+                "1", callback = RequestCallback(
+                    onSuccess = {
+                        ldSuccess.value = it
+                    },
+                    onFailed = {
+                    }
+                ))
+        }
+    }
 
 }

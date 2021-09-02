@@ -54,6 +54,9 @@ object RouteUrl {
     }
 
     object MyModule {
+        //我的页面
+        const val ACTIVITY_MY_MY: String = "/my/my";
+
         //设置页面
         const val ACTIVITY_MY_SET: String = "/my/set";
 

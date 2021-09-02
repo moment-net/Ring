@@ -138,6 +138,7 @@ dependencies {
         implementation project(path: ':module_home')
         implementation project(path: ':module_chat')
         implementation project(path: ':module_my')
+        implementation project(path: ':module_web')
     } else {
         implementation project(path: ':lib_common')
     }

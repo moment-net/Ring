@@ -91,7 +91,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
     }
 
     fun setUserInfo() {
-        var userInfo = SpHelper.getUserInfo()
+        val userInfo = SpHelper.getUserInfo()
         CoilUtils.loadCircle(mBinding.ivAvatar, userInfo?.avatar ?: "")
         mBinding.ivGender.setImageResource(if (userInfo?.gender == 1) R.drawable.icon_bing_boy else R.drawable.icon_bing_girl)
         mBinding.tvName.setText(userInfo?.userName)

@@ -3,7 +3,10 @@
     package="com.alan.module.my">
 
     <application>
-        <activity android:name=".activity.SettingActivity"></activity>
+        <activity
+            android:name=".activity.MyActivity"
+            android:exported="true" />
+        <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.FollowActivity" />
         <activity android:name=".activity.WithdrawActivity" />
         <activity android:name=".activity.WithdrawDetailActivity" />

@@ -63,7 +63,7 @@
             android:button="@null"
             android:drawableTop="@drawable/select_main_my"
             android:gravity="center"
-            android:text="我的"
+            android:text="广场"
             android:textColor="@drawable/select_color_main"
             android:textSize="@dimen/sp10" />
 

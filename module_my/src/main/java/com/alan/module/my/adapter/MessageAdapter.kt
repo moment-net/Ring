@@ -5,8 +5,7 @@ import com.alan.mvvm.base.http.responsebean.MessageBean
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
-class MessageAdapter(data: MutableList<MessageBean>?) :
-    BaseMultiItemQuickAdapter<MessageBean, BaseViewHolder>(data) {
+class MessageAdapter() : BaseMultiItemQuickAdapter<MessageBean, BaseViewHolder>() {
 
     init {
         addItemType(MessageBean.FOCUS_MSG, R.layout.item_msg_focus)

@@ -8,10 +8,14 @@ import com.alan.module.my.R
 import com.alan.module.my.adapter.SystemMsgAdapter
 import com.alan.module.my.databinding.ActivitySystemMessageBinding
 import com.alan.module.my.viewmodol.SystemMessageViewModel
+import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.SystemMessageBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.MyColorDecoration
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -32,8 +36,7 @@ class SystemMessageActivity : BaseActivity<ActivitySystemMessageBinding, SystemM
      */
     override val mViewModel by viewModels<SystemMessageViewModel>()
     lateinit var mAdapter: SystemMsgAdapter
-    private var cursor: Long = 0
-    private val hasMore = false
+    private var mCursor: Int = 0
     private var isLoad = false
 
     /**
@@ -47,16 +50,12 @@ class SystemMessageActivity : BaseActivity<ActivitySystemMessageBinding, SystemM
     private fun initRV() {
         mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onRefresh(refreshLayout: RefreshLayout) {
-                cursor = 0
-                isLoad = false
+                requestRefresh()
             }
 
             override fun onLoadMore(refreshLayout: RefreshLayout) {
-                if (hasMore) {
-                    isLoad = true
-                } else {
-                    mBinding.srfList.finishLoadMore()
-                }
+                isLoad = true
+                requestList()
             }
         })
         mAdapter = SystemMsgAdapter()
@@ -76,13 +75,53 @@ class SystemMessageActivity : BaseActivity<ActivitySystemMessageBinding, SystemM
      * 订阅数据
      */
     override fun initObserve() {
+        mViewModel.ldData.observe(this) {
+            when (it) {
+                is BaseResponse<*> -> {
+                    mCursor = it.cursor
+                    var list: ArrayList<SystemMessageBean> = it.data as ArrayList<SystemMessageBean>
+                    if (isLoad) {
+                        mBinding.srfList.finishLoadMore()
+                        mAdapter.addData(list)
+                    } else {
+                        mBinding.srfList.finishRefresh()
+                        mAdapter.setList(list)
+                    }
+                }
+
+                is BaseHttpException -> {
+                    if (isLoad) {
+                        mBinding.srfList.finishLoadMore()
+                    } else {
+                        mBinding.srfList.finishRefresh()
+                    }
+                    toast(it.errorMessage)
+                }
+
+            }
+        }
+    }
+
+    override fun initRequestData() {
 
     }
 
-    /**
-     * 获取数据
-     */
-    override fun initRequestData() {
+    override fun onResume() {
+        super.onResume()
+        requestRefresh()
+    }
 
+    /**
+     * 刷新列表
+     */
+    fun requestRefresh() {
+        isLoad = false
+        mCursor = 0
+        requestList()
+    }
+
+
+    fun requestList() {
+        mViewModel.requestList(mCursor)
     }
 }

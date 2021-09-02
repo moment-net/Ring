@@ -1,10 +1,12 @@
 package com.alan.mvvm.base.http.apiservice
 
 import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.requestbean.AccountBean
 import com.alan.mvvm.base.http.responsebean.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
+import java.util.*
 
 /**
  * 作者：alan
@@ -15,24 +17,18 @@ interface HomeApiService {
 
     /**
      * 获取验证码
-     *
-     * @return
      */
     @POST("user/common/sendVerifyCode")
     suspend fun requestCode(@Body requestBody: RequestBody): BaseResponse<String>
 
     /**
      * 用户注册接口(已注册使用手机号登陆)
-     *
-     * @return
      */
     @POST("user/login")
     suspend fun requestLogin(@Body requestBody: RequestBody): BaseResponse<LoginBean>
 
     /**
      * 三方登录(微信)
-     *
-     * @return
      */
     @POST("user/login/third")
     suspend fun requestLoginWX(@Body requestBody: RequestBody): BaseResponse<ThridLoginBean>
@@ -40,16 +36,12 @@ interface HomeApiService {
 
     /**
      * 自动登陆
-     *
-     * @return
      */
     @POST("user/auto")
     suspend fun requestAutoLogin(): BaseResponse<LoginBean>
 
     /**
      * 绑定手机号
-     *
-     * @return
      */
     @POST("user/bindPhone")
     suspend fun requestBindPhone(@Body requestBody: RequestBody): BaseResponse<LoginBean>
@@ -57,24 +49,18 @@ interface HomeApiService {
 
     /**
      * 一键获取手机号
-     *
-     * @return
      */
     @POST("user/login/checkphone")
     suspend fun requestCheckPhone(@Body requestBody: RequestBody): BaseResponse<PhoneBean>
 
     /**
      * 绑定三方账号
-     *
-     * @return
      */
     @POST("user/bindThird")
     suspend fun requestBindThird(@Body requestBody: RequestBody): BaseResponse<UserInfoBean>
 
     /**
      * 获取用户信息
-     *
-     * @return
      */
     @GET("user/info/{userId}")
     suspend fun requestUserInfo(@Path("userId") userId: String): BaseResponse<UserInfoBean>
@@ -82,11 +68,9 @@ interface HomeApiService {
 
     /**
      * 编辑用户信息
-     *
-     * @return
      */
     @POST("user/edit")
-    suspend fun requestEditUserInfo(@Body requestBody: RequestBody): BaseResponse<String>
+    suspend fun requestEditUserInfo(@Body requestBody: RequestBody): BaseResponse<UserInfoBean>
 
     /**
      * 极光推送设备注册
@@ -97,8 +81,6 @@ interface HomeApiService {
 
     /**
      * 上传图片
-     *
-     * @return
      */
     @Multipart
     @POST("user/common/uploadImage")
@@ -107,8 +89,6 @@ interface HomeApiService {
 
     /**
      * 获取target信息
-     *
-     * @return
      */
     @GET("user/taglist")
     suspend fun requestTargetList(): BaseResponse<TargetBean>
@@ -133,58 +113,38 @@ interface HomeApiService {
     @GET("meal/list")
     suspend fun requestMealList(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<CookerBean>>
 
-//
-//
-//    /**
-//     * 消息列表
-//     *
-//     * @return
-//     */
-//    @GET("user/notice/list")
-//    suspend fun requestMessage(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<MessageBean>>
-//
-//    /**
-//     * 消息列表
-//     *
-//     * @return
-//     */
-//    @GET("user/notice/list")
-//    suspend fun requestSystemMessage(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<SystemMessageBean>>
-//
-//    /**
-//     * 未读回复数
-//     *
-//     * @return
-//     */
-//    @GET("msgboard/reply/unreadCount")
-//    suspend fun requestMsgboardUnread(): BaseResponse<String>
-//
-//
-//    /**
-//     * 关注/取关
-//     *
-//     * @return
-//     */
-//    
-//    @POST("user/relation/follow")
-//    suspend fun requestChangeFollow(@Body requestBody:RequestBody): BaseResponse<ChangeFollowBean>
-//
-//    /**
-//     * 我关注的列表
-//     *
-//     * @return
-//     */
-//    @GET("user/relation/followlist")
-//    suspend fun requestFollowList(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<UserInfoBean>>
-//
-//
-//    /**
-//     * 关注我的列表
-//     *
-//     * @return
-//     */
-//    @GET("user/relation/fanslist")
-//    suspend fun requestFansList(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<UserInfoBean>>
+
+    /**
+     * 消息列表
+     */
+    @GET("user/notice/list")
+    suspend fun requestMessage(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<MessageBean>>
+
+    /**
+     * 消息列表
+     */
+    @GET("user/notice/list")
+    suspend fun requestSystemMessage(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<SystemMessageBean>>
+
+
+    /**
+     * 关注/取关
+     */
+    @POST("user/relation/follow")
+    suspend fun requestChangeFollow(@Body requestBody: RequestBody): BaseResponse<UserInfoBean>
+
+    /**
+     * 我关注的列表
+     */
+    @GET("user/relation/followlist")
+    suspend fun requestFollowList(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<UserInfoBean>>
+
+
+    /**
+     * 关注我的列表
+     */
+    @GET("user/relation/fanslist")
+    suspend fun requestFansList(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<UserInfoBean>>
 //
 //
 //    /**
@@ -730,91 +690,90 @@ interface HomeApiService {
 //    @GET("user/common/getShareUrl")
 //    suspend fun requestShareUrl(@QueryMap map: MutableMap<String, String>): BaseResponse<String>
 //
-//
-//    /**
-//     * 申请提现
-//     */
-//    @GET("cash/apply")
-//    suspend fun requestApply(): BaseResponse<ApplyRequestBean>
-//
-//
-//    /**
-//     * 绑定用户微信名创
-//     */
-//    
-//    @POST("user/addwxaccount")
-//    suspend fun requestAddWXAccount(@Body requestBody:RequestBody): BaseResponse
-//
-//
-//    /**
-//     * 提现记录
-//     */
-//    @GET("cash/list")
-//    suspend fun requestWithdrawList(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<WithdrawBean>>
-//
-//
-//    /**
-//     * 单条提现记录详情
-//     */
-//    @GET("cash/details/{tradeId}")
-//    suspend fun requestWithdrawDetail(@Path("tradeId") tradeId: String): BaseResponse<ArrayList<WithdrawBean>>
-//
-//
-//    /**
-//     * 查询微信绑定信息
-//     */
-//    @GET("user/wxaccount")
-//    suspend fun requestWxAccount(): BaseResponse<WXAccountBindBean>
-//
-//
-//    /**
-//     * 账户直说币余额相关
-//     */
-//    @GET("cash/account")
-//    suspend fun requestAccount(): BaseResponse<AccountBean>
-//
-//
-//    /**
-//     * 收益历史/我收到的
-//     */
-//    @GET("cash/receivedlist")
-//    suspend fun requestReceived(@QueryMap map: MutableMap<String, String>): BaseResponse<LinkedList<ReceivedBean>>
-//
-//
-//    /**
-//     * 消费历史
-//     */
-//    @GET("cash/consumelist")
-//    suspend fun requestConsume(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<ConsumeBean>>
-//
-//
-//    /**
-//     * 充值商品列表
-//     */
-//    @GET("shop/goodsList")
-//    suspend fun requestGoodsList(@Query("type") type: String): BaseResponse<ArrayList<GoodBean>>
-//
-//
-//    /**
-//     * 礼物列表
-//     */
-//    @GET("gift/list")
-//    suspend fun requestGiftList(): BaseResponse<ArrayList<GiftBean>>
-//
-//
-//    /**
-//     * 打赏礼物
-//     */
-//    
-//    @POST("gift/give")
-//    suspend fun requestGive(@Body requestBody:RequestBody): BaseResponse
-//
-//
-//    /**
-//     * 账户余额(钻石)
-//     */
-//    @GET("user/account")
-//    suspend fun requestDiamond(): BaseResponse<DiamondBean>
+
+    /**
+     * 申请提现
+     */
+    @GET("cash/apply")
+    suspend fun requestApply(): BaseResponse<ApplyRequestBean>
+
+
+    /**
+     * 绑定用户微信名
+     */
+    @POST("user/addwxaccount")
+    suspend fun requestAddWXAccount(@Body requestBody: RequestBody): BaseResponse<String>
+
+
+    /**
+     * 提现记录
+     */
+    @GET("cash/list")
+    suspend fun requestWithdrawList(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<WithdrawBean>>
+
+
+    /**
+     * 单条提现记录详情
+     */
+    @GET("cash/details/{tradeId}")
+    suspend fun requestWithdrawDetail(@Path("tradeId") tradeId: String): BaseResponse<ArrayList<WithdrawBean>>
+
+
+    /**
+     * 查询微信绑定信息
+     */
+    @GET("user/wxaccount")
+    suspend fun requestWxAccount(): BaseResponse<WXAccountBindBean>
+
+
+    /**
+     * 账户直说币余额相关
+     */
+    @GET("cash/account")
+    suspend fun requestAccount(): BaseResponse<AccountBean>
+
+
+    /**
+     * 收益历史/我收到的
+     */
+    @GET("cash/receivedlist")
+    suspend fun requestReceived(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<ReceivedBean>>
+
+
+    /**
+     * 消费历史
+     */
+    @GET("cash/consumelist")
+    suspend fun requestConsume(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<ConsumeBean>>
+
+
+    /**
+     * 充值商品列表
+     */
+    @GET("shop/goodsList")
+    suspend fun requestGoodsList(@Query("type") type: String): BaseResponse<ArrayList<GoodBean>>
+
+
+    /**
+     * 礼物列表
+     */
+    @GET("gift/list")
+    suspend fun requestGiftList(): BaseResponse<ArrayList<GiftBean>>
+
+
+    /**
+     * 打赏礼物
+     */
+
+    @POST("gift/give")
+    suspend fun requestGive(@Body requestBody: RequestBody): BaseResponse<String>
+
+
+    /**
+     * 账户余额(钻石)
+     */
+    @GET("user/account")
+    suspend fun requestDiamond(): BaseResponse<DiamondBean>
 //
 //    /**
 //     * 礼物人气排行
@@ -834,32 +793,30 @@ interface HomeApiService {
 //    @GET("gift/topRank")
 //    suspend fun requestTopRank(): BaseResponse<TopRankBean>
 //
-//    /**
-//     * 购买钻石
-//     */
-//    @POST("shop/order")
-//    suspend fun requestOrder(@Body requestBody:RequestBody): BaseResponse<OrderBean>
-//
-//    /**
-//     * 微信支付
-//     */
-//    
-//    @POST("shop/pay/wx")
-//    suspend fun requestPayWX(@Body requestBody:RequestBody): BaseResponse<PrepayBean>
-//
-//    /**
-//     * 支付宝支付
-//     */
-//    
-//    @POST("shop/pay/ali")
-//    suspend fun requestPayZFB(@Body requestBody:RequestBody): BaseResponse<String>
-//
-//    /**
-//     * 订单查询
-//     */
-//    @GET("shop/order/{orderId}")
-//    suspend fun requestOrderInfo(@Path("orderId") orderId: String): BaseResponse<OrderBean>
-//
+    /**
+     * 购买钻石
+     */
+    @POST("shop/order")
+    suspend fun requestOrder(@Body requestBody: RequestBody): BaseResponse<OrderBean>
+
+    /**
+     * 微信支付
+     */
+    @POST("shop/pay/wx")
+    suspend fun requestPayWX(@Body requestBody: RequestBody): BaseResponse<PrepayBean>
+
+    /**
+     * 支付宝支付
+     */
+    @POST("shop/pay/ali")
+    suspend fun requestPayZFB(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 订单查询
+     */
+    @GET("shop/order/{orderId}")
+    suspend fun requestOrderInfo(@Path("orderId") orderId: String): BaseResponse<OrderBean>
+
 //
 //    /**
 //     * 实名认证
@@ -896,56 +853,48 @@ interface HomeApiService {
 //    /**
 //     * 开始匹配
 //     */
-//    
 //    @POST("match/join")
 //    suspend fun requestStartMatch(@Body requestBody:RequestBody): BaseResponse<SortBean>
 //
 //    /**
 //     * 终止匹配
 //     */
-//    
 //    @POST("match/out")
 //    suspend fun requestStopMatch(@Body requestBody:RequestBody): BaseResponse<String>
 //
 //    /**
 //     * 开始聊天
 //     */
-//    
 //    @POST("chat/start")
 //    suspend fun requestStartChat(@Body requestBody:RequestBody): BaseResponse<ChatTimeBean>
 //
 //    /**
 //     * 挂断聊天
 //     */
-//    
 //    @POST("chat/hangUp")
 //    suspend fun requestStopChat(@Body requestBody:RequestBody): BaseResponse<TotalTimeBean>
 //
 //    /**
 //     * 兑换时间
 //     */
-//    
 //    @POST("shop/exchange")
 //    suspend fun requestConvertTime(@Body requestBody:RequestBody): BaseResponse<OrderBean>
 //
 //    /**
 //     * 点亮爱心
 //     */
-//    
 //    @POST("chat/support")
 //    suspend fun requestChatSupport(@Body requestBody:RequestBody): BaseResponse<ChatTimeBean>
 //
 //    /**
 //     * 评价
 //     */
-//    
 //    @POST("chat/review")
 //    suspend fun requestChatReview(@Body requestBody:RequestBody): BaseResponse<ChatTimeBean>
 //
 //    /**
 //     * 服务器时间
 //     */
-//    
 //    @POST("chat/servertime")
 //    suspend fun requestServerTime(@Body requestBody:RequestBody): BaseResponse<ChatTimeBean>
 //
@@ -970,14 +919,12 @@ interface HomeApiService {
 //    /**
 //     * 修改接单配置
 //     */
-//    
 //    @POST("host/settings")
 //    suspend fun requestSetting(@Body requestBody:RequestBody): BaseResponse
 //
 //    /**
 //     * app开始状态
 //     */
-//    
 //    @POST("match/appStatus")
 //    suspend fun requestAppStatus(@Body requestBody:RequestBody): BaseResponse
 //
@@ -1020,7 +967,6 @@ interface HomeApiService {
 //    /**
 //     * 订阅匹配开始提醒
 //     */
-//    
 //    @POST("match/setremind")
 //    suspend fun requestMatchRemind(@Body requestBody:RequestBody): BaseResponse
 

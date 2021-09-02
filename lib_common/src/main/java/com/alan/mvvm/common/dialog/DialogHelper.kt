@@ -14,6 +14,10 @@ import com.lxj.xpopup.interfaces.OnConfirmListener
  */
 object DialogHelper {
 
+    /**
+     * 显示基础版本
+     * 一个确认按钮
+     */
     fun showBaseDialog(
         context: Context,
         title: String,

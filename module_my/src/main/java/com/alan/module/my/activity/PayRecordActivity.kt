@@ -8,10 +8,14 @@ import com.alan.module.my.R
 import com.alan.module.my.adapter.RecordAdapter
 import com.alan.module.my.databinding.ActivityPayRecordBinding
 import com.alan.module.my.viewmodol.PayRecordViewModel
+import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.ConsumeBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.MyColorDecoration
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -32,8 +36,7 @@ class PayRecordActivity : BaseActivity<ActivityPayRecordBinding, PayRecordViewMo
      */
     override val mViewModel by viewModels<PayRecordViewModel>()
     private lateinit var mAdapter: RecordAdapter
-    private var mCursor: Long = 0
-    private var hasMore = false
+    private var mCursor: Int = 0
     private var isLoad = false
 
     /**
@@ -50,18 +53,12 @@ class PayRecordActivity : BaseActivity<ActivityPayRecordBinding, PayRecordViewMo
     private fun initRv() {
         mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
-                if (hasMore) {
-                    isLoad = true
-                    requestList()
-                } else {
-                    mBinding.srfList.finishLoadMore()
-                }
+                isLoad = true
+                requestList()
             }
 
             override fun onRefresh(refreshLayout: RefreshLayout) {
-                mCursor = 0
-                isLoad = false
-                requestList()
+                requestRefresh()
             }
         })
 
@@ -82,7 +79,31 @@ class PayRecordActivity : BaseActivity<ActivityPayRecordBinding, PayRecordViewMo
      * 订阅数据
      */
     override fun initObserve() {
+        mViewModel.ldData.observe(this) {
+            when (it) {
+                is BaseResponse<*> -> {
+                    mCursor = it.cursor
+                    var list: ArrayList<ConsumeBean> = it.data as ArrayList<ConsumeBean>
+                    if (isLoad) {
+                        mBinding.srfList.finishLoadMore()
+                        mAdapter.addData(list)
+                    } else {
+                        mBinding.srfList.finishRefresh()
+                        mAdapter.setList(list)
+                    }
+                }
 
+                is BaseHttpException -> {
+                    if (isLoad) {
+                        mBinding.srfList.finishLoadMore()
+                    } else {
+                        mBinding.srfList.finishRefresh()
+                    }
+                    toast(it.errorMessage)
+                }
+
+            }
+        }
     }
 
     /**
@@ -92,10 +113,22 @@ class PayRecordActivity : BaseActivity<ActivityPayRecordBinding, PayRecordViewMo
 
     }
 
-    /**
-     * 获取列表数据
-     */
-    fun requestList() {
+    override fun onResume() {
+        super.onResume()
+        requestRefresh()
+    }
 
+    /**
+     * 刷新列表
+     */
+    fun requestRefresh() {
+        isLoad = false
+        mCursor = 0
+        requestList()
+    }
+
+
+    fun requestList() {
+        mViewModel.requestList(mCursor)
     }
 }

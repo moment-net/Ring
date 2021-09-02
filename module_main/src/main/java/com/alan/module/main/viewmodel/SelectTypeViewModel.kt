@@ -48,8 +48,7 @@ class SelectTypeViewModel @Inject constructor(private val mRepository: CommonRep
                 RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        ldSuccess.value = 1
-                        toast(it.msg)
+                        ldSuccess.value = it.data!!
                     },
                     onFailed = {
                         toast(it.errorMessage)

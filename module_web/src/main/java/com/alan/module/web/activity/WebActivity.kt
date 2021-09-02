@@ -33,11 +33,13 @@ class WebActivity : BaseActivity<ActivityWebBinding, EmptyViewModel>() {
      */
     override val mViewModel by viewModels<EmptyViewModel>()
 
+    @JvmField
     @Autowired
-    lateinit var webUrl: String
+    var webUrl: String = ""
 
+    @JvmField
     @Autowired
-    lateinit var webTitle: String
+    var webTitle: String = ""
 
 
     /**
@@ -100,6 +102,7 @@ class WebActivity : BaseActivity<ActivityWebBinding, EmptyViewModel>() {
      */
     override fun initObserve() {
         mBinding.tvTitle.setText(webTitle)
+        KLog.d("xujm", "webUrl:${webUrl}")
         mBinding.webview.loadUrl(webUrl)
     }
 

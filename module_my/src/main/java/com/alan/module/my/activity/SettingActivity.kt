@@ -183,17 +183,17 @@ class SettingActivity : BaseActivity<ActivitySettingBinding, SettingViewModel>()
 
 
         ivBack.clickDelay { finish() }
-        tvBinding.clickDelay { }
+        tvBinding.clickDelay { requestWX() }
         tvAgreement.clickDelay {
             val bundle = Bundle().apply {
-                putString("webUrl", HttpBaseUrlConstant.BASE_H5URL + "page/user-agreement")
+                putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/user-agreement")
                 putString("webTitle", "用户协议")
             }
             jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
         }
         tvPrivacy.clickDelay {
             val bundle = Bundle().apply {
-                putString("webUrl", HttpBaseUrlConstant.BASE_H5URL + "page/privacy-policy")
+                putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/privacy-policy")
                 putString("webTitle", "用户协议")
             }
             jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)

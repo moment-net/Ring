@@ -2,6 +2,7 @@ package com.alan.module.my.activity
 
 import android.graphics.Color
 import android.os.Build
+import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
@@ -17,6 +18,10 @@ import com.alan.module.my.R
 import com.alan.module.my.adapter.DiamondListAdapter
 import com.alan.module.my.databinding.ActivityMyDiamondBinding
 import com.alan.module.my.viewmodol.MyDiamondViewModel
+import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
+import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.DiamondBean
+import com.alan.mvvm.base.http.responsebean.GoodBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.MyColorDecoration
@@ -25,6 +30,7 @@ import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 /**
  * 作者：alan
@@ -40,7 +46,7 @@ class MyDiamondActivity : BaseActivity<ActivityMyDiamondBinding, MyDiamondViewMo
      */
     override val mViewModel by viewModels<MyDiamondViewModel>()
     lateinit var mAdapter: DiamondListAdapter
-
+    lateinit var diamondBean: DiamondBean
     /**
      * 初始化View
      */
@@ -61,19 +67,11 @@ class MyDiamondActivity : BaseActivity<ActivityMyDiamondBinding, MyDiamondViewMo
             }
 
             override fun onClick(view: View) {
-//                val intent = Intent(
-//                    Intent.ACTION_VIEW,
-//                    Uri.parse(
-//                        "scheme://speak:8888/webActivity?webUrl=" + ApiConstant.getHostUrl(
-//                            Host.APP
-//                        ).toString() + "page/consume-policy&title=充值协议"
-//                    )
-//                )
-//                intent.putExtra(
-//                    IConstantRoom.KEY_SPEAK_FROM_PAGE,
-//                    IConstantRoom.MyConstant.MY_LOGIN_PHONE
-//                )
-//                startActivity(intent)
+                val bundle = Bundle().apply {
+                    putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/consume-policy")
+                    putString("webTitle", "充值协议")
+                }
+                jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
             }
         }, 6, 14, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         spanText.setSpan(object : ClickableSpan() {
@@ -87,7 +85,11 @@ class MyDiamondActivity : BaseActivity<ActivityMyDiamondBinding, MyDiamondViewMo
             }
 
             override fun onClick(view: View) {
-//                jumpARoute()
+                val bundle = Bundle().apply {
+                    putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/QnA")
+                    putString("webTitle", "常见问题")
+                }
+                jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
             }
         }, spanText.length - 6, spanText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
@@ -110,13 +112,28 @@ class MyDiamondActivity : BaseActivity<ActivityMyDiamondBinding, MyDiamondViewMo
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = mAdapter
         }
+        mAdapter.setOnItemClickListener { adapter, view, position ->
+
+        }
     }
 
     /**
      * 订阅数据
      */
     override fun initObserve() {
+        mViewModel.ldSuccess.observe(this) {
+            when (it) {
+                is DiamondBean -> {
+                    diamondBean = it
+                    mBinding.tvNum.setText("${it.points}")
+                }
 
+                is BaseResponse<*> -> {
+                    val list: ArrayList<GoodBean> = it.data as ArrayList<GoodBean>
+                    mAdapter.setList(list)
+                }
+            }
+        }
     }
 
     /**
@@ -124,5 +141,11 @@ class MyDiamondActivity : BaseActivity<ActivityMyDiamondBinding, MyDiamondViewMo
      */
     override fun initRequestData() {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.requestDiamond()
+        mViewModel.requestGoodsList()
     }
 }

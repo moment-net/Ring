@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.ManagerInfoActivity">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/iv_avatar_bg"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/_FFBD2A"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
+        android:background="@drawable/shape_home_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +28,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/dimen92">
+            android:paddingStart="@dimen/dimen10"
+            android:paddingTop="@dimen/dimen92"
+            android:paddingEnd="@dimen/dimen10">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -47,38 +47,37 @@
 
                 <ImageView
                     android:id="@+id/iv_avatar"
-                    android:layout_width="@dimen/dimen100"
-                    android:layout_height="@dimen/dimen100"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="@dimen/dimen20"
+                    android:layout_width="@dimen/dimen110"
+                    android:layout_height="@dimen/dimen110"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="@dimen/dimen13"
                     android:src="@drawable/icon_placeholder"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
+                    android:id="@+id/iv_online"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen81"
+                    android:layout_marginTop="@dimen/dimen10"
                     android:src="@drawable/icon_home_online"
-                    app:layout_constraintTop_toTopOf="@+id/iv_avatar"
-                    app:layout_constraintStart_toStartOf="@+id/iv_avatar" />
-
+                    app:layout_constraintStart_toStartOf="@+id/iv_avatar"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_voice"
-                    android:layout_width="@dimen/dimen65"
-                    android:layout_height="@dimen/dimen30"
-                    android:layout_marginStart="@dimen/dimen10"
-                    android:layout_marginTop="@dimen/dimen4"
-                    android:background="@drawable/icon_home_voic"
-                    android:drawableStart="@drawable/icon_home_play"
-                    android:drawablePadding="@dimen/dimen10"
-                    android:gravity="center_vertical"
-                    android:paddingStart="@dimen/dimen16"
-                    android:text="15'"
+                    android:layout_width="62dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/icon_home_voice_bg"
+                    android:gravity="center"
+                    android:text="14s"
+                    android:textSize="10sp"
                     android:textColor="@color/white"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-                    app:layout_constraintTop_toTopOf="@+id/iv_avatar" />
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+                    app:layout_constraintStart_toStartOf="@+id/iv_avatar" />
 
 
                 <TextView
@@ -86,90 +85,72 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="10dp"
                     android:ellipsize="end"
                     android:includeFontPadding="false"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="番茄会害羞"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp20"
+                    android:layout_marginTop="@dimen/dimen10"
+                    android:textColor="@color/_221800"
+                    android:textSize="@dimen/sp18"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_voice" />
+                    app:layout_constraintTop_toTopOf="@+id/iv_avatar" />
+
 
                 <leifu.shapelibrary.ShapeView
                     android:id="@+id/tv_age"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dimen18"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:paddingStart="@dimen/dimen6"
-                    android:paddingTop="@dimen/dimen0"
-                    android:paddingEnd="@dimen/dimen6"
-                    android:paddingBottom="@dimen/dimen0"
-                    android:text="27岁"
-                    android:textColor="@color/white"
+                    android:layout_height="@dimen/dimen20"
+                    android:layout_marginTop="14dp"
+                    android:drawableStart="@drawable/icon_home_girl"
+                    android:drawablePadding="@dimen/dimen3"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:paddingStart="@dimen/dimen5"
+                    android:paddingTop="0dp"
+                    android:paddingEnd="@dimen/dimen5"
+                    android:paddingBottom="0dp"
+                    android:text="19岁  准格尔"
+                    android:textColor="@color/_FF517A"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/tv_name"
                     app:layout_constraintTop_toBottomOf="@+id/tv_name"
-                    app:sCorners="4dp"
-                    app:sSolidColor="@color/_698DEE"
-                    app:sStrokeColor="@color/_3A3A3A"
+                    app:sCorners="3dp"
+                    app:sSizeHeight="@dimen/dimen20"
+                    app:sSolidColor="@color/_1AFF517A"
                     app:sStrokeWidth="0dp" />
 
                 <leifu.shapelibrary.ShapeView
-                    android:id="@+id/tv_location"
+                    android:id="@+id/tv_state"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dimen18"
-                    android:layout_marginStart="8dp"
-                    android:gravity="center"
-                    android:paddingStart="@dimen/dimen6"
-                    android:paddingTop="@dimen/dimen0"
-                    android:paddingEnd="@dimen/dimen6"
-                    android:paddingBottom="@dimen/dimen0"
-                    android:text="北京"
-                    android:textColor="@color/white"
+                    android:layout_height="@dimen/dimen20"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:paddingStart="@dimen/dimen5"
+                    android:paddingTop="0dp"
+                    android:paddingEnd="@dimen/dimen5"
+                    android:paddingBottom="0dp"
+                    android:text="“饭后思考人生中”"
+                    android:textColor="@color/_FF6800"
                     android:textSize="12sp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_age"
-                    app:layout_constraintStart_toEndOf="@+id/tv_age"
-                    app:sCorners="4dp"
-                    app:sSolidColor="@color/_8364C7"
-                    app:sStrokeColor="@color/_3A3A3A"
+                    app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_age"
+                    app:sCorners="3dp"
+                    app:sSolidColor="@color/_26FF6800"
                     app:sStrokeWidth="0dp" />
 
-                <leifu.shapelibrary.ShapeView
-                    android:id="@+id/tv_star"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dimen18"
-                    android:layout_marginStart="8dp"
-                    android:gravity="center"
-                    android:paddingStart="@dimen/dimen6"
-                    android:paddingTop="@dimen/dimen0"
-                    android:paddingEnd="@dimen/dimen6"
-                    android:paddingBottom="@dimen/dimen0"
-                    android:text="白羊座"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_age"
-                    app:layout_constraintStart_toEndOf="@+id/tv_location"
-                    app:sCorners="4dp"
-                    app:sSolidColor="@color/_08DA89"
-                    app:sStrokeColor="@color/_3A3A3A"
-                    app:sStrokeWidth="0dp" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_remind"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/shape_white10"
-                    android:elevation="@dimen/dimen5"
-                    android:paddingStart="@dimen/dimen20"
-                    android:paddingEnd="@dimen/dimen20"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_avatar">
@@ -179,21 +160,18 @@
                         android:id="@+id/home_textview3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="26dp"
-                        android:text="在职时间"
-                        android:textColor="@color/black50"
+                        android:text="吃货宣言："
+                        android:textColor="@color/_993A3A3A"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_time"
+                        android:id="@+id/tv_declaration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:text="每天 08:00-22:00"
-                        android:textColor="@color/black"
+                        android:text="人是铁饭是钢"
+                        android:textColor="@color/_3A3A3A"
                         android:textSize="14sp"
                         app:layout_constraintBaseline_toBaselineOf="@+id/home_textview3"
                         app:layout_constraintStart_toEndOf="@+id/home_textview3" />
@@ -203,44 +181,68 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
-                        android:text="管家类型"
-                        android:textColor="@color/black50"
+                        android:text="喜欢吃"
+                        android:textColor="@color/_3A3A3A"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="@+id/home_textview3"
                         app:layout_constraintTop_toBottomOf="@+id/home_textview3" />
+
+                    <leifu.shapelibrary.ShapeView
+                        android:id="@+id/tv_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dimen20"
+                        android:layout_marginStart="10dp"
+                        android:includeFontPadding="false"
+                        android:paddingStart="@dimen/dimen5"
+                        android:paddingTop="0dp"
+                        android:paddingEnd="@dimen/dimen5"
+                        android:paddingBottom="0dp"
+                        android:text="川菜"
+                        android:textColor="@color/_CCFF6800"
+                        android:textSize="11sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/home_textview5"
+                        app:layout_constraintStart_toEndOf="@+id/home_textview5"
+                        app:layout_constraintTop_toTopOf="@+id/home_textview5"
+                        app:sCorners="3dp"
+                        app:sSolidColor="@color/white"
+                        app:sStrokeColor="@color/_FF6800"
+                        app:sStrokeWidth="0.5dp" />
 
                     <TextView
                         android:id="@+id/home_textview6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
-                        android:layout_marginBottom="30dp"
-                        android:text="职业技能"
-                        android:textColor="@color/black50"
+                        android:layout_marginBottom="10dp"
+                        android:text="干饭标签"
+                        android:textColor="@color/_3A3A3A"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/home_textview3"
                         app:layout_constraintTop_toBottomOf="@+id/home_textview5" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_type"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="20dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/home_textview5"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/home_textview5"
-                        app:layout_constraintTop_toTopOf="@+id/home_textview5" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_skil"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="20dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/home_textview6"
-                        app:layout_constraintEnd_toEndOf="parent"
+                    <leifu.shapelibrary.ShapeView
+                        android:id="@+id/tv_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dimen20"
+                        android:layout_marginStart="10dp"
+                        android:gravity="center_vertical"
+                        android:includeFontPadding="false"
+                        android:paddingStart="@dimen/dimen5"
+                        android:paddingTop="0dp"
+                        android:paddingEnd="@dimen/dimen5"
+                        android:paddingBottom="0dp"
+                        android:text="大胃王"
+                        android:textColor="@color/_CCFF6800"
+                        android:textSize="11sp"
                         app:layout_constraintStart_toEndOf="@+id/home_textview6"
-                        app:layout_constraintTop_toTopOf="@+id/home_textview6" />
+                        app:layout_constraintBottom_toBottomOf="@+id/home_textview6"
+                        app:layout_constraintTop_toTopOf="@+id/home_textview6"
+                        app:sCorners="3dp"
+                        app:sSolidColor="@color/white"
+                        app:sStrokeColor="@color/_FF6800"
+                        app:sStrokeWidth="0.5dp" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -329,7 +331,6 @@
                     android:padding="0dp"
                     app:sCorners="8dp"
                     app:sSolidColor="@color/_FF4F78"
-                    app:sStrokeColor="@color/_3A3A3A"
                     app:sStrokeWidth="0dp" />
 
                 <leifu.shapelibrary.ShapeView
@@ -339,7 +340,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="15dp"
-                    android:text="聊一聊"
+                    android:text="边吃边聊"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -361,7 +362,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ll_title"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dimen64"
+        android:layout_height="@dimen/dimen74"
         android:background="@color/white0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -374,7 +375,7 @@
             android:layout_marginStart="@dimen/dimen15"
             android:layout_marginBottom="@dimen/dimen8"
             android:padding="@dimen/dimen5"
-            android:src="@drawable/icon_back_white"
+            android:src="@drawable/icon_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -385,8 +386,8 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="管家简历详情"
-            android:textColor="@color/white"
+            android:text="饭友详情"
+            android:textColor="@color/_3F3317"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_back"
             app:layout_constraintEnd_toEndOf="parent"

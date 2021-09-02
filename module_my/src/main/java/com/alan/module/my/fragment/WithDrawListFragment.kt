@@ -1,5 +1,6 @@
 package com.alan.module.my.fragment
 
+import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,8 +9,14 @@ import com.alan.module.my.R
 import com.alan.module.my.adapter.WithDrawAdapter
 import com.alan.module.my.databinding.FragmentWithDrawListBinding
 import com.alan.module.my.viewmodol.WithdrawListViewModel
+import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.WithdrawBean
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.MyColorDecoration
+import com.alan.mvvm.base.utils.jumpARoute
+import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.ui.BaseFragment
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -26,8 +33,7 @@ class WithDrawListFragment : BaseFragment<FragmentWithDrawListBinding, WithdrawL
 
     override val mViewModel by viewModels<WithdrawListViewModel>()
     private lateinit var mAdapter: WithDrawAdapter
-    private var cursor: Long = 0
-    private var hasMore = false
+    private var mCursor: Int = 0
     private var isLoad = false
 
 
@@ -42,18 +48,12 @@ class WithDrawListFragment : BaseFragment<FragmentWithDrawListBinding, WithdrawL
     fun initRV() {
         mBinding.srlList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
-                if (hasMore) {
-                    isLoad = true
-                    requestList()
-                } else {
-                    mBinding.srlList.finishLoadMore()
-                }
+                isLoad = true
+                requestList()
             }
 
             override fun onRefresh(refreshLayout: RefreshLayout) {
-                cursor = 0
-                isLoad = false
-                requestList()
+                requestRefresh()
             }
         })
         mAdapter = WithDrawAdapter()
@@ -68,26 +68,63 @@ class WithDrawListFragment : BaseFragment<FragmentWithDrawListBinding, WithdrawL
             adapter = mAdapter
         }
         mAdapter.setOnItemClickListener(OnItemClickListener { adapter, view, position ->
-//            val withdrawBean: WithdrawBean = mAdapter.getData().get(position)
-//            val tradeId: String = withdrawBean.getTradeId()
-//            ARouter.getInstance().build(IConstantRoom.MyConstant.MY_WITHDRAWDETAIL)
-//                .withString("tradeId", tradeId).navigation()
+            val withdrawBean: WithdrawBean = mAdapter.data.get(position)
+            val bundle = Bundle().apply {
+                putString("tradeId", withdrawBean.tradeId)
+            }
+            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_WITHDRAWDETAIL, bundle)
         })
-//        mAdapter.setEmptyView(R.layout.item_null_record)
     }
 
     override fun initObserve() {
+        mViewModel.ldData.observe(this) {
+            when (it) {
+                is BaseResponse<*> -> {
+                    mCursor = it.cursor
+                    var list: ArrayList<WithdrawBean> = it.data as ArrayList<WithdrawBean>
+                    if (isLoad) {
+                        mBinding.srlList.finishLoadMore()
+                        mAdapter.addData(list)
+                    } else {
+                        mBinding.srlList.finishRefresh()
+                        mAdapter.setList(list)
+                    }
 
+                }
+
+                is BaseHttpException -> {
+                    if (isLoad) {
+                        mBinding.srlList.finishLoadMore()
+                    } else {
+                        mBinding.srlList.finishRefresh()
+                    }
+                    toast(it.errorMessage)
+                }
+
+            }
+        }
     }
 
     override fun initRequestData() {
         requestList()
     }
 
-    /**
-     * 获取列表数据
-     */
-    fun requestList() {
+    override fun onResume() {
+        super.onResume()
+        requestRefresh()
+    }
 
+    /**
+     * 刷新列表
+     */
+    fun requestRefresh() {
+        isLoad = false
+        mCursor = 0
+        requestList()
+    }
+
+
+    fun requestList() {
+        mViewModel.requestList(mCursor)
     }
 }

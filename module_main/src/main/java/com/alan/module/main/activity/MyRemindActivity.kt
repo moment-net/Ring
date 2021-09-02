@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 /**
  * 作者：alan
  * 时间：2021/7/30
- * 备注：
+ * 备注：我的订阅提醒
  */
 @Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_MYREMIND)
 @AndroidEntryPoint

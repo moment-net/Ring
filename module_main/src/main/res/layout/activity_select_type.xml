@@ -12,7 +12,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="请选择你的监督目标"
+        android:text="请选择你的干饭标签"
         android:textColor="@color/black"
         android:textSize="@dimen/sp18"
         app:layout_constraintEnd_toEndOf="parent"

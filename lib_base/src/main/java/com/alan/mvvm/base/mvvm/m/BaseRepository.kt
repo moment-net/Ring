@@ -6,7 +6,9 @@ import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.http.exception.BaseHttpException.Companion.CODE_ERROR_LOCAL_UNKNOWN
 import com.alan.mvvm.common.http.exception.BaseHttpException.Companion.ERROR_NO_NET
+import com.alan.mvvm.common.http.exception.BaseHttpException.Companion.ERROR_PARSE
 import com.alan.mvvm.common.http.exception.BaseHttpException.Companion.ERROR_UNKNOWN
+import com.google.gson.JsonSyntaxException
 import com.socks.library.KLog
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -83,6 +85,9 @@ open class BaseRepository {
             }
             is ConnectException, is SocketTimeoutException, is UnknownHostException, is GeneralSecurityException, is UnknownServiceException, is IOException -> {
                 exception = BaseHttpException(ERROR_NO_NET, "没有网络，请检查网络设置", throwable)
+            }
+            is JsonSyntaxException -> {
+                exception = BaseHttpException(ERROR_PARSE, "解析出错，服务器异常", throwable)
             }
             else -> {
                 exception = BaseHttpException(ERROR_UNKNOWN, "请求出错，请检查网络设置", throwable)

@@ -1,6 +1,7 @@
 package com.alan.module.my.activity
 
 import android.text.TextUtils
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,6 +10,8 @@ import com.alan.module.my.R
 import com.alan.module.my.adapter.FollowAdapter
 import com.alan.module.my.databinding.ActivityFollowBinding
 import com.alan.module.my.viewmodol.FollowViewModel
+import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.MyColorDecoration
@@ -16,6 +19,8 @@ import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.listener.OnItemChildClickListener
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,34 +39,37 @@ class FollowActivity : BaseActivity<ActivityFollowBinding, FollowViewModel>() {
      */
     override val mViewModel by viewModels<FollowViewModel>()
     lateinit var mAdapter: FollowAdapter
-    private var cursor: Long = 0
-    private val hasMore = false
+    private var mCursor: Int = 0
     private var isLoad = false
 
+    @JvmField
     @Autowired
-    lateinit var type: String
+    var type: String = "0"
 
     /**
      * 初始化View
      */
     override fun ActivityFollowBinding.initView() {
         ivBack.clickDelay { finish() }
+        if (TextUtils.equals(type, "1")) {
+            tvTitle.setText("我关注的")
+        } else {
+            tvTitle.setText("关注我的")
+        }
+
+
         initRV()
     }
 
     private fun initRV() {
         mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onRefresh(refreshLayout: RefreshLayout) {
-                cursor = 0
-                isLoad = false
+                requestRefresh()
             }
 
             override fun onLoadMore(refreshLayout: RefreshLayout) {
-                if (hasMore) {
-                    isLoad = true
-                } else {
-                    mBinding.srfList.finishLoadMore()
-                }
+                isLoad = true
+                requestList()
             }
         })
         mAdapter = FollowAdapter()
@@ -75,13 +83,52 @@ class FollowActivity : BaseActivity<ActivityFollowBinding, FollowViewModel>() {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = mAdapter
         }
+        mAdapter.setOnItemChildClickListener(object : OnItemChildClickListener {
+            override fun onItemChildClick(
+                adapter: BaseQuickAdapter<*, *>,
+                view: View,
+                position: Int
+            ) {
+                var userInfoBean: UserInfoBean = mAdapter.data.get(position)
+                if (userInfoBean.followStatus == 0) {
+                    mViewModel.requestChangeFollow(position, userInfoBean.userId, 1)
+                } else {
+                    mViewModel.requestChangeFollow(position, userInfoBean.userId, 0)
+                }
+            }
+        })
     }
 
     /**
      * 订阅数据
      */
     override fun initObserve() {
+        mViewModel.ldSuccess.observe(this) {
+            when (it) {
+                is BaseResponse<*> -> {
+                    mCursor = it.cursor
+                    val list: ArrayList<UserInfoBean> =
+                        (it.data ?: arrayListOf<UserInfoBean>()) as ArrayList<UserInfoBean>
+                    if (isLoad) {
+                        mBinding.srfList.finishLoadMore()
+                        mAdapter.addData(list)
+                    } else {
+                        mBinding.srfList.finishRefresh()
+                        mAdapter.setList(list)
+                    }
+                }
 
+                is Int -> {
+                    val tag = mAdapter.data.get(it).followStatus
+                    if (tag == 0) {
+                        mAdapter.data.get(it).followStatus = 1
+                    } else {
+                        mAdapter.data.get(it).followStatus = 0
+                    }
+                    mAdapter.notifyItemChanged(it)
+                }
+            }
+        }
     }
 
     /**
@@ -92,94 +139,28 @@ class FollowActivity : BaseActivity<ActivityFollowBinding, FollowViewModel>() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        requestRefresh()
+    }
+
+    /**
+     * 刷新列表
+     */
+    fun requestRefresh() {
+        isLoad = false
+        mCursor = 0
+        requestList()
+    }
+
     /**
      * 请求列表数据
      */
     fun requestList() {
         if (TextUtils.equals(type, "1")) {
-            requestFollowList();
+            mViewModel.requestFollowList(mCursor);
         } else {
-            requestFansList();
+            mViewModel.requestFansList(mCursor);
         }
-    }
-
-    /**
-     * 更改关注与被关注
-     */
-    fun requestFollow() {
-//        viewModel.requestChangeFollow(userId, tag, new RequestHandler<HeartBaseResponse<ChangeFollowBean>>() {
-//            @Override
-//            public void onError(String message) {
-//                ToastUtil.showToast(mActivity, message);
-//            }
-//
-//            @Override
-//            public void onSucceed(HeartBaseResponse<ChangeFollowBean> response) {
-//                if (response.getResultCode() == 0) {
-//                    mAdapter.getData().get(position).setFollowStatus(response.getData().getFollowStatus());
-//                    mAdapter.notifyItemChanged(position);
-//                }
-//            }
-//
-//        });
-    }
-
-
-    fun requestFollowList() {
-//        viewModel.requestFollowList(cursor, new RequestHandler<HeartBaseResponse<ArrayList<UserInfoBean>>>() {
-//
-//
-//            @Override
-//            public void onError(String message) {
-//                ToastUtil.showToast(mActivity, message);
-//                binding.srfFollow.finishRefresh();
-//            }
-//
-//            @Override
-//            public void onSucceed(HeartBaseResponse<ArrayList<UserInfoBean>> response) {
-//                if (response.getResultCode() == 0) {
-//                    cursor = response.getCursor();
-//                    hasMore = response.isHasMore();
-//                    ArrayList<UserInfoBean> data = response.getData();
-//                    if (isLoad) {
-//                        binding.srfFollow.finishLoadMore();
-//                        mAdapter.addData(data);
-//                    } else {
-//                        binding.srfFollow.finishRefresh();
-//                        mAdapter.setList(data);
-//                    }
-//                }
-//                mAdapter.setEmptyView(R.layout.item_null);
-//            }
-//        });
-    }
-
-    fun requestFansList() {
-//        viewModel.requestFansList(cursor, new RequestHandler<HeartBaseResponse<ArrayList<UserInfoBean>>>() {
-//
-//
-//            @Override
-//            public void onError(String message) {
-//                ToastUtil.showToast(mActivity, message);
-//                binding.srfFollow.finishRefresh();
-//            }
-//
-//            @Override
-//            public void onSucceed(HeartBaseResponse<ArrayList<UserInfoBean>> response) {
-//                if (response.getResultCode() == 0) {
-//                    cursor = response.getCursor();
-//                    hasMore = response.isHasMore();
-//                    ArrayList<UserInfoBean> data = response.getData();
-//                    if (isLoad) {
-//                        binding.srfFollow.finishLoadMore();
-//                        mAdapter.addData(data);
-//                    } else {
-//                        binding.srfFollow.finishRefresh();
-//                        mAdapter.setList(data);
-//                    }
-//                }
-//                mAdapter.setEmptyView(R.layout.item_null);
-//            }
-//        });
     }
 }

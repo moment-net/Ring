@@ -1,0 +1,21 @@
+package com.alan.mvvm.base.http.responsebean
+
+data class GoodBean(
+    var id: String? = null,
+    val goodsId: String? = null,
+    val name: String? = null,
+    val type: String? = null,
+    val amount: Int = 0,
+    val point: Int = 0,
+    val detail: String? = null,
+    val date: String? = null,
+    val status: String? = null,
+    val num: String? = null,
+    val activity: ActivityClass? = null
+)
+
+
+data class ActivityClass(
+    var original_amount: Int = 0,
+    val name: String? = null
+)

@@ -19,7 +19,7 @@ class CookiesInterceptor : Interceptor {
         /**
          * 登陆相关接口不设置cookie
          */
-        val url = request.url.toString()
+//        val url = request.url.toString()
 
         builder.addHeader("device_platform", "android")
         builder.addHeader("device_type", Build.MODEL)

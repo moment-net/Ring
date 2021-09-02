@@ -1,9 +1,12 @@
 package com.alan.module.my.viewmodol
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -16,7 +19,31 @@ import javax.inject.Inject
 class MessageViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
-    val data = MutableLiveData<String>()
+    val ldData = MutableLiveData<Any>()
+
+
+    /**
+     * 获取列表
+     */
+    fun requestList(curson: Int) {
+        var map = hashMapOf<String, String>()
+        map.put("cursor", "${curson}")
+        map.put("count", "20")
+        map.put("type", "2");
+        viewModelScope.launch() {
+            mRepository.requestMessage(
+                map,
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = it
+                    },
+                    onFailed = {
+                        ldData.value = it
+                    },
+                )
+            )
+        }
+    }
 
 
 }

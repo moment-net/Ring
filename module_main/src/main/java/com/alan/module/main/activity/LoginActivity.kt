@@ -235,7 +235,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
             override fun onClick(view: View) {
                 val bundle = Bundle().apply {
-                    putString("webUrl", HttpBaseUrlConstant.BASE_H5URL + "page/user-agreement")
+                    putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/user-agreement")
                     putString("webTitle", "用户协议")
                 }
                 jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
@@ -250,7 +250,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
             override fun onClick(view: View) {
                 val bundle = Bundle().apply {
-                    putString("webUrl", HttpBaseUrlConstant.BASE_H5URL + "page/privacy-policy")
+                    putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/privacy-policy")
                     putString("webTitle", "隐私政策")
                 }
                 jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
@@ -352,7 +352,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             //3上传JPUSH设备ID
             mViewModel.requestDevicesRegister()
             //4跳转逻辑
-            if (thridLoginBean!!.user!!.bindPhone) {
+            if (thridLoginBean!!.user!!.bindPhone!!) {
                 finish()
                 jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
             } else {
@@ -409,11 +409,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 .setPrivacyClauseTextStrings(
                     "未注册的手机号验证通过后将自动注册登录即同意",
                     "用户协议",
-                    HttpBaseUrlConstant.BASE_H5URL + "page/user-agreement",
+                    HttpBaseUrlConstant.BASE_URL + "page/user-agreement",
                     "",
                     "和",
                     "隐私政策",
-                    HttpBaseUrlConstant.BASE_H5URL + "page/privacy-policy",
+                    HttpBaseUrlConstant.BASE_URL + "page/privacy-policy",
                     "",
                     "和",
                     "",

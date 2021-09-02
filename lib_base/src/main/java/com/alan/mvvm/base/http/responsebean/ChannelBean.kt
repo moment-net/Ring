@@ -1,7 +1,9 @@
 package com.alan.mvvm.base.http.responsebean
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ChannelBean(
     var id: String? = null,
     var name: String? = null,
@@ -15,4 +17,4 @@ data class ChannelBean(
     var isPublic: Boolean = false,
     var cityCode: String? = null,
     var enterCode: String? = null
-) : Serializable
+) : Parcelable

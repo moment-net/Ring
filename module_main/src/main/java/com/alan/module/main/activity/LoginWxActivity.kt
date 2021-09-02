@@ -269,10 +269,10 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
         } else {
             mBinding.llBind.setVisibility(View.GONE)
             mBinding.etName.setText(SpHelper.getUserInfo()?.userName)
-            if (SpHelper.getUserInfo()?.gender === 1) {
+            if (SpHelper.getUserInfo()?.gender == 1) {
                 gender = 1
                 mBinding.rbBoy.setChecked(true)
-            } else if (SpHelper.getUserInfo()?.gender === 2) {
+            } else if (SpHelper.getUserInfo()?.gender == 2) {
                 gender = 2
                 mBinding.rbGirl.setChecked(true)
             }
@@ -282,7 +282,7 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
         if (SpHelper.getUserInfo() != null) {
             mBinding.etName.setText(SpHelper.getUserInfo()?.userName)
             mBinding.etName.clearFocus()
-            mBinding.ivAvator.load(SpHelper.getUserInfo()?.avatar)
+            CoilUtils.loadCircle(mBinding.ivAvator, SpHelper.getUserInfo()?.avatar!!)
         }
     }
 

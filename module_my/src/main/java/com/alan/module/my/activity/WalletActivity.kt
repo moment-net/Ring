@@ -1,8 +1,11 @@
 package com.alan.module.my.activity
 
+import android.os.Bundle
 import androidx.activity.viewModels
 import com.alan.module.my.databinding.ActivityWalletBinding
 import com.alan.module.my.viewmodol.WalletViewModel
+import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
+import com.alan.mvvm.base.http.requestbean.AccountBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
@@ -19,6 +22,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class WalletActivity : BaseActivity<ActivityWalletBinding, WalletViewModel>() {
 
+    lateinit var accountBean: AccountBean
+
     /**
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
      */
@@ -29,16 +34,36 @@ class WalletActivity : BaseActivity<ActivityWalletBinding, WalletViewModel>() {
      */
     override fun ActivityWalletBinding.initView() {
         ivBack.clickDelay { finish() }
-        tvRight.clickDelay { }
-        tvBill.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_BILL) }
-        tvWithdraw.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_WITHDRAW) }
+        tvRight.clickDelay {
+            val bundle = Bundle().apply {
+                putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/QnA")
+                putString("webTitle", "常见问题")
+            }
+            jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
+        }
+        tvBill.clickDelay {
+            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_BILL)
+        }
+        tvWithdraw.clickDelay {
+            val bundle = Bundle().apply {
+                putParcelable("bean", accountBean)
+            }
+            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_WITHDRAW, bundle)
+        }
     }
 
     /**
      * 订阅数据
      */
     override fun initObserve() {
-
+        mViewModel.ldSuccess.observe(this) {
+            when (it) {
+                is AccountBean -> {
+                    accountBean = it
+                    mBinding.tvNum.setText("${it.assetsCount}")
+                }
+            }
+        }
     }
 
     /**
@@ -46,5 +71,10 @@ class WalletActivity : BaseActivity<ActivityWalletBinding, WalletViewModel>() {
      */
     override fun initRequestData() {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.requestAccount()
     }
 }

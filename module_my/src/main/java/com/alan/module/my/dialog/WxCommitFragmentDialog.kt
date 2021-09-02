@@ -2,6 +2,7 @@ package com.alan.module.my.dialog
 
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.view.Gravity
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
@@ -17,6 +18,23 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class WxCommitFragmentDialog : BaseFrameDialogFragment<LayoutWxcommitBinding, WxCommitViewModel>() {
 
+
+    companion object {
+        fun newInstance(wxAccount: String?): WxCommitFragmentDialog {
+            val bundle = Bundle()
+            bundle.putString("wxAccount", wxAccount)
+            val dialog = WxCommitFragmentDialog()
+            dialog.setArguments(bundle)
+            return dialog
+        }
+    }
+
+    var dialogListener: DialogOnClickListener? = null
+        set(value) {
+            field = value
+        }
+
+    var wxAccount: String? = null
 
     /**
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
@@ -45,18 +63,45 @@ class WxCommitFragmentDialog : BaseFrameDialogFragment<LayoutWxcommitBinding, Wx
 
 
     override fun LayoutWxcommitBinding.initView() {
-        tvEdit.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        tvCommit.clickDelay { }
-        tvCancle.clickDelay { }
-        tvEdit.clickDelay { }
+        tvCommit.clickDelay {
+            if (dialogListener != null) {
+                dialogListener!!.onCommitClick()
+            }
+            dismiss()
+        }
+        tvCancle.clickDelay {
+            if (dialogListener != null) {
+                dialogListener!!.onCancelClick()
+            }
+            dismiss()
+        }
+        tvEdit.clickDelay {
+            if (dialogListener != null) {
+                dialogListener!!.onEditClick()
+            }
+            dismiss()
+        }
+
+        wxAccount = arguments?.getString("wxAccount")
+        tvEdit.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG)
+        tvInfo.setText(wxAccount)
     }
 
 
     override fun initObserve() {
+
     }
 
     override fun initRequestData() {
     }
 
 
+    interface DialogOnClickListener {
+        fun onCancelClick();
+        fun onCommitClick();
+        fun onEditClick();
+    }
+
+
 }
+

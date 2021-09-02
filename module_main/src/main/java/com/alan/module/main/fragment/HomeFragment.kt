@@ -1,5 +1,6 @@
 package com.alan.module.main.fragment
 
+import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,12 +9,17 @@ import com.alan.module.main.R
 import com.alan.module.main.adapter.ManagerAdapter
 import com.alan.module.main.databinding.FragmentHomeBinding
 import com.alan.module.main.viewmodel.HomeViewModel
+import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.CookerBean
+import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.utils.MyColorDecoration
+import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.ui.BaseFragment
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -35,6 +41,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
 
     override fun FragmentHomeBinding.initView() {
+        ivAvatar.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MY) }
+        tvState.clickDelay {
+
+        }
         initRV()
         changeState()
     }
@@ -69,7 +79,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initRequestData() {
-        requestRefresh()
+
     }
 
 
@@ -89,6 +99,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             adapter = mAdapter
         }
 
+        mAdapter.setOnItemClickListener { adapter, view, position ->
+            val bundle = Bundle().apply {
+                putParcelable("bean", mAdapter.data.get(position))
+            }
+            jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
+        }
+
         mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
                 isLoad = true
@@ -99,33 +116,52 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 requestRefresh()
             }
         })
+
+
     }
 
 
     fun changeState() {
         if (true) {
-            mBinding.tvRecord.setText("暂未匹配饭友…")
-            mBinding.tvRecord.setTextColor(R.color._FFE26B.getResColor())
-            mBinding.tvRecord.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            mBinding.tvState.setText("暂未匹配饭友…")
+            mBinding.tvState.setTextColor(R.color._FFE26B.getResColor())
+            mBinding.tvState.setCompoundDrawablesRelativeWithIntrinsicBounds(
                 R.drawable.icon_home_cooking,
                 0,
                 0,
                 0
             )
-            mBinding.tvRecord.setShapeSolidColor(R.color._3F3317.getResColor()).setUseShape()
+            mBinding.tvState.setShapeSolidColor(R.color._3F3317.getResColor()).setUseShape()
         } else {
-            mBinding.tvRecord.setText("正在匹配饭友…")
-            mBinding.tvRecord.setTextColor(R.color._221800.getResColor())
-            mBinding.tvRecord.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            mBinding.tvState.setText("正在匹配饭友…")
+            mBinding.tvState.setTextColor(R.color._221800.getResColor())
+            mBinding.tvState.setCompoundDrawablesRelativeWithIntrinsicBounds(
                 R.drawable.icon_home_cooked,
                 0,
                 0,
                 0
             )
-            mBinding.tvRecord.setShapeSolidColor(R.color._FFC94F.getResColor()).setUseShape()
+            mBinding.tvState.setShapeSolidColor(R.color._FFC94F.getResColor()).setUseShape()
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setUserInfo()
+        requestRefresh()
+    }
+
+    fun setUserInfo() {
+        var userInfoBean = SpHelper.getUserInfo()
+        CoilUtils.loadRoundBorder(
+            mBinding.ivAvatar,
+            userInfoBean?.avatar!!,
+            17f,
+            1f,
+            R.color.white.getResColor()
+        )
+        mBinding.tvName.setText(userInfoBean.userName)
+    }
 
     /**
      * 刷新列表

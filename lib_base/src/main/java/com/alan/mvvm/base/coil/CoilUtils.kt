@@ -1,11 +1,13 @@
 package com.alan.mvvm.base.coil
 
+import android.content.Context
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import coil.Coil
 import coil.ImageLoader
 import coil.load
 import coil.request.CachePolicy
+import coil.transform.BlurTransformation
 import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
 import coil.util.CoilUtils
@@ -29,6 +31,33 @@ object CoilUtils {
             }
             .build()
         Coil.setImageLoader(imageLoader)
+    }
+
+    /**
+     * 加载图片
+     */
+    fun load(
+        iv: ImageView,
+        url: String
+    ) {
+        iv.load(url) {}
+    }
+
+    /**
+     * 加载图片高斯模糊
+     */
+    fun loadBlur(
+        iv: ImageView,
+        url: String,
+        context: Context,
+        radius: Float,
+        sampling: Float
+    ) {
+        iv.load(url) {
+            transformations(
+                BlurTransformation(context, radius, sampling)
+            )
+        }
     }
 
     /**
