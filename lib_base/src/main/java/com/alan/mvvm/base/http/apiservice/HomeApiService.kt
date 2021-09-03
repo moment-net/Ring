@@ -572,16 +572,16 @@ interface HomeApiService {
 //    @POST("private/matchSwitch")
 //    suspend fun requestMatchSwitch(@Body requestBody:RequestBody): BaseResponse
 //
-//    /**
-//     * 上传音频信息
-//     */
-//    @Multipart
-//    @POST("user/common/uploadAudio")
-//    suspend fun requestUploadAudio(
-//        @Part type: Part,
-//        @Part audio: Part,
-//        @Part duration: Part
-//    ): BaseResponse<GreetBean>
+    /**
+     * 上传音频信息
+     */
+    @Multipart
+    @POST("user/common/uploadAudio")
+    suspend fun requestUploadAudio(
+        @Part type: MultipartBody.Part,
+        @Part audio: MultipartBody.Part,
+        @Part duration: MultipartBody.Part
+    ): BaseResponse<FileBean>
 //
 //    /**
 //     * 获取用户开关状态

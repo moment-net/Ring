@@ -4,9 +4,11 @@ import com.alan.module.im.EMClientHelper
 import com.alan.mvvm.base.http.responsebean.LoginBean
 import com.alan.mvvm.base.http.responsebean.ThridLoginBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
+import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.base.utils.GsonUtil
 import com.alan.mvvm.base.utils.SpUtils
 import com.alan.mvvm.common.constant.SpKey
+import com.alan.mvvm.common.event.UserEvent
 import com.socks.library.KLog
 
 /**
@@ -82,6 +84,7 @@ object SpHelper {
                 setUserInfo(obj.user)
             }
         }
+        EventBusUtils.postEvent(UserEvent(1))
     }
 
     /**

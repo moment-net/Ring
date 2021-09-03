@@ -59,7 +59,7 @@ object DependencyConfig {
         const val XPopupVersion = "2.5.6"                   // XPopupDialog框架
         const val PickerViewVersion = "4.1.9"               // PickerView框架
         const val EasyPhotoVersion = "3.1.3"                // EasyPhoto框架
-        const val OneLoginVersion = "2.5.1"                 // 极验框架
+        const val LottieVersion = "3.5.0"                   // Lottie框架
 
         // 第三方SDK--------------------------------------------------------------
         const val WeChat = "6.6.4"                          // 腾讯开放平台微信
@@ -67,6 +67,7 @@ object DependencyConfig {
         const val TencentBuglyNative = "3.8.0"              // Bugly native异常上报
         const val TencentTBSX5 = "43939"                    // 腾讯X5WebView
         const val IMVersion = "3.8.4"                       // 环信版本
+        const val OneLoginVersion = "2.5.1"                 // 极验框架
         const val JPushVersion = "4.1.5"                    // 极光推送版本
         const val JCoreVersion = "2.9.0"                    // 极光推送版本
         const val HWHMSVersion = "5.3.0.301"                // 华为推送版本
@@ -160,6 +161,8 @@ object DependencyConfig {
         const val XPopup = "com.github.li-xiaojun:XPopup:${Version.XPopupVersion}"
         const val PickerView = "com.contrarywind:Android-PickerView:${Version.PickerViewVersion}"
         const val EasyPhotos = "com.github.HuanTanSheng:EasyPhotos:${Version.EasyPhotoVersion}"
+        const val Lottie = "com.airbnb.android:lottie:${Version.LottieVersion}"
+
     }
 
     /**

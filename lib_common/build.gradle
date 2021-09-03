@@ -16,10 +16,11 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation fileTree(dir: "libs", include: ["*.jar",'*.aar'])
 
     api project(path: ':lib_base')
     api project(path: ':module_im')
+    // 支付宝 SDK AAR 包所需的配置
 
     api DependencyConfig.JetPack.HiltCore
     kapt DependencyConfig.JetPack.HiltApt

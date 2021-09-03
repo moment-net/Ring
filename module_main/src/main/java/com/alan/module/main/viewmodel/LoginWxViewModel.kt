@@ -86,7 +86,7 @@ class LoginWxViewModel @Inject constructor(private val mRepository: CommonReposi
         val file = File(url)
         viewModelScope.launch {
             mRepository.requestUploadPic(
-                RequestUtil.getPostPart(file),
+                RequestUtil.getPostPart(RequestUtil.PART_TYPE_IMAGE, file),
                 callback = RequestCallback(
                     onSuccess = {
                         ldSuccess.value = it.data!!

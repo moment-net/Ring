@@ -9,6 +9,6 @@ data class EditRequestBean(
     var address: String? = null,
     var hometown: String? = null,
     var audioDesc: String? = null,
-    var audioGreeti: String? = null,
+    var audioGreeting: String? = null,
     val audioDuration: Int = 0
 )

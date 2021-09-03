@@ -61,6 +61,7 @@ dependencies {
     api DependencyConfig.GitHub.XPopup
     api DependencyConfig.GitHub.PickerView
     api DependencyConfig.GitHub.EasyPhotos
+    api DependencyConfig.GitHub.Lottie
 
 
     api DependencyConfig.SDK.WeChat

@@ -267,6 +267,33 @@ class CommonRepository @Inject constructor() : BaseRepository() {
 
 
     /**
+     * 购买钻石
+     */
+    suspend fun requestOrder(
+        requestBody: RequestBody,
+        callback: RequestCallback<OrderBean>
+    ) = request(mApi, callback) { mApi.requestOrder(requestBody) }
+
+
+    /**
+     * 微信支付
+     */
+    suspend fun requestPayWX(
+        requestBody: RequestBody,
+        callback: RequestCallback<PrepayBean>
+    ) = request(mApi, callback) { mApi.requestPayWX(requestBody) }
+
+
+    /**
+     * 支付宝支付
+     */
+    suspend fun requestPayZFB(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestPayZFB(requestBody) }
+
+
+    /**
      * 订单查询
      */
     suspend fun requestOrderInfo(
@@ -274,6 +301,15 @@ class CommonRepository @Inject constructor() : BaseRepository() {
         callback: RequestCallback<OrderBean>
     ) = request(mApi, callback) { mApi.requestOrderInfo(orderId) }
 
+    /**
+     * 上传音频信息
+     */
+    suspend fun requestUploadAudio(
+        type: MultipartBody.Part,
+        duration: MultipartBody.Part,
+        audio: MultipartBody.Part,
+        callback: RequestCallback<FileBean>
+    ) = request(mApi, callback) { mApi.requestUploadAudio(type, audio, duration) }
 
 }
 

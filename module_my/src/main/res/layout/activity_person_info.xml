@@ -290,107 +290,6 @@
 
 
             <TextView
-                android:id="@+id/tv_worktime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
-                android:text="工作时间"
-                android:textColor="@color/_3A3A3A"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_hometown" />
-
-            <TextView
-                android:id="@+id/tv_worktime_value"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:drawableRight="@drawable/icon_bing_right"
-                android:drawablePadding="7dp"
-                android:gravity="right"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="请选择"
-                android:textColor="@color/_898989"
-                android:textSize="15sp"
-                android:clickable="true"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_worktime"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_worktime"
-                app:layout_constraintTop_toTopOf="@+id/tv_worktime" />
-
-
-            <TextView
-                android:id="@+id/tv_manager"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
-                android:text="管家类型"
-                android:textColor="@color/_3A3A3A"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_worktime" />
-
-            <TextView
-                android:id="@+id/tv_manager_value"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:drawableRight="@drawable/icon_bing_right"
-                android:drawablePadding="7dp"
-                android:gravity="right"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="请选择"
-                android:textColor="@color/_898989"
-                android:textSize="15sp"
-                android:clickable="true"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_manager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_manager"
-                app:layout_constraintTop_toTopOf="@+id/tv_manager" />
-
-            <TextView
-                android:id="@+id/tv_skil"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
-                android:text="职业技能"
-                android:textColor="@color/_3A3A3A"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_manager" />
-
-            <TextView
-                android:id="@+id/tv_skil_value"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:drawableRight="@drawable/icon_bing_right"
-                android:drawablePadding="7dp"
-                android:gravity="right"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="请选择"
-                android:textColor="@color/_898989"
-                android:textSize="15sp"
-                android:clickable="true"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_skil"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_skil"
-                app:layout_constraintTop_toTopOf="@+id/tv_skil" />
-
-
-            <TextView
                 android:id="@+id/tv_voice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -401,7 +300,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_skil" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_hometown" />
 
             <leifu.shapelibrary.ShapeView
                 android:id="@+id/tv_play"

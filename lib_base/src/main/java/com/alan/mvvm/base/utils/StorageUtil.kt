@@ -3,7 +3,6 @@ package com.alan.mvvm.base.utils
 import android.content.Context
 import android.os.Environment
 import java.io.File
-import java.lang.Exception
 
 
 /**
@@ -71,9 +70,9 @@ object StorageUtil {
      * @return
      */
     fun getExternalFileDir(): File? {
-        val appDir = File(Environment.getExternalStorageDirectory(), "freedomspeak")
+        val appDir = File(Environment.getExternalStorageDirectory(), "ring")
         if (!appDir.exists()) {
-            appDir.mkdir()
+            appDir.mkdirs()
         }
         return appDir
     }

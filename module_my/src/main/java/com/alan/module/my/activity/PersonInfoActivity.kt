@@ -8,15 +8,17 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.activity.viewModels
 import com.alan.module.my.databinding.ActivityPersonInfoBinding
-import com.alan.module.my.dialog.ManagerTypeFragmentDialog
-import com.alan.module.my.dialog.SkilFragmentDialog
+import com.alan.module.my.dialog.VoiceFragmentDialog
 import com.alan.module.my.viewmodol.PersonInfoViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.FileBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
+import com.alan.mvvm.base.ktx.gone
+import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.utils.*
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.UserEvent
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -25,6 +27,8 @@ import com.huantansheng.easyphotos.EasyPhotos
 import com.huantansheng.easyphotos.models.album.entity.Photo
 import com.permissionx.guolindev.PermissionX
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 
 
@@ -33,6 +37,7 @@ import java.util.*
  * 时间：2021/7/30
  * 备注：
  */
+@EventBusRegister
 @Route(path = RouteUrl.MyModule.ACTIVITY_MY_PERSONINFO)
 @AndroidEntryPoint
 class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoViewModel>() {
@@ -63,13 +68,16 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
             changeAddress()
         }
 
+        tvPlay.clickDelay {
+            MediaPlayUtil.play(SpHelper.getUserInfo()?.greeting?.audioPath)
+        }
 
-        tvManagerValue.clickDelay {
-            ManagerTypeFragmentDialog().show(supportFragmentManager)
+
+        tvVoiceValue.clickDelay {
+            var voiceFragmentDialog = VoiceFragmentDialog.newInstance()
+            voiceFragmentDialog.show(this@PersonInfoActivity.supportFragmentManager)
         }
-        tvSkilValue.clickDelay {
-            SkilFragmentDialog().show(supportFragmentManager)
-        }
+
 
         tvCommit.clickDelay { requestEditUserInfo() }
 
@@ -122,9 +130,19 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
      * 获取数据
      */
     override fun initRequestData() {
+
+    }
+
+    //更新信息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun updaeInfo(event: UserEvent) {
         setUserInfo()
     }
 
+    override fun onResume() {
+        super.onResume()
+        setUserInfo()
+    }
 
     fun setUserInfo() {
         var userInfo = SpHelper.getUserInfo()
@@ -139,7 +157,13 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
         mBinding.etName.clearFocus()
         mBinding.tvBirthdayValue.setText("${userInfo?.birthday}")
         mBinding.tvHometownValue.setText("${userInfo?.address}")
-
+        if (userInfo?.greeting == null) {
+            mBinding.tvVoiceValue.setText("录制语音签名")
+            mBinding.tvPlay.gone()
+        } else {
+            mBinding.tvVoiceValue.setText("重新录制")
+            mBinding.tvPlay.visible()
+        }
     }
 
 
@@ -241,5 +265,8 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
         )
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        MediaPlayUtil.release()
+    }
 }

@@ -11,6 +11,8 @@ import java.io.File
  * Json转换请求
  */
 object RequestUtil {
+    const val PART_TYPE_IMAGE = "image"
+    const val PART_TYPE_AUDIO = "audio"
 
     /**
      * 将对象转为请求体
@@ -24,9 +26,17 @@ object RequestUtil {
     /**
      * 将文件转换请求Part
      */
-    fun getPostPart(file: File): MultipartBody.Part {
+    fun getPostPart(name: String, file: File): MultipartBody.Part {
         val fileBody: RequestBody = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-        val part = MultipartBody.Part.createFormData("image", file.getName(), fileBody)
+        val part = MultipartBody.Part.createFormData(name, file.getName(), fileBody)
+        return part
+    }
+
+    /**
+     * 将文字转换请求Part
+     */
+    fun getPostStringPart(name: String, value: String): MultipartBody.Part {
+        val part = MultipartBody.Part.createFormData(name, value)
         return part
     }
 }
