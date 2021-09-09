@@ -49,7 +49,7 @@ object EMClientHelper {
         //初始化推送
         initPush(context)
         //callKit初始化
-        InitCallKit(context)
+        initCallKit(context)
 
         //链接状态监听事件初始化
         EMClientListener.init()
@@ -105,7 +105,7 @@ object EMClientHelper {
      *
      * @param context
      */
-    fun InitCallKit(context: Context) {
+    fun initCallKit(context: Context) {
         val callKitConfig = EaseCallKitConfig()
         //设置呼叫超时时间
         callKitConfig.callTimeOut = (30 * 1000).toLong()
@@ -157,7 +157,7 @@ object EMClientHelper {
         get() = EMClient.getInstance()
 
     /**
-     * 获取contact manager
+     * 获取联系人管理
      *
      * @return
      */
@@ -165,7 +165,7 @@ object EMClientHelper {
         get() = eMClient.contactManager()
 
     /**
-     * 获取group manager
+     * 获取群组管理
      *
      * @return
      */
@@ -173,7 +173,7 @@ object EMClientHelper {
         get() = eMClient.groupManager()
 
     /**
-     * 获取chatroom manager
+     * 获取聊天室管理
      *
      * @return
      */
@@ -181,7 +181,7 @@ object EMClientHelper {
         get() = eMClient.chatroomManager()
 
     /**
-     * get EMChatManager
+     * 获取聊天管理
      *
      * @return
      */
@@ -189,15 +189,23 @@ object EMClientHelper {
         get() = eMClient.chatManager()
 
     /**
-     * get push manager
+     * 获取推送管理
      *
      * @return
      */
     val pushManager: EMPushManager
         get() = eMClient.pushManager()
 
+
     /**
-     * get conversation
+     * 获取当前用户
+     */
+    val currentUser: String
+        get() = eMClient.currentUser
+
+
+    /**
+     * 获取某人的会话
      *
      * @param username
      * @param type
@@ -212,8 +220,25 @@ object EMClientHelper {
         return chatManager.getConversation(username, type, createIfNotExists)
     }
 
-    val currentUser: String
-        get() = eMClient.currentUser
+
+    /**
+     * 获取会话列表
+     * 按最后一次消息时间排序
+     */
+    fun getConversationList(): ArrayList<EMConversation> {
+        val sortList = arrayListOf<EMConversation>()
+        val conversations: Map<String, EMConversation> = chatManager.allConversations
+        synchronized(conversations) {
+            for (conversation in conversations.values) {
+                if (conversation.allMessages.size != 0) {
+                    sortList.add(conversation)
+                }
+            }
+        }
+        sortList.sortWith(compareBy({ it.lastMessage.msgTime }))
+        return sortList;
+    }
+
 
     /**
      * IM登录

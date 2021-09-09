@@ -32,7 +32,7 @@ class LoginCodeViewModel @Inject constructor(private val mRepository: CommonRepo
     BaseViewModel() {
 
     val ldCode = MutableLiveData<Boolean>()
-    val ldBind = MutableLiveData<LoginBean>()
+    val ldBind = MutableLiveData<Boolean>()
     val ldLogin = MutableLiveData<LoginBean>()
     val ldFailed = MutableLiveData<Boolean>()
     val ldIM = MutableLiveData<BaseHttpException>()
@@ -85,7 +85,7 @@ class LoginCodeViewModel @Inject constructor(private val mRepository: CommonRepo
             mRepository.requestBindPhone(RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        ldBind.value = it.data!!
+                        ldBind.value = true
                     },
                     onFailed = {
                         toast(it.errorMessage)

@@ -62,6 +62,7 @@ dependencies {
     api DependencyConfig.GitHub.PickerView
     api DependencyConfig.GitHub.EasyPhotos
     api DependencyConfig.GitHub.Lottie
+    api DependencyConfig.GitHub.Camera
 
 
     api DependencyConfig.SDK.WeChat
@@ -79,6 +80,7 @@ dependencies {
     api DependencyConfig.SDK.Oppoplugin
     api DependencyConfig.SDK.Vivoplugin
 
+
     kapt DependencyConfig.GitHub.ARouteCompiler
     kapt DependencyConfig.GitHub.EventBusAPT
     kapt DependencyConfig.GitHub.AutoServiceAnnotations
@@ -86,5 +88,5 @@ dependencies {
     kapt DependencyConfig.JetPack.HiltAndroidx
     kapt DependencyConfig.JetPack.LifecycleCompilerAPT
 
-    debugApi DependencyConfig.GitHub.LeakCanary
+//    debugApi DependencyConfig.GitHub.LeakCanary
 }

@@ -64,52 +64,37 @@
         app:sStrokeColor="@color/_3A3A3A"
         app:sStrokeWidth="0dp" />
 
+    <ImageView
+        android:id="@+id/main_imageview5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
+        android:src="@drawable/icon_home_manager" />
+
+
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srf_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_avatar">
+        app:layout_constraintTop_toBottomOf="@+id/main_imageview5">
 
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scrollView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_manager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:paddingStart="@dimen/dimen10"
+            android:paddingEnd="@dimen/dimen10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/dimen80">
-
-                <ImageView
-                    android:id="@+id/main_imageview5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/icon_home_manager" />
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_manager"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:paddingStart="@dimen/dimen10"
-                    android:paddingEnd="@dimen/dimen10"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/main_imageview5" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
@@ -117,7 +102,7 @@
         android:id="@+id/iv_add"
         android:layout_width="@dimen/dimen64"
         android:layout_height="@dimen/dimen64"
-        android:src="@drawable/icon_main_add"
+        android:src="@drawable/icon_home_openmeal"
         android:layout_marginBottom="@dimen/dimen115"
         android:layout_marginEnd="@dimen/dimen15"
         app:layout_constraintBottom_toBottomOf="parent"

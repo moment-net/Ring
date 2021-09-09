@@ -47,10 +47,17 @@ object RouteUrl {
     }
 
     object ChatModule {
-        //首页
+        //聊天页面
         const val ACTIVITY_CHAT_DETAIL: String = "/chat/detail";
 
+        //显示图片
+        const val ACTIVITY_CHAT_IMAGE: String = "/chat/image";
 
+        //显示视频
+        const val ACTIVITY_CHAT_VIDEO: String = "/chat/video";
+
+        //录制视频或图片
+        const val ACTIVITY_CHAT_CAMERA: String = "/chat/camera";
     }
 
     object MyModule {

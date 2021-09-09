@@ -27,7 +27,7 @@ class WalletViewModel @Inject constructor(private val mRepository: CommonReposit
         viewModelScope.launch {
             mRepository.requestAccount(callback = RequestCallback(
                 onSuccess = {
-                    ldSuccess.value = it.data!!
+                    ldSuccess.value = it.data
                 },
                 onFailed = {
                     toast(it.errorMessage)

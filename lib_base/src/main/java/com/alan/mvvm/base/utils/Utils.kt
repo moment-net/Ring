@@ -1,5 +1,6 @@
 package com.alan.mvvm.base.utils
 
+import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -52,6 +53,13 @@ fun jumpARoute(routerUrl: String) {
  */
 fun jumpARoute(routerUrl: String, bundle: Bundle) {
     ARouter.getInstance().build(routerUrl).with(bundle).navigation()
+}
+
+/**
+ * 阿里路由带请求码跳转
+ */
+fun jumpARoute(routerUrl: String, activity: Activity, requestCode: Int) {
+    ARouter.getInstance().build(routerUrl).navigation(activity, requestCode)
 }
 
 /**************************************************************************************************/

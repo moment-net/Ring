@@ -40,7 +40,7 @@ class CommonRepository @Inject constructor() : BaseRepository() {
      */
     suspend fun requestLoginWX(
         requestBody: RequestBody,
-        callback: RequestCallback<ThridLoginBean>
+        callback: RequestCallback<LoginBean>
     ) = request(mApi, callback) { mApi.requestLoginWX(requestBody) }
 
     /**
@@ -55,7 +55,7 @@ class CommonRepository @Inject constructor() : BaseRepository() {
      */
     suspend fun requestBindPhone(
         requestBody: RequestBody,
-        callback: RequestCallback<LoginBean>
+        callback: RequestCallback<String>
     ) = request(mApi, callback) { mApi.requestBindPhone(requestBody) }
 
     /**
@@ -71,7 +71,7 @@ class CommonRepository @Inject constructor() : BaseRepository() {
      */
     suspend fun requestBindThird(
         requestBody: RequestBody,
-        callback: RequestCallback<UserInfoBean>
+        callback: RequestCallback<String>
     ) = request(mApi, callback) { mApi.requestBindThird(requestBody) }
 
     /**

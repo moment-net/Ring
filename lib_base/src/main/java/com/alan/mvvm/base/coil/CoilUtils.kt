@@ -1,6 +1,7 @@
 package com.alan.mvvm.base.coil
 
 import android.content.Context
+import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.ColorInt
 import coil.Coil
@@ -18,7 +19,7 @@ import okhttp3.OkHttpClient
 
 object CoilUtils {
     /**
-     *
+     * 初始化
      */
     fun initCoil() {
         val imageLoader = ImageLoader.Builder(BaseApplication.mContext)
@@ -38,9 +39,16 @@ object CoilUtils {
      */
     fun load(
         iv: ImageView,
-        url: String
+        url: Any
     ) {
-        iv.load(url) {}
+        when (url) {
+            is Uri -> {
+                iv.load(url) {}
+            }
+            is String -> {
+                iv.load(url) {}
+            }
+        }
     }
 
     /**

@@ -74,9 +74,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         if (mFragments.isNotEmpty()) {
             mFragments.clear()
         }
-        mFragments.add(HomeFragment())
-        mFragments.add(ChatFragment())
-        mFragments.add(MyFragment())
+        mFragments.add(HomeFragment.newInstance())
+        mFragments.add(ChatFragment.newInstance())
+        mFragments.add(MyFragment.newInstance())
+//        mFragments.add(SquareFragment.newInstance())
 
         mBinding.vpMain.adapter = MainVPAdapter(mFragments, supportFragmentManager, lifecycle)
         mBinding.vpMain.isUserInputEnabled = false

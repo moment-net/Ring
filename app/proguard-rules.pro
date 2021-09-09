@@ -200,16 +200,60 @@
 -dontwarn java.lang.instrument.Instrumentation
 -dontwarn sun.misc.Signal
 
+
+-keep class **.R$* {
+    <fields>;
+}
+-keep public class * extends android.content.ContentProvider
+-keepnames class * extends android.view.View
+
+-keep class * extends android.app.Fragment {
+ public void setUserVisibleHint(boolean);
+ public void onHiddenChanged(boolean);
+ public void onResume();
+ public void onPause();
+}
+-keep class androidx.fragment.app.Fragment {
+ public void setUserVisibleHint(boolean);
+ public void onHiddenChanged(boolean);
+ public void onResume();
+ public void onPause();
+}
+-keep class * extends androidx.fragment.app.Fragment {
+ public void setUserVisibleHint(boolean);
+ public void onHiddenChanged(boolean);
+ public void onResume();
+ public void onPause();
+}
+
+# 内部WebView混淆过滤
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+-keepclassmembers class * extends android.webkit.WebChromeClient{
+public void openFileChooser(...);
+}
+
+#gradle-retrolambda
+-dontwarn java.lang.invoke.*
+-dontwarn **$$Lambda$*
+
+
 #------------------------------------------主项目混淆规则----------------------------------------------
 
-#---------------------------------1.实体类---------------------------------
+#---------------------------------1.项目中的基类---------------------------------
+-keep class com.alan.mvvm.** { *; }
 
 
-
-#--------------------------------2.项目中的-------------------------------
+#--------------------------------2.项目中的模块-------------------------------
 #实体类不参与混淆
 -keep class com.moment.ring.** { *; }
--keep class com.moment.module.main.** { *; }
+-keep class com.alan.module.main.** { *; }
+-keep class com.alan.module.home.** { *; }
+-keep class com.alan.module.chat.** { *; }
+-keep class com.alan.module.my.** { *; }
+-keep class com.alan.module.im.** { *; }
+-keep class com.alan.module.web.** { *; }
 
 
 #---------------------------------3.与js互相调用的类------------------------
@@ -258,12 +302,6 @@
 -keepattributes Signature
 -keepattributes Exceptions
 
-#gson
--keepattributes Signature
--keepattributes *Annotation*
--keep class sun.misc.Unsafe { *; }
--keep class com.google.gson.stream.** { *; }
--keep class com.sunloto.shandong.bean.** { *; }
 
 #glide
 -keep public class * implements com.bumptech.glide.module.AppGlideModule
@@ -324,12 +362,12 @@
 -dontwarn me.tatarka.bindingcollectionadapter.**
 
 
-#------------------------------bugly----------------------------------------------
+#bugly
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
 
 
-# AndroidEventBus
+# Android EventBus
 -keep class org.simple.** { *; }
 -keep interface org.simple.** { *; }
 -keepclassmembers class * {
@@ -367,11 +405,14 @@
 }
 
 # Gson
--keep class sun.misc.Unsafe { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
 -keep class com.google.gson.stream.** { *; }
+-keep class com.sunloto.shandong.bean.** { *; }
 # 使用Gson时需要配置Gson的解析对象及变量都不混淆。不然Gson会找不到变量。
 # 将下面替换成自己的实体类
--keep class com.example.bean.** { *; }
+
+
 
 # Jackson
 -dontwarn org.codehaus.jackson.**
@@ -552,7 +593,7 @@
 }
 -dontnote rx.internal.util.PlatformDependent
 
-#----------------------------------umeng分享开始----------------------------------
+#umeng分享
 -keep class com.umeng.commonsdk.** {*;}
 -keep class com.umeng.** {*;}
 -dontshrink
@@ -646,7 +687,6 @@
 -keep class com.android.dingtalk.share.ddsharemodule.** { *; }
 -keepattributes Signature
 
-#----------------------------------umeng分享结束----------------------------------
 #umeng app
 -keepclassmembers class * {
    public <init> (org.json.JSONObject);
@@ -656,16 +696,14 @@
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
-
+#----------------------------------umeng结束----------------------------------
 
 
 #qiniu
 -keep class com.qiniu.**{*;}
 -keep class com.qiniu.**{public <init>();}
 -ignorewarnings
-
 -keepattributes Exceptions,InnerClasses
-
 -keepattributes Signature
 
 # RongCloud SDK
@@ -677,38 +715,8 @@
 -dontnote io.rong.**
 -ignorewarnings
 
--keep class **.R$* {
-    <fields>;
-}
--keep public class * extends android.content.ContentProvider
--keepnames class * extends android.view.View
-
--keep class * extends android.app.Fragment {
- public void setUserVisibleHint(boolean);
- public void onHiddenChanged(boolean);
- public void onResume();
- public void onPause();
-}
--keep class android.support.v4.app.Fragment {
- public void setUserVisibleHint(boolean);
- public void onHiddenChanged(boolean);
- public void onResume();
- public void onPause();
-}
--keep class * extends android.support.v4.app.Fragment {
- public void setUserVisibleHint(boolean);
- public void onHiddenChanged(boolean);
- public void onResume();
- public void onPause();
-}
-
-#gradle-retrolambda
--dontwarn java.lang.invoke.*
--dontwarn **$$Lambda$*
-
 
 #agentweb
-
 -keep class com.just.agentweb.** {
     *;
 }
@@ -742,14 +750,8 @@
 ## arouter
 -keep public class com.alibaba.android.arouter.routes.**{*;}
 -keep class * implements com.alibaba.android.arouter.facade.template.ISyringe{*;}
-
-# If you use the byType method to obtain Service, add the following rules to protect the interface:
 -keep interface * implements com.alibaba.android.arouter.facade.template.IProvider
-
-# If single-type injection is used, that is, no interface is defined to implement IProvider, the following rules need to be added to protect the implementation
 -keep class * implements com.alibaba.android.arouter.facade.template.IProvider
-
-# If @Autowired is used for injection in non-Activity classes, add the following rules to prevent injection failures
 -keepnames class * {
     @com.alibaba.android.arouter.facade.annotation.Autowired <fields>;
 }
@@ -766,19 +768,7 @@
 -dontwarn  com.tencent.**
 -keep class com.tencent.** {*;}
 
-# 内部WebView混淆过滤
--keepclassmembers class * {
-    @android.webkit.JavascriptInterface <methods>;
-}
 
-# banner 的混淆代码
--keep class com.youth.banner.** {
-    *;
-}
-
--keepclassmembers class * extends android.webkit.WebChromeClient{
-public void openFileChooser(...);
-}
 
 # Canary
 -dontwarn com.squareup.haha.guava.**
@@ -807,7 +797,7 @@ public void openFileChooser(...);
     *;
 }
 
-
+#环信IM
 -keep class com.hyphenate.** {*;}
 -dontwarn  com.hyphenate.**
 -keep class internal.org.apache.http.entity.** {*;}

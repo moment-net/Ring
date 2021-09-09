@@ -67,6 +67,7 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
                         mViewModel.requestLogin(phone ?: "", etCode.text.toString(), "", 0)
                     }
                     2 -> {
+                        showDialog()
                         mViewModel.requestBindPhone(phone ?: "", etCode.text.toString(), 0)
                     }
                 }
@@ -107,18 +108,6 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
             }
         }
 
-        mViewModel.ldBind.observe(this) {
-            when (it) {
-                is LoginBean -> {
-                    loginBean = it
-                    handleIMLogin()
-                }
-            }
-        }
-
-        mViewModel.ldFailed.observe(this) {
-            dismissDialog()
-        }
         mViewModel.ldIM.observe(this) {
             dismissDialog()
             if (it.errorCode == 0) {
@@ -127,6 +116,29 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
                 toast(it.errorMessage)
             }
         }
+
+
+        mViewModel.ldBind.observe(this) {
+            mViewModel.requestDevicesRegister()
+            //5跳转逻辑
+            if (SpHelper.getNewUser()) {
+                val bundle = Bundle().apply {
+                    putInt("type", type)
+                }
+                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_WXINFO, bundle)
+            } else {
+                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+            }
+            ActivityStackManager.finishActivity(LoginActivity::class.java)
+            ActivityStackManager.finishActivity(LoginPhoneActivity::class.java)
+            ActivityStackManager.finishActivity(LoginCodeActivity::class.java)
+        }
+
+        mViewModel.ldFailed.observe(this) {
+            dismissDialog()
+        }
+
+
     }
 
     /**

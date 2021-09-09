@@ -2,7 +2,6 @@ package com.alan.mvvm.common.helper
 
 import com.alan.module.im.EMClientHelper
 import com.alan.mvvm.base.http.responsebean.LoginBean
-import com.alan.mvvm.base.http.responsebean.ThridLoginBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.base.utils.GsonUtil
@@ -48,6 +47,19 @@ object SpHelper {
         SpUtils.put(SpKey.KEY_TOKEN, token)
     }
 
+    /**
+     * 判断是否是新用户
+     */
+    fun getNewUser(): Boolean {
+        return SpUtils.getBoolean(SpKey.KEY_NEWUSER, false)!!
+    }
+
+    /**
+     * 设置是否是新用户
+     */
+    fun setNewUser(isNew: Boolean) {
+        SpUtils.put(SpKey.KEY_NEWUSER, isNew)
+    }
 
     /**
      * 获取token
@@ -61,7 +73,7 @@ object SpHelper {
      * 设置token
      */
     fun setUserInfo(userInfoBean: UserInfoBean?) {
-        var userInfo: String = GsonUtil.jsonToString(userInfoBean)
+        val userInfo: String = GsonUtil.jsonToString(userInfoBean)
         SpUtils.put(SpKey.KEY_USERINFO, userInfo)
     }
 
@@ -76,11 +88,7 @@ object SpHelper {
             is LoginBean -> {
                 setLogin(true)
                 setToken(obj.token?.token ?: "")
-                setUserInfo(obj.user)
-            }
-            is ThridLoginBean -> {
-                setLogin(true)
-                setToken(obj.tokenBean?.token ?: "")
+                setNewUser(obj.newUser)
                 setUserInfo(obj.user)
             }
         }

@@ -1,11 +1,11 @@
 package com.alan.module.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import com.alan.module.im.EMClientHelper
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.common.http.model.CommonRepository
+import com.hyphenate.chat.EMConversation
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -18,19 +18,12 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
-    val data = MutableLiveData<String>()
+    val ldSuccess = MutableLiveData<String>()
 
     /**
-     * 模拟获取数据
+     * 获取会话列表
      */
-    fun getData() {
-        viewModelScope.launch() {
-//            mRepository.getData(callback = RequestCallback(
-//                onStart = {},
-//                onSuccess = {},
-//                onFailed = {},
-//                onFinally = {}
-//            ))
-        }
+    fun requestConversations(): ArrayList<EMConversation> {
+        return EMClientHelper.getConversationList();
     }
 }

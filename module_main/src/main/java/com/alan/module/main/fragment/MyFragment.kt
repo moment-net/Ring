@@ -28,6 +28,15 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
+    companion object {
+        @JvmStatic
+        fun newInstance() =
+            MyFragment().apply {
+                arguments = Bundle().apply {
+                }
+            }
+    }
+
     override val mViewModel by viewModels<MyViewModel>()
 
     @RequiresApi(Build.VERSION_CODES.M)

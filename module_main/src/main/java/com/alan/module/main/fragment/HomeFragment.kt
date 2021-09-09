@@ -34,6 +34,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
+    companion object {
+        @JvmStatic
+        fun newInstance() = HomeFragment().apply {
+            arguments.apply { }
+        }
+    }
+
     override val mViewModel by viewModels<HomeViewModel>()
     lateinit var mAdapter: ManagerAdapter
     var isLoad = false

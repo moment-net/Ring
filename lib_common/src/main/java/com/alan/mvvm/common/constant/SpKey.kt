@@ -12,6 +12,9 @@ object SpKey {
     //登录token
     const val KEY_TOKEN: String = "key_token";
 
+    //是否是新用户
+    const val KEY_NEWUSER: String = "key_newuser";
+
     //用户信息
     const val KEY_USERINFO: String = "key_userinfo";
 }

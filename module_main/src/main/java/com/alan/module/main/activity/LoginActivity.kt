@@ -25,8 +25,8 @@ import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.base.http.requestbean.LoginThirdRequestBean
 import com.alan.mvvm.base.http.responsebean.LoginBean
 import com.alan.mvvm.base.http.responsebean.PhoneBean
-import com.alan.mvvm.base.http.responsebean.ThridLoginBean
 import com.alan.mvvm.base.ktx.clickDelay
+import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.NetworkUtil
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
@@ -57,6 +57,7 @@ import java.nio.charset.Charset
  * 时间：2021/7/30
  * 备注：登录页面
  */
+@EventBusRegister
 @Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_LOGIN)
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
@@ -69,7 +70,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     var scope: String? = null
     var unionid: String? = null
     var loginBean: LoginBean? = null
-    var thridLoginBean: ThridLoginBean? = null
     var loginType = 0 //type=1是手机号登录流程，2是微信登录流程
 
 
@@ -208,6 +208,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 toast("请先勾选协议再登录")
                 return@clickDelay
             }
+            loginType = 1
             loginPhone()
         }
 
@@ -216,6 +217,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 toast("请先勾选协议再登录")
                 return@clickDelay
             }
+            loginType = 2
             requestWX()
         }
     }
@@ -271,13 +273,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                     requestLogin(it.phone)
                 }
                 is LoginBean -> {
-                    loginType = 1
                     loginBean = it
-                    mViewModel.loginIM(it.user!!)
-                }
-                is ThridLoginBean -> {
-                    loginType = 2
-                    thridLoginBean = it
                     mViewModel.loginIM(it.user!!)
                 }
             }
@@ -342,17 +338,17 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             }
             finish()
         } else if (loginType == 2) {
-            if (thridLoginBean == null) {
+            if (loginBean == null) {
                 return
             }
             //1用户注册成功后调用
 //            OpenInstall.reportRegister()
             //2更新用户信息
-            SpHelper.updateUserInfo(thridLoginBean)
+            SpHelper.updateUserInfo(loginBean)
             //3上传JPUSH设备ID
             mViewModel.requestDevicesRegister()
             //4跳转逻辑
-            if (thridLoginBean!!.user!!.bindPhone!!) {
+            if (loginBean!!.user!!.bindPhone!!) {
                 finish()
                 jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
             } else {

@@ -1,5 +1,6 @@
 package com.alan.mvvm.base.utils
 
+import com.hyphenate.util.DateUtils
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -183,5 +184,50 @@ object DateUtils {
      */
     fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
         return cal1[0] == cal2[0] && cal1[1] == cal2[1] && cal1[6] == cal2[6]
+    }
+
+
+    fun getTimestampString(messageDate: Date): String? {
+        var format: String? = null
+        val language = Locale.getDefault().language
+        val isZh = language.startsWith("zh")
+        val messageTime = messageDate.time
+        format = if (isSameDay(messageTime)) {
+            if (isZh) {
+                "aa hh:mm"
+            } else {
+                "hh:mm aa"
+            }
+        } else if (isYesterday(messageTime)) {
+            if (isZh) {
+                "昨天aa hh:mm"
+            } else {
+                return "Yesterday " + SimpleDateFormat("hh:mm aa", Locale.ENGLISH).format(
+                    messageDate
+                )
+            }
+        } else {
+            if (isZh) {
+                "M月d日aa hh:mm"
+            } else {
+                "MMM dd hh:mm aa"
+            }
+        }
+        return if (isZh) {
+            SimpleDateFormat(format, Locale.CHINESE).format(messageDate)
+        } else {
+            SimpleDateFormat(format, Locale.ENGLISH).format(messageDate)
+        }
+    }
+
+
+    fun isSameDay(inputTime: Long): Boolean {
+        val tStartAndEndTime = DateUtils.getTodayStartAndEndTime()
+        return if (inputTime > tStartAndEndTime.startTime && inputTime < tStartAndEndTime.endTime) true else false
+    }
+
+    fun isYesterday(inputTime: Long): Boolean {
+        val yStartAndEndTime = DateUtils.getYesterdayStartAndEndTime()
+        return if (inputTime > yStartAndEndTime.startTime && inputTime < yStartAndEndTime.endTime) true else false
     }
 }

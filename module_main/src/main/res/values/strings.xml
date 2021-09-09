@@ -7,4 +7,6 @@
     <string name="string_login_register">未注册的手机号验证通过后将自动注册</string>
     <string name="string_message_send">验证码已通过短信发送至</string>
     <string name="string_input_code">请输入验证码</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -19,7 +19,6 @@ import com.alan.module.main.viewmodel.LoginWxViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.requestbean.LoginThirdRequestBean
 import com.alan.mvvm.base.http.responsebean.FileBean
-import com.alan.mvvm.base.http.responsebean.LoginBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.utils.*
@@ -52,6 +51,7 @@ import java.util.*
  * 时间：2021/7/30
  * 备注：注册信息
  */
+@EventBusRegister
 @Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_WXINFO)
 @AndroidEntryPoint
 class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>() {
@@ -298,13 +298,13 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
                     CoilUtils.loadCircle(mBinding.ivAvator, it.fileUrl)
                 }
 
-                is LoginBean -> {
+                is Boolean -> {
                     //绑定微信
                     toast("微信绑定成功")
-                    SpHelper.updateUserInfo(it)
-                    mBinding.etName.setText(it.user?.userName)
-                    NetworkUtil.getImage(handler, it.user?.avatar, NetworkUtil.GET_IMG)
-                    mBinding.ivAvator.load(it.user?.avatar)
+                    val userInfoBean = SpHelper.getUserInfo()
+                    mBinding.etName.setText(userInfoBean?.userName)
+                    NetworkUtil.getImage(handler, userInfoBean?.avatar, NetworkUtil.GET_IMG)
+                    mBinding.ivAvator.load(userInfoBean?.avatar)
 
                     mBinding.tvBind.setText("已绑定微信")
                     mBinding.tvBind.setEnabled(false)

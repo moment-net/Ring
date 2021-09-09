@@ -14,6 +14,7 @@ import com.alan.mvvm.base.http.requestbean.AccountBean
 import com.alan.mvvm.base.http.responsebean.ApplyRequestBean
 import com.alan.mvvm.base.http.responsebean.WXAccountBindBean
 import com.alan.mvvm.base.ktx.clickDelay
+import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.NetworkUtil
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
@@ -40,6 +41,7 @@ import java.nio.charset.Charset
  * 时间：2021/7/30
  * 备注：
  */
+@EventBusRegister
 @Route(path = RouteUrl.MyModule.ACTIVITY_MY_WITHDRAW)
 @AndroidEntryPoint
 class WithdrawActivity : BaseActivity<ActivityWithdrawBinding, WithdrawViewModel>() {

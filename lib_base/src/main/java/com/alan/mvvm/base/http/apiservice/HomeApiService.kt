@@ -31,7 +31,7 @@ interface HomeApiService {
      * 三方登录(微信)
      */
     @POST("user/login/third")
-    suspend fun requestLoginWX(@Body requestBody: RequestBody): BaseResponse<ThridLoginBean>
+    suspend fun requestLoginWX(@Body requestBody: RequestBody): BaseResponse<LoginBean>
 
 
     /**
@@ -44,7 +44,7 @@ interface HomeApiService {
      * 绑定手机号
      */
     @POST("user/bindPhone")
-    suspend fun requestBindPhone(@Body requestBody: RequestBody): BaseResponse<LoginBean>
+    suspend fun requestBindPhone(@Body requestBody: RequestBody): BaseResponse<String>
 
 
     /**
@@ -57,7 +57,7 @@ interface HomeApiService {
      * 绑定三方账号
      */
     @POST("user/bindThird")
-    suspend fun requestBindThird(@Body requestBody: RequestBody): BaseResponse<UserInfoBean>
+    suspend fun requestBindThird(@Body requestBody: RequestBody): BaseResponse<String>
 
     /**
      * 获取用户信息

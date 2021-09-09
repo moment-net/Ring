@@ -1,6 +1,60 @@
 package com.alan.module.im.constants
 
+import com.hyphenate.util.PathUtil
+
 object IMConstant {
+
+    //音频聊天
+    var PATH_VOICE =
+        "${PathUtil.getInstance().voicePath.toString()}/${System.currentTimeMillis()}.amr"
+
+    //拍摄视频地址
+    var PATH_VEDIO = PathUtil.getInstance().videoPath.toString()
+
+    //头像
+    const val MESSAGE_ATTR_AVATAR = "avatar"
+
+    //名字
+    const val MESSAGE_ATTR_USERNAME = "userName"
+
+    //是否是语音通话
+    const val MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call"
+
+    //是否是视频通话
+    const val MESSAGE_ATTR_IS_VIDEO_CALL = "is_video_call"
+
+    //消息类型-文字
+    const val MESSAGE_TYPE_TXT_LEFT = 1
+    const val MESSAGE_TYPE_TXT_RIGHT = 2
+
+    //消息类型-图片
+    const val MESSAGE_TYPE_IMAGE_LEFT = 3
+    const val MESSAGE_TYPE_IMAGE_RIGHT = 4
+
+    //消息类型-语音
+    const val MESSAGE_TYPE_VOICE_LEFT = 5
+    const val MESSAGE_TYPE_VOICE_RIGHT = 6
+
+    //消息类型-视频
+    const val MESSAGE_TYPE_VIDEO_LEFT = 7
+    const val MESSAGE_TYPE_VIDEO_RIGHT = 8
+
+    //消息类型-文件
+    const val MESSAGE_TYPE_FILE_LEFT = 9
+    const val MESSAGE_TYPE_FILE_RIGHT = 10
+
+    //消息类型-自定义
+    const val MESSAGE_TYPE_CUSTOM_LEFT = 11
+    const val MESSAGE_TYPE_CUSTOM_RIGHT = 12
+
+    //消息类型-文字-语音聊天
+    const val MESSAGE_TYPE_VOICECALL_LEFT = 13
+    const val MESSAGE_TYPE_VOICECALL_RIGHT = 14
+
+    //消息类型-文字-视频聊天
+    const val MESSAGE_TYPE_VIDEOCALL_LEFT = 15
+    const val MESSAGE_TYPE_VIDEOCALL_RIGHT = 16
+
 
     const val ACCOUNT_CHANGE = "account_change"
     const val ACCOUNT_REMOVED = "account_removed"

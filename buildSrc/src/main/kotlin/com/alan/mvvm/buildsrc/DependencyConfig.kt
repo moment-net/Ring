@@ -60,6 +60,7 @@ object DependencyConfig {
         const val PickerViewVersion = "4.1.9"               // PickerView框架
         const val EasyPhotoVersion = "3.1.3"                // EasyPhoto框架
         const val LottieVersion = "3.5.0"                   // Lottie框架
+        const val CameraVersion = "1.1.9"                   // Camera框架
 
         // 第三方SDK--------------------------------------------------------------
         const val WeChat = "6.6.4"                          // 腾讯开放平台微信
@@ -162,6 +163,7 @@ object DependencyConfig {
         const val PickerView = "com.contrarywind:Android-PickerView:${Version.PickerViewVersion}"
         const val EasyPhotos = "com.github.HuanTanSheng:EasyPhotos:${Version.EasyPhotoVersion}"
         const val Lottie = "com.airbnb.android:lottie:${Version.LottieVersion}"
+        const val Camera = "cjt.library.wheel:camera:${Version.CameraVersion}"
 
     }
 

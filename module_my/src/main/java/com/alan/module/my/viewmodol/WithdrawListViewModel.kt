@@ -33,10 +33,10 @@ class WithdrawListViewModel @Inject constructor(private val mRepository: CommonR
                 map,
                 callback = RequestCallback(
                     onSuccess = {
-                        ldData.value = it!!
+                        ldData.value = it
                     },
                     onFailed = {
-                        ldData.value = it!!
+                        ldData.value = it
                     },
                 )
             )

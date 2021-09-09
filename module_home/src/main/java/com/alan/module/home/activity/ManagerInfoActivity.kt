@@ -2,6 +2,7 @@ package com.alan.module.home.activity
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ImageSpan
@@ -55,7 +56,12 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
             }
         }
         tvChat.clickDelay {
-            jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL)
+            val bundle = Bundle().apply {
+                putString("userId", cookerBean!!.user.userId)
+                putString("userName", cookerBean!!.user.userName)
+                putString("avatar", cookerBean!!.user.avatar)
+            }
+            jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
         }
         initScrollView()
     }

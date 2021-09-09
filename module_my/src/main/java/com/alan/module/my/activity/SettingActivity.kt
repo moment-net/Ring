@@ -11,10 +11,7 @@ import com.alan.module.my.viewmodol.SettingViewModel
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.base.http.requestbean.LoginThirdRequestBean
 import com.alan.mvvm.base.ktx.clickDelay
-import com.alan.mvvm.base.utils.DeviceUtil
-import com.alan.mvvm.base.utils.NetworkUtil
-import com.alan.mvvm.base.utils.jumpARoute
-import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.base.utils.*
 import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.dialog.DialogHelper
@@ -39,6 +36,7 @@ import java.nio.charset.Charset
  * 时间：2021/7/30
  * 备注：
  */
+@EventBusRegister
 @Route(path = RouteUrl.MyModule.ACTIVITY_MY_SET)
 @AndroidEntryPoint
 class SettingActivity : BaseActivity<ActivitySettingBinding, SettingViewModel>() {

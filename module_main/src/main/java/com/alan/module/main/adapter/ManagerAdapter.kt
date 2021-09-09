@@ -2,6 +2,7 @@ package com.alan.module.main.adapter
 
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextUtils
 import android.text.style.ImageSpan
 import com.alan.module.main.R
 import com.alan.mvvm.base.coil.CoilUtils
@@ -18,7 +19,8 @@ class ManagerAdapter : BaseQuickAdapter<CookerBean, BaseViewHolder>(R.layout.ite
         CoilUtils.loadRound(holder.getView(R.id.iv_avatar), item.user.avatar!!, 3f)
         holder.setText(R.id.tv_name, item.user.userName)
         var tvAge = holder.getView<ShapeView>(R.id.tv_age)
-        var address = item.user.address!!.split("-")[2]
+        var address =
+            if (!TextUtils.isEmpty(item.user.address)) item.user.address!!.split("-")[2] else ""
         tvAge.setText("${item.user.age}岁  ${address}")
         if (item.user.gender == 1) {
             tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_boy, 0, 0, 0)

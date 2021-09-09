@@ -28,7 +28,7 @@ class WithdrawDetailViewModel @Inject constructor(private val mRepository: Commo
             mRepository.requestWithdrawDetail(
                 tradeId, callback = RequestCallback(
                     onSuccess = {
-                        ldSuccess.value = it!!
+                        ldSuccess.value = it
                     },
                     onFailed = {
                         toast(it.errorMessage)

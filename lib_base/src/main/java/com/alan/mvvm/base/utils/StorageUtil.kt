@@ -31,7 +31,8 @@ object StorageUtil {
      *
      * @return
      */
-    private fun isExternalStorageWritable(): Boolean {
+    @JvmStatic
+    fun isExternalStorageWritable(): Boolean {
         val state = Environment.getExternalStorageState()
         return Environment.MEDIA_MOUNTED == state
     }

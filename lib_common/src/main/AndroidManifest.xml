@@ -8,12 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <permission
-        android:name="${applicationId}.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature" />
 
-    <!--oppo Push权限-->
-    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
 
     <!-- 魅族推送配置 start-->
     <!-- 兼容 flyme5.0 以下版本，魅族内部集成 pushSDK 必填，不然无法收到消息-->

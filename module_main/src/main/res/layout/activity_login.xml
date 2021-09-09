@@ -33,23 +33,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen18"
-        android:text="人工自律监督管家"
+        android:text="饭点到了 边吃边聊"
+        android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="@dimen/sp18"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
-
-    <TextView
-        android:id="@+id/main_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="减肥、健身、学习、生活习惯\n在Ring，都可以帮你完成目标"
-        android:textColor="@color/black70"
-        android:textSize="@dimen/sp14"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
     <LinearLayout
         android:id="@+id/ll_phone"

@@ -21,15 +21,15 @@ android {
         targetSdkVersion ProjectBuildConfig.targetSdkVersion
         versionCode ProjectBuildConfig.versionCode
         versionName ProjectBuildConfig.versionName
-//        multiDexEnabled = true
+        multiDexEnabled = true
         testInstrumentationRunner DependencyConfig.AndroidX.AndroidJUnitRunner
         multiDexKeepProguard file("multidexKeep.pro")
-//        flavorDimensions "versionCode"
+        flavorDimensions "versionCode"
 
         ndk {
             // 设置支持的SO库架构
             //abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
+            abiFilters 'armeabi-v7a'
         }
 
         //极光推送key
@@ -47,45 +47,54 @@ android {
         ]
     }
 
+    packagingOptions {
+        doNotStrip "*/armeabi/*.so"
+        doNotStrip "*/armeabi-v7a/*.so"
+        doNotStrip "*/arm64-v8a/*.so"
+        doNotStrip "*/x86/*.so"
+        doNotStrip "*/x86_64/*.so"
+        doNotStrip "*/mips/*.so"
+        doNotStrip "*/mips64/*.so"
+    }
 
 //    //使用相对路径签名
-//    Properties props = new Properties()
-//    props.load(new FileInputStream(file("signing.properties")))
-//    signingConfigs {
-//        debug {
-//            storeFile file(props['KEYSTORE_FILE'])
-//            keyAlias props['KEY_ALIAS']
-//            keyPassword props['KEY_PASSWORD']
-//            storePassword props['KEYSTORE_PASSWORD']
-//        }
-//        release {
-//            storeFile file(props['KEYSTORE_FILE'])
-//            keyAlias props['KEY_ALIAS']
-//            keyPassword props['KEY_PASSWORD']
-//            storePassword props['KEYSTORE_PASSWORD']
-//        }
-//    }
-//
-//    productFlavors {
-//        moment{}
+    Properties props = new Properties()
+    props.load(new FileInputStream(file("signing.properties")))
+    signingConfigs {
+        debug {
+            storeFile file(props['KEYSTORE_FILE'])
+            keyAlias props['KEY_ALIAS']
+            keyPassword props['KEY_PASSWORD']
+            storePassword props['KEYSTORE_PASSWORD']
+        }
+        release {
+            storeFile file(props['KEYSTORE_FILE'])
+            keyAlias props['KEY_ALIAS']
+            keyPassword props['KEY_PASSWORD']
+            storePassword props['KEYSTORE_PASSWORD']
+        }
+    }
+
+    productFlavors {
+        moment{}
 //        yingyongbao{}
 ////        _360{}
 //        xiaomi{}
 //        huawei{}
-//    }
-//    productFlavors.all { flavor ->
-//        flavor.manifestPlaceholders = [ JPUSH_CHANNEL:name ]
-//    }
+    }
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [ JPUSH_CHANNEL:name ]
+    }
 
 
     buildTypes {
         // 对应 ALPHA 版本
         debug {
             buildConfigField "String", "VERSION_TYPE", "\"${ProjectBuildConfig.Version.ALPHA}\""
-//            minifyEnabled true
-//            shrinkResources true
-//            zipAlignEnabled true
-//            signingConfig signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         beta {
@@ -93,7 +102,7 @@ android {
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
-//            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
@@ -101,7 +110,7 @@ android {
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

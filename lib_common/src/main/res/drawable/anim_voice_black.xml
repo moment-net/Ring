@@ -2,16 +2,16 @@
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:oneshot="false">
     <item
-        android:drawable="@drawable/icon_voice_one"
+        android:drawable="@drawable/icon_voice_black1"
         android:duration="200" />
     <item
-        android:drawable="@drawable/icon_voice_two"
+        android:drawable="@drawable/icon_voice_black2"
         android:duration="200" />
     <item
-        android:drawable="@drawable/icon_voice_three"
+        android:drawable="@drawable/icon_voice_black3"
         android:duration="200" />
     <item
-        android:drawable="@drawable/icon_voice_four"
+        android:drawable="@drawable/icon_voice_black4"
         android:duration="200" />
 
 

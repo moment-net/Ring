@@ -29,7 +29,7 @@ class WithdrawViewModel @Inject constructor(private val mRepository: CommonRepos
         viewModelScope.launch {
             mRepository.requestWxAccount(callback = RequestCallback(
                 onSuccess = {
-                    ldSuccess.value = it.data!!
+                    ldSuccess.value = it.data
                 },
                 onFailed = {
                     toast(it.errorMessage)
@@ -57,7 +57,7 @@ class WithdrawViewModel @Inject constructor(private val mRepository: CommonRepos
         viewModelScope.launch {
             mRepository.requestApply(callback = RequestCallback(
                 onSuccess = {
-                    ldSuccess.value = it.data!!
+                    ldSuccess.value = it.data
                 },
                 onFailed = {
                     toast(it.errorMessage)
