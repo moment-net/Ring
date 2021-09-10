@@ -6,21 +6,21 @@ import com.alan.module.im.constants.IMConstant
 import com.chad.library.adapter.base.BaseProviderMultiAdapter
 import com.hyphenate.chat.EMMessage
 
-class ChatMessageAdapter(avatar: String) : BaseProviderMultiAdapter<EMMessage>() {
+class ChatMessageAdapter() : BaseProviderMultiAdapter<EMMessage>() {
 
     init {
-        addItemProvider(ChatTextLeftProvider(avatar))
-        addItemProvider(ChatTextRightProvider(avatar))
-        addItemProvider(ChatImageLeftProvider(avatar))
-        addItemProvider(ChatImageRightProvider(avatar))
-        addItemProvider(ChatVoiceLeftProvider(avatar))
-        addItemProvider(ChatVoiceRightProvider(avatar))
-        addItemProvider(ChatVideoLeftProvider(avatar))
-        addItemProvider(ChatVideoRightProvider(avatar))
-        addItemProvider(ChatCustomLeftProvider(avatar))
-        addItemProvider(ChatCustomRightProvider(avatar))
-        addItemProvider(ChatVoiceCallLeftProvider(avatar))
-        addItemProvider(ChatVoiceCallRightProvider(avatar))
+        addItemProvider(ChatTextLeftProvider())
+        addItemProvider(ChatTextRightProvider())
+        addItemProvider(ChatImageLeftProvider())
+        addItemProvider(ChatImageRightProvider())
+        addItemProvider(ChatVoiceLeftProvider())
+        addItemProvider(ChatVoiceRightProvider())
+        addItemProvider(ChatVideoLeftProvider())
+        addItemProvider(ChatVideoRightProvider())
+        addItemProvider(ChatCustomLeftProvider())
+        addItemProvider(ChatCustomRightProvider())
+        addItemProvider(ChatVoiceCallLeftProvider())
+        addItemProvider(ChatVoiceCallRightProvider())
 
         addChildClickViewIds(R.id.iv_pic)
         addChildClickViewIds(R.id.iv_video)

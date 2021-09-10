@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 import java.util.*
 
 object GsonUtil {
@@ -39,11 +40,27 @@ object GsonUtil {
      * @param cls
      * @return
      */
-    fun <T> jsonToBean(gsonString: String?, cls: Class<T>?): T? {
+    fun <T> jsonToBean(gsonString: String, cls: Class<T>): T? {
         var t: T? = null
         if (gson != null) {
             //传入json对象和对象类型,将json转成对象
             t = gson!!.fromJson(gsonString, cls)
+        }
+        return t
+    }
+
+    /**
+     * 将json转成特定的cls的对象
+     *
+     * @param gsonString
+     * @param cls
+     * @return
+     */
+    fun <T> jsonToBean(gsonString: String?, clazz: Type?): T? {
+        var t: T? = null
+        if (gson != null) {
+            //传入json对象和对象类型,将json转成对象
+            t = gson!!.fromJson(gsonString, clazz)
         }
         return t
     }

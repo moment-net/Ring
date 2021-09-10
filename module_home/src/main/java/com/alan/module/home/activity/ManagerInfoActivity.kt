@@ -1,10 +1,10 @@
 package com.alan.module.home.activity
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextUtils
 import android.text.style.ImageSpan
 import android.view.View
 import androidx.activity.viewModels
@@ -45,7 +45,7 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
     /**
      * 初始化View
      */
-    @SuppressLint("NewApi")
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun ActivityManagerInfoBinding.initView() {
         ivBack.clickDelay { finish() }
         tvFocus.clickDelay {
@@ -106,13 +106,16 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
         if (cookerBean == null) {
             return
         }
-        var userInfoBean = cookerBean?.user;
+        val userInfoBean = cookerBean?.user;
         CoilUtils.loadRound(mBinding.ivAvatar, userInfoBean?.avatar!!, 3f)
         CoilUtils.loadBlur(mBinding.ivAvatarBg, userInfoBean?.avatar!!, this, 25f, 1f)
         mBinding.tvName.setText(userInfoBean?.userName)
-        var address = userInfoBean?.address!!.split("-")[2]
+        var address = ""
+        if (!TextUtils.isEmpty(cookerBean?.user?.address) && cookerBean?.user?.address!!.split("-").size == 3) {
+            address = cookerBean?.user?.address!!.split("-")[2]
+        }
         mBinding.tvAge.setText("${userInfoBean?.age}岁  ${address}")
-        if (userInfoBean?.gender == 1) {
+        if (userInfoBean.gender == 1) {
             mBinding.tvAge.setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.icon_home_boy,
                 0,

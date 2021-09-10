@@ -15,7 +15,7 @@ import com.hyphenate.chat.EMTextMessageBody
 import com.hyphenate.util.DateUtils
 import java.util.*
 
-class ChatTextRightProvider(var avatar: String) : BaseItemProvider<EMMessage>() {
+class ChatTextRightProvider() : BaseItemProvider<EMMessage>() {
     override val itemViewType: Int
         get() = IMConstant.MESSAGE_TYPE_TXT_RIGHT
 
@@ -48,6 +48,7 @@ class ChatTextRightProvider(var avatar: String) : BaseItemProvider<EMMessage>() 
             }
         }
 
+        val avatar = item.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR)
         CoilUtils.loadCircle(iv_avatar, avatar)
 
         val txtBody = item.getBody() as EMTextMessageBody

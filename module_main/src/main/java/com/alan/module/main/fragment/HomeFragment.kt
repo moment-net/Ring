@@ -1,6 +1,5 @@
 package com.alan.module.main.fragment
 
-import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -107,10 +106,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
 
         mAdapter.setOnItemClickListener { adapter, view, position ->
-            val bundle = Bundle().apply {
-                putParcelable("bean", mAdapter.data.get(position))
-            }
-            jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
+            jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, mAdapter.data.get(position))
         }
 
         mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {

@@ -18,9 +18,11 @@ class ManagerAdapter : BaseQuickAdapter<CookerBean, BaseViewHolder>(R.layout.ite
     override fun convert(holder: BaseViewHolder, item: CookerBean) {
         CoilUtils.loadRound(holder.getView(R.id.iv_avatar), item.user.avatar!!, 3f)
         holder.setText(R.id.tv_name, item.user.userName)
-        var tvAge = holder.getView<ShapeView>(R.id.tv_age)
-        var address =
-            if (!TextUtils.isEmpty(item.user.address)) item.user.address!!.split("-")[2] else ""
+        val tvAge = holder.getView<ShapeView>(R.id.tv_age)
+        var address = ""
+        if (!TextUtils.isEmpty(item.user.address) && item.user.address!!.split("-").size == 3) {
+            address = item.user.address!!.split("-")[2]
+        }
         tvAge.setText("${item.user.age}岁  ${address}")
         if (item.user.gender == 1) {
             tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_boy, 0, 0, 0)

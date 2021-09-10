@@ -12,7 +12,7 @@ import com.hyphenate.chat.EMMessage
 import com.hyphenate.util.DateUtils
 import java.util.*
 
-class ChatVoiceCallLeftProvider(var avatar: String) : BaseItemProvider<EMMessage>() {
+class ChatVoiceCallLeftProvider() : BaseItemProvider<EMMessage>() {
     override val itemViewType: Int
         get() = IMConstant.MESSAGE_TYPE_VOICECALL_LEFT
 
@@ -43,7 +43,7 @@ class ChatVoiceCallLeftProvider(var avatar: String) : BaseItemProvider<EMMessage
                 tv_time.setVisibility(View.VISIBLE)
             }
         }
-
+        val avatar = item.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR)
         CoilUtils.loadCircle(iv_avatar, avatar)
 
 

@@ -1,9 +1,5 @@
 package com.alan.mvvm.base.http.responsebean
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
 data class UserInfoBean(
     var id: String = "",
     var userId: String = "",
@@ -12,18 +8,18 @@ data class UserInfoBean(
     var gender: Int = 0,
     var status: Boolean? = false,
     var avatar: String = "",
-    var followCount: Int? = 0,
-    var fansCount: Int? = 0,
-    var followStatus: Int? = 0,
-    var type: Int? = 0,
+    var followCount: Int = 0,
+    var fansCount: Int = 0,
+    var followStatus: Int = 0,
+    var type: Int = 0,
     var hostLevel: String? = "",
     var reviewScore: String? = "",
     //屏蔽状态，1为屏蔽，0为未屏蔽；
-    var shieldStatus: Int? = 0,
+    var shieldStatus: Int = 0,
     var desc: String? = "",
-    var inviteStatus: Int? = 0,
+    var inviteStatus: Int = 0,
     var online: Boolean? = false,
-    var dyUserInfoId: Int? = 0,
+    var dyUserInfoId: Int = 0,
     var dyNickname: String? = "",
     var registTime: String? = "",
     var refuseHotmusic: Boolean? = false,
@@ -39,11 +35,10 @@ data class UserInfoBean(
     var audioDesc: String? = "",
     var greeting: GreetBean? = null,
     var headsetStatus: String? = "",
-    var age: Int? = 0,
+    var age: Int = 0,
     var bindApple: Boolean? = false,
-    var eduRight: Int? = 0,
+    var eduRight: Int = 0,
     var hasHeadset: Boolean? = false,
-    var needInvite: Int? = 0,
+    var needInvite: Int = 0,
     var starSign: String? = "",
-
-    ) : Parcelable
+)

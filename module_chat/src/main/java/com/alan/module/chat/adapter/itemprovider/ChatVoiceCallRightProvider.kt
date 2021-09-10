@@ -6,7 +6,7 @@ import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.hyphenate.chat.EMMessage
 
-class ChatVoiceCallRightProvider(avatar: String) : BaseItemProvider<EMMessage>() {
+class ChatVoiceCallRightProvider() : BaseItemProvider<EMMessage>() {
     override val itemViewType: Int
         get() = IMConstant.MESSAGE_TYPE_VOICECALL_RIGHT
 

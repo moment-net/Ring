@@ -56,6 +56,13 @@ fun jumpARoute(routerUrl: String, bundle: Bundle) {
 }
 
 /**
+ * 阿里路由带参数跳转
+ */
+fun jumpARoute(routerUrl: String, objects: Any) {
+    ARouter.getInstance().build(routerUrl).withObject("bean", objects).navigation()
+}
+
+/**
  * 阿里路由带请求码跳转
  */
 fun jumpARoute(routerUrl: String, activity: Activity, requestCode: Int) {

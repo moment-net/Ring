@@ -3,6 +3,7 @@ package com.alan.module.im
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.alan.module.im.constants.IMConstant
 import com.alan.module.im.listener.EMClientListener
 import com.alan.mvvm.base.utils.ProcessUtils
 import com.alan.mvvm.common.http.exception.BaseHttpException
@@ -10,6 +11,8 @@ import com.hyphenate.EMCallBack
 import com.hyphenate.chat.*
 import com.hyphenate.easecallkit.EaseCallKit
 import com.hyphenate.easecallkit.base.EaseCallKitConfig
+import com.hyphenate.easecallkit.base.EaseCallType
+import com.hyphenate.easecallkit.base.EaseCallUserInfo
 import com.hyphenate.push.EMPushConfig
 import com.hyphenate.push.EMPushHelper
 import com.socks.library.KLog
@@ -110,9 +113,19 @@ object EMClientHelper {
         //设置呼叫超时时间
         callKitConfig.callTimeOut = (30 * 1000).toLong()
         //设置声网AgoraAppId
-        callKitConfig.agoraAppId = "15cb0d28b87b425ea613fc46f7c9f974"
+        callKitConfig.agoraAppId = IMConstant.AGORA_ID
         callKitConfig.isEnableRTCToken = true
         EaseCallKit.getInstance().init(context, callKitConfig)
+    }
+
+    fun startSingleVoiceCall(ext: Map<String, String>) {
+        val userInfo = EaseCallUserInfo()
+        userInfo.userId = ext.get("userId")
+        userInfo.nickName = ext.get("userName")
+        userInfo.headImage = ext.get("avatar")
+        EaseCallKit.getInstance().callKitConfig.setUserInfo(ext.get("userId"), userInfo)
+        EaseCallKit.getInstance()
+            .startSingleCall(EaseCallType.SINGLE_VOICE_CALL, ext.get("userId"), ext)
     }
 
     fun initPush(context: Context?) {
@@ -236,6 +249,7 @@ object EMClientHelper {
             }
         }
         sortList.sortWith(compareBy({ it.lastMessage.msgTime }))
+        sortList.reverse()
         return sortList;
     }
 

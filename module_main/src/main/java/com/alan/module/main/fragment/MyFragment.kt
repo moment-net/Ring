@@ -2,6 +2,7 @@ package com.alan.module.main.fragment
 
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -10,8 +11,8 @@ import com.alan.module.main.R
 import com.alan.module.main.databinding.FragmentMyBinding
 import com.alan.module.main.viewmodel.MyViewModel
 import com.alan.mvvm.base.coil.CoilUtils
-import com.alan.mvvm.base.ktx.clickDelay
-import com.alan.mvvm.base.ktx.dp2px
+import com.alan.mvvm.base.http.responsebean.DiamondBean
+import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.helper.SpHelper
@@ -87,7 +88,20 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
     }
 
     override fun initObserve() {
-
+        mViewModel.ldSuccess.observe(this) {
+            when (it) {
+                is DiamondBean -> {
+                    if (it.recharge) {
+                        mBinding.ivFirst.gone()
+                        mBinding.tvDiamondNum.visible()
+                        mBinding.tvDiamondNum.setText("${it.points}个钻石")
+                    } else {
+                        mBinding.ivFirst.visible()
+                        mBinding.tvDiamondNum.gone()
+                    }
+                }
+            }
+        }
     }
 
     override fun initRequestData() {
@@ -96,18 +110,33 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
     override fun onResume() {
         super.onResume()
+        mViewModel.requestDiamond()
         setUserInfo()
     }
 
+
     fun setUserInfo() {
         val userInfo = SpHelper.getUserInfo()
-        CoilUtils.loadCircle(mBinding.ivAvatar, userInfo?.avatar ?: "")
+        CoilUtils.loadRoundBorder(
+            mBinding.ivAvatar,
+            userInfo?.avatar ?: "",
+            15f,
+            2f,
+            R.color.white.getResColor()
+        )
         mBinding.ivGender.setImageResource(if (userInfo?.gender == 1) R.drawable.icon_bing_boy else R.drawable.icon_bing_girl)
         mBinding.tvName.setText(userInfo?.userName)
+        mBinding.tvAge.setText("${userInfo?.age}岁")
+        if (TextUtils.isEmpty(userInfo?.address!!)) {
+            mBinding.tvLocation.gone()
+        } else {
+            mBinding.tvLocation.visible()
+            var address = userInfo?.address!!.split("-")[2]
+            mBinding.tvLocation.setText("${address}")
+        }
         mBinding.tvFollowNum.setText("${userInfo?.fansCount}")
         mBinding.tvFocusNum.setText("${userInfo?.followCount}")
 
     }
-
 
 }

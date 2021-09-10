@@ -1,6 +1,7 @@
 package com.alan.module.im.listener
 
 import android.content.Context
+import android.text.TextUtils
 import com.alan.module.im.EMClientHelper
 import com.hyphenate.*
 import com.hyphenate.chat.EMMessage
@@ -184,21 +185,10 @@ object EMClientListener {
      * 语音视频电话监听
      */
     class ChatCallListener : EaseCallKitListener {
-        override fun onInviteUsers(context: Context, userId: Array<String>, ext: JSONObject) {
-//                Intent intent = new Intent(context, ConferenceInviteActivity.class).addFlags(FLAG_ACTIVITY_NEW_TASK);
-//                String groupId = null;
-//                if(ext != null && ext.length() > 0){
-//                    try {
-//                        groupId = ext.getString("groupId");
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                intent.putExtra(IMConstant.EXTRA_CONFERENCE_GROUP_ID, groupId);
-//                intent.putExtra(IMConstant.EXTRA_CONFERENCE_GROUP_EXIST_MEMBERS, userId);
-//                context.startActivity(intent);
-        }
+        //多人通话中邀请
+        override fun onInviteUsers(context: Context, userId: Array<String>, ext: JSONObject) {}
 
+        //通话结束
         override fun onEndCallWithReason(
             callType: EaseCallType,
             channelName: String,
@@ -215,54 +205,50 @@ object EMClientListener {
             callString += formatter.format(callTime)
         }
 
+        //获取声网token
         override fun onGenerateToken(
             userId: String,
             channelName: String,
             appKey: String,
             callback: EaseCallKitTokenCallback
         ) {
-            EMLog.d(TAG, "onGenerateToken userId:$userId channelName:$channelName appKey:$appKey")
-            //            String url = tokenUrl;
-//            url += "?";
-//            url += "userAccount=";
-//            url += userId;
-//            url += "&channelName=";
-//            url += channelName;
-//            url += "&appkey=";
-//            url += appKey;
-//            private String tokenUrl = "http://a1.easemob.com/token/rtcToken/v1";
-//            private String uIdUrl = "http://a1.easemob.com/channel/mapper";
-            //获取声网Token
-//                getRtcToken(url, callback);
         }
 
+        //被叫收到通话邀请
         override fun onReceivedCall(callType: EaseCallType, fromUserId: String, ext: JSONObject) {
             //收到接听电话
             EMLog.d(TAG, "onRecivedCall" + callType.name + " fromUserId:" + fromUserId)
+            if (!TextUtils.isEmpty(ext.toString())) {
+                val userId = ext.optString("userId")
+                val userName = ext.optString("userName")
+                val avatar = ext.optString("avatar")
+                //设置用户昵称 头像
+                val userInfo = EaseCallUserInfo()
+                userInfo.userId = userId
+                userInfo.nickName = userName
+                userInfo.headImage = avatar
+
+                EaseCallKit.getInstance().callKitConfig.setUserInfo(userName, userInfo)
+            }
         }
 
+        //通话异常回调
         override fun onCallError(type: EaseCallError, errorCode: Int, description: String) {}
+
+        //通话邀请消息回调
         override fun onInViteCallMessageSent() {}
+
+        //加入频道成功回调
         override fun onRemoteUserJoinChannel(
             channelName: String,
             userName: String,
             uid: Int,
             callback: EaseGetUserAccountCallback
         ) {
-            if (userName == null || userName === "") {
-//                String url = uIdUrl;
-//                url += "?";
-//                url += "channelName=";
-//                url += channelName;
-//                url += "&userAccount=";
-//                url += EMClient.getInstance().getCurrentUser();
-//                url += "&appkey=";
-//                url += EMClient.getInstance().getOptions().getAppKey();
-                //获取所有人的uid
-//                    getUserIdAgoraUid(uid, url, callback);
-            } else {
-                //设置用户昵称 头像
-            }
+            val account = EaseUserAccount(uid, userName)
+            val accounts: MutableList<EaseUserAccount> = ArrayList()
+            accounts.add(account)
+            callback.onUserAccount(accounts)
         }
     }
 

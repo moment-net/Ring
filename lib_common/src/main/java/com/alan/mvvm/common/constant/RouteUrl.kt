@@ -105,4 +105,9 @@ object RouteUrl {
         //WEB浏览器页面
         const val ACTIVITY_WEB_WEB: String = "/web/web";
     }
+
+    object JsonModule {
+        //json服务
+        const val ACTIVITY_JSON_JSON: String = "/json/json";
+    }
 }

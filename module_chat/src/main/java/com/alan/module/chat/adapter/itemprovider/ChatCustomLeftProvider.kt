@@ -6,7 +6,7 @@ import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.hyphenate.chat.EMMessage
 
-class ChatCustomLeftProvider(avatar: String) : BaseItemProvider<EMMessage>() {
+class ChatCustomLeftProvider() : BaseItemProvider<EMMessage>() {
     override val itemViewType: Int
         get() = IMConstant.MESSAGE_TYPE_CUSTOM_RIGHT
 

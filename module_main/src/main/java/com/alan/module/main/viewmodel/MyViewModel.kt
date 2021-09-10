@@ -2,6 +2,7 @@ package com.alan.module.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,19 +19,19 @@ import javax.inject.Inject
 class MyViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
-    val data = MutableLiveData<String>()
+    val ldSuccess = MutableLiveData<Any>()
 
-    /**
-     * 模拟获取数据
-     */
-    fun getData() {
-        viewModelScope.launch() {
-//            mRepository.getData(callback = RequestCallback(
-//                onStart = {},
-//                onSuccess = {},
-//                onFailed = {},
-//                onFinally = {}
-//            ))
+
+    fun requestDiamond() {
+        viewModelScope.launch {
+            mRepository.requestDiamond(callback = RequestCallback(
+                onSuccess = {
+                    ldSuccess.value = it.data!!
+                },
+                onFailed = {
+
+                }
+            ))
         }
     }
 }

@@ -13,7 +13,7 @@ import com.hyphenate.chat.EMMessage
 import com.hyphenate.util.DateUtils
 import java.util.*
 
-class ChatImageRightProvider(var avatar: String) : BaseItemProvider<EMMessage>() {
+class ChatImageRightProvider() : BaseItemProvider<EMMessage>() {
     override val itemViewType: Int
         get() = IMConstant.MESSAGE_TYPE_IMAGE_RIGHT
 
@@ -45,11 +45,11 @@ class ChatImageRightProvider(var avatar: String) : BaseItemProvider<EMMessage>()
                 tv_time.setVisibility(View.VISIBLE)
             }
         }
-
+        val avatar = item.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR)
         CoilUtils.loadCircle(iv_avatar, avatar)
 
         val txtBody = item.getBody() as EMImageMessageBody
-        CoilUtils.loadRound(iv_pic, txtBody.thumbnailUrl, 7f)
+        CoilUtils.loadRound(iv_pic, txtBody.localUri.toString(), 7f)
 
         if (item.isAcked()) {
             iv_ack.setVisibility(View.VISIBLE)

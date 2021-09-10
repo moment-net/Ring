@@ -35,7 +35,7 @@ class VoiceRecorderUtil(val handler: Handler) {
             recorder!!.setAudioSamplingRate(8000) // 8000Hz
             recorder!!.setAudioEncodingBitRate(64) // seems if change this to
             voiceFilePath = IMConstant.PATH_VOICE;
-            file = File(voiceFilePath)
+            file = File(voiceFilePath!!)
             recorder!!.setOutputFile(file!!.absolutePath)
             recorder!!.prepare()
             isRecording = true

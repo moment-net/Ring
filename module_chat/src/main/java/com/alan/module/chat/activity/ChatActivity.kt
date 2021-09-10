@@ -3,7 +3,7 @@ package com.alan.module.chat.activity
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -20,6 +20,7 @@ import com.alan.module.chat.databinding.ActivityChatBinding
 import com.alan.module.chat.view.VoiceRecorderView
 import com.alan.module.chat.viewmodol.ChatDetailViewModel
 import com.alan.module.im.EMClientHelper
+import com.alan.module.im.constants.IMConstant
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.base.http.responsebean.AvatarInfoBean
@@ -37,6 +38,7 @@ import com.hyphenate.EMMessageListener
 import com.hyphenate.EMValueCallBack
 import com.hyphenate.chat.*
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.IOException
 
 
 /**
@@ -92,7 +94,14 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                 llPress.visible()
             }
         }
-        ivCall.clickDelay { }
+        ivCall.clickDelay {
+            val map = mutableMapOf<String, String>().apply {
+                put("userId", userId)
+                put("userName", userName)
+                put("avatar", avatar)
+            }
+            EMClientHelper.startSingleVoiceCall(map)
+        }
         ivPic.clickDelay {
             ImageSelectUtil.singlePic(this@ChatActivity)
         }
@@ -131,7 +140,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
     }
 
     fun initRV() {
-        mAdapter = ChatMessageAdapter(avatar)
+        mAdapter = ChatMessageAdapter()
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
             when (view.id) {
                 R.id.iv_pic -> {
@@ -268,7 +277,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             EMConversation.EMConversationType.Chat,
             true
         )
-        var avatarInfoBean = AvatarInfoBean(avatar, userName)
+        val avatarInfoBean = AvatarInfoBean(avatar, userName)
         conversation.extField = GsonUtil.jsonToString(avatarInfoBean)
         conversation.markAllMessagesAsRead()
         loadMoreServerMessages(PAGE_SIZE, true)
@@ -290,19 +299,24 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                     val type = data?.getIntExtra("type", Constants.TYPE_IMAGE)
                     when (type) {
                         Constants.TYPE_IMAGE -> {
-                            var bitmap = data.getParcelableExtra<Bitmap>("bitmap")
-                            var path = BitmapUtil.save(this, bitmap)
+                            val path = data.getStringExtra("bitmap")
                             sendImageMessage(path)
-                            bitmap?.recycle()
-                            bitmap = null
+
                         }
                         Constants.TYPE_VIDEO -> {
-                            var bitmap = data.getParcelableExtra<Bitmap>("bitmap")
-                            var path = BitmapUtil.save(this, bitmap)
-                            var url = data.getStringExtra("url")
-                            sendVideoMessage(url, path, 1000)
-                            bitmap?.recycle()
-                            bitmap = null
+                            val path = data.getStringExtra("bitmap")
+                            val url = data.getStringExtra("url")
+                            var duration = 0
+                            val player = MediaPlayer()
+                            try {
+                                player.setDataSource(url)
+                                player.prepare()
+                                duration = player.duration
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            }
+
+                            sendVideoMessage(url, path, duration)
                         }
                     }
                 }
@@ -590,6 +604,11 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             toast("请检查消息附件是否存在！")
             return
         }
+        // 增加自己特定的属性
+        message.setAttribute(IMConstant.MESSAGE_ATTR_AVATAR, SpHelper.getUserInfo()?.avatar);
+        message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME, SpHelper.getUserInfo()?.userName);
+        message.setAttribute(IMConstant.MESSAGE_ATTR_AVATAR_OTHER, avatar);
+        message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME_OTHER, userName);
         EMClientHelper.chatManager.sendMessage(message)
         refreshToLatest()
     }

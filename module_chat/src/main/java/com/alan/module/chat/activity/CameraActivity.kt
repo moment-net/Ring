@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import com.alan.module.chat.databinding.ActivityCameraBinding
 import com.alan.module.im.constants.IMConstant
 import com.alan.mvvm.base.mvvm.vm.EmptyViewModel
+import com.alan.mvvm.base.utils.BitmapUtil
 import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.ui.BaseActivity
@@ -39,18 +40,20 @@ class CameraActivity : BaseActivity<ActivityCameraBinding, EmptyViewModel>() {
         //JCameraView监听
         jcamera.setJCameraLisenter(object : JCameraListener {
             override fun captureSuccess(bitmap: Bitmap) {
+                val path = BitmapUtil.save(this@CameraActivity, bitmap)
                 val intent = Intent().apply {
                     putExtra("type", Constants.TYPE_IMAGE)
-                    putExtra("bitmap", bitmap)
+                    putExtra("bitmap", path)
                 }
                 setResult(RESULT_OK, intent)
                 finish()
             }
 
             override fun recordSuccess(url: String, firstFrame: Bitmap) {
+                val path = BitmapUtil.save(this@CameraActivity, firstFrame)
                 val intent = Intent().apply {
                     putExtra("type", Constants.TYPE_VIDEO)
-                    putExtra("bitmap", firstFrame)
+                    putExtra("bitmap", path)
                     putExtra("url", url)
                 }
                 setResult(RESULT_OK, intent)

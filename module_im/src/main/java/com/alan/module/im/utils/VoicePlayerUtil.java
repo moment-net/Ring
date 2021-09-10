@@ -36,6 +36,13 @@ public class VoicePlayerUtil {
         return instance;
     }
 
+    private VoicePlayerUtil(Context cxt) {
+        baseContext = cxt.getApplicationContext();
+        audioManager = (AudioManager) baseContext.getSystemService(Context.AUDIO_SERVICE);
+        mediaPlayer = new MediaPlayer();
+    }
+
+
     public MediaPlayer getPlayer() {
         return mediaPlayer;
     }
@@ -44,11 +51,7 @@ public class VoicePlayerUtil {
         return mediaPlayer.isPlaying();
     }
 
-    /**
-     * May null, please consider.
-     *
-     * @return
-     */
+
     public String getCurrentPlayingId() {
         return playingId;
     }
@@ -88,11 +91,10 @@ public class VoicePlayerUtil {
         mediaPlayer.reset();
 
         /**
-         * This listener is to stop the voice play animation currently, considered the following 3 conditions:
-         *
-         * 1.A new voice item is clicked to play, to stop the previous playing voice item animation.
-         * 2.The voice is play complete, to stop it's voice play animation.
-         * 3.Press the voice record button will stop the voice play and must stop voice play animation.
+         * 该监听器当前是停止语音播放动画，考虑以下3种情况：
+         * 1.点击一个新的语音项播放，停止之前播放的语音项动画。
+         * 2.语音播放完毕，停止语音播放动画。
+         * 3.按录音键将停止语音播放，必须停止语音播放动画。
          *
          */
         if (onCompletionListener != null) {
@@ -100,14 +102,10 @@ public class VoicePlayerUtil {
         }
     }
 
-    private VoicePlayerUtil(Context cxt) {
-        baseContext = cxt.getApplicationContext();
-        audioManager = (AudioManager) baseContext.getSystemService(Context.AUDIO_SERVICE);
-        mediaPlayer = new MediaPlayer();
-    }
+
 
     private void setSpeaker() {
-        boolean speakerOn = true;
+        boolean speakerOn = false;
         if (speakerOn) {
             audioManager.setMode(AudioManager.MODE_NORMAL);
             audioManager.setSpeakerphoneOn(true);
