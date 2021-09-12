@@ -1,6 +1,7 @@
 package com.alan.module.chat.activity
 
 import android.net.Uri
+import android.widget.MediaController
 import androidx.activity.viewModels
 import com.alan.module.chat.databinding.ActivityVideoBinding
 import com.alan.mvvm.base.ktx.clickDelay
@@ -53,8 +54,14 @@ class VideoActivity : BaseActivity<ActivityVideoBinding, EmptyViewModel>() {
 
 
     fun initVideo() {
+        //加载指定的视频文件
         val videoUri = Uri.parse(uri)
         mBinding.videoview.setVideoURI(videoUri);
+        //创建MediaController对象
+        val mediaController = MediaController(this)
+        //VideoView与MediaController建立关联
+        mBinding.videoview.setMediaController(mediaController);
+        //让VideoView获取焦点
         mBinding.videoview.requestFocus();
         mBinding.videoview.start();
 
