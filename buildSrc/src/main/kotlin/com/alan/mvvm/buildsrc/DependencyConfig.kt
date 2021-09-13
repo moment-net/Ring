@@ -67,7 +67,7 @@ object DependencyConfig {
         const val TencentBugly = "3.3.9"                    // 腾讯Bugly 异常上报
         const val TencentBuglyNative = "3.8.0"              // Bugly native异常上报
         const val TencentTBSX5 = "43939"                    // 腾讯X5WebView
-        const val IMVersion = "3.8.4"                       // 环信版本
+        const val IMVersion = "3.8.5"                       // 环信版本
         const val OneLoginVersion = "2.5.1"                 // 极验框架
         const val JPushVersion = "4.1.5"                    // 极光推送版本
         const val JCoreVersion = "2.9.0"                    // 极光推送版本

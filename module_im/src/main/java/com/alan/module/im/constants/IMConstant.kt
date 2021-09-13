@@ -3,8 +3,8 @@ package com.alan.module.im.constants
 import com.hyphenate.util.PathUtil
 
 object IMConstant {
-//    const val AGORA_ID="aef85e061fc048658a23a96860a26718"
-const val AGORA_ID = "15cb0d28b87b425ea613fc46f7c9f974"
+    const val AGORA_ID = "aef85e061fc048658a23a96860a26718"
+//const val AGORA_ID = "d90373e913834741b538844be09bcc2d"
 
     //音频聊天
     var PATH_VOICE =

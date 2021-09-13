@@ -54,7 +54,7 @@ class ChatVideoRightProvider() : BaseItemProvider<EMMessage>() {
             val time = DateUtils.toTime(body.getDuration())
             tv_length.setText(time)
         }
-        CoilUtils.load(iv_video, body.localThumbUri.toString())
+        CoilUtils.load(iv_video, body.thumbnailUrl)
 
         if (item.isAcked()) {
             iv_ack.setVisibility(View.VISIBLE)

@@ -7,7 +7,6 @@ import android.widget.TextView
 import com.alan.module.chat.R
 import com.alan.module.im.constants.IMConstant
 import com.alan.module.im.utils.SmileUtils
-import com.alan.mvvm.base.coil.CoilUtils
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.hyphenate.chat.EMMessage
@@ -48,8 +47,8 @@ class ChatTextRightProvider() : BaseItemProvider<EMMessage>() {
             }
         }
 
-        val avatar = item.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR)
-        CoilUtils.loadCircle(iv_avatar, avatar)
+//        val avatar = item.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR)
+//        CoilUtils.loadCircle(iv_avatar, avatar)
 
         val txtBody = item.getBody() as EMTextMessageBody
         val span: Spannable = SmileUtils.getSmiledText(context, txtBody.message)

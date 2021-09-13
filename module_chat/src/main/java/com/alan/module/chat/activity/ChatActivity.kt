@@ -95,12 +95,14 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             }
         }
         ivCall.clickDelay {
+            val userInfoBean = SpHelper.getUserInfo()
             val map = mutableMapOf<String, String>().apply {
-                put("userId", userId)
-                put("userName", userName)
-                put("avatar", avatar)
+                put("userId", userInfoBean?.userId!!)
+                put("userName", userInfoBean.userName)
+                put("avatar", userInfoBean.avatar)
             }
-            EMClientHelper.startSingleVoiceCall(map)
+            EMClientHelper.setUserInfoCallKit(userId, userName, avatar)
+            EMClientHelper.startSingleVoiceCall(userId, map)
         }
         ivPic.clickDelay {
             ImageSelectUtil.singlePic(this@ChatActivity)

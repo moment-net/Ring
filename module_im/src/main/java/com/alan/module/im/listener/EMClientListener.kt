@@ -212,6 +212,9 @@ object EMClientListener {
             appKey: String,
             callback: EaseCallKitTokenCallback
         ) {
+            EMLog.d(TAG, "onGenerateToken userId:$userId channelName:$channelName appKey:$appKey")
+            callback.onSetToken(null, 0)
+
         }
 
         //被叫收到通话邀请
@@ -219,16 +222,11 @@ object EMClientListener {
             //收到接听电话
             EMLog.d(TAG, "onRecivedCall" + callType.name + " fromUserId:" + fromUserId)
             if (!TextUtils.isEmpty(ext.toString())) {
+                //设置用户昵称 头像
                 val userId = ext.optString("userId")
                 val userName = ext.optString("userName")
                 val avatar = ext.optString("avatar")
-                //设置用户昵称 头像
-                val userInfo = EaseCallUserInfo()
-                userInfo.userId = userId
-                userInfo.nickName = userName
-                userInfo.headImage = avatar
-
-                EaseCallKit.getInstance().callKitConfig.setUserInfo(userName, userInfo)
+                EMClientHelper.setUserInfoCallKit(userId, userName, avatar)
             }
         }
 
@@ -238,10 +236,10 @@ object EMClientListener {
         //通话邀请消息回调
         override fun onInViteCallMessageSent() {}
 
-        //加入频道成功回调
+        //远端用户加入频道成功回调
         override fun onRemoteUserJoinChannel(
             channelName: String,
-            userName: String,
+            userName: String?,
             uid: Int,
             callback: EaseGetUserAccountCallback
         ) {

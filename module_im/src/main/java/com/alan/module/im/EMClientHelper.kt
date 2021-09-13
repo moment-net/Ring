@@ -113,19 +113,21 @@ object EMClientHelper {
         //设置呼叫超时时间
         callKitConfig.callTimeOut = (30 * 1000).toLong()
         //设置声网AgoraAppId
-        callKitConfig.agoraAppId = IMConstant.AGORA_ID
+        callKitConfig.setAgoraAppId(IMConstant.AGORA_ID)
         callKitConfig.isEnableRTCToken = true
         EaseCallKit.getInstance().init(context, callKitConfig)
     }
 
-    fun startSingleVoiceCall(ext: Map<String, String>) {
+    fun startSingleVoiceCall(userId: String, ext: Map<String, String>) {
+        EaseCallKit.getInstance().startSingleCall(EaseCallType.SINGLE_VOICE_CALL, userId, ext)
+    }
+
+    fun setUserInfoCallKit(userId: String, username: String?, avatar: String) {
         val userInfo = EaseCallUserInfo()
-        userInfo.userId = ext.get("userId")
-        userInfo.nickName = ext.get("userName")
-        userInfo.headImage = ext.get("avatar")
-        EaseCallKit.getInstance().callKitConfig.setUserInfo(ext.get("userId"), userInfo)
-        EaseCallKit.getInstance()
-            .startSingleCall(EaseCallType.SINGLE_VOICE_CALL, ext.get("userId"), ext)
+        userInfo.userId = userId
+        userInfo.nickName = username
+        userInfo.headImage = avatar
+        EaseCallKit.getInstance().callKitConfig.setUserInfo(userId, userInfo)
     }
 
     fun initPush(context: Context?) {
