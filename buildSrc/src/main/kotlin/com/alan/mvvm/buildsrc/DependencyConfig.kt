@@ -71,7 +71,7 @@ object DependencyConfig {
         const val OneLoginVersion = "2.5.1"                 // 极验框架
         const val JPushVersion = "4.1.5"                    // 极光推送版本
         const val JCoreVersion = "2.9.0"                    // 极光推送版本
-        const val HWHMSVersion = "5.3.0.301"                // 华为推送版本
+        const val HWHMSVersion = "5.3.0.304"                // 华为推送版本
         const val HWPushVersion = "4.1.5"                   // 华为推送版本
         const val XiaomiPushVersion = "4.1.5"               // 小米推送版本
         const val OppoPushVersion = "4.1.5"                 // oppo推送版本

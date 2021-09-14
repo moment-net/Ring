@@ -15,7 +15,6 @@ buildscript {
         classpath ProjectPluginManager.ARouterRegister
         classpath ProjectPluginManager.HiltPlugin
         classpath ProjectPluginManager.HWAgcpPlugin
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20'
     }
 }
 
