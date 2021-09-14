@@ -9,7 +9,7 @@ data class ChannelBean(
     var onlineNum: Int = 0,
     var onlineStatus: Int = 0,
     var followUser: List<FollowUserBean>? = null,
-    var rtcInfo: FreedomSpeakRtc? = null,
+    var rtcInfo: RtcTokenBean? = null,
     var isPublic: Boolean = false,
     var cityCode: String? = null,
     var enterCode: String? = null

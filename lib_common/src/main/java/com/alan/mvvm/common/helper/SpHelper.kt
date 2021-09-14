@@ -1,6 +1,5 @@
 package com.alan.mvvm.common.helper
 
-import com.alan.module.im.EMClientHelper
 import com.alan.mvvm.base.http.responsebean.LoginBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.utils.EventBusUtils
@@ -8,6 +7,7 @@ import com.alan.mvvm.base.utils.GsonUtil
 import com.alan.mvvm.base.utils.SpUtils
 import com.alan.mvvm.common.constant.SpKey
 import com.alan.mvvm.common.event.UserEvent
+import com.alan.mvvm.common.im.EMClientHelper
 import com.socks.library.KLog
 
 /**

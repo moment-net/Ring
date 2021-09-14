@@ -2,7 +2,7 @@ package com.alan.module.chat.adapter
 
 import com.alan.module.chat.R
 import com.alan.module.chat.adapter.itemprovider.*
-import com.alan.module.im.constants.IMConstant
+import com.alan.mvvm.common.constant.IMConstant
 import com.chad.library.adapter.base.BaseProviderMultiAdapter
 import com.hyphenate.chat.EMMessage
 

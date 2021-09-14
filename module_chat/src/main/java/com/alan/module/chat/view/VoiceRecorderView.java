@@ -15,9 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alan.module.chat.R;
-import com.alan.module.im.utils.VoicePlayerUtil;
-import com.alan.module.im.utils.VoiceRecorderUtil;
 import com.alan.mvvm.base.utils.StorageUtil;
+import com.alan.mvvm.common.im.utils.VoicePlayerUtil;
+import com.alan.mvvm.common.im.utils.VoiceRecorderUtil;
 import com.hyphenate.EMError;
 
 /**

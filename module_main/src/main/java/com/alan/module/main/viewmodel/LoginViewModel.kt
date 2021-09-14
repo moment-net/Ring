@@ -3,7 +3,6 @@ package com.alan.module.main.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import cn.jpush.android.api.JPushInterface
-import com.alan.module.im.EMClientHelper
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.http.requestbean.DeviceRegisterBean
@@ -17,6 +16,7 @@ import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.http.model.CommonRepository
+import com.alan.mvvm.common.im.EMClientHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

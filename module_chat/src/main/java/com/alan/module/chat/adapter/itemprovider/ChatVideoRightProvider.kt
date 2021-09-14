@@ -4,8 +4,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.alan.module.chat.R
-import com.alan.module.im.constants.IMConstant
 import com.alan.mvvm.base.coil.CoilUtils
+import com.alan.mvvm.common.constant.IMConstant
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.hyphenate.chat.EMMessage

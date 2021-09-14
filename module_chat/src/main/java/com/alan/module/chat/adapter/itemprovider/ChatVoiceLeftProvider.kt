@@ -8,11 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.alan.module.chat.R
-import com.alan.module.im.constants.IMConstant
-import com.alan.module.im.utils.EMVoiceLengthUtils
-import com.alan.module.im.utils.VoicePlayerUtil
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.coil.CoilUtils
+import com.alan.mvvm.common.constant.IMConstant
+import com.alan.mvvm.common.im.utils.EMVoiceLengthUtils
+import com.alan.mvvm.common.im.utils.VoicePlayerUtil
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.hyphenate.chat.EMMessage

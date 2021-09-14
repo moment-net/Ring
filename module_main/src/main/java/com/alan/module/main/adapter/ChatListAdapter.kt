@@ -2,12 +2,12 @@ package com.alan.module.main.adapter
 
 import android.text.TextUtils
 import android.widget.ImageView
-import com.alan.module.im.constants.IMConstant
 import com.alan.module.main.R
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.AvatarInfoBean
 import com.alan.mvvm.base.utils.DateUtils
 import com.alan.mvvm.base.utils.GsonUtil
+import com.alan.mvvm.common.constant.IMConstant
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.hyphenate.chat.EMConversation

@@ -6,10 +6,10 @@ import android.os.Build
 import android.view.View
 import androidx.activity.viewModels
 import com.alan.module.chat.databinding.ActivityCameraBinding
-import com.alan.module.im.constants.IMConstant
 import com.alan.mvvm.base.mvvm.vm.EmptyViewModel
 import com.alan.mvvm.base.utils.BitmapUtil
 import com.alan.mvvm.common.constant.Constants
+import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route

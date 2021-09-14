@@ -252,7 +252,7 @@ public void openFileChooser(...);
 -keep class com.alan.module.home.** { *; }
 -keep class com.alan.module.chat.** { *; }
 -keep class com.alan.module.my.** { *; }
--keep class com.alan.module.im.** { *; }
+-keep class com.alan.mvvm.common.im.** { *; }
 -keep class com.alan.module.web.** { *; }
 
 

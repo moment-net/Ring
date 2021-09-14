@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import androidx.core.content.ContextCompat
-import com.alan.module.im.EMClientHelper
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.app.ApplicationLifecycle
 import com.alan.mvvm.base.app.InitDepend
@@ -13,6 +12,7 @@ import com.alan.mvvm.base.constant.VersionStatus
 import com.alan.mvvm.base.utils.ProcessUtils
 import com.alan.mvvm.base.utils.SpUtils
 import com.alan.mvvm.base.utils.network.NetworkStateClient
+import com.alan.mvvm.common.im.EMClientHelper
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.auto.service.AutoService
 import com.scwang.smart.refresh.footer.ClassicsFooter

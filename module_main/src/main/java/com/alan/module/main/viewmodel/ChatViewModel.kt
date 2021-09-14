@@ -1,9 +1,9 @@
 package com.alan.module.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import com.alan.module.im.EMClientHelper
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.common.http.model.CommonRepository
+import com.alan.mvvm.common.im.EMClientHelper
 import com.hyphenate.chat.EMConversation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

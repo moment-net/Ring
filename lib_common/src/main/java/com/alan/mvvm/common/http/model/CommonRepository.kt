@@ -311,5 +311,15 @@ class CommonRepository @Inject constructor() : BaseRepository() {
         callback: RequestCallback<FileBean>
     ) = request(mApi, callback) { mApi.requestUploadAudio(type, audio, duration) }
 
+
+    /**
+     * 进入语聊房
+     */
+    suspend fun requestRtcToken(
+        requestBody: RequestBody,
+        callback: RequestCallback<RtcTokenBean>
+    ) = request(mApi, callback) { mApi.requestRtcToken(requestBody) }
+
+
 }
 

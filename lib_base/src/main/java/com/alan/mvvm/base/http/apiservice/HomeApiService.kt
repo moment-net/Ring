@@ -970,4 +970,12 @@ interface HomeApiService {
 //    @POST("match/setremind")
 //    suspend fun requestMatchRemind(@Body requestBody:RequestBody): BaseResponse
 
+    /**
+     * 进入语聊房
+     *
+     * @return
+     */
+    @POST("chat/getRtcToken")
+    suspend fun requestRtcToken(@Body requestBody: RequestBody): BaseResponse<RtcTokenBean>
+
 }

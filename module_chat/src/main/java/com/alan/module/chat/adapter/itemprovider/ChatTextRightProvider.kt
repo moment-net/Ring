@@ -5,8 +5,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.alan.module.chat.R
-import com.alan.module.im.constants.IMConstant
-import com.alan.module.im.utils.SmileUtils
+import com.alan.mvvm.common.constant.IMConstant
+import com.alan.mvvm.common.im.utils.SmileUtils
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.hyphenate.chat.EMMessage
