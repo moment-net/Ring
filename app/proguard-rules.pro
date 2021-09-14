@@ -631,11 +631,8 @@ public void openFileChooser(...);
 -keep class com.umeng.weixin.handler.*
 -keep class com.umeng.qq.handler.**
 -keep class com.umeng.qq.handler.*
--keep class UMMoreHandler{*;}
--keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
--keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
--keep class im.yixin.sdk.api.YXMessage {*;}
--keep class im.yixin.sdk.api.** implements im.yixin.sdk.api.YXMessage$YXMessageData{*;}
+
+
 -keep class com.tencent.mm.sdk.** {
    *;
 }
@@ -668,11 +665,8 @@ public void openFileChooser(...);
 
 -keep class com.tencent.open.TDialog$*
 -keep class com.tencent.open.TDialog$* {*;}
--keep class com.tencent.open.PKDialog
--keep class com.tencent.open.PKDialog {*;}
 -keep class com.tencent.open.PKDialog$*
 -keep class com.tencent.open.PKDialog$* {*;}
--keep class com.umeng.socialize.impl.ImageImpl {*;}
 -keep class com.sina.** {*;}
 -dontwarn com.sina.**
 -keep class  com.alipay.share.sdk.** {
@@ -705,15 +699,6 @@ public void openFileChooser(...);
 -ignorewarnings
 -keepattributes Exceptions,InnerClasses
 -keepattributes Signature
-
-# RongCloud SDK
--keep class io.rong.** {*;}
--keep class * implements io.rong.imlib.model.MessageContent {*;}
--dontwarn io.rong.push.**
--dontnote com.xiaomi.**
--dontnote com.google.android.gms.gcm.**
--dontnote io.rong.**
--ignorewarnings
 
 
 #agentweb
@@ -803,6 +788,10 @@ public void openFileChooser(...);
 -keep class internal.org.apache.http.entity.** {*;}
 -keep class com.superrtc.** {*;}
 -dontwarn  com.superrtc.**
+# 环信 push
+-dontwarn com.hyphenate.push.***
+-keep class com.hyphenate.push.**{*;}
+
 
 #JPUSH
 -dontoptimize

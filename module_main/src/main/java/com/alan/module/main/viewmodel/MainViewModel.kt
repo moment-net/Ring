@@ -3,7 +3,10 @@ package com.alan.module.main.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.http.model.CommonRepository
+import com.alan.mvvm.common.im.EMClientHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +22,7 @@ class MainViewModel @Inject constructor(private val mRepository: CommonRepositor
     BaseViewModel() {
 
     val data = MutableLiveData<String>()
+    val ldIM = MutableLiveData<BaseHttpException>()
 
     /**
      * 模拟获取数据
@@ -32,5 +36,12 @@ class MainViewModel @Inject constructor(private val mRepository: CommonRepositor
 //                onFinally = {}
 //            ))
         }
+    }
+
+    /**
+     * 登录环信
+     */
+    fun loginIM() {
+        EMClientHelper.loginEM(SpHelper.getUserInfo()!!.userId, ldIM)
     }
 }

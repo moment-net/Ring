@@ -4,16 +4,22 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.alan.mvvm.base.utils.ProcessUtils
+import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.im.listener.EMClientListener
+import com.heytap.msp.push.HeytapPushManager
 import com.hyphenate.EMCallBack
 import com.hyphenate.chat.*
 import com.hyphenate.easecallkit.EaseCallKit
 import com.hyphenate.easecallkit.base.EaseCallKitConfig
 import com.hyphenate.easecallkit.base.EaseCallType
 import com.hyphenate.easecallkit.base.EaseCallUserInfo
+import com.hyphenate.easecallkit.utils.EaseCallKitNotifier
 import com.hyphenate.push.EMPushConfig
 import com.hyphenate.push.EMPushHelper
+import com.hyphenate.push.EMPushType
+import com.hyphenate.push.PushListener
+import com.hyphenate.util.EMLog
 import com.socks.library.KLog
 
 /**
@@ -23,6 +29,7 @@ import com.socks.library.KLog
  */
 object EMClientHelper {
     const val TAG: String = "IM"
+    lateinit var notifier: EaseCallKitNotifier
 
     /**
      * 设置SDK是否初始化
@@ -77,14 +84,10 @@ object EMClientHelper {
          */
         val builder = EMPushConfig.Builder(context)
         builder.enableVivoPush() // 需要在AndroidManifest.xml中配置appId和appKey
-            .enableMeiZuPush("134952", "f00e7e8499a549e09731a60a4da399e3")
-            .enableMiPush("2882303761517426801", "5381742660801")
-            .enableOppoPush(
-                "0bb597c5e9234f3ab9f821adbeceecdb",
-                "cd93056d03e1418eaa6c3faf10fd7537"
-            )
+            .enableMiPush(Constants.MI_APPID, Constants.MI_APPKEY)
+            .enableOppoPush(Constants.OPPO_APPKEY, Constants.OPPO_APPSECRET)
+            .enableVivoPush()
             .enableHWPush() // 需要在AndroidManifest.xml中配置appId
-            .enableFCM("921300338324")
         options.pushConfig = builder.build()
         val imServer = options.imServer
         val restServer = options.restServer
@@ -112,7 +115,7 @@ object EMClientHelper {
         //设置呼叫超时时间
         callKitConfig.callTimeOut = (30 * 1000).toLong()
         //设置声网AgoraAppId
-        callKitConfig.setAgoraAppId(com.alan.mvvm.common.constant.IMConstant.AGORA_ID)
+        callKitConfig.setAgoraAppId(Constants.AGORA_ID)
         callKitConfig.isEnableRTCToken = true
         EaseCallKit.getInstance().init(context, callKitConfig)
     }
@@ -130,18 +133,25 @@ object EMClientHelper {
     }
 
     fun initPush(context: Context?) {
-        if (ProcessUtils.isMainProcess(context!!)) {
-            //OPPO SDK升级到2.1.0后需要进行初始化
-//            HeytapPushManager.init(context, true);
-//            //HMSPushHelper.getInstance().initHMSAgent(DemoApplication.getInstance());
-//            EMPushHelper.getInstance().setPushListener(new PushListener() {
-//                @Override
-//                public void onError(EMPushType pushType, long errorCode) {
-//                    // TODO: 返回的errorCode仅9xx为环信内部错误，可从EMError中查询，其他错误请根据pushType去相应第三方推送网站查询。
-//                    EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
-//                }
-//            });
-        }
+        //初始化通知工具
+        notifier = EaseCallKitNotifier(context)
+        //OPPO SDK升级到2.1.0后需要进行初始化
+        HeytapPushManager.init(context, true);
+        //HMSPushHelper.getInstance().initHMSAgent(DemoApplication.getInstance());
+        //仅支持小米、魅族、OPPO、VIVO
+        EMPushHelper.getInstance().setPushListener(object : PushListener() {
+            override fun onError(pushType: EMPushType?, errorCode: Long) {
+                // TODO: 返回的errorCode仅9xx为环信内部错误，可从EMError中查询，其他错误请根据pushType去相应第三方推送网站查询。
+                EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
+            }
+
+            override fun isSupportPush(
+                pushType: EMPushType?,
+                pushConfig: EMPushConfig?
+            ): Boolean {
+                return super.isSupportPush(pushType, pushConfig)
+            }
+        })
     }
 
     /**
@@ -149,9 +159,9 @@ object EMClientHelper {
      */
     fun showNotificationPermissionDialog() {
         val pushType = EMPushHelper.getInstance().pushType
-        //        if(pushType == EMPushType.OPPOPUSH && HeytapPushManager.isSupportPush()) {
-//            HeytapPushManager.requestNotificationPermission();
-//        }
+        if (pushType == EMPushType.OPPOPUSH && HeytapPushManager.isSupportPush()) {
+            HeytapPushManager.requestNotificationPermission();
+        }
     }
 
     /**
@@ -281,6 +291,7 @@ object EMClientHelper {
     /**
      * IM退出登录
      * @param callback
+     * 使用第三方推送时需要在退出登录时解绑设备 token
      */
     fun logoutEM(callback: EMCallBack?) {
         KLog.e(TAG, "IM退出登陆")

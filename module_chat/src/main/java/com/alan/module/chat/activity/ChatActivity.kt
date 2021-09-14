@@ -37,8 +37,16 @@ import com.huantansheng.easyphotos.models.album.entity.Photo
 import com.hyphenate.EMMessageListener
 import com.hyphenate.EMValueCallBack
 import com.hyphenate.chat.*
+import com.hyphenate.chat.EMMessage
+import com.hyphenate.exceptions.HyphenateException
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
+
+
+
+
+
+
 
 
 /**
@@ -281,7 +289,13 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         )
         val avatarInfoBean = AvatarInfoBean(avatar, userName)
         conversation.extField = GsonUtil.jsonToString(avatarInfoBean)
+        //会话已读回执
         conversation.markAllMessagesAsRead()
+        try {
+            EMClientHelper.chatManager.ackConversationRead(conversation.conversationId())
+        } catch (e: HyphenateException) {
+            e.printStackTrace()
+        }
         loadMoreServerMessages(PAGE_SIZE, true)
     }
 
@@ -349,8 +363,11 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
      * 消息监听
      */
     var msgListener = object : EMMessageListener {
-        override fun onMessageReceived(messages: MutableList<EMMessage>?) {
+        override fun onMessageReceived(messages: MutableList<EMMessage>) {
             refreshToLatest()
+            for (msg in messages) {
+                sendReadAck(msg)
+            }
         }
 
         override fun onCmdMessageReceived(messages: MutableList<EMMessage>?) {
@@ -611,10 +628,36 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME, SpHelper.getUserInfo()?.userName);
         message.setAttribute(IMConstant.MESSAGE_ATTR_AVATAR_OTHER, avatar);
         message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME_OTHER, userName);
+        // 设置自定义扩展字段-强制推送
+        message.setAttribute("em_force_notification", true);
+        // 设置自定义扩展字段-发送静默消息（不推送）
+//        message.setAttribute("em_ignore_notification", true);
         EMClientHelper.chatManager.sendMessage(message)
         refreshToLatest()
     }
 
+
+    /**
+     * 发送已读回执
+     * @param message
+     */
+    fun sendReadAck(message: EMMessage) {
+        //是接收的消息，未发送过read ack消息且是单聊
+        if (message.direct() == EMMessage.Direct.RECEIVE && !message.isAcked
+            && message.chatType == EMMessage.ChatType.Chat
+        ) {
+            val type = message.type
+            //视频，语音及文件需要点击后再发送,这个可以根据需求进行调整
+            if (type == EMMessage.Type.VIDEO || type == EMMessage.Type.VOICE || type == EMMessage.Type.FILE) {
+                return
+            }
+            try {
+                EMClientHelper.chatManager.ackMessageRead(message.from, message.msgId)
+            } catch (e: HyphenateException) {
+                e.printStackTrace()
+            }
+        }
+    }
 //============================== 发送消息模块 end ==============================================
 
 

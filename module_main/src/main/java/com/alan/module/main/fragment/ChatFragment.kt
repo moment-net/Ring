@@ -12,19 +12,25 @@ import com.alan.module.main.viewmodel.ChatViewModel
 import com.alan.mvvm.base.http.responsebean.AvatarInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
+import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.GsonUtil
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
+import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.MessageEvent
 import com.alan.mvvm.common.ui.BaseFragment
 import com.hyphenate.chat.EMConversation
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 作者：alan
  * 时间：2021/7/28
  * 备注：
  */
+@EventBusRegister
 @AndroidEntryPoint
 class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
     companion object {
@@ -103,5 +109,13 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         mBinding.srfList.finishRefresh()
     }
 
-
+    //获取新消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun receiveMsg(event: MessageEvent) {
+        when (event.type) {
+            IMConstant.EVENT_TYPE_MESSAGE -> {
+                requestList()
+            }
+        }
+    }
 }

@@ -6,11 +6,14 @@ import cn.jpush.android.api.JPushInterface
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.http.requestbean.DeviceRegisterBean
+import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.DeviceUtil
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.http.model.CommonRepository
+import com.alan.mvvm.common.im.EMClientHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +29,7 @@ class SplashViewModel @Inject constructor(private val mRepository: CommonReposit
     BaseViewModel() {
 
     val ldResult = MutableLiveData<Boolean>()
+    val ldIM = MutableLiveData<BaseHttpException>()
 
     /**
      * 重新登录
@@ -37,6 +41,7 @@ class SplashViewModel @Inject constructor(private val mRepository: CommonReposit
                     onSuccess = {
                         ldResult.value = true
                         SpHelper.updateUserInfo(it.data)
+                        loginIM(it.data.user!!)
                         requestDevicesRegister()
                     },
                     onFailed = {
@@ -73,4 +78,10 @@ class SplashViewModel @Inject constructor(private val mRepository: CommonReposit
         }
     }
 
+    /**
+     * 登录环信
+     */
+    fun loginIM(userInfoBean: UserInfoBean) {
+        EMClientHelper.loginEM(userInfoBean.userId, ldIM)
+    }
 }

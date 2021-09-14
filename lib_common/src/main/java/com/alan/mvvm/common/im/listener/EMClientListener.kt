@@ -2,6 +2,10 @@ package com.alan.mvvm.common.im.listener
 
 import android.content.Context
 import android.text.TextUtils
+import com.alan.mvvm.base.utils.ActivityStackManager
+import com.alan.mvvm.base.utils.EventBusUtils
+import com.alan.mvvm.common.constant.IMConstant
+import com.alan.mvvm.common.event.MessageEvent
 import com.alan.mvvm.common.im.EMClientHelper
 import com.hyphenate.*
 import com.hyphenate.chat.EMMessage
@@ -22,7 +26,7 @@ import java.util.*
  * * [.init]方法建议在登录成功以后进行调用
  */
 object EMClientListener {
-    const val TAG: String = "IM"
+    const val TAG: String = "RING-IM"
 
     init {
         //添加网络连接状态监听
@@ -31,6 +35,8 @@ object EMClientListener {
         EMClientHelper.eMClient.addMultiDeviceListener(ChatMultiDeviceListener())
         //添加消息接受监听
         EMClientHelper.chatManager.addMessageListener(ChatMessageListener())
+        //添加会话监听
+        EMClientHelper.chatManager.addConversationListener(ChatConversationListener())
         //添加群组监听
         EMClientHelper.groupManager.addGroupChangeListener(ChatGroupListener())
         //添加联系人监听
@@ -52,16 +58,62 @@ object EMClientListener {
      */
     class ChatMessageListener : EMMessageListener {
         override fun onMessageReceived(messages: List<EMMessage>) {
+            EventBusUtils.postEvent(
+                MessageEvent(
+                    IMConstant.EVENT_TYPE_MESSAGE,
+                    IMConstant.EVENT_EVENT_CHANGE
+                )
+            )
             for (message in messages) {
                 KLog.e(TAG, "收到IM消息$message")
+                KLog.e(TAG, "onMessageReceived id : " + message.msgId)
+                KLog.e(TAG, "onMessageReceived: " + message.type)
+
+                // 如果设置群组离线消息免打扰，则不进行消息通知
+//                val disabledIds: List<String> = EMClientHelper.pushManager.getNoPushGroups()
+//                if (disabledIds.contains(message.conversationId())) {
+//                    return
+//                }
+                //后台通知有新的消息
+                if (!ActivityStackManager.isFront()) {
+                    EMClientHelper.notifier.notify(message)
+                }
+                //通知有新的消息
+                EMClientHelper.notifier.vibrateAndPlayTone(message)
             }
         }
 
         override fun onCmdMessageReceived(list: List<EMMessage>) {}
-        override fun onMessageRead(list: List<EMMessage>) {}
+        override fun onMessageRead(list: List<EMMessage>) {
+            EventBusUtils.postEvent(
+                MessageEvent(
+                    IMConstant.EVENT_TYPE_MESSAGE,
+                    IMConstant.EVENT_EVENT_CHANGE
+                )
+            )
+        }
+
         override fun onMessageDelivered(list: List<EMMessage>) {}
         override fun onMessageRecalled(list: List<EMMessage>) {}
         override fun onMessageChanged(emMessage: EMMessage, o: Any) {}
+    }
+
+    /**
+     * 会话监听
+     */
+    class ChatConversationListener : EMConversationListener {
+        override fun onCoversationUpdate() {
+
+        }
+
+        override fun onConversationRead(from: String?, to: String?) {
+            EventBusUtils.postEvent(
+                MessageEvent(
+                    IMConstant.EVENT_TYPE_MESSAGE,
+                    IMConstant.EVENT_EVENT_CHANGE
+                )
+            )
+        }
     }
 
     /**
@@ -73,7 +125,12 @@ object EMClientListener {
             if (!EMClientHelper.isLoggedIn) {
                 return
             }
-            //            LiveDataBus.get().with(BusConstant.ACCOUNT_CHANGE).postValue(new BusEvent(BusConstant.ACCOUNT_CONNECTION, BusEvent.TYPE.ACCOUNT));
+            EventBusUtils.postEvent(
+                MessageEvent(
+                    IMConstant.EVENT_TYPE_MESSAGE,
+                    IMConstant.EVENT_EVENT_CHANGE
+                )
+            )
         }
 
         /**
@@ -83,23 +140,7 @@ object EMClientListener {
          */
         override fun onDisconnected(error: Int) {
             KLog.e(TAG, "环信断开连接onDisconnected =$error")
-            val event: String? = null
-            //            if (error == EMError.USER_REMOVED) {
-//                event = BusConstant.ACCOUNT_REMOVED;
-//            } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
-//                event = BusConstant.ACCOUNT_CONFLICT;
-//            } else if (error == EMError.SERVER_SERVICE_RESTRICTED) {
-//                event = BusConstant.ACCOUNT_FORBIDDEN;
-//            } else if (error == EMError.USER_KICKED_BY_CHANGE_PASSWORD) {
-//                event = BusConstant.ACCOUNT_KICKED_BY_CHANGE_PASSWORD;
-//            } else if (error == EMError.USER_KICKED_BY_OTHER_DEVICE) {
-//                event = BusConstant.ACCOUNT_KICKED_BY_OTHER_DEVICE;
-//            }
-//            if (!TextUtils.isEmpty(event)) {
-//                LiveDataBus.get().with(BusConstant.ACCOUNT_CHANGE).postValue(new BusEvent(event, BusEvent.TYPE.ACCOUNT));
-//            } else {
-//                LiveDataBus.get().with(BusConstant.ACCOUNT_CHANGE).postValue(new BusEvent(BusConstant.ACCOUNT_DISCONNECT, BusEvent.TYPE.ACCOUNT));
-//            }
+            EventBusUtils.postEvent(MessageEvent(IMConstant.EVENT_TYPE_CONNECTION))
         }
     }
 
@@ -213,8 +254,8 @@ object EMClientListener {
             callback: EaseCallKitTokenCallback
         ) {
             EMLog.d(TAG, "onGenerateToken userId:$userId channelName:$channelName appKey:$appKey")
-//            callback.onSetToken(null,0)
-            requestRtcToken(channelName, callback)
+            callback.onSetToken(null, 0)
+//            requestRtcToken(channelName, callback)
         }
 
         //被叫收到通话邀请
@@ -257,7 +298,7 @@ object EMClientListener {
     ) {
 //        val requestBean = ChannelNameRequestBean(channelName)
 //        CoroutineScope(Dispatchers.IO).launch {
-//            mResp.requestRtcToken(
+//            .requestRtcToken(
 //                RequestUtil.getPostBody(requestBean), callback = RequestCallback(
 //                    onSuccess = {
 //                        callback.onSetToken(it.data.rtcToken, it.data.uid)

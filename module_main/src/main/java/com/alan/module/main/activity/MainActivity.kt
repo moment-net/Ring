@@ -1,5 +1,6 @@
 package com.alan.module.main.activity
 
+import android.content.Intent
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -11,16 +12,29 @@ import com.alan.module.main.fragment.HomeFragment
 import com.alan.module.main.fragment.MyFragment
 import com.alan.module.main.viewmodel.MainViewModel
 import com.alan.mvvm.base.ktx.clickDelay
+import com.alan.mvvm.base.ktx.gone
+import com.alan.mvvm.base.ktx.visible
+import com.alan.mvvm.base.utils.EventBusRegister
+import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.MessageEvent
+import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.im.push.HMSPushHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.hyphenate.easecallkit.base.EaseCallType
+import com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity
+import com.hyphenate.easecallkit.ui.EaseVideoCallActivity
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 作者：alan
  * 时间：2021/7/28
  * 备注：首页
  */
+@EventBusRegister
 @Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
@@ -63,7 +77,31 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
      * 获取数据
      */
     override fun initRequestData() {
+        checkUnreadMsg(MessageEvent(IMConstant.EVENT_TYPE_MESSAGE, IMConstant.EVENT_EVENT_CHANGE))
 
+        // 获取华为 HMS 推送 token
+        HMSPushHelper.getInstance().getHMSToken(this)
+
+
+        //判断是否为来电推送
+        if (IMConstant.isRtcCall) {
+            if (EaseCallType.getfrom(IMConstant.type) != EaseCallType.CONFERENCE_CALL) {
+                val callActivity = EaseVideoCallActivity()
+                val intent = Intent(
+                    applicationContext,
+                    callActivity.javaClass
+                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                applicationContext.startActivity(intent)
+            } else {
+                val callActivity = EaseMultipleVideoActivity()
+                val intent = Intent(
+                    application.applicationContext,
+                    callActivity.javaClass
+                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                applicationContext.startActivity(intent)
+            }
+            IMConstant.isRtcCall = false
+        }
     }
 
 
@@ -107,4 +145,31 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
             }
         }
     }
+
+    //获取新消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun checkUnreadMsg(event: MessageEvent) {
+        when (event.type) {
+            IMConstant.EVENT_TYPE_MESSAGE -> {
+                val count = EMClientHelper.chatManager.unreadMessageCount
+                if (count > 0) {
+                    mBinding.tvNum.visible()
+                    mBinding.tvNum.setText("$count")
+                } else {
+                    mBinding.tvNum.gone()
+                }
+            }
+            IMConstant.EVENT_TYPE_CONNECTION -> {
+                mViewModel.loginIM()
+            }
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        EMClientHelper.showNotificationPermissionDialog()
+    }
+
+
 }

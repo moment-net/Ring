@@ -3,7 +3,7 @@
     package="com.alan.module.home">
 
     <application>
-        <activity android:name=".activity.RemindSetActivity"></activity>
+        <activity android:name=".activity.RemindSetActivity" />
         <activity android:name=".activity.RingActivity" />
         <activity android:name=".activity.ManagerInfoActivity" />
     </application>

@@ -3,7 +3,7 @@
     package="com.alan.module.main">
 
     <application>
-        <activity android:name=".activity.SelectTypeActivity"></activity>
+        <activity android:name=".activity.SelectTypeActivity" />
         <activity android:name=".activity.TaRemindActivity" />
         <activity android:name=".activity.MyRemindActivity" />
         <activity android:name=".activity.SelectTargetActivity" />

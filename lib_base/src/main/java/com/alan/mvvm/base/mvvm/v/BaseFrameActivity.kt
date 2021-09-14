@@ -35,7 +35,7 @@ abstract class BaseFrameActivity<VB : ViewBinding, VM : BaseViewModel> : AppComp
         mStatusHelper?.onRestoreInstanceStatus(savedInstanceState)
         // ARouter 依赖注入
         ARouter.getInstance().inject(this)
-        // 注册EventBus
+        // 注册EventBus-只有在Activity上添加注解才可以注册-@EventBusRegister
         if (javaClass.isAnnotationPresent(EventBusRegister::class.java)) EventBusUtils.register(this)
 
         setStatusBar()

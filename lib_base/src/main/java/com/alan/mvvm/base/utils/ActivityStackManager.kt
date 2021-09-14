@@ -10,8 +10,11 @@ import java.util.*
  */
 object ActivityStackManager {
 
-    // 管理栈
+    // 管理栈所有Activity
     val activityStack by lazy { Stack<Activity>() }
+
+    //处于前台的Activity
+    val frontStack by lazy { Stack<Activity>() }
 
     /**
      * 添加 Activity 到管理栈
@@ -34,6 +37,36 @@ object ActivityStackManager {
                 }
             }
         }
+    }
+
+    /**
+     * 添加 Activity 到管理栈
+     * @param activity Activity
+     */
+    fun addResumedToStack(activity: Activity) {
+        frontStack.push(activity)
+    }
+
+    /**
+     * 弹出栈内指定Activity 不finish
+     * @param activity Activity
+     */
+    fun popPausedToStack(activity: Activity) {
+        if (!frontStack.empty()) {
+            frontStack.forEach {
+                if (it == activity) {
+                    frontStack.remove(activity)
+                    return
+                }
+            }
+        }
+    }
+
+    /**
+     * 是否是前台
+     */
+    fun isFront(): Boolean {
+        return frontStack.size > 0
     }
 
     /**

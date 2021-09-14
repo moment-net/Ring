@@ -25,10 +25,12 @@ class ActivityLifecycleCallbacksImpl : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityResumed(activity: Activity) {
+        ActivityStackManager.addResumedToStack(activity)
         Log.e(TAG, "${activity.javaClass.simpleName} --> onActivityResumed")
     }
 
     override fun onActivityPaused(activity: Activity) {
+        ActivityStackManager.popPausedToStack(activity)
         Log.e(TAG, "${activity.javaClass.simpleName} --> onActivityPaused")
     }
 

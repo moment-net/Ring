@@ -19,3 +19,10 @@
 
 
 
+  EventBus使用
+  1、在Activity上添加@EventBusRegister注解才可以注册Eventbus
+  2、添加注册方法@Subscribe(threadMode = ThreadMode.MAIN)
+  3、发送事件EventBusUtils
+
+
+

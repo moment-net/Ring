@@ -3,15 +3,23 @@ package com.alan.mvvm.common.constant
 import com.hyphenate.util.PathUtil
 
 object IMConstant {
-    const val AGORA_ID = "aef85e061fc048658a23a96860a26718"
-//const val AGORA_ID = "d90373e913834741b538844be09bcc2d"
 
-    //音频聊天
+
+    //语音聊天地址
     var PATH_VOICE =
         "${PathUtil.getInstance().voicePath.toString()}/${System.currentTimeMillis()}.amr"
 
     //拍摄视频地址
     var PATH_VEDIO = PathUtil.getInstance().videoPath.toString()
+
+
+    //收到推送是否为音视频通话推送
+    @JvmField
+    var isRtcCall = false;
+
+    @JvmField
+    var type = 0;
+
 
     //头像
     const val MESSAGE_ATTR_AVATAR = "avatar"
@@ -62,6 +70,14 @@ object IMConstant {
     //消息类型-文字-视频聊天
     const val MESSAGE_TYPE_VIDEOCALL_LEFT = 15
     const val MESSAGE_TYPE_VIDEOCALL_RIGHT = 16
+
+
+    //EventBus事件-类型
+    const val EVENT_TYPE_MESSAGE = "chatmessage"
+    const val EVENT_TYPE_CONNECTION = "chatconnection"
+
+    //EventBus事件-事件
+    const val EVENT_EVENT_CHANGE = "change"
 
 
     const val ACCOUNT_CHANGE = "account_change"
