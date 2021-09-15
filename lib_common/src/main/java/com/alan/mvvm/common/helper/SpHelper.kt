@@ -1,11 +1,13 @@
 package com.alan.mvvm.common.helper
 
+import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.http.responsebean.LoginBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.base.utils.GsonUtil
 import com.alan.mvvm.base.utils.SpUtils
 import com.alan.mvvm.common.constant.SpKey
+import com.alan.mvvm.common.db.DbHelper
 import com.alan.mvvm.common.event.UserEvent
 import com.alan.mvvm.common.im.EMClientHelper
 import com.socks.library.KLog
@@ -90,6 +92,7 @@ object SpHelper {
                 setToken(obj.token?.token ?: "")
                 setNewUser(obj.newUser)
                 setUserInfo(obj.user)
+                DbHelper.instance.initDB(BaseApplication.mContext, obj.user!!.userId)
             }
         }
         EventBusUtils.postEvent(UserEvent(1))
@@ -103,6 +106,7 @@ object SpHelper {
         setToken("")
         setUserInfo(null)
         EMClientHelper.logoutEM(null)
+        DbHelper.instance.closeDb()
     }
 
 

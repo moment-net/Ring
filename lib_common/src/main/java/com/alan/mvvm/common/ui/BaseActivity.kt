@@ -1,9 +1,7 @@
 package com.alan.mvvm.common.ui
 
-import android.os.Build
-import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
+import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.mvvm.v.BaseFrameActivity
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.ActivityStackManager
@@ -29,12 +27,9 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : BaseFrameAct
      * @return Unit
      */
     override fun setStatusBar() {
-        val themeColor = ContextCompat.getColor(this, R.color.transparent)
-        StatusBarUtil.setColor(this, themeColor, 0)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
-        }
+        StatusBarUtil.setColor(this, R.color.transparent.getResColor(), 0)
+        StatusBarUtil.setLightMode(this)
+
 
         mViewModel.ld_state.observe(this) {
             when {

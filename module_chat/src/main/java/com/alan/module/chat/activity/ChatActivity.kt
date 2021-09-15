@@ -10,7 +10,6 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.PopupWindow
 import android.widget.TextView
-import android.widget.TextView.OnEditorActionListener
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,14 +38,9 @@ import com.hyphenate.EMValueCallBack
 import com.hyphenate.chat.*
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.exceptions.HyphenateException
+import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
-
-
-
-
-
-
 
 
 /**
@@ -84,6 +78,25 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
      */
     override val mViewModel by viewModels<ChatDetailViewModel>()
 
+    override fun setStatusBar() {
+        getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        StatusBarUtil.setColor(this, com.alan.mvvm.common.R.color.white.getResColor(), 0)
+        mViewModel.ld_state.observe(this) {
+            when {
+                it == StateLayoutEnum.LOADING -> {
+                    showDialog()
+                }
+                it == StateLayoutEnum.HIDE -> {
+                    dismissDialog()
+                }
+                it == StateLayoutEnum.ERROR -> {
+                }
+                it == StateLayoutEnum.NO_DATA -> {
+                }
+            }
+        }
+    }
+
     /**
      * 初始化View
      */
@@ -97,8 +110,10 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         }
         ivVoice.clickDelay {
             if (llPress.isVisible) {
+                ivVoice.setImageResource(R.drawable.icon_chat_voice)
                 llPress.gone()
             } else {
+                ivVoice.setImageResource(R.drawable.icon_chat_input)
                 llPress.visible()
             }
         }
@@ -133,7 +148,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             true
         }
 
-        etMsg.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+        etMsg.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEND ||
                 event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN
             ) {

@@ -1,5 +1,6 @@
 package com.alan.mvvm.base.mvvm.v
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
@@ -78,7 +79,9 @@ abstract class BaseFrameActivity<VB : ViewBinding, VM : BaseViewModel> : AppComp
 
     override fun isRecreate(): Boolean = mStatusHelper?.isRecreate ?: false
 
+    @SuppressLint("MissingSuperCall")
     override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
         if (mStatusHelper == null) {
             //仅当触发重建需要保存状态时创建对象
             mStatusHelper = ActivityRecreateHelper(outState)

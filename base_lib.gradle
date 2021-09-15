@@ -85,5 +85,6 @@ android {
 kapt {
     arguments {
         arg("AROUTER_MODULE_NAME", project.name)
+        arg("eventBusIndex", "${ProjectBuildConfig.applicationId}.eventbus.index.${project.name}EventIndex")
     }
 }

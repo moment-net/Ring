@@ -34,6 +34,7 @@ object DependencyConfig {
         const val Lifecycle = "2.3.1"                       // Lifecycle相关（ViewModel & LiveData & Lifecycle）
         const val Hilt = "2.35.1"                           // DI框架-Hilt
         const val HiltAndroidx = "1.0.0"
+        const val Room = "2.2.5"                            // 数据库框架-Hilt
 
         // GitHub----------------------------------------------------------------
         const val OkHttp = "4.9.0"                          // OkHttp
@@ -106,13 +107,17 @@ object DependencyConfig {
      */
     object JetPack {
         const val ViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.Lifecycle}"
-        const val ViewModelSavedState = "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Version.Lifecycle}"
+        const val ViewModelSavedState =
+            "androidx.lifecycle:lifecycle-viewmodel-savedstate:${Version.Lifecycle}"
         const val LiveData = "androidx.lifecycle:lifecycle-livedata-ktx:${Version.Lifecycle}"
         const val Lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${Version.Lifecycle}"
-        const val LifecycleCompilerAPT = "androidx.lifecycle:lifecycle-compiler:${Version.Lifecycle}"
+        const val LifecycleCompilerAPT =
+            "androidx.lifecycle:lifecycle-compiler:${Version.Lifecycle}"
         const val HiltCore = "com.google.dagger:hilt-android:${Version.Hilt}"
         const val HiltApt = "com.google.dagger:hilt-compiler:${Version.Hilt}"
         const val HiltAndroidx = "androidx.hilt:hilt-compiler:${Version.HiltAndroidx}"
+        const val Room = "androidx.room:room-runtime:${Version.Room}"
+        const val RoomApt = "androidx.room:room-compiler:${Version.Room}"
     }
 
     /**

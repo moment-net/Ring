@@ -10,7 +10,17 @@ import com.alan.mvvm.buildsrc.*
 android {
     resourcePrefix "base_"
 
-
+    defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation":"$projectDir/schemas".toString(),
+                        "room.incremental":"true",
+                        "room.expandProjection":"true",
+                        "AROUTER_MODULE_NAME":project.name]
+            }
+        }
+    }
 }
 
 dependencies {
@@ -34,6 +44,7 @@ dependencies {
     api DependencyConfig.JetPack.LiveData
     api DependencyConfig.JetPack.Lifecycle
     api DependencyConfig.JetPack.HiltCore
+    api DependencyConfig.JetPack.Room
 
     api DependencyConfig.GitHub.Gson
     api DependencyConfig.GitHub.MMKV
@@ -81,12 +92,13 @@ dependencies {
     api DependencyConfig.SDK.Vivoplugin
 
 
-    kapt DependencyConfig.GitHub.ARouteCompiler
-    kapt DependencyConfig.GitHub.EventBusAPT
-    kapt DependencyConfig.GitHub.AutoServiceAnnotations
     kapt DependencyConfig.JetPack.HiltApt
     kapt DependencyConfig.JetPack.HiltAndroidx
     kapt DependencyConfig.JetPack.LifecycleCompilerAPT
+    kapt DependencyConfig.JetPack.RoomApt
+    kapt DependencyConfig.GitHub.ARouteCompiler
+    kapt DependencyConfig.GitHub.EventBusAPT
+    kapt DependencyConfig.GitHub.AutoServiceAnnotations
 
 //    debugApi DependencyConfig.GitHub.LeakCanary
 }

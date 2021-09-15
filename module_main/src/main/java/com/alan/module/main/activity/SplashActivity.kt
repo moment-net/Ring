@@ -69,6 +69,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
 
     /**
      * 获取数据
+     * 初始化
      */
     override fun initRequestData() {
         requestPermisssion()
@@ -111,6 +112,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
                 } else {
                     jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_LOGIN);
                 }
+                finish()
             }
         }
     }

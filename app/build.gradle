@@ -32,6 +32,16 @@ android {
             abiFilters 'armeabi-v7a'
         }
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation":"$projectDir/schemas".toString(),
+                        "room.incremental":"true",
+                        "room.expandProjection":"true",
+                        "AROUTER_MODULE_NAME":project.name]
+            }
+        }
+
         //极光推送key
         manifestPlaceholders = [
                 JPUSH_CHANNEL: "moment",
@@ -151,9 +161,13 @@ dependencies {
     } else {
         implementation project(path: ':lib_common')
     }
-    implementation DependencyConfig.JetPack.HiltCore
 
-    kapt DependencyConfig.GitHub.AutoServiceAnnotations
+    implementation DependencyConfig.JetPack.HiltCore
     kapt DependencyConfig.JetPack.HiltApt
     kapt DependencyConfig.JetPack.HiltAndroidx
+    kapt DependencyConfig.JetPack.LifecycleCompilerAPT
+    kapt DependencyConfig.JetPack.RoomApt
+    kapt DependencyConfig.GitHub.ARouteCompiler
+    kapt DependencyConfig.GitHub.EventBusAPT
+    kapt DependencyConfig.GitHub.AutoServiceAnnotations
 }

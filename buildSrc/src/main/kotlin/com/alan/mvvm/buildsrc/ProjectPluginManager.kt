@@ -7,8 +7,8 @@ package com.alan.mvvm.buildsrc
  */
 object ProjectPluginManager {
     const val AndroidToolsPlugin = "com.android.tools.build:gradle:4.2.2"
-    const val KotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20"
+    const val KotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21"
     const val ARouterRegister = "com.alibaba:arouter-register:1.0.2"
     const val HiltPlugin = "com.google.dagger:hilt-android-gradle-plugin:2.35.1"
-    const val HWAgcpPlugin = "com.huawei.agconnect:agcp:1.4.2.300"
+    const val HWAgcpPlugin = "com.huawei.agconnect:agcp:1.6.0.300"
 }
