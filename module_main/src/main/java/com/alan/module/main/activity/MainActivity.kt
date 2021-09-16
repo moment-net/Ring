@@ -1,6 +1,7 @@
 package com.alan.module.main.activity
 
 import android.content.Intent
+import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -15,16 +16,15 @@ import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.gone
 import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.utils.EventBusRegister
+import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.event.MessageEvent
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.im.callkit.base.EaseCallType
 import com.alan.mvvm.common.im.push.HMSPushHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.hyphenate.easecallkit.base.EaseCallType
-import com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity
-import com.hyphenate.easecallkit.ui.EaseVideoCallActivity
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -86,19 +86,19 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         //判断是否为来电推送
         if (IMConstant.isRtcCall) {
             if (EaseCallType.getfrom(IMConstant.type) != EaseCallType.CONFERENCE_CALL) {
-                val callActivity = EaseVideoCallActivity()
-                val intent = Intent(
-                    applicationContext,
-                    callActivity.javaClass
-                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                applicationContext.startActivity(intent)
+                val bundle = Bundle().apply {}
+                jumpARoute(
+                    RouteUrl.CallModule.ACTIVITY_CALL_CALL,
+                    bundle,
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+                )
             } else {
-                val callActivity = EaseMultipleVideoActivity()
-                val intent = Intent(
-                    application.applicationContext,
-                    callActivity.javaClass
-                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                applicationContext.startActivity(intent)
+                val bundle = Bundle().apply {}
+                jumpARoute(
+                    RouteUrl.CallModule.ACTIVITY_CALL_CALLS,
+                    bundle,
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+                )
             }
             IMConstant.isRtcCall = false
         }

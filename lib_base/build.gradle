@@ -83,7 +83,7 @@ dependencies {
     api DependencyConfig.SDK.TencentTBSX5
     api DependencyConfig.SDK.OneLogin
     api DependencyConfig.SDK.IMChat
-    api DependencyConfig.SDK.IMCall
+//    api DependencyConfig.SDK.IMCall
     api DependencyConfig.SDK.Agora
     api DependencyConfig.SDK.JPush
     api DependencyConfig.SDK.JCore

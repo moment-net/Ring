@@ -185,7 +185,7 @@ object DependencyConfig {
         const val TencentTBSX5 = "com.tencent.tbs.tbssdk:sdk:${Version.TencentTBSX5}"
         const val OneLogin = "com.geetest.android:onelogin:${Version.OneLoginVersion}"
         const val IMChat = "io.hyphenate:hyphenate-chat:${Version.IMVersion}"
-        const val IMCall = "io.hyphenate:ease-call-kit:${Version.IMVersion}"
+//        const val IMCall = "io.hyphenate:ease-call-kit:${Version.IMVersion}"
         const val Agora = "io.agora.rtc:full-sdk:${Version.AgoraVersion}"
         const val JPush = "cn.jiguang.sdk:jpush:${Version.JPushVersion}"
         const val JCore = "cn.jiguang.sdk:jcore:${Version.JCoreVersion}"

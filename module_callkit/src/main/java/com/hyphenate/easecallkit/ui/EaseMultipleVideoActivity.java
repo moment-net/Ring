@@ -1,8 +1,8 @@
 package com.hyphenate.easecallkit.ui;
 
-import static com.hyphenate.easecallkit.utils.EaseMsgUtils.CALL_INVITE_EXT;
-import static com.hyphenate.easecallkit.utils.EaseMsgUtils.CALL_TIMER_CALL_TIME;
-import static com.hyphenate.easecallkit.utils.EaseMsgUtils.CALL_TIMER_TIMEOUT;
+import static com.alan.mvvm.common.im.callkit.utils.EaseMsgUtils.CALL_INVITE_EXT;
+import static com.alan.mvvm.common.im.callkit.utils.EaseMsgUtils.CALL_TIMER_CALL_TIME;
+import static com.alan.mvvm.common.im.callkit.utils.EaseMsgUtils.CALL_TIMER_TIMEOUT;
 import static io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
 import static io.agora.rtc.Constants.CLIENT_ROLE_BROADCASTER;
 import static io.agora.rtc.Constants.REMOTE_AUDIO_REASON_REMOTE_MUTED;
@@ -24,12 +24,10 @@ import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -48,37 +46,43 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
+import com.alan.mvvm.common.constant.RouteUrl;
+import com.alan.mvvm.common.im.callkit.EaseCallKit;
+import com.alan.mvvm.common.im.callkit.base.EaseCallEndReason;
+import com.alan.mvvm.common.im.callkit.base.EaseCallKitConfig;
+import com.alan.mvvm.common.im.callkit.base.EaseCallKitListener;
+import com.alan.mvvm.common.im.callkit.base.EaseCallKitTokenCallback;
+import com.alan.mvvm.common.im.callkit.base.EaseCallType;
+import com.alan.mvvm.common.im.callkit.base.EaseCallUserInfo;
+import com.alan.mvvm.common.im.callkit.base.EaseGetUserAccountCallback;
+import com.alan.mvvm.common.im.callkit.base.EaseUserAccount;
+import com.alan.mvvm.common.im.callkit.event.AlertEvent;
+import com.alan.mvvm.common.im.callkit.event.AnswerEvent;
+import com.alan.mvvm.common.im.callkit.event.BaseEvent;
+import com.alan.mvvm.common.im.callkit.event.CallCancelEvent;
+import com.alan.mvvm.common.im.callkit.event.ConfirmCallEvent;
+import com.alan.mvvm.common.im.callkit.event.ConfirmRingEvent;
+import com.alan.mvvm.common.im.callkit.livedatas.EaseLiveDataBus;
+import com.alan.mvvm.common.im.callkit.utils.EaseCallAction;
+import com.alan.mvvm.common.im.callkit.utils.EaseCallKitUtils;
+import com.alan.mvvm.common.im.callkit.utils.EaseCallState;
+import com.alan.mvvm.common.im.callkit.utils.EaseMsgUtils;
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.R;
-import com.hyphenate.easecallkit.base.EaseCallEndReason;
-import com.hyphenate.easecallkit.base.EaseCallFloatWindow;
-import com.hyphenate.easecallkit.base.EaseCallKitConfig;
-import com.hyphenate.easecallkit.base.EaseCallKitListener;
-import com.hyphenate.easecallkit.base.EaseCallKitTokenCallback;
-import com.hyphenate.easecallkit.base.EaseCallMemberView;
-import com.hyphenate.easecallkit.base.EaseCallMemberViewGroup;
-import com.hyphenate.easecallkit.base.EaseCallType;
-import com.hyphenate.easecallkit.base.EaseCallUserInfo;
-import com.hyphenate.easecallkit.base.EaseGetUserAccountCallback;
-import com.hyphenate.easecallkit.base.EaseUserAccount;
-import com.hyphenate.easecallkit.event.AlertEvent;
-import com.hyphenate.easecallkit.event.AnswerEvent;
-import com.hyphenate.easecallkit.event.BaseEvent;
-import com.hyphenate.easecallkit.event.CallCancelEvent;
-import com.hyphenate.easecallkit.event.ConfirmCallEvent;
-import com.hyphenate.easecallkit.event.ConfirmRingEvent;
-import com.hyphenate.easecallkit.livedatas.EaseLiveDataBus;
-import com.hyphenate.easecallkit.utils.EaseCallAction;
-import com.hyphenate.easecallkit.utils.EaseCallKitUtils;
-import com.hyphenate.easecallkit.utils.EaseCallState;
-import com.hyphenate.easecallkit.utils.EaseMsgUtils;
+import com.hyphenate.easecallkit.widget.EaseCallFloatWindow;
+import com.hyphenate.easecallkit.widget.EaseCallMemberView;
+import com.hyphenate.easecallkit.widget.EaseCallMemberViewGroup;
+import com.hyphenate.easecallkit.widget.EaseCommingCallView;
 import com.hyphenate.util.EMLog;
+import com.lzf.easyfloat.interfaces.OnPermissionResult;
+import com.lzf.easyfloat.permission.PermissionUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,11 +106,12 @@ import io.agora.rtc.video.VideoEncoderConfiguration;
 
 
 /**
- * author lijian
- * email: Allenlee@easemob.com
- * date: 01/15/2021
+ * 作者：alan
+ * 时间：2021/9/16
+ * 备注：多人语音聊天
  */
-public class EaseMultipleVideoActivity extends EaseBaseCallActivity implements View.OnClickListener {
+@Route(path = RouteUrl.CallModule.ACTIVITY_CALL_CALLS)
+public class EaseMultipleVideoActivity extends FragmentActivity implements View.OnClickListener {
 
     private static final String TAG = EaseMultipleVideoActivity.class.getSimpleName();
 
@@ -757,7 +762,16 @@ public class EaseMultipleVideoActivity extends EaseBaseCallActivity implements V
             }
             exitChannel();
         } else if (view.getId() == R.id.btn_float) {
-            showFloatWindow();
+            PermissionUtils.requestPermission(this, new OnPermissionResult() {
+                @Override
+                public void permissionResult(boolean b) {
+                    if (PermissionUtils.checkPermission(EaseMultipleVideoActivity.this)) {
+                        doShowFloatWindow();
+                    } else {
+                        Toast.makeText(EaseMultipleVideoActivity.this, "当前App未被授予悬浮窗权限", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         } else if (view.getId() == R.id.btn_invite) {
             if (listener != null) {
                 Set<Integer> userset = mUidsList.keySet();
@@ -1527,9 +1541,7 @@ public class EaseMultipleVideoActivity extends EaseBaseCallActivity implements V
     /**
      * 显示悬浮窗
      */
-    @Override
     public void doShowFloatWindow() {
-        super.doShowFloatWindow();
         if (timeUpdataTimer != null) {
             Log.e(TAG, "timeUpdataTimer cost seconds: " + timeUpdataTimer.timePassed);
             EaseCallFloatWindow.getInstance().setCostSeconds(timeUpdataTimer.timePassed);
@@ -1671,21 +1683,6 @@ public class EaseMultipleVideoActivity extends EaseBaseCallActivity implements V
         return memberViewMap;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        EMLog.i(TAG, "onActivityResult: " + requestCode + ", result code: " + resultCode);
-        if (requestCode == REQUEST_CODE_OVERLAY_PERMISSION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestOverlayPermission = false;
-            // Result of window permission request, resultCode = RESULT_CANCELED
-            if (Settings.canDrawOverlays(this)) {
-                doShowFloatWindow();
-            } else {
-                Toast.makeText(this, getString(R.string.alert_window_permission_denied), Toast.LENGTH_SHORT).show();
-            }
-            return;
-        }
-    }
 
 
     /**
@@ -1719,7 +1716,6 @@ public class EaseMultipleVideoActivity extends EaseBaseCallActivity implements V
             if (uIdMap != null) {
                 uIdMap.clear();
             }
-            EaseCallKit.getInstance().releaseCall();
             leaveChannel();
             RtcEngine.destroy();
         }
@@ -1783,4 +1779,8 @@ public class EaseMultipleVideoActivity extends EaseBaseCallActivity implements V
             }
         });
     }
-};
+
+    public boolean isFloatWindowShowing() {
+        return EaseCallFloatWindow.getInstance().isShowing();
+    }
+}

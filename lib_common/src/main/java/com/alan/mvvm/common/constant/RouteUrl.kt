@@ -60,6 +60,14 @@ object RouteUrl {
         const val ACTIVITY_CHAT_CAMERA: String = "/chat/camera";
     }
 
+    object CallModule {
+        //视频通话页面
+        const val ACTIVITY_CALL_CALL: String = "/call/call";
+
+        //多人视频通话页面
+        const val ACTIVITY_CALL_CALLS: String = "/call/calls";
+    }
+
     object MyModule {
         //我的页面
         const val ACTIVITY_MY_MY: String = "/my/my";

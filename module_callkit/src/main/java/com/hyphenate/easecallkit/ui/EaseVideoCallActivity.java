@@ -1,6 +1,6 @@
 package com.hyphenate.easecallkit.ui;
 
-import static com.hyphenate.easecallkit.utils.EaseMsgUtils.CALL_INVITE_EXT;
+import static com.alan.mvvm.common.im.callkit.utils.EaseMsgUtils.CALL_INVITE_EXT;
 import static io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
 import static io.agora.rtc.Constants.CLIENT_ROLE_BROADCASTER;
 import static io.agora.rtc.Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED;
@@ -18,14 +18,11 @@ import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -45,47 +42,50 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
+import com.alan.mvvm.base.coil.CoilUtils;
+import com.alan.mvvm.common.constant.RouteUrl;
+import com.alan.mvvm.common.im.callkit.EaseCallKit;
+import com.alan.mvvm.common.im.callkit.base.EaseCallEndReason;
+import com.alan.mvvm.common.im.callkit.base.EaseCallKitConfig;
+import com.alan.mvvm.common.im.callkit.base.EaseCallKitListener;
+import com.alan.mvvm.common.im.callkit.base.EaseCallKitTokenCallback;
+import com.alan.mvvm.common.im.callkit.base.EaseCallType;
+import com.alan.mvvm.common.im.callkit.base.EaseCallUserInfo;
+import com.alan.mvvm.common.im.callkit.base.EaseGetUserAccountCallback;
+import com.alan.mvvm.common.im.callkit.base.EaseUserAccount;
+import com.alan.mvvm.common.im.callkit.event.AlertEvent;
+import com.alan.mvvm.common.im.callkit.event.AnswerEvent;
+import com.alan.mvvm.common.im.callkit.event.BaseEvent;
+import com.alan.mvvm.common.im.callkit.event.CallCancelEvent;
+import com.alan.mvvm.common.im.callkit.event.ConfirmCallEvent;
+import com.alan.mvvm.common.im.callkit.event.ConfirmRingEvent;
+import com.alan.mvvm.common.im.callkit.event.InviteEvent;
+import com.alan.mvvm.common.im.callkit.event.VideoToVoiceeEvent;
+import com.alan.mvvm.common.im.callkit.livedatas.EaseLiveDataBus;
+import com.alan.mvvm.common.im.callkit.utils.EaseCallAction;
+import com.alan.mvvm.common.im.callkit.utils.EaseCallKitUtils;
+import com.alan.mvvm.common.im.callkit.utils.EaseCallState;
+import com.alan.mvvm.common.im.callkit.utils.EaseMsgUtils;
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easecallkit.EaseCallKit;
 import com.hyphenate.easecallkit.R;
-import com.hyphenate.easecallkit.base.EaseCallEndReason;
-import com.hyphenate.easecallkit.base.EaseCallFloatWindow;
-import com.hyphenate.easecallkit.base.EaseCallKitConfig;
-import com.hyphenate.easecallkit.base.EaseCallKitListener;
-import com.hyphenate.easecallkit.base.EaseCallKitTokenCallback;
-import com.hyphenate.easecallkit.base.EaseCallType;
-import com.hyphenate.easecallkit.base.EaseCallUserInfo;
-import com.hyphenate.easecallkit.base.EaseGetUserAccountCallback;
-import com.hyphenate.easecallkit.base.EaseUserAccount;
-import com.hyphenate.easecallkit.event.AlertEvent;
-import com.hyphenate.easecallkit.event.AnswerEvent;
-import com.hyphenate.easecallkit.event.BaseEvent;
-import com.hyphenate.easecallkit.event.CallCancelEvent;
-import com.hyphenate.easecallkit.event.ConfirmCallEvent;
-import com.hyphenate.easecallkit.event.ConfirmRingEvent;
-import com.hyphenate.easecallkit.event.InviteEvent;
-import com.hyphenate.easecallkit.event.VideoToVoiceeEvent;
-import com.hyphenate.easecallkit.livedatas.EaseLiveDataBus;
-import com.hyphenate.easecallkit.utils.EaseCallAction;
-import com.hyphenate.easecallkit.utils.EaseCallKitUtils;
-import com.hyphenate.easecallkit.utils.EaseCallState;
-import com.hyphenate.easecallkit.utils.EaseMsgUtils;
+import com.hyphenate.easecallkit.widget.EaseCallFloatWindow;
 import com.hyphenate.easecallkit.widget.EaseImageView;
 import com.hyphenate.easecallkit.widget.MyChronometer;
 import com.hyphenate.util.EMLog;
+import com.lzf.easyfloat.interfaces.OnPermissionResult;
+import com.lzf.easyfloat.permission.PermissionUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -101,11 +101,12 @@ import io.agora.rtc.video.VideoEncoderConfiguration;
 
 
 /**
- * author lijian
- * email: Allenlee@easemob.com
- * date: 01/11/2021
+ * 作者：alan
+ * 时间：2021/9/16
+ * 备注：
  */
-public class EaseVideoCallActivity extends EaseBaseCallActivity implements View.OnClickListener {
+@Route(path = RouteUrl.CallModule.ACTIVITY_CALL_CALL)
+public class EaseVideoCallActivity extends FragmentActivity implements View.OnClickListener {
 
     private static final String TAG = EaseVideoCallActivity.class.getSimpleName();
 
@@ -770,7 +771,16 @@ public class EaseVideoCallActivity extends EaseBaseCallActivity implements View.
         } else if (id == R.id.local_surface_layout) {
             changeSurface();
         } else if (id == R.id.btn_call_float) {
-            showFloatWindow();
+            PermissionUtils.requestPermission(this, new OnPermissionResult() {
+                @Override
+                public void permissionResult(boolean b) {
+                    if (PermissionUtils.checkPermission(EaseVideoCallActivity.this)) {
+                        doShowFloatWindow();
+                    } else {
+                        Toast.makeText(EaseVideoCallActivity.this, "当前App未被授予悬浮窗权限", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         } else if (id == R.id.iv_mute) { // mute
             if (isMuteState) {
                 // resume voice transfer
@@ -1444,39 +1454,11 @@ public class EaseVideoCallActivity extends EaseBaseCallActivity implements View.
     private void loadHeadImage() {
         if (headUrl != null) {
             if (headUrl.startsWith("http://") || headUrl.startsWith("https://")) {
-                new AsyncTask<String, Void, Bitmap>() {
-                    //该方法运行在后台线程中，因此不能在该线程中更新UI，UI线程为主线程
-                    @Override
-                    protected Bitmap doInBackground(String... params) {
-                        Bitmap bitmap = null;
-                        try {
-                            String url = params[0];
-                            URL HttpURL = new URL(url);
-                            HttpURLConnection conn = (HttpURLConnection) HttpURL.openConnection();
-                            conn.setDoInput(true);
-                            conn.connect();
-                            InputStream is = conn.getInputStream();
-                            bitmap = BitmapFactory.decodeStream(is);
-                            is.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return bitmap;
-                    }
-
-                    //在doInBackground 执行完成后，onPostExecute 方法将被UI 线程调用，
-                    // 后台的计算结果将通过该方法传递到UI线程，并且在界面上展示给用户.
-                    @Override
-                    protected void onPostExecute(Bitmap bitmap) {
-                        if (bitmap != null) {
-                            if (EaseCallKit.getInstance().getCallType() == EaseCallType.SINGLE_VIDEO_CALL) {
-                                avatarView.setImageBitmap(bitmap);
-                            } else {
-                                iv_avatar_voice.setImageBitmap(bitmap);
-                            }
-                        }
-                    }
-                }.execute(headUrl);
+                if (EaseCallKit.getInstance().getCallType() == EaseCallType.SINGLE_VIDEO_CALL) {
+                    CoilUtils.INSTANCE.loadCircle(avatarView, headUrl);
+                } else {
+                    CoilUtils.INSTANCE.loadCircle(iv_avatar_voice, headUrl);
+                }
             } else {
                 if (headBitMap == null) {
                     //该方法直接传文件路径的字符串，即可将指定路径的图片读取到Bitmap对象
@@ -1575,9 +1557,7 @@ public class EaseVideoCallActivity extends EaseBaseCallActivity implements View.
     /**
      * 显示悬浮窗
      */
-    @Override
     public void doShowFloatWindow() {
-        super.doShowFloatWindow();
         if (chronometer != null) {
             EaseCallFloatWindow.getInstance().setCostSeconds(chronometer.getCostSeconds());
         }
@@ -1704,21 +1684,6 @@ public class EaseVideoCallActivity extends EaseBaseCallActivity implements View.
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        EMLog.i(TAG, "onActivityResult: " + requestCode + ", result code: " + resultCode);
-        if (requestCode == REQUEST_CODE_OVERLAY_PERMISSION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestOverlayPermission = false;
-            // Result of window permission request, resultCode = RESULT_CANCELED
-            if (Settings.canDrawOverlays(this)) {
-                doShowFloatWindow();
-            } else {
-                Toast.makeText(this, getString(R.string.alert_window_permission_denied), Toast.LENGTH_SHORT).show();
-            }
-            return;
-        }
-    }
 
     private void startCount() {
         if (chronometer != null) {
@@ -1755,8 +1720,6 @@ public class EaseVideoCallActivity extends EaseBaseCallActivity implements View.
             uIdMap.clear();
         }
         if (!isFloatWindowShowing()) {
-            EaseCallKit.getInstance().releaseCall();
-
             leaveChannel();
             RtcEngine.destroy();
         }
@@ -1823,5 +1786,9 @@ public class EaseVideoCallActivity extends EaseBaseCallActivity implements View.
                 EMLog.e(TAG, "exitChannelDisplay not exit channel");
             }
         });
+    }
+
+    public boolean isFloatWindowShowing() {
+        return EaseCallFloatWindow.getInstance().isShowing();
     }
 }

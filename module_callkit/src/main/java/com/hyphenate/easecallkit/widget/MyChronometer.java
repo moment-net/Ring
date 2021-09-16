@@ -25,6 +25,11 @@ import java.util.Formatter;
 import java.util.IllegalFormatException;
 import java.util.Locale;
 
+/**
+ * 作者：alan
+ * 时间：2021/9/16
+ * 备注：倒计时使用
+ */
 public class MyChronometer extends androidx.appcompat.widget.AppCompatTextView {
 
     private static final String TAG = "Chronometer";
@@ -353,11 +358,6 @@ public class MyChronometer extends androidx.appcompat.widget.AppCompatTextView {
                 .formatMeasures(measures.toArray(new Measure[measures.size()]));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public CharSequence getContentDescription() {
-        return formatDuration(mNow - mBase);
-    }
 
     @Override
     public CharSequence getAccessibilityClassName() {

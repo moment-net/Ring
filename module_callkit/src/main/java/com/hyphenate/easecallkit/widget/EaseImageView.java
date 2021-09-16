@@ -23,11 +23,6 @@ import com.hyphenate.easecallkit.R;
 import java.lang.reflect.Method;
 
 
-/**
- * Canvas#save(int) has been removed from sdk-28, see detail from:
- * https://issuetracker.google.com/issues/110856542
- * so this helper classes uses reflection to access the API on older devices.
- */
 @SuppressWarnings("JavaReflectionMemberAccess")
 class CanvasLegacy {
     static final int MATRIX_SAVE_FLAG;

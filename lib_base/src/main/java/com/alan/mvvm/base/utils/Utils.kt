@@ -56,6 +56,13 @@ fun jumpARoute(routerUrl: String, bundle: Bundle) {
 }
 
 /**
+ * 阿里路由带参数跳转+flags
+ */
+fun jumpARoute(routerUrl: String, bundle: Bundle, flags: Int) {
+    ARouter.getInstance().build(routerUrl).with(bundle).addFlags(flags).navigation()
+}
+
+/**
  * 阿里路由带参数跳转
  */
 fun jumpARoute(routerUrl: String, objects: Any) {

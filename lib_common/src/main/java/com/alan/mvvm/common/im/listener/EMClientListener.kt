@@ -7,12 +7,11 @@ import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.event.MessageEvent
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.im.callkit.EaseCallKit
+import com.alan.mvvm.common.im.callkit.base.*
 import com.hyphenate.*
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.chat.EMMucSharedFile
-import com.hyphenate.easecallkit.EaseCallKit
-import com.hyphenate.easecallkit.EaseCallKit.EaseCallError
-import com.hyphenate.easecallkit.base.*
 import com.hyphenate.util.EMLog
 import com.socks.library.KLog
 import org.json.JSONObject
@@ -272,7 +271,12 @@ object EMClientListener {
         }
 
         //通话异常回调
-        override fun onCallError(type: EaseCallError, errorCode: Int, description: String) {}
+        override fun onCallError(
+            type: EaseCallKit.EaseCallError,
+            errorCode: Int,
+            description: String
+        ) {
+        }
 
         //通话邀请消息回调
         override fun onInViteCallMessageSent() {}
