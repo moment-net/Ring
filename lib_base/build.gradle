@@ -74,6 +74,7 @@ dependencies {
     api DependencyConfig.GitHub.EasyPhotos
     api DependencyConfig.GitHub.Lottie
     api DependencyConfig.GitHub.Camera
+    api DependencyConfig.GitHub.EasyFloat
 
 
     api DependencyConfig.SDK.WeChat
@@ -83,6 +84,7 @@ dependencies {
     api DependencyConfig.SDK.OneLogin
     api DependencyConfig.SDK.IMChat
     api DependencyConfig.SDK.IMCall
+    api DependencyConfig.SDK.Agora
     api DependencyConfig.SDK.JPush
     api DependencyConfig.SDK.JCore
     api DependencyConfig.SDK.HWHms

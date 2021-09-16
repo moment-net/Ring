@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.hyphenate.easecallkit">
+<manifest package="com.hyphenate.easecallkit"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <application>
+        <activity
+            android:name="com.hyphenate.easecallkit.ui.EaseVideoCallActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.hyphenate.easecallkit.ui.EaseMultipleVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+    </application>
 </manifest>

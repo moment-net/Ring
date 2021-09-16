@@ -28,7 +28,7 @@ import com.socks.library.KLog
  * 备注：作为hyphenate-sdk的入口控制类，获取sdk下的基础类均通过此类
  */
 object EMClientHelper {
-    const val TAG: String = "IM"
+    const val TAG: String = "RingIM"
     lateinit var notifier: EaseCallKitNotifier
 
     /**

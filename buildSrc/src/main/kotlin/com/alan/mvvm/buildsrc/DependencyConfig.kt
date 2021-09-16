@@ -62,6 +62,7 @@ object DependencyConfig {
         const val EasyPhotoVersion = "3.1.3"                // EasyPhoto框架
         const val LottieVersion = "3.5.0"                   // Lottie框架
         const val CameraVersion = "1.1.9"                   // Camera框架
+        const val EasyFloatVersion = "2.0.3"                // 悬浮窗权限框架
 
         // 第三方SDK--------------------------------------------------------------
         const val WeChat = "6.6.4"                          // 腾讯开放平台微信
@@ -69,6 +70,7 @@ object DependencyConfig {
         const val TencentBuglyNative = "3.8.0"              // Bugly native异常上报
         const val TencentTBSX5 = "43939"                    // 腾讯X5WebView
         const val IMVersion = "3.8.5"                       // 环信版本
+        const val AgoraVersion = "3.3.0"                    // 声网版本
         const val OneLoginVersion = "2.5.1"                 // 极验框架
         const val JPushVersion = "4.1.5"                    // 极光推送版本
         const val JCoreVersion = "2.9.0"                    // 极光推送版本
@@ -169,7 +171,7 @@ object DependencyConfig {
         const val EasyPhotos = "com.github.HuanTanSheng:EasyPhotos:${Version.EasyPhotoVersion}"
         const val Lottie = "com.airbnb.android:lottie:${Version.LottieVersion}"
         const val Camera = "cjt.library.wheel:camera:${Version.CameraVersion}"
-
+        const val EasyFloat = "com.github.princekin-f:EasyFloat:${Version.EasyFloatVersion}"
     }
 
     /**
@@ -184,6 +186,7 @@ object DependencyConfig {
         const val OneLogin = "com.geetest.android:onelogin:${Version.OneLoginVersion}"
         const val IMChat = "io.hyphenate:hyphenate-chat:${Version.IMVersion}"
         const val IMCall = "io.hyphenate:ease-call-kit:${Version.IMVersion}"
+        const val Agora = "io.agora.rtc:full-sdk:${Version.AgoraVersion}"
         const val JPush = "cn.jiguang.sdk:jpush:${Version.JPushVersion}"
         const val JCore = "cn.jiguang.sdk:jcore:${Version.JCoreVersion}"
         const val HWHms = "com.huawei.hms:push:${Version.HWHMSVersion}"
