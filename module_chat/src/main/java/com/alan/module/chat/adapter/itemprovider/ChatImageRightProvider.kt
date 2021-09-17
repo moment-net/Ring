@@ -6,6 +6,7 @@ import android.widget.TextView
 import com.alan.module.chat.R
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.common.constant.IMConstant
+import com.alan.mvvm.common.helper.SpHelper
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.hyphenate.chat.EMImageMessageBody
@@ -45,8 +46,7 @@ class ChatImageRightProvider() : BaseItemProvider<EMMessage>() {
                 tv_time.setVisibility(View.VISIBLE)
             }
         }
-        val avatar = item.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR)
-        CoilUtils.loadCircle(iv_avatar, avatar)
+        CoilUtils.loadCircle(iv_avatar, SpHelper.getUserInfo()?.avatar!!)
 
         val txtBody = item.getBody() as EMImageMessageBody
         CoilUtils.loadRound(iv_pic, txtBody.localUri.toString(), 7f)

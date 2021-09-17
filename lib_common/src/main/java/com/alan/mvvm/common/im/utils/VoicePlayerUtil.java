@@ -4,9 +4,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMVoiceMessageBody;
-
 import java.io.IOException;
 
 /**
@@ -20,7 +17,7 @@ public class VoicePlayerUtil {
 
     private AudioManager audioManager;
     private MediaPlayer mediaPlayer;
-    private String playingId;
+    private String mUri;
 
     private MediaPlayer.OnCompletionListener onCompletionListener;
     private final Context baseContext;
@@ -52,31 +49,27 @@ public class VoicePlayerUtil {
     }
 
 
-    public String getCurrentPlayingId() {
-        return playingId;
+    public String getUrl() {
+        return mUri;
     }
 
-    public void play(final EMMessage msg, final MediaPlayer.OnCompletionListener listener) {
-        if (!(msg.getBody() instanceof EMVoiceMessageBody)) return;
-
+    public void play(String url, final MediaPlayer.OnCompletionListener listener) {
         if (mediaPlayer.isPlaying()) {
             stop();
         }
-
-        playingId = msg.getMsgId();
+        this.mUri = url;
         onCompletionListener = listener;
 
         try {
-            setSpeaker();
-            EMVoiceMessageBody voiceBody = (EMVoiceMessageBody) msg.getBody();
-            mediaPlayer.setDataSource(baseContext, voiceBody.getLocalUri());
+//            setSpeaker();
+            mediaPlayer.setDataSource(mUri);
             mediaPlayer.prepare();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     stop();
 
-                    playingId = null;
+                    mUri = null;
                     onCompletionListener = null;
                 }
             });

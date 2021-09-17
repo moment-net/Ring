@@ -3,23 +3,24 @@ package com.alan.module.chat.adapter
 import com.alan.module.chat.R
 import com.alan.module.chat.adapter.itemprovider.*
 import com.alan.mvvm.common.constant.IMConstant
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.chad.library.adapter.base.BaseProviderMultiAdapter
 import com.hyphenate.chat.EMMessage
 
-class ChatMessageAdapter() : BaseProviderMultiAdapter<EMMessage>() {
+class ChatMessageAdapter(userEntity: UserEntity) : BaseProviderMultiAdapter<EMMessage>() {
 
     init {
-        addItemProvider(ChatTextLeftProvider())
+        addItemProvider(ChatTextLeftProvider(userEntity))
         addItemProvider(ChatTextRightProvider())
-        addItemProvider(ChatImageLeftProvider())
+        addItemProvider(ChatImageLeftProvider(userEntity))
         addItemProvider(ChatImageRightProvider())
-        addItemProvider(ChatVoiceLeftProvider())
+        addItemProvider(ChatVoiceLeftProvider(userEntity))
         addItemProvider(ChatVoiceRightProvider())
-        addItemProvider(ChatVideoLeftProvider())
+        addItemProvider(ChatVideoLeftProvider(userEntity))
         addItemProvider(ChatVideoRightProvider())
-        addItemProvider(ChatCustomLeftProvider())
+        addItemProvider(ChatCustomLeftProvider(userEntity))
         addItemProvider(ChatCustomRightProvider())
-        addItemProvider(ChatVoiceCallLeftProvider())
+        addItemProvider(ChatVoiceCallLeftProvider(userEntity))
         addItemProvider(ChatVoiceCallRightProvider())
 
         addChildClickViewIds(R.id.iv_pic)

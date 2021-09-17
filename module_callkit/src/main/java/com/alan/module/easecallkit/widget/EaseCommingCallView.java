@@ -1,4 +1,4 @@
-package com.hyphenate.easecallkit.widget;
+package com.alan.module.easecallkit.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,10 +15,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.alan.module.easecallkit.R;
+import com.alan.module.easecallkit.activity.EaseVideoCallActivity;
 import com.alan.mvvm.base.coil.CoilUtils;
 import com.alan.mvvm.common.im.callkit.utils.EaseCallKitUtils;
-import com.hyphenate.easecallkit.R;
-import com.hyphenate.easecallkit.ui.EaseVideoCallActivity;
 import com.hyphenate.util.EMLog;
 
 

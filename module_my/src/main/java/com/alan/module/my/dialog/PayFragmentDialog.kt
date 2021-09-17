@@ -97,9 +97,9 @@ class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayVie
             )
         )
         window.setBackgroundDrawable(colorDrawable)
-        params.width = dp2px(300f)
+        params.width = dp2px(360f)
         params.height = WindowManager.LayoutParams.WRAP_CONTENT
-        params.gravity = Gravity.CENTER
+        params.gravity = Gravity.BOTTOM
         setCanceledOnTouchOutside(true)
         isCancelable = true
         window.attributes = params
@@ -156,7 +156,7 @@ class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayVie
     fun showPayResult() {
         DialogHelper.showMultipleDialog(mActivity, "正在等待支付结果...", "支付成功", "支付遇到问题", {
             val bundle = Bundle().apply {
-                putString("orderId", orderBean.orderId)
+                putString("orderId", if (orderBean == null) "" else orderBean.orderId)
             }
             jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_PAYRESULT, bundle)
         }, {

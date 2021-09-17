@@ -35,6 +35,7 @@ data class UserInfoBean(
     var audioDesc: String? = "",
     var greeting: GreetBean? = null,
     var headsetStatus: String? = "",
+    var onlineStatusDesc: String? = "",
     var age: Int = 0,
     var bindApple: Boolean? = false,
     var eduRight: Int = 0,

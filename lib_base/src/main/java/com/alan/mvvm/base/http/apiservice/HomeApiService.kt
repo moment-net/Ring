@@ -972,10 +972,51 @@ interface HomeApiService {
 
     /**
      * 进入语聊房
-     *
-     * @return
      */
     @POST("chat/getRtcToken")
     suspend fun requestRtcToken(@Body requestBody: RequestBody): BaseResponse<RtcTokenBean>
+
+    /**
+     * 发起聊天
+     */
+    @POST("chat/start")
+    suspend fun requestChatStart(@Body requestBody: RequestBody): BaseResponse<CallBean>
+
+    /**
+     * 结束聊天
+     */
+    @POST("chat/hangUp")
+    suspend fun requestChatHangup(@Body requestBody: RequestBody): BaseResponse<CallEndBean>
+
+    /**
+     * 用户是否在饭友匹配中
+     */
+    @GET("user/inmatch")
+    suspend fun requestCheckMatch(@Query("userId") userId: String): BaseResponse<MatchStatusBean>
+
+    /**
+     * 开始干饭
+     */
+    @POST("meal/add")
+    suspend fun requestMealStart(@Part img: MultipartBody.Part): BaseResponse<String>
+
+    /**
+     * 停止干饭匹配
+     */
+    @GET("meal/stop")
+    suspend fun requestMealStop(): BaseResponse<String>
+
+    /**
+     * 修改干饭状态
+     */
+    @GET("meal/updateStatus")
+    suspend fun requestEditMeal(@Query("orderStatus") orderStatus: String): BaseResponse<String>
+
+    /**
+     * 查看用户干饭状态
+     */
+    @GET("meal/orderStatus")
+    suspend fun requestMealStatus(): BaseResponse<String>
+
 
 }

@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.alan.mvvm.base.utils.ProcessUtils
 import com.alan.mvvm.common.constant.Constants
+import com.alan.mvvm.common.db.DbHelper
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.im.callkit.EaseCallKit
 import com.alan.mvvm.common.im.callkit.base.EaseCallKitConfig
@@ -38,6 +40,71 @@ object EMClientHelper {
      */
     //SDK是否初始化
     var isSDKInit = false
+
+
+    /**
+     * 判断是否之前登录过
+     *
+     * @return
+     */
+    val isLoggedIn: Boolean
+        get() = eMClient.isLoggedInBefore
+
+    /**
+     * 获取IM SDK的入口类
+     *
+     * @return
+     */
+    val eMClient: EMClient
+        get() = EMClient.getInstance()
+
+    /**
+     * 获取联系人管理
+     *
+     * @return
+     */
+    val contactManager: EMContactManager
+        get() = eMClient.contactManager()
+
+    /**
+     * 获取群组管理
+     *
+     * @return
+     */
+    val groupManager: EMGroupManager
+        get() = eMClient.groupManager()
+
+    /**
+     * 获取聊天室管理
+     *
+     * @return
+     */
+    val chatroomManager: EMChatRoomManager
+        get() = eMClient.chatroomManager()
+
+    /**
+     * 获取聊天管理
+     *
+     * @return
+     */
+    val chatManager: EMChatManager
+        get() = eMClient.chatManager()
+
+    /**
+     * 获取推送管理
+     *
+     * @return
+     */
+    val pushManager: EMPushManager
+        get() = eMClient.pushManager()
+
+
+    /**
+     * 获取当前用户
+     */
+    val currentUser: String
+        get() = eMClient.currentUser
+
 
     fun init(context: Context) {
         if (!ProcessUtils.isMainProcess(context)) {
@@ -164,68 +231,22 @@ object EMClientHelper {
         }
     }
 
-    /**
-     * 判断是否之前登录过
-     *
-     * @return
-     */
-    val isLoggedIn: Boolean
-        get() = eMClient.isLoggedInBefore
 
     /**
-     * 获取IM SDK的入口类
-     *
-     * @return
+     * 通过ID获取某人数据库中信息
      */
-    val eMClient: EMClient
-        get() = EMClient.getInstance()
+    fun getUserById(userId: String): UserEntity {
+        val userEntity = DbHelper.instance.getUserDao()?.getUserById(userId.toLong())
+        return userEntity ?: UserEntity(userId, "", "")
+    }
 
     /**
-     * 获取联系人管理
-     *
-     * @return
+     * 存储某人信息到数据库
      */
-    val contactManager: EMContactManager
-        get() = eMClient.contactManager()
+    fun saveUser(userEntity: UserEntity) {
+        DbHelper.instance.getUserDao()?.addUser(userEntity)
+    }
 
-    /**
-     * 获取群组管理
-     *
-     * @return
-     */
-    val groupManager: EMGroupManager
-        get() = eMClient.groupManager()
-
-    /**
-     * 获取聊天室管理
-     *
-     * @return
-     */
-    val chatroomManager: EMChatRoomManager
-        get() = eMClient.chatroomManager()
-
-    /**
-     * 获取聊天管理
-     *
-     * @return
-     */
-    val chatManager: EMChatManager
-        get() = eMClient.chatManager()
-
-    /**
-     * 获取推送管理
-     *
-     * @return
-     */
-    val pushManager: EMPushManager
-        get() = eMClient.pushManager()
-
-
-    /**
-     * 获取当前用户
-     */
-    val currentUser: String
-        get() = eMClient.currentUser
 
 
     /**

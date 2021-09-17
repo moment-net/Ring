@@ -5,6 +5,7 @@ import android.text.TextUtils
 import com.alan.mvvm.base.utils.ActivityStackManager
 import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.common.constant.IMConstant
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.event.MessageEvent
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.im.callkit.EaseCallKit
@@ -67,6 +68,12 @@ object EMClientListener {
                 KLog.e(TAG, "收到IM消息$message")
                 KLog.e(TAG, "onMessageReceived id : " + message.msgId)
                 KLog.e(TAG, "onMessageReceived: " + message.type)
+
+                //每收到一个消息进行保存用户信息
+                val userName = message.getStringAttribute(IMConstant.MESSAGE_ATTR_USERNAME, "")
+                val avatar = message.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR, "")
+                EMClientHelper.saveUser(UserEntity(message.from, userName, avatar))
+
 
                 // 如果设置群组离线消息免打扰，则不进行消息通知
 //                val disabledIds: List<String> = EMClientHelper.pushManager.getNoPushGroups()

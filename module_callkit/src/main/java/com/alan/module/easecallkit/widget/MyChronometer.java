@@ -1,4 +1,4 @@
-package com.hyphenate.easecallkit.widget;
+package com.alan.module.easecallkit.widget;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import android.widget.Chronometer;
 import androidx.annotation.InspectableProperty;
 import androidx.annotation.RequiresApi;
 
-import com.hyphenate.easecallkit.R;
+import com.alan.module.easecallkit.R;
 
 import java.util.ArrayList;
 import java.util.Formatter;

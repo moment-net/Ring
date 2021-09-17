@@ -65,19 +65,27 @@
                     app:layout_constraintStart_toStartOf="@+id/iv_avatar"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <leifu.shapelibrary.ShapeView
                     android:id="@+id/tv_voice"
                     android:layout_width="62dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/icon_home_voice_bg"
                     android:gravity="center"
                     android:text="14s"
                     android:textSize="10sp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
-                    app:layout_constraintStart_toStartOf="@+id/iv_avatar" />
+                    app:layout_constraintStart_toStartOf="@+id/iv_avatar"
+                    android:padding="0dp"
+                    app:sCorners="12dp"
+                    app:sGradientOrientation="TOP_BOTTOM"
+                    app:sGradientCenterX="@dimen/dimen12"
+                    app:sGradientCenterY="@dimen/dimen30"
+                    app:sGradientType="linear"
+                    app:sGradientStartColor="@color/_FFF17A"
+                    app:sGradientEndColor="@color/_FFD25C"
+                    app:sStrokeWidth="0dp" />
 
 
                 <TextView

@@ -1,4 +1,4 @@
-package com.hyphenate.easecallkit.ui;
+package com.alan.module.easecallkit.activity;
 
 import static com.alan.mvvm.common.im.callkit.utils.EaseMsgUtils.CALL_INVITE_EXT;
 import static io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING;
@@ -44,8 +44,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.alan.module.easecallkit.R;
+import com.alan.module.easecallkit.widget.EaseCallFloatWindow;
+import com.alan.module.easecallkit.widget.EaseImageView;
+import com.alan.module.easecallkit.widget.MyChronometer;
 import com.alan.mvvm.base.coil.CoilUtils;
+import com.alan.mvvm.common.constant.IMConstant;
 import com.alan.mvvm.common.constant.RouteUrl;
+import com.alan.mvvm.common.helper.SpHelper;
 import com.alan.mvvm.common.im.callkit.EaseCallKit;
 import com.alan.mvvm.common.im.callkit.base.EaseCallEndReason;
 import com.alan.mvvm.common.im.callkit.base.EaseCallKitConfig;
@@ -74,10 +80,6 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easecallkit.R;
-import com.hyphenate.easecallkit.widget.EaseCallFloatWindow;
-import com.hyphenate.easecallkit.widget.EaseImageView;
-import com.hyphenate.easecallkit.widget.MyChronometer;
 import com.hyphenate.util.EMLog;
 import com.lzf.easyfloat.interfaces.OnPermissionResult;
 import com.lzf.easyfloat.permission.PermissionUtils;
@@ -758,6 +760,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
         } else if (id == R.id.btn_hangup_call) {
             stopCount();
             if (remoteUId == 0) {
+                //发送取消消息
                 CallCancelEvent cancelEvent = new CallCancelEvent();
                 sendCmdMsg(cancelEvent, username);
             } else {
@@ -771,16 +774,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
         } else if (id == R.id.local_surface_layout) {
             changeSurface();
         } else if (id == R.id.btn_call_float) {
-            PermissionUtils.requestPermission(this, new OnPermissionResult() {
-                @Override
-                public void permissionResult(boolean b) {
-                    if (PermissionUtils.checkPermission(EaseVideoCallActivity.this)) {
-                        doShowFloatWindow();
-                    } else {
-                        Toast.makeText(EaseVideoCallActivity.this, "当前App未被授予悬浮窗权限", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            showFloatWindow();
         } else if (id == R.id.iv_mute) { // mute
             if (isMuteState) {
                 // resume voice transfer
@@ -1036,12 +1030,14 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
                                 });
                             } else {
                                 timehandler.stopTime();
+                                //发送接通消息
                                 sendCmdMsg(callEvent, username);
                             }
                         } else if (TextUtils.equals(answerEvent.result, EaseMsgUtils.CALL_ANSWER_ACCEPT)) {
                             //设置为接听
                             EaseCallKit.getInstance().setCallState(EaseCallState.CALL_ANSWERED);
                             timehandler.stopTime();
+                            //发送接通消息
                             sendCmdMsg(callEvent, username);
                             if (transVoice) {
                                 runOnUiThread(new Runnable() {
@@ -1057,6 +1053,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
                             }
                         } else if (TextUtils.equals(answerEvent.result, EaseMsgUtils.CALL_ANSWER_REFUSE)) {
                             timehandler.stopTime();
+                            //发送接通消息
                             sendCmdMsg(callEvent, username);
                         }
                         break;
@@ -1185,6 +1182,10 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
         } else {
             message = EMMessage.createTxtSendMessage("邀请您进行语音通话", username);
         }
+        // 增加自己特定的属性
+        message.setAttribute(IMConstant.MESSAGE_ATTR_AVATAR, SpHelper.INSTANCE.getUserInfo().getAvatar());
+        message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME, SpHelper.INSTANCE.getUserInfo().getUserName());
+
         message.setAttribute(EaseMsgUtils.CALL_ACTION, EaseCallAction.CALL_INVITE.state);
         message.setAttribute(EaseMsgUtils.CALL_CHANNELNAME, channelName);
         message.setAttribute(EaseMsgUtils.CALL_TYPE, callType.code);
@@ -1786,6 +1787,27 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
                 EMLog.e(TAG, "exitChannelDisplay not exit channel");
             }
         });
+    }
+
+    /**
+     * 缩小房间进入悬浮
+     * isFront:true为点击按钮缩小；false为点击Home键缩小；
+     */
+    protected void showFloatWindow() {
+        if (PermissionUtils.checkPermission(this)) {
+            doShowFloatWindow();
+        } else {
+            PermissionUtils.requestPermission(this, new OnPermissionResult() {
+                @Override
+                public void permissionResult(boolean b) {
+                    if (PermissionUtils.checkPermission(EaseVideoCallActivity.this)) {
+                        doShowFloatWindow();
+                    } else {
+                        Toast.makeText(EaseVideoCallActivity.this, "当前App未被授予悬浮窗权限", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     public boolean isFloatWindowShowing() {

@@ -1,4 +1,4 @@
-package com.hyphenate.easecallkit.widget;
+package com.alan.module.easecallkit.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -18,7 +18,7 @@ import android.view.MotionEvent;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.hyphenate.easecallkit.R;
+import com.alan.module.easecallkit.R;
 
 import java.lang.reflect.Method;
 

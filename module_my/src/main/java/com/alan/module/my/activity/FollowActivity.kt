@@ -89,7 +89,7 @@ class FollowActivity : BaseActivity<ActivityFollowBinding, FollowViewModel>() {
                 view: View,
                 position: Int
             ) {
-                var userInfoBean: UserInfoBean = mAdapter.data.get(position)
+                val userInfoBean: UserInfoBean = mAdapter.data.get(position)
                 if (userInfoBean.followStatus == 0) {
                     mViewModel.requestChangeFollow(position, userInfoBean.userId, 1)
                 } else {

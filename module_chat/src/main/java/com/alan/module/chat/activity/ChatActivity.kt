@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.jpush.android.api.JPushInterface
 import com.alan.module.chat.R
 import com.alan.module.chat.adapter.ChatMessageAdapter
 import com.alan.module.chat.databinding.ActivityChatBinding
@@ -20,7 +21,9 @@ import com.alan.module.chat.view.VoiceRecorderView
 import com.alan.module.chat.viewmodol.ChatDetailViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
-import com.alan.mvvm.base.http.responsebean.AvatarInfoBean
+import com.alan.mvvm.base.http.responsebean.CallBean
+import com.alan.mvvm.base.http.responsebean.MatchStatusBean
+import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.*
 import com.alan.mvvm.common.constant.Constants
@@ -56,16 +59,13 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
     @Autowired
     var userId = ""
 
-    @JvmField
-    @Autowired
     var userName = ""
-
-    @JvmField
-    @Autowired
     var avatar = ""
+
 
     val CAMERA_CODE = 200
     lateinit var popupWindow: PopupWindow
+    lateinit var userInfoBean: UserInfoBean
     lateinit var mAdapter: ChatMessageAdapter
     lateinit var conversation: EMConversation
     var recyclerViewLastHeight: Int = 0;
@@ -79,8 +79,8 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
     override val mViewModel by viewModels<ChatDetailViewModel>()
 
     override fun setStatusBar() {
-        getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         StatusBarUtil.setColor(this, com.alan.mvvm.common.R.color.white.getResColor(), 0)
+        getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         mViewModel.ld_state.observe(this) {
             when {
                 it == StateLayoutEnum.LOADING -> {
@@ -102,39 +102,68 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
      */
     @SuppressLint("ClickableViewAccessibility")
     override fun ActivityChatBinding.initView() {
-        ivBack.clickDelay { finish() }
-        ivMore.clickDelay { showPopupWindow() }
-        tvInvite.clickDelay { }
-        ivCamera.clickDelay {
+
+        initListener()
+
+        initRV()
+
+
+        //是否有通知权限
+        val notificationEnabled = JPushInterface.isNotificationEnabled(this@ChatActivity)
+        if (notificationEnabled != 1) {
+            //没开启通知权限
+            clNotifi.visible()
+        } else {
+            clNotifi.gone()
+        }
+
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initListener() {
+        mBinding.ivBack.clickDelay { finish() }
+        mBinding.ivMore.clickDelay { showPopupWindow() }
+        mBinding.tvInvite.clickDelay {
+            when (mBinding.tvInvite.text) {
+                "立即聊天" -> {
+                    mViewModel.requestChatStart(userId)
+                }
+                "立即投喂" -> {
+
+                }
+                "立即关注" -> {
+                    mViewModel.requestChangeFollow(userId, 1)
+                }
+            }
+        }
+
+        mBinding.tvOpen.clickDelay {
+            JPushInterface.goToAppNotificationSettings(this@ChatActivity)
+        }
+
+        mBinding.ivCamera.clickDelay {
             jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_CAMERA, this@ChatActivity, CAMERA_CODE)
         }
-        ivVoice.clickDelay {
-            if (llPress.isVisible) {
-                ivVoice.setImageResource(R.drawable.icon_chat_voice)
-                llPress.gone()
+        mBinding.ivVoice.clickDelay {
+            if (mBinding.llPress.isVisible) {
+                mBinding.ivVoice.setImageResource(R.drawable.icon_chat_voice)
+                mBinding.llPress.gone()
             } else {
-                ivVoice.setImageResource(R.drawable.icon_chat_input)
-                llPress.visible()
+                mBinding.ivVoice.setImageResource(R.drawable.icon_chat_input)
+                mBinding.llPress.visible()
             }
         }
-        ivCall.clickDelay {
-            val userInfoBean = SpHelper.getUserInfo()
-            val map = mutableMapOf<String, String>().apply {
-                put("userId", userInfoBean?.userId!!)
-                put("userName", userInfoBean.userName)
-                put("avatar", userInfoBean.avatar)
-            }
-            EMClientHelper.setUserInfoCallKit(userId, userName, avatar)
-            EMClientHelper.startSingleVoiceCall(userId, map)
+        mBinding.ivCall.clickDelay {
+            mViewModel.requestChatStart(userId)
         }
-        ivPic.clickDelay {
+        mBinding.ivPic.clickDelay {
             ImageSelectUtil.singlePic(this@ChatActivity)
         }
-        ivGift.clickDelay { }
+        mBinding.ivGift.clickDelay { }
 
 
-        llPress.setOnTouchListener { v, event ->
-            rlRecording.onPressToSpeakBtnTouch(
+        mBinding.llPress.setOnTouchListener { v, event ->
+            mBinding.rlRecording.onPressToSpeakBtnTouch(
                 v,
                 event,
                 object : VoiceRecorderView.EaseVoiceRecorderCallback {
@@ -148,24 +177,26 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             true
         }
 
-        etMsg.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+        mBinding.etMsg.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEND ||
                 event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN
             ) {
-                val msg: String = etMsg.getText().toString()
-                etMsg.setText("")
+                val msg: String = mBinding.etMsg.getText().toString()
+                mBinding.etMsg.setText("")
                 sendTextMessage(msg)
                 true
             } else {
                 false
             }
         })
-
-        initRV()
     }
 
     fun initRV() {
-        mAdapter = ChatMessageAdapter()
+        val userEntity = EMClientHelper.getUserById(userId)
+        userName = userEntity.userName
+        avatar = userEntity.avatar
+
+        mAdapter = ChatMessageAdapter(userEntity)
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
             when (view.id) {
                 R.id.iv_pic -> {
@@ -205,7 +236,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
 
                 } else {
-
+                    KeyBoardUtils.closeKeybord(mBinding.etMsg, this@ChatActivity)
                 }
             }
         })
@@ -243,12 +274,22 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         val tv_focus = contentview.findViewById<TextView>(R.id.tv_focus)
         val tvReport = contentview.findViewById<TextView>(R.id.tv_report)
         val view_line = contentview.findViewById<View>(R.id.view_line)
+
+        if (userInfoBean.followStatus == 0) {
+            tv_focus.setText("关注")
+        } else if (userInfoBean.followStatus == 1) {
+            tv_focus.setText("已关注")
+        } else if (userInfoBean.followStatus == 2) {
+            tv_focus.setText("互相关注")
+        }
+
+
         tvReport.clickDelay {
             popupWindow.dismiss()
             val bundle = Bundle().apply {
                 putString(
                     "webUrl",
-                    HttpBaseUrlConstant.BASE_URL + "&reportFromUserid=${SpHelper.getUserInfo()!!.userId}&reportToUserid="
+                    HttpBaseUrlConstant.BASE_URL + "&reportFromUserid=${SpHelper.getUserInfo()!!.userId}&reportToUserid=${userId}"
                 )
                 putString("webTitle", "举报")
             }
@@ -256,15 +297,13 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         }
         tv_focus.clickDelay {
             popupWindow.dismiss()
+            if (userInfoBean.followStatus == 0) {
+                mViewModel.requestChangeFollow(userId, 1)
+            } else {
+                mViewModel.requestChangeFollow(userId, 0)
+            }
+        }
 
-        }
-        if (true) {
-            tv_focus.visibility = View.VISIBLE
-            view_line.visibility = View.VISIBLE
-        } else {
-            tv_focus.visibility = View.GONE
-            view_line.visibility = View.GONE
-        }
         popupWindow = PopupWindow(
             contentview,
             ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -280,16 +319,50 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
      * 订阅数据
      */
     override fun initObserve() {
-
+        mViewModel.ldSuccess.observe(this) {
+            when (it) {
+                is UserInfoBean -> {
+                    userInfoBean = it
+                    mBinding.tvTitle.setText(it.userName)
+                    mBinding.tvTime.setText(it.onlineStatusDesc)
+                    CoilUtils.loadCircle(mBinding.ivAvatar, it.avatar)
+                }
+                is MatchStatusBean -> {
+                    if (it.inMatch) {
+                        mBinding.tvInfo.setText("${userName}${it.orderStatus},和Ta聊聊吧！")
+                        mBinding.tvInvite.setText("立即聊天")
+                    } else {
+                        if (it.isFollowed) {
+                            mBinding.tvInfo.setText("${userName}正在等待投喂，投喂Ta周饭卡可开启语音聊天，边吃边聊")
+                            mBinding.tvInvite.setText("立即投喂")
+                        } else {
+                            mBinding.tvInfo.setText("关注${userName}，Ta干饭时会给你发送通知")
+                            mBinding.tvInvite.setText("立即关注")
+                        }
+                    }
+                }
+                is CallBean -> {
+                    val userInfoBean = SpHelper.getUserInfo()
+                    val map = mutableMapOf<String, String>().apply {
+                        put("userId", userInfoBean?.userId!!)
+                        put("userName", userInfoBean.userName)
+                        put("avatar", userInfoBean.avatar)
+                    }
+                    EMClientHelper.setUserInfoCallKit(userId, userName, avatar)
+                    EMClientHelper.startSingleVoiceCall(userId, map)
+                }
+            }
+        }
     }
 
     /**
      * 获取数据
      */
     override fun initRequestData() {
-        mBinding.tvTitle.setText(userName)
-        CoilUtils.loadCircle(mBinding.ivAvatar, avatar)
         initConversation()
+
+        mViewModel.requestUserInfo(userId)
+        mViewModel.requestCheckMatch(userId)
     }
 
 
@@ -302,8 +375,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             EMConversation.EMConversationType.Chat,
             true
         )
-        val avatarInfoBean = AvatarInfoBean(avatar, userName)
-        conversation.extField = GsonUtil.jsonToString(avatarInfoBean)
         //会话已读回执
         conversation.markAllMessagesAsRead()
         try {
@@ -641,12 +712,12 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         // 增加自己特定的属性
         message.setAttribute(IMConstant.MESSAGE_ATTR_AVATAR, SpHelper.getUserInfo()?.avatar);
         message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME, SpHelper.getUserInfo()?.userName);
-        message.setAttribute(IMConstant.MESSAGE_ATTR_AVATAR_OTHER, avatar);
-        message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME_OTHER, userName);
+
         // 设置自定义扩展字段-强制推送
-        message.setAttribute("em_force_notification", true);
+        message.setAttribute(IMConstant.MESSAGE_ATTR_FORCEPUSH, true);
         // 设置自定义扩展字段-发送静默消息（不推送）
-//        message.setAttribute("em_ignore_notification", true);
+//        message.setAttribute(IMConstant.MESSAGE_ATTR_IGNOREPUSH, true);
+
         EMClientHelper.chatManager.sendMessage(message)
         refreshToLatest()
     }

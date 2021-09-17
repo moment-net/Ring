@@ -35,7 +35,7 @@ import java.util.*
 /**
  * 作者：alan
  * 时间：2021/7/30
- * 备注：
+ * 备注：个人信息页面
  */
 @EventBusRegister
 @Route(path = RouteUrl.MyModule.ACTIVITY_MY_PERSONINFO)

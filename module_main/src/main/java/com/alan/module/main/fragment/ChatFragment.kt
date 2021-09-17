@@ -9,11 +9,8 @@ import com.alan.module.main.R
 import com.alan.module.main.adapter.ChatListAdapter
 import com.alan.module.main.databinding.FragmentChatBinding
 import com.alan.module.main.viewmodel.ChatViewModel
-import com.alan.mvvm.base.http.responsebean.AvatarInfoBean
-import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.EventBusRegister
-import com.alan.mvvm.base.utils.GsonUtil
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.IMConstant
@@ -43,12 +40,10 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
 
     override val mViewModel by viewModels<ChatViewModel>()
     lateinit var messageAdapter: ChatListAdapter
+    val conList by lazy(mode = LazyThreadSafetyMode.NONE) { arrayListOf<EMConversation>() }
 
 
     override fun FragmentChatBinding.initView() {
-        tvOpen.clickDelay {
-
-        }
         initRVMessage()
     }
 
@@ -80,11 +75,8 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         messageAdapter.setOnItemClickListener { adapter, view, position ->
             val item: Any = messageAdapter.getItem(position)
             if (item is EMConversation) {
-                val avatarInfoBean = GsonUtil.jsonToBean(item.extField, AvatarInfoBean::class.java)
                 val bundle = Bundle().apply {
                     putString("userId", item.conversationId())
-                    putString("userName", avatarInfoBean?.userName)
-                    putString("avatar", avatarInfoBean?.avatar)
                 }
                 jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
             }
@@ -105,7 +97,17 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
 
     fun requestList() {
         val list = mViewModel.requestConversations()
-        messageAdapter.setList(list)
+        //过滤系统消息
+        if (!conList.isEmpty()) {
+            conList.clear()
+        }
+        for (conversation in list) {
+            if (conversation.conversationId().length >= 16) {
+                conList.add(conversation)
+            }
+        }
+
+        messageAdapter.setList(conList)
         mBinding.srfList.finishRefresh()
     }
 

@@ -90,7 +90,8 @@ open class BaseRepository {
                 exception = BaseHttpException(ERROR_PARSE, "解析出错，服务器异常", throwable)
             }
             else -> {
-                exception = BaseHttpException(ERROR_UNKNOWN, "请求出错，请检查网络设置", throwable)
+                exception =
+                    BaseHttpException(ERROR_UNKNOWN, throwable.message ?: "请求出错，请检查网络设置", throwable)
             }
         }
         KLog.e("http", "onFailed==>exception:${exception}")

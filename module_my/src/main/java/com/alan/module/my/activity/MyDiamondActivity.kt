@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alan.module.my.R
 import com.alan.module.my.adapter.DiamondListAdapter
 import com.alan.module.my.databinding.ActivityMyDiamondBinding
+import com.alan.module.my.dialog.PayFragmentDialog
 import com.alan.module.my.viewmodol.MyDiamondViewModel
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.base.http.baseresp.BaseResponse
@@ -113,7 +114,10 @@ class MyDiamondActivity : BaseActivity<ActivityMyDiamondBinding, MyDiamondViewMo
             adapter = mAdapter
         }
         mAdapter.setOnItemClickListener { adapter, view, position ->
-
+            val goodBean: GoodBean = mAdapter.data.get(position)
+            val payDialog: PayFragmentDialog =
+                PayFragmentDialog.newInstance(diamondBean.recharge, goodBean)
+            payDialog.show(supportFragmentManager)
         }
     }
 

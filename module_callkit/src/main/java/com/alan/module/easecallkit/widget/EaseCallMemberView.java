@@ -1,4 +1,4 @@
-package com.hyphenate.easecallkit.widget;
+package com.alan.module.easecallkit.widget;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -13,10 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alan.module.easecallkit.R;
 import com.alan.mvvm.base.coil.CoilUtils;
 import com.alan.mvvm.common.im.callkit.base.EaseUserAccount;
 import com.alan.mvvm.common.im.callkit.utils.EaseCallKitUtils;
-import com.hyphenate.easecallkit.R;
 
 import io.agora.rtc.models.UserInfo;
 

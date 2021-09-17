@@ -1,13 +1,11 @@
 package com.alan.module.main.adapter
 
-import android.text.TextUtils
 import android.widget.ImageView
 import com.alan.module.main.R
 import com.alan.mvvm.base.coil.CoilUtils
-import com.alan.mvvm.base.http.responsebean.AvatarInfoBean
 import com.alan.mvvm.base.utils.DateUtils
-import com.alan.mvvm.base.utils.GsonUtil
 import com.alan.mvvm.common.constant.IMConstant
+import com.alan.mvvm.common.im.EMClientHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.hyphenate.chat.EMConversation
@@ -18,33 +16,13 @@ import java.util.*
 class ChatListAdapter : BaseQuickAdapter<EMConversation, BaseViewHolder>(R.layout.item_chatlist) {
 
     override fun convert(holder: BaseViewHolder, item: EMConversation) {
-        var avatar: String? = null
-        var userName: String? = null
-        if (!TextUtils.isEmpty(item.extField)) {
-            val avatarInfoBean = GsonUtil.jsonToBean(item.extField, AvatarInfoBean::class.java)
-            avatar = avatarInfoBean?.avatar
-            userName = avatarInfoBean?.userName
-        } else {
-            if (item.allMsgCount != 0) {
-                val lastMessage = item.lastMessage
-                if (lastMessage.direct() == EMMessage.Direct.RECEIVE) {
-                    avatar = lastMessage.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR)
-                    userName = lastMessage.getStringAttribute(IMConstant.MESSAGE_ATTR_USERNAME)
-                } else {
-                    avatar = lastMessage.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR_OTHER)
-                    userName =
-                        lastMessage.getStringAttribute(IMConstant.MESSAGE_ATTR_USERNAME_OTHER)
-                }
-                val avatarInfoBean = AvatarInfoBean(avatar, userName)
-                item.extField = GsonUtil.jsonToString(avatarInfoBean)
-            }
-        }
+        val userEntity = EMClientHelper.getUserById(item.conversationId())
 
         CoilUtils.loadCircle(
             holder.getView<ImageView>(R.id.iv_avatar),
-            avatar!!
+            userEntity.avatar!!
         )
-        holder.setText(R.id.tv_name, userName)
+        holder.setText(R.id.tv_name, userEntity.userName)
 
         if (item.unreadMsgCount > 0) {
             holder.setText(R.id.tv_num, "${item.unreadMsgCount}")

@@ -6,6 +6,7 @@ import android.widget.TextView
 import com.alan.module.chat.R
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.common.constant.IMConstant
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.hyphenate.chat.EMMessage
@@ -13,7 +14,7 @@ import com.hyphenate.chat.EMVideoMessageBody
 import com.hyphenate.util.DateUtils
 import java.util.*
 
-class ChatVideoLeftProvider() : BaseItemProvider<EMMessage>() {
+class ChatVideoLeftProvider(val userEntity: UserEntity) : BaseItemProvider<EMMessage>() {
     override val itemViewType: Int
         get() = IMConstant.MESSAGE_TYPE_VIDEO_LEFT
 
@@ -45,8 +46,7 @@ class ChatVideoLeftProvider() : BaseItemProvider<EMMessage>() {
                 tv_time.setVisibility(View.VISIBLE)
             }
         }
-        val avatar = item.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR)
-        CoilUtils.loadCircle(iv_avatar, avatar)
+        CoilUtils.loadCircle(iv_avatar, userEntity.avatar)
 
         val body = item.getBody() as EMVideoMessageBody
         if (body.getDuration() > 0) {

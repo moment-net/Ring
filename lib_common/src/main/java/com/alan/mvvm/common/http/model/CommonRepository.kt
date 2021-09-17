@@ -321,5 +321,32 @@ class CommonRepository @Inject constructor() : BaseRepository() {
     ) = request(mApi, callback) { mApi.requestRtcToken(requestBody) }
 
 
+    /**
+     * 发起聊天
+     */
+    suspend fun requestChatStart(
+        requestBody: RequestBody,
+        callback: RequestCallback<CallBean>
+    ) = request(mApi, callback) { mApi.requestChatStart(requestBody) }
+
+
+    /**
+     * 挂断聊天
+     */
+    suspend fun requestChatHangup(
+        requestBody: RequestBody,
+        callback: RequestCallback<CallEndBean>
+    ) = request(mApi, callback) { mApi.requestChatHangup(requestBody) }
+
+
+    /**
+     * 用户是否在饭友匹配中
+     */
+    suspend fun requestCheckMatch(
+        userId: String,
+        callback: RequestCallback<MatchStatusBean>
+    ) = request(mApi, callback) { mApi.requestCheckMatch(userId) }
+
+
 }
 

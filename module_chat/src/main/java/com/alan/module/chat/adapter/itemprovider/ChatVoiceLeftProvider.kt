@@ -11,6 +11,7 @@ import com.alan.module.chat.R
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.common.constant.IMConstant
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.im.utils.EMVoiceLengthUtils
 import com.alan.mvvm.common.im.utils.VoicePlayerUtil
 import com.chad.library.adapter.base.provider.BaseItemProvider
@@ -20,7 +21,7 @@ import com.hyphenate.chat.EMVoiceMessageBody
 import com.hyphenate.util.DateUtils
 import java.util.*
 
-class ChatVoiceLeftProvider() : BaseItemProvider<EMMessage>() {
+class ChatVoiceLeftProvider(val userEntity: UserEntity) : BaseItemProvider<EMMessage>() {
     lateinit var ivVoice: ImageView
     lateinit var voiceAnimation: AnimationDrawable
     var voicePlayerUtil: VoicePlayerUtil
@@ -61,8 +62,7 @@ class ChatVoiceLeftProvider() : BaseItemProvider<EMMessage>() {
                 tv_time.setVisibility(View.VISIBLE)
             }
         }
-        val avatar = item.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR)
-        CoilUtils.loadCircle(iv_avatar, avatar)
+        CoilUtils.loadCircle(iv_avatar, userEntity.avatar)
 
         val voiceBody = item.getBody() as EMVoiceMessageBody
         val len = voiceBody.length
@@ -78,6 +78,7 @@ class ChatVoiceLeftProvider() : BaseItemProvider<EMMessage>() {
         iv_voice.setImageResource(R.drawable.icon_voice_black4)
 
         cl_voice.setOnClickListener {
+            val body = item.body as EMVoiceMessageBody
             if (voicePlayerUtil.isPlaying) {
                 //无论播放的语音项是这个还是其他，都先停止语音播放
                 voicePlayerUtil.stop()
@@ -85,15 +86,14 @@ class ChatVoiceLeftProvider() : BaseItemProvider<EMMessage>() {
                 stopVoicePlayAnimation()
 
                 // 如果正在播放的语音项是此项，则只需停止播放即可。
-                val playingId: String = voicePlayerUtil.getCurrentPlayingId()
-                if (item.msgId == playingId) {
+                val playingUrl: String = voicePlayerUtil.url
+                if (TextUtils.equals(body.localUrl, playingUrl)) {
                     return@setOnClickListener
                 }
             }
-            val voice = item.getBody() as EMVoiceMessageBody
-            if (!TextUtils.isEmpty(voice.localUri.toString())) {
+            if (!TextUtils.isEmpty(body.localUrl)) {
                 ivVoice = iv_voice
-                playVoice(item)
+                playVoice(body.localUrl)
                 // 启动语音播放动画
                 startVoicePlayAnimation()
             }
@@ -115,8 +115,8 @@ class ChatVoiceLeftProvider() : BaseItemProvider<EMMessage>() {
         ivVoice.setImageResource(R.drawable.icon_voice_black4)
     }
 
-    private fun playVoice(msg: EMMessage) {
-        voicePlayerUtil.play(msg, OnCompletionListener {
+    private fun playVoice(url: String) {
+        voicePlayerUtil.play(url, OnCompletionListener {
             stopVoicePlayAnimation()
         })
     }

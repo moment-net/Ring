@@ -5,7 +5,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.alan.module.chat.R
+import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.common.constant.IMConstant
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.im.utils.SmileUtils
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -14,7 +16,7 @@ import com.hyphenate.chat.EMTextMessageBody
 import com.hyphenate.util.DateUtils
 import java.util.*
 
-class ChatTextLeftProvider() : BaseItemProvider<EMMessage>() {
+class ChatTextLeftProvider(val userEntity: UserEntity) : BaseItemProvider<EMMessage>() {
 
 
     override val itemViewType: Int
@@ -48,8 +50,7 @@ class ChatTextLeftProvider() : BaseItemProvider<EMMessage>() {
             }
         }
 
-//        val avatar = item.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR)
-//        CoilUtils.loadCircle(iv_avatar, avatar)
+        CoilUtils.loadCircle(iv_avatar, userEntity.avatar)
 
         val txtBody = item.getBody() as EMTextMessageBody
         val span: Spannable = SmileUtils.getSmiledText(context, txtBody.message)

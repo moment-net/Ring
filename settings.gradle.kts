@@ -7,5 +7,5 @@ include(
     ":module_chat",
     ":module_my",
     ":module_web",
-    ":module_callkit",
+    ":module_callkit"
 )

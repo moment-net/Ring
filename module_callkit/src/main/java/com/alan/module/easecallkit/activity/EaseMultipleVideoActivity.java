@@ -1,4 +1,4 @@
-package com.hyphenate.easecallkit.ui;
+package com.alan.module.easecallkit.activity;
 
 import static com.alan.mvvm.common.im.callkit.utils.EaseMsgUtils.CALL_INVITE_EXT;
 import static com.alan.mvvm.common.im.callkit.utils.EaseMsgUtils.CALL_TIMER_CALL_TIME;
@@ -48,6 +48,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.alan.module.easecallkit.R;
+import com.alan.module.easecallkit.widget.EaseCallFloatWindow;
+import com.alan.module.easecallkit.widget.EaseCallMemberView;
+import com.alan.module.easecallkit.widget.EaseCallMemberViewGroup;
+import com.alan.module.easecallkit.widget.EaseCommingCallView;
 import com.alan.mvvm.common.constant.RouteUrl;
 import com.alan.mvvm.common.im.callkit.EaseCallKit;
 import com.alan.mvvm.common.im.callkit.base.EaseCallEndReason;
@@ -75,11 +80,6 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easecallkit.R;
-import com.hyphenate.easecallkit.widget.EaseCallFloatWindow;
-import com.hyphenate.easecallkit.widget.EaseCallMemberView;
-import com.hyphenate.easecallkit.widget.EaseCallMemberViewGroup;
-import com.hyphenate.easecallkit.widget.EaseCommingCallView;
 import com.hyphenate.util.EMLog;
 import com.lzf.easyfloat.interfaces.OnPermissionResult;
 import com.lzf.easyfloat.permission.PermissionUtils;

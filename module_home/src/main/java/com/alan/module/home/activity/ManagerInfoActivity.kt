@@ -1,5 +1,6 @@
 package com.alan.module.home.activity
 
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
@@ -17,6 +18,9 @@ import com.alan.mvvm.base.http.responsebean.CookerBean
 import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.db.entity.UserEntity
+import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.im.utils.VoicePlayerUtil
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -48,6 +52,13 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
     @RequiresApi(Build.VERSION_CODES.M)
     override fun ActivityManagerInfoBinding.initView() {
         ivBack.clickDelay { finish() }
+        tvVoice.clickDelay {
+            val url = cookerBean?.user?.greeting?.audioPath
+            VoicePlayerUtil.getInstance(this@ManagerInfoActivity)
+                .play(url, MediaPlayer.OnCompletionListener {
+
+                })
+        }
         tvFocus.clickDelay {
             if (cookerBean?.user?.followStatus == 0) {
                 mViewModel.requestChangeFollow(cookerBean?.user?.userId!!, 1)
@@ -58,9 +69,14 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
         tvChat.clickDelay {
             val bundle = Bundle().apply {
                 putString("userId", cookerBean!!.user.userId)
-                putString("userName", cookerBean!!.user.userName)
-                putString("avatar", cookerBean!!.user.avatar)
             }
+            EMClientHelper.saveUser(
+                UserEntity(
+                    cookerBean!!.user.userId,
+                    cookerBean!!.user.userName,
+                    cookerBean!!.user.avatar
+                )
+            )
             jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
         }
         initScrollView()
@@ -143,8 +159,8 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
             mBinding.ivOnline.gone()
         }
 
-        var duration: Int = (userInfoBean?.greeting?.duration ?: 0) / 1000
-        mBinding.tvVoice.text = ("${duration}s")
+        val duration: Int = userInfoBean.greeting?.duration?.div(1000) ?: 0
+        mBinding.tvVoice.setText("${duration}s")
 
 
         var tagList = cookerBean?.tag
