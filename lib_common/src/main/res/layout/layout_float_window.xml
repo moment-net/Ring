@@ -28,10 +28,11 @@
             android:id="@+id/cl_time"
             android:layout_width="@dimen/dimen56"
             android:layout_height="@dimen/dimen56"
+            android:visibility="gone"
             android:background="@drawable/icon_float_bg">
 
 
-            <com.alan.module.easecallkit.widget.MyChronometer
+            <com.alan.mvvm.common.views.MyChronometer
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -61,13 +62,5 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/layout_call_video"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@android:color/transparent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="20dip"
-        android:visibility="gone" />
+
 </RelativeLayout>

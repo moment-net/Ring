@@ -12,6 +12,8 @@ import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.CookerBean
 import com.alan.mvvm.base.ktx.getResColor
+import com.alan.mvvm.base.ktx.gone
+import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.common.im.utils.VoicePlayerUtil
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -54,8 +56,13 @@ class ManagerAdapter : BaseQuickAdapter<CookerBean, BaseViewHolder>(R.layout.ite
             holder.setGone(R.id.iv_online, true)
         }
 
-        val duration: Int = (item.user.greeting?.duration ?: 0) / 1000
-        tv_Voice.setText("${duration}s")
+        if (item.user.greeting?.duration ?: 0 == 0) {
+            tv_Voice.gone()
+        } else {
+            tv_Voice.visible()
+            val duration: Int = (item.user.greeting?.duration ?: 0) / 1000
+            tv_Voice.setText("${duration}s")
+        }
 
 
         val tagList = item.tag

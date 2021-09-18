@@ -1,4 +1,4 @@
-package com.alan.mvvm.common.im.callkit.utils;
+package com.alan.mvvm.common.im.callkit.base;
 
 
 /**
@@ -7,12 +7,18 @@ package com.alan.mvvm.common.im.callkit.utils;
  * 备注：
  */
 public enum EaseCallAction {
+    //邀请通话
     CALL_INVITE("invite"),
+    //会话验证消息
     CALL_ALERT("alert"),
+    //会话确认消息
     CALL_CONFIRM_RING("confirmRing"),
+    //取消通话
     CALL_CANCEL("cancelCall"),
+    //接受通话
     CALL_ANSWER("answerCall"),
     CALL_CONFIRM_CALLEE("confirmCallee"),
+    //视频转语音
     CALL_VIDEO_TO_VOICE("videoToVoice");
 
     public String state;

@@ -1,4 +1,4 @@
-package com.alan.mvvm.common.im.callkit.utils;
+package com.alan.mvvm.common.im.callkit.base;
 
 
 public enum EaseCallState {

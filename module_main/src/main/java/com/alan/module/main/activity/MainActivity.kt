@@ -4,7 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
+import com.alan.module.home.dialog.CallFragmentDialog
 import com.alan.module.main.R
 import com.alan.module.main.adapter.MainVPAdapter
 import com.alan.module.main.databinding.ActivityMainBinding
@@ -15,13 +17,14 @@ import com.alan.module.main.viewmodel.MainViewModel
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.gone
 import com.alan.mvvm.base.ktx.visible
+import com.alan.mvvm.base.utils.ActivityStackManager
 import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.CallEvent
 import com.alan.mvvm.common.event.MessageEvent
 import com.alan.mvvm.common.im.EMClientHelper
-import com.alan.mvvm.common.im.callkit.base.EaseCallType
 import com.alan.mvvm.common.im.push.HMSPushHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -85,21 +88,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
         //判断是否为来电推送
         if (IMConstant.isRtcCall) {
-            if (EaseCallType.getfrom(IMConstant.type) != EaseCallType.CONFERENCE_CALL) {
-                val bundle = Bundle().apply {}
-                jumpARoute(
-                    RouteUrl.CallModule.ACTIVITY_CALL_CALL,
-                    bundle,
-                    Intent.FLAG_ACTIVITY_NEW_TASK
-                )
-            } else {
-                val bundle = Bundle().apply {}
-                jumpARoute(
-                    RouteUrl.CallModule.ACTIVITY_CALL_CALLS,
-                    bundle,
-                    Intent.FLAG_ACTIVITY_NEW_TASK
-                )
-            }
+            val bundle = Bundle().apply {}
+            jumpARoute(
+                RouteUrl.CallModule.ACTIVITY_CALL_CALL,
+                bundle,
+                Intent.FLAG_ACTIVITY_NEW_TASK
+            )
             IMConstant.isRtcCall = false
         }
     }
@@ -163,6 +157,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
                 mViewModel.loginIM()
             }
         }
+    }
+
+    //获取新消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showCall(event: CallEvent) {
+        val dialog =
+            CallFragmentDialog.newInstance(event.isComingCall, event.channelName, event.username)
+        dialog.show((ActivityStackManager.getCurrentActivity() as FragmentActivity).supportFragmentManager)
     }
 
 

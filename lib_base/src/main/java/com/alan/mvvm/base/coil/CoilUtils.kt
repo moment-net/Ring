@@ -83,7 +83,7 @@ object CoilUtils {
     }
 
     /**
-     * 加载圆角带边框图片
+     * 加载圆角图片
      */
     fun loadRound(
         iv: ImageView,
@@ -101,6 +101,7 @@ object CoilUtils {
 
     /**
      * 加载圆角带边框图片
+     * roundRadius为Radius的一半
      */
     fun loadRoundBorder(
         iv: ImageView,

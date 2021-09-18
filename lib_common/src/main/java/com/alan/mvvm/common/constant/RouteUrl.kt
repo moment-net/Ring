@@ -63,9 +63,6 @@ object RouteUrl {
     object CallModule {
         //视频通话页面
         const val ACTIVITY_CALL_CALL: String = "/call/call";
-
-        //多人视频通话页面
-        const val ACTIVITY_CALL_CALLS: String = "/call/calls";
     }
 
     object MyModule {

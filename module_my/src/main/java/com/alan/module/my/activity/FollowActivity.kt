@@ -1,7 +1,10 @@
 package com.alan.module.my.activity
 
 import android.text.TextUtils
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +17,7 @@ import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
+import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.ui.BaseActivity
@@ -96,6 +100,16 @@ class FollowActivity : BaseActivity<ActivityFollowBinding, FollowViewModel>() {
                     mViewModel.requestChangeFollow(position, userInfoBean.userId, 0)
                 }
             }
+        })
+        mAdapter.setEmptyView(TextView(this).apply {
+            setText("暂无数据")
+            setTextSize(16f)
+            setTextColor(R.color._3A3A3A.getResColor())
+            gravity = Gravity.CENTER
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
         })
     }
 

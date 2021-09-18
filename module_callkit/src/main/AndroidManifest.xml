@@ -9,11 +9,5 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.EaseMultipleVideoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:excludeFromRecents="true"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait" />
     </application>
 </manifest>

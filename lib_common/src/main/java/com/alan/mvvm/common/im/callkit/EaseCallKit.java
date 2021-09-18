@@ -2,7 +2,6 @@ package com.alan.mvvm.common.im.callkit;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
@@ -12,12 +11,18 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alan.mvvm.base.utils.EventBusUtils;
 import com.alan.mvvm.base.utils.UtilsKt;
+import com.alan.mvvm.common.constant.IMConstant;
 import com.alan.mvvm.common.constant.RouteUrl;
+import com.alan.mvvm.common.event.CallEvent;
+import com.alan.mvvm.common.im.callkit.base.EaseCallAction;
 import com.alan.mvvm.common.im.callkit.base.EaseCallInfo;
 import com.alan.mvvm.common.im.callkit.base.EaseCallKitConfig;
 import com.alan.mvvm.common.im.callkit.base.EaseCallKitListener;
+import com.alan.mvvm.common.im.callkit.base.EaseCallState;
 import com.alan.mvvm.common.im.callkit.base.EaseCallType;
+import com.alan.mvvm.common.im.callkit.base.EaseMsgUtils;
 import com.alan.mvvm.common.im.callkit.event.AlertEvent;
 import com.alan.mvvm.common.im.callkit.event.AnswerEvent;
 import com.alan.mvvm.common.im.callkit.event.BaseEvent;
@@ -25,11 +30,8 @@ import com.alan.mvvm.common.im.callkit.event.CallCancelEvent;
 import com.alan.mvvm.common.im.callkit.event.ConfirmCallEvent;
 import com.alan.mvvm.common.im.callkit.event.InviteEvent;
 import com.alan.mvvm.common.im.callkit.livedatas.EaseLiveDataBus;
-import com.alan.mvvm.common.im.callkit.utils.EaseCallAction;
 import com.alan.mvvm.common.im.callkit.utils.EaseCallKitNotifier;
 import com.alan.mvvm.common.im.callkit.utils.EaseCallKitUtils;
-import com.alan.mvvm.common.im.callkit.utils.EaseCallState;
-import com.alan.mvvm.common.im.callkit.utils.EaseMsgUtils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -78,6 +80,7 @@ public class EaseCallKit {
     private ArrayList<String> inviteeUsers = new ArrayList<>();
     private EaseCallKitConfig callKitConfig;
     private EaseCallKitNotifier notifier;
+    public String sessionId;//音频会话id;发起聊天和挂断聊天使用
 
     private EaseCallKit() {
     }
@@ -184,12 +187,6 @@ public class EaseCallKit {
             }
             return;
         }
-        if (type == EaseCallType.CONFERENCE_CALL) {
-            if (callListener != null) {
-                callListener.onCallError(EaseCallError.PROCESS_ERROR, CALL_PROCESS_ERROR.CALL_TYPE_ERROR.code, "call type is error");
-            }
-            return;
-        }
         if (user != null && user.length() == 0) {
             if (callListener != null) {
                 callListener.onCallError(EaseCallError.PROCESS_ERROR, CALL_PROCESS_ERROR.CALL_PARAM_ERROR.code, "user is null");
@@ -214,64 +211,6 @@ public class EaseCallKit {
         UtilsKt.jumpARoute(RouteUrl.CallModule.ACTIVITY_CALL_CALL, bundle, FLAG_ACTIVITY_NEW_TASK);
     }
 
-
-//    /**
-//     * 邀请加入多人通话
-//     * 注意：在相关activity结束时需要调用，防止出现内存泄漏
-//     *
-//     * @param users 用户ID列表(环信ID列表)
-//     * @param ext   扩展字段(用户扩展字段)
-//     */
-//    public void startInviteMultipleCall(final String[] users, final Map<String, Object> ext) {
-//        if (callState != EaseCallState.CALL_IDLE && callType != EaseCallType.CONFERENCE_CALL) {
-//            if (callListener != null) {
-//                callListener.onCallError(EaseCallError.PROCESS_ERROR, CALL_PROCESS_ERROR.CALL_STATE_ERROR.code, "current state is busy");
-//            }
-//            return;
-//        }
-//        if (users == null || users.length == 0) {
-//            if (curCallCls != null) {
-//                inviteeUsers.clear();
-//                Intent intent = new Intent(appContext, curCallCls)
-//                        .addFlags(FLAG_ACTIVITY_NEW_TASK);
-//                appContext.startActivity(intent);
-//            } else {
-//                if (callListener != null) {
-//                    callListener.onCallError(EaseCallError.PROCESS_ERROR, CALL_PROCESS_ERROR.CALL_PARAM_ERROR.code, "users is null");
-//                }
-//            }
-//        } else {
-//            callType = EaseCallType.CONFERENCE_CALL;
-//            inviteeUsers.clear();
-//            for (String user : users) {
-//                inviteeUsers.add(user);
-//            }
-//            //还没有加入会议 创建会议
-//            if (curCallCls == null) {
-//                if (users != null && users.length > 0) {
-//                    //改为主动呼叫状态
-//                    if (ext != null) {
-//                        inviteExt = EaseCallKitUtils.convertMapToJSONObject(ext);
-//                    }
-//                    callState = EaseCallState.CALL_OUTGOING;
-//                    curCallCls = cls;
-//                    Intent intent = new Intent(appContext, curCallCls);
-//                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-//                    Bundle bundle = new Bundle();
-//                    isComingCall = false;
-//                    bundle.putBoolean("isComingCall", false);
-//                    channelName = EaseCallKitUtils.getRandomString(10);
-//                    bundle.putString("channelName", channelName);
-//                    intent.putExtras(bundle);
-//                    appContext.startActivity(intent);
-//                }
-//            } else {
-//                //邀请成员加入
-//                Intent intent = new Intent(appContext, curCallCls).addFlags(FLAG_ACTIVITY_NEW_TASK);
-//                appContext.startActivity(intent);
-//            }
-//        }
-//    }
 
 
     /**
@@ -313,8 +252,10 @@ public class EaseCallKit {
                                 EaseCallType callkitType =
                                         EaseCallType.getfrom(calltype);
                                 if (callState != EaseCallState.CALL_IDLE) {
+                                    //收到邀请对话并且处于正在通话状态
                                     if (TextUtils.equals(fromCallId, callID) && TextUtils.equals(fromUser, fromUserId)
                                             && callkitType == EaseCallType.SINGLE_VOICE_CALL && callType == EaseCallType.SINGLE_VIDEO_CALL) {
+                                        //同个语音通话-收到转音频事件
                                         InviteEvent inviteEvent = new InviteEvent();
                                         inviteEvent.callId = fromCallId;
                                         inviteEvent.type = callkitType;
@@ -322,7 +263,7 @@ public class EaseCallKit {
                                         //发布消息
                                         EaseLiveDataBus.get().with(EaseCallType.SINGLE_VIDEO_CALL.toString()).postValue(inviteEvent);
                                     } else {
-                                        //发送忙碌状态
+                                        //不同语音通话-发送忙碌状态
                                         AnswerEvent callEvent = new AnswerEvent();
                                         callEvent.result = EaseMsgUtils.CALL_ANSWER_BUSY;
                                         callEvent.callerDevId = callerDevId;
@@ -330,6 +271,7 @@ public class EaseCallKit {
                                         sendCmdMsg(callEvent, fromUser);
                                     }
                                 } else {
+                                    //收到邀请对话并且处于闲置状态
                                     callInfo.setCallerDevId(callerDevId);
                                     callInfo.setCallId(fromCallId);
                                     callInfo.setCallKitType(callkitType);
@@ -355,6 +297,20 @@ public class EaseCallKit {
                                 break;
                         }
 
+                    }
+                    if (message.getType() == EMMessage.Type.TXT
+                            && message.ext() != null
+                            && message.ext().size() > 0) {
+                        //自定义消息 (服务端下发的房间消息)
+                        int command = Integer.parseInt(message.ext().get(IMConstant.MESSAGE_KEY_COMMOND).toString());
+                        String data = message.ext().get(IMConstant.MESSAGE_KEY_DATA).toString();
+                        if (command == IMConstant.MESSAGE_COMMOND_LAUNCH) {
+
+                        } else if (command == IMConstant.MESSAGE_COMMOND_JOINED) {
+
+                        } else if (command == IMConstant.MESSAGE_COMMOND_HANGUP) {
+
+                        }
                     }
                 }
             }
@@ -434,7 +390,6 @@ public class EaseCallKit {
                                         }
                                     }
                                 }
-
                                 break;
                             case CALL_CONFIRM_CALLEE:  //收到仲裁消息
                                 String result = message.getStringAttribute(EaseMsgUtils.CALL_RESULT, "");
@@ -448,39 +403,24 @@ public class EaseCallKit {
                                 //发布消息
                                 EaseLiveDataBus.get().with(EaseCallType.SINGLE_VIDEO_CALL.toString()).postValue(event);
                                 break;
-                            case CALL_ANSWER:  //收到被叫的回复消息
+                            case CALL_ANSWER:
+                                //收到被叫的回复消息
                                 String result1 = message.getStringAttribute(EaseMsgUtils.CALL_RESULT, "");
                                 String calledDevId1 = message.getStringAttribute(EaseMsgUtils.CALLED_DEVICE_ID, "");
                                 boolean transVoice = message.getBooleanAttribute(EaseMsgUtils.CALLED_TRANSE_VOICE, false);
                                 //判断不是被叫另外一台设备的漫游消息
                                 //或者是主叫收到的
-                                if (callType != EaseCallType.CONFERENCE_CALL) {
-                                    if (!isComingCall || TextUtils.equals(calledDevId1, deviceId)) {
-                                        AnswerEvent answerEvent = new AnswerEvent();
-                                        answerEvent.result = result1;
-                                        answerEvent.calleeDevId = calledDevId1;
-                                        answerEvent.callerDevId = callerDevId;
-                                        answerEvent.callId = fromCallId;
-                                        answerEvent.userId = fromUser;
-                                        answerEvent.transVoice = transVoice;
+                                if (!isComingCall || TextUtils.equals(calledDevId1, deviceId)) {
+                                    AnswerEvent answerEvent = new AnswerEvent();
+                                    answerEvent.result = result1;
+                                    answerEvent.calleeDevId = calledDevId1;
+                                    answerEvent.callerDevId = callerDevId;
+                                    answerEvent.callId = fromCallId;
+                                    answerEvent.userId = fromUser;
+                                    answerEvent.transVoice = transVoice;
 
-                                        //发布消息
-                                        EaseLiveDataBus.get().with(EaseCallType.SINGLE_VIDEO_CALL.toString()).postValue(answerEvent);
-                                    }
-                                } else {
-                                    if (!TextUtils.equals(fromUser, EMClient.getInstance().getCurrentUser())) {
-                                        AnswerEvent answerEvent = new AnswerEvent();
-                                        answerEvent.result = result1;
-                                        answerEvent.calleeDevId = calledDevId1;
-                                        answerEvent.callerDevId = callerDevId;
-                                        answerEvent.callId = fromCallId;
-                                        answerEvent.userId = fromUser;
-                                        answerEvent.transVoice = transVoice;
-
-                                        //发布消息
-                                        EaseLiveDataBus.get().with(EaseCallType.SINGLE_VIDEO_CALL.toString()).postValue(answerEvent);
-
-                                    }
+                                    //发布消息
+                                    EaseLiveDataBus.get().with(EaseCallType.SINGLE_VIDEO_CALL.toString()).postValue(answerEvent);
                                 }
                                 break;
                             case CALL_VIDEO_TO_VOICE:
@@ -577,6 +517,14 @@ public class EaseCallKit {
 
     public void setCallID(String callID) {
         this.callID = callID;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getClallee_devId() {
@@ -678,7 +626,7 @@ public class EaseCallKit {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == MSG_TIMER) {
-                // TODO: update calling time.
+                // TODO:更新通话时间
                 timePassed++;
                 String time = dateFormat.format(timePassed * 1000);
                 if (timePassed * 1000 == EaseMsgUtils.CALL_INVITED_INTERVAL) {
@@ -692,37 +640,20 @@ public class EaseCallKit {
                 timeHandler.stopTime();
                 String info = "";
                 String userName = EaseCallKitUtils.getUserNickName(fromUserId);
-                if (callType != EaseCallType.CONFERENCE_CALL) {
-                    //启动activity
-                    Bundle bundle = new Bundle();
-                    isComingCall = true;
-                    bundle.putBoolean("isComingCall", true);
-                    bundle.putString("channelName", channelName);
-                    bundle.putString("username", fromUserId);
-                    UtilsKt.jumpARoute(RouteUrl.CallModule.ACTIVITY_CALL_CALL, bundle, FLAG_ACTIVITY_NEW_TASK);
-                    if (Build.VERSION.SDK_INT >= 29 && !EasyUtils.isAppRunningForeground(appContext)) {
-                        EMLog.e(TAG, "notifier.notify:" + info);
-                        if (callType == EaseCallType.SINGLE_VIDEO_CALL) {
-                            info = userName + "发起视频邀请";
-                        } else {
-                            info = userName + "发起语音邀请";
-                        }
-//                        notifier.notify(intent, "环信 ", info);
+
+                //启动activity
+                isComingCall = true;
+                EventBusUtils.INSTANCE.postEvent(new CallEvent(true, channelName, fromUserId));
+
+                //发送通知
+                if (Build.VERSION.SDK_INT >= 29 && !EasyUtils.isAppRunningForeground(appContext)) {
+                    EMLog.e(TAG, "notifier.notify:" + info);
+                    if (callType == EaseCallType.SINGLE_VIDEO_CALL) {
+                        info = userName + "发起视频邀请";
+                    } else {
+                        info = userName + "发起语音邀请";
                     }
-                } else {
-                    //启动多人通话界面
-//                    Intent intent = new Intent(appContext, curCallCls).addFlags(FLAG_ACTIVITY_NEW_TASK);
-//                    Bundle bundle = new Bundle();
-//                    isComingCall = true;
-//                    bundle.putBoolean("isComingCall", true);
-//                    bundle.putString("channelName", channelName);
-//                    bundle.putString("username", fromUserId);
-//                    intent.putExtras(bundle);
-//                    appContext.startActivity(intent);
-//                    if (Build.VERSION.SDK_INT >= 29 && EaseCallKitUtils.isAppRunningForeground(appContext)) {
-//                        info = userName+"发起多人视频邀请";
-//                        notifier.notify(intent, "Hyphenate", info);
-//                    }
+//                        notifier.notify(intent, "环信 ", info);
                 }
 
                 //通话邀请回调
@@ -734,27 +665,13 @@ public class EaseCallKit {
         }
     }
 
-    /**
-     * 判断Activity是否Destroy
-     *
-     * @param mActivity
-     * @return true:已销毁
-     */
-    private boolean isDestroy(Activity mActivity) {
-        if (mActivity == null ||
-                mActivity.isFinishing() ||
-                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && mActivity.isDestroyed())) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 
     public ArrayList<String> getInviteeUsers() {
         return inviteeUsers;
     }
 
-    public void InitInviteeUsers() {
+    public void initInviteeUsers() {
         inviteeUsers.clear();
     }
 

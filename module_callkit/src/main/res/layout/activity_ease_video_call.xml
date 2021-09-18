@@ -270,7 +270,7 @@
         app:layout_constraintRight_toRightOf="@id/btn_hangup_call"
         app:layout_constraintTop_toBottomOf="@id/btn_hangup_call" />
 
-    <com.alan.module.easecallkit.widget.MyChronometer
+    <com.alan.mvvm.common.views.MyChronometer
         android:id="@+id/chronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

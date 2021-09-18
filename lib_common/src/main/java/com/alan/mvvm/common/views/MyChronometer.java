@@ -1,4 +1,4 @@
-package com.alan.module.easecallkit.widget;
+package com.alan.mvvm.common.views;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import android.widget.Chronometer;
 import androidx.annotation.InspectableProperty;
 import androidx.annotation.RequiresApi;
 
-import com.alan.module.easecallkit.R;
+import com.alan.mvvm.common.R;
 
 import java.util.ArrayList;
 import java.util.Formatter;

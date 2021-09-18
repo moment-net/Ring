@@ -108,14 +108,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         initRV()
 
 
-        //是否有通知权限
-        val notificationEnabled = JPushInterface.isNotificationEnabled(this@ChatActivity)
-        if (notificationEnabled != 1) {
-            //没开启通知权限
-            clNotifi.visible()
-        } else {
-            clNotifi.gone()
-        }
+
 
     }
 
@@ -262,6 +255,21 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             loadMoreServerMessages(PAGE_SIZE, false)
         }
         mBinding.srfList.setEnableLoadMore(false)
+    }
+
+
+    /**
+     * 检查通知权限
+     */
+    fun checkNotifi() {
+        //是否有通知权限
+        val notificationEnabled = JPushInterface.isNotificationEnabled(this@ChatActivity)
+        if (notificationEnabled != 1) {
+            //没开启通知权限
+            mBinding.clNotifi.visible()
+        } else {
+            mBinding.clNotifi.gone()
+        }
     }
 
     /**
@@ -437,6 +445,8 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         }
         isFirst = false
         EMClientHelper.chatManager.addMessageListener(msgListener)
+
+        checkNotifi()
     }
 
     override fun onPause() {
@@ -732,11 +742,11 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         if (message.direct() == EMMessage.Direct.RECEIVE && !message.isAcked
             && message.chatType == EMMessage.ChatType.Chat
         ) {
-            val type = message.type
-            //视频，语音及文件需要点击后再发送,这个可以根据需求进行调整
-            if (type == EMMessage.Type.VIDEO || type == EMMessage.Type.VOICE || type == EMMessage.Type.FILE) {
-                return
-            }
+//            val type = message.type
+//            //视频，语音及文件需要点击后再发送,这个可以根据需求进行调整
+//            if (type == EMMessage.Type.VIDEO || type == EMMessage.Type.VOICE || type == EMMessage.Type.FILE) {
+//                return
+//            }
             try {
                 EMClientHelper.chatManager.ackMessageRead(message.from, message.msgId)
             } catch (e: HyphenateException) {

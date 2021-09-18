@@ -159,8 +159,13 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
             mBinding.ivOnline.gone()
         }
 
-        val duration: Int = userInfoBean.greeting?.duration?.div(1000) ?: 0
-        mBinding.tvVoice.setText("${duration}s")
+        if (cookerBean?.user?.greeting?.duration ?: 0 == 0) {
+            mBinding.tvVoice.gone()
+        } else {
+            mBinding.tvVoice.visible()
+            val duration: Int = userInfoBean.greeting?.duration?.div(1000) ?: 0
+            mBinding.tvVoice.setText("${duration}s")
+        }
 
 
         var tagList = cookerBean?.tag

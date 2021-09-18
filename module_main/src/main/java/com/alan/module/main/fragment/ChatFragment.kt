@@ -1,6 +1,9 @@
 package com.alan.module.main.fragment
 
 import android.os.Bundle
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +13,7 @@ import com.alan.module.main.adapter.ChatListAdapter
 import com.alan.module.main.databinding.FragmentChatBinding
 import com.alan.module.main.viewmodel.ChatViewModel
 import com.alan.mvvm.base.ktx.dp2px
+import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
@@ -81,6 +85,16 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
                 jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
             }
         }
+        messageAdapter.setEmptyView(TextView(activity).apply {
+            setText("暂无聊天记录，快去聊天吧")
+            setTextSize(16f)
+            setTextColor(R.color._3A3A3A.getResColor())
+            gravity = Gravity.CENTER
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        })
     }
 
 

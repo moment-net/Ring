@@ -23,9 +23,9 @@ object IMConstant {
 
     //头像
     const val MESSAGE_ATTR_AVATAR = "avatar"
-
     //名字
     const val MESSAGE_ATTR_USERNAME = "userName"
+
 
     //强制推送通知和发送静默消息（不推送）
     const val MESSAGE_ATTR_FORCEPUSH = "em_force_notification"
@@ -33,7 +33,6 @@ object IMConstant {
 
     //是否是语音通话
     const val MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call"
-
     //是否是视频通话
     const val MESSAGE_ATTR_IS_VIDEO_CALL = "is_video_call"
 
@@ -77,6 +76,20 @@ object IMConstant {
 
     //EventBus事件-事件
     const val EVENT_EVENT_CHANGE = "change"
+
+
+    //服务器长链消息key
+    const val MESSAGE_KEY_COMMOND = "command"
+    const val MESSAGE_KEY_DATA = "data"
+
+    //发起聊天，等待加入
+    const val MESSAGE_COMMOND_LAUNCH = 300210
+
+    //加入完毕，开始聊天
+    const val MESSAGE_COMMOND_JOINED = 300211
+
+    //聊天结束
+    const val MESSAGE_COMMOND_HANGUP = 300212
 
 
 }
