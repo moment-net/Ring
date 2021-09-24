@@ -4,7 +4,7 @@
 
     <application>
         <activity
-            android:name=".activity.EaseVideoCallActivity"
+            android:name=".activity.CallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"

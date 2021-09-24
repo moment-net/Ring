@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
  * 备注：Recyclerview间隔
  */
 class MyColorDecoration(
-    private val left: Int,
-    private val top: Int,
-    private val right: Int,
-    private val bottom: Int,
+    private var left: Int = 0,
+    private var top: Int = 0,
+    private var right: Int = 0,
+    private var bottom: Int = 0,
     color: Int
 ) : ItemDecoration() {
     private val mPaint: Paint

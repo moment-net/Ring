@@ -14,7 +14,7 @@ import com.alan.mvvm.common.im.callkit.base.EaseCallKitConfig;
 import com.alan.mvvm.common.im.callkit.base.EaseCallKitListener;
 import com.alan.mvvm.common.im.callkit.base.EaseCallKitTokenCallback;
 import com.alan.mvvm.common.im.callkit.base.EaseCallUserInfo;
-import com.hyphenate.util.EMLog;
+import com.socks.library.KLog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -172,10 +172,10 @@ public class EaseCallKitUtils {
                     return false;
                 }
                 boolean b = ctx.getPackageName().equalsIgnoreCase(tasks.get(0).baseActivity.getPackageName());
-                EMLog.d("utils", "app running in foregroud：" + (b ? true : false));
+                KLog.e(TAG, "app running in foregroud：" + (b ? true : false));
                 return b;
             } catch (SecurityException e) {
-                EMLog.d(TAG, "Apk doesn't hold GET_TASKS permission");
+                KLog.e(TAG, "Apk doesn't hold GET_TASKS permission");
                 e.printStackTrace();
             }
         }
@@ -233,12 +233,12 @@ public class EaseCallKitUtils {
             try {
 
                 cMethod = listener.getClass().getDeclaredMethod("onGenerateToken", String.class, String.class, String.class, EaseCallKitTokenCallback.class);
-                EMLog.d(TAG, "realizeGetToken result:" + cMethod.toString());
+                KLog.e(TAG, "realizeGetToken result:" + cMethod.toString());
                 if (cMethod != null) {
                     return true;
                 }
             } catch (NoSuchMethodException e) {
-                EMLog.e(TAG, "realizeGetToken result:" + e.getLocalizedMessage());
+                KLog.e(TAG, "realizeGetToken result:" + e.getLocalizedMessage());
                 return false;
             }
         }

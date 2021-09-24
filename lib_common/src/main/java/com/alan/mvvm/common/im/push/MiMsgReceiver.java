@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.alan.mvvm.common.constant.IMConstant;
 import com.hyphenate.push.platform.mi.EMMiMsgReceiver;
-import com.hyphenate.util.EMLog;
+import com.socks.library.KLog;
 import com.xiaomi.mipush.sdk.MiPushMessage;
 
 import org.json.JSONObject;
@@ -18,17 +18,17 @@ public class MiMsgReceiver extends EMMiMsgReceiver {
     static private String TAG = "MiMsgReceiver";
 
     public void onNotificationMessageClicked(Context context, MiPushMessage message) {
-        EMLog.i(TAG, "onNotificationMessageClicked is called. " + message.toString());
+        KLog.e(TAG, "onNotificationMessageClicked is called. " + message.toString());
         String extStr = message.getContent();
-        EMLog.i(TAG, "onReceivePassThroughMessage get extras: " + extStr);
+        KLog.e(TAG, "onReceivePassThroughMessage get extras: " + extStr);
         try {
             JSONObject extras = new JSONObject(extStr);
-            EMLog.i(TAG, "onReceivePassThroughMessage get extras: " + extras.toString());
+            KLog.e(TAG, "onReceivePassThroughMessage get extras: " + extras.toString());
             JSONObject object = extras.getJSONObject("e");
             if (object != null) {
                 IMConstant.isRtcCall = object.getBoolean("isRtcCall");
                 IMConstant.type = object.getInt("callType");
-                EMLog.i(TAG, "onReceivePassThroughMessage get type: " + IMConstant.type);
+                KLog.e(TAG, "onReceivePassThroughMessage get type: " + IMConstant.type);
 
             }
         } catch (Exception e) {

@@ -48,6 +48,6 @@ class ChatImageLeftProvider(val userEntity: UserEntity) : BaseItemProvider<EMMes
         CoilUtils.loadCircle(iv_avatar, userEntity.avatar)
 
         val txtBody = item.getBody() as EMImageMessageBody
-        CoilUtils.loadRound(iv_pic, txtBody.localUri.toString(), 7f)
+        CoilUtils.loadRound(iv_pic, txtBody.remoteUrl.toString(), 7f)
     }
 }

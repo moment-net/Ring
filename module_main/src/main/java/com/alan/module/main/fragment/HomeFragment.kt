@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alan.module.main.R
 import com.alan.module.main.adapter.ManagerAdapter
 import com.alan.module.main.databinding.FragmentHomeBinding
+import com.alan.module.main.dialog.StateFragmentDialog
 import com.alan.module.main.viewmodel.HomeViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.baseresp.BaseResponse
@@ -14,22 +15,27 @@ import com.alan.mvvm.base.http.responsebean.CookerBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
+import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.RefreshEvent
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.ui.BaseFragment
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 作者：alan
  * 时间：2021/7/28
  * 备注：测试fragment
  */
+@EventBusRegister
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
@@ -49,10 +55,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     override fun FragmentHomeBinding.initView() {
         ivAvatar.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MY) }
         tvState.clickDelay {
-
+            val dialog = StateFragmentDialog.newInstance()
+            dialog.show(requireActivity().supportFragmentManager)
         }
         initRV()
-        changeState()
     }
 
     override fun initObserve() {
@@ -60,7 +66,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             when (it) {
                 is BaseResponse<*> -> {
                     mCursor = it.cursor
-                    var list: ArrayList<CookerBean> = it.data as ArrayList<CookerBean>
+                    val list: ArrayList<CookerBean> = it.data as ArrayList<CookerBean>
                     if (isLoad) {
                         mBinding.srfList.finishLoadMore()
                         mAdapter.addData(list)
@@ -80,6 +86,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                     toast(it.errorMessage)
                 }
 
+            }
+        }
+
+        mViewModel.ldState.observe(this) {
+            when (it) {
+                is BaseResponse<*> -> {
+                    if (it.data == null) {
+                        changeState(true)
+                    } else {
+                        changeState(false)
+                    }
+                }
+                is BaseHttpException -> {
+
+                }
             }
         }
     }
@@ -124,8 +145,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
 
-    fun changeState() {
-        if (true) {
+    fun changeState(isClose: Boolean) {
+        if (isClose) {
             mBinding.tvState.setText("暂未匹配饭友…")
             mBinding.tvState.setTextColor(R.color._FFE26B.getResColor())
             mBinding.tvState.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -148,14 +169,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        setUserInfo()
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun refreshHome(event: RefreshEvent?) {
+        mViewModel.requestMealStatus()
         requestRefresh()
     }
 
+    override fun onResume() {
+        super.onResume()
+        setUserInfo()
+        refreshHome(null)
+    }
+
     fun setUserInfo() {
-        var userInfoBean = SpHelper.getUserInfo()
+        val userInfoBean = SpHelper.getUserInfo()
         CoilUtils.loadRoundBorder(
             mBinding.ivAvatar,
             userInfoBean?.avatar!!,

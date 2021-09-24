@@ -107,7 +107,7 @@ class LoginWxViewModel @Inject constructor(private val mRepository: CommonReposi
             mRepository.requestBindThird(RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        ldSuccess.value = true
+                        ldSuccess.value = requestBean
                     },
                     onFailed = {
                         toast(it.errorMessage)

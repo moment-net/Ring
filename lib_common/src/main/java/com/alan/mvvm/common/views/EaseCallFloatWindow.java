@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ import com.alan.mvvm.common.im.callkit.EaseCallKit;
 import com.alan.mvvm.common.im.callkit.base.EaseCallState;
 import com.alan.mvvm.common.im.callkit.base.EaseCallType;
 import com.alan.mvvm.common.im.callkit.utils.EaseCallKitUtils;
-import com.hyphenate.util.EMLog;
+import com.socks.library.KLog;
 
 import io.agora.rtc.RtcEngine;
 
@@ -58,6 +59,10 @@ public class EaseCallFloatWindow {
     private MyChronometer tvTime;
     private ConstraintLayout clTime;
     private TextView tvCalling;
+    private String username;
+    private String channelName;
+    private boolean isComingCall;
+
 
     public EaseCallFloatWindow(Context context) {
         initFloatWindow(context);
@@ -97,6 +102,30 @@ public class EaseCallFloatWindow {
     public void setRtcEngine(Context context, RtcEngine rtcEngine) {
         this.rtcEngine = rtcEngine;
         initFloatWindow(context);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
+
+    public boolean isComingCall() {
+        return isComingCall;
+    }
+
+    public void setComingCall(boolean comingCall) {
+        isComingCall = comingCall;
     }
 
     private void initFloatWindow(Context context) {
@@ -165,6 +194,11 @@ public class EaseCallFloatWindow {
                 Bundle bundle = new Bundle();
                 bundle.putInt("uId", singleCallInfo != null ? singleCallInfo.remoteUid : 0);
                 bundle.putBoolean("isClickByFloat", true);
+                if (!TextUtils.isEmpty(username)) {
+                    bundle.putBoolean("isComingCall", isComingCall);
+                    bundle.putString("channelName", channelName);
+                    bundle.putString("username", username);
+                }
                 UtilsKt.jumpARoute(RouteUrl.CallModule.ACTIVITY_CALL_CALL, bundle, Intent.FLAG_ACTIVITY_NEW_TASK);
             }
         });
@@ -188,7 +222,7 @@ public class EaseCallFloatWindow {
                         left = layoutParams.x;
                         top = layoutParams.y;
 
-                        EMLog.i(TAG, "startX: " + startX + ", startY: " + startY + ", left: " + left + ", top: " + top);
+                        KLog.e(TAG, "startX: " + startX + ", startY: " + startY + ", left: " + left + ", top: " + top);
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (Math.abs(event.getRawX() - startX) > 20 || Math.abs(event.getRawY() - startY) > 20) {
@@ -199,7 +233,7 @@ public class EaseCallFloatWindow {
 
                         layoutParams.x = left + deltaX;
                         layoutParams.y = (int) (top + event.getRawY() - startY);
-                        EMLog.i(TAG, "startX: " + (event.getRawX() - startX) + ", startY: " + (event.getRawY() - startY)
+                        KLog.e(TAG, "startX: " + (event.getRawX() - startX) + ", startY: " + (event.getRawY() - startY)
                                 + ", left: " + left + ", top: " + top);
                         windowManager.updateViewLayout(floatView, layoutParams);
                         break;
@@ -269,14 +303,16 @@ public class EaseCallFloatWindow {
     }
 
     public void updateState() {
-        EaseCallState state = EaseCallKit.getInstance().getCallState();
-        if (state == EaseCallState.CALL_ANSWERED) {
-            tvCalling.setVisibility(View.GONE);
-            clTime.setVisibility(View.VISIBLE);
-            startCount();
-        } else {
-            tvCalling.setVisibility(View.VISIBLE);
-            clTime.setVisibility(View.GONE);
+        if (isShowing()) {
+            EaseCallState state = EaseCallKit.getInstance().getCallState();
+            if (state == EaseCallState.CALL_ANSWERED) {
+                tvCalling.setVisibility(View.GONE);
+                clTime.setVisibility(View.VISIBLE);
+                startCount();
+            } else {
+                tvCalling.setVisibility(View.VISIBLE);
+                clTime.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -319,6 +355,9 @@ public class EaseCallFloatWindow {
         }
         floatView = null;
 
+        username = null;
+        channelName = null;
+        isComingCall = false;
 
         if (singleCallInfo != null) {
             singleCallInfo = null;
@@ -328,7 +367,7 @@ public class EaseCallFloatWindow {
 
 
     private void smoothScrollToBorder() {
-        EMLog.i(TAG, "screenWidth: " + screenWidth + ", floatViewWidth: " + floatViewWidth);
+        KLog.e(TAG, "screenWidth: " + screenWidth + ", floatViewWidth: " + floatViewWidth);
         int splitLine = screenWidth / 2 - floatViewWidth / 2;
         final int left = layoutParams.x;
         final int top = layoutParams.y;
@@ -352,7 +391,7 @@ public class EaseCallFloatWindow {
                         if (floatView == null) return;
 
                         int value = (int) animation.getAnimatedValue();
-                        EMLog.i(TAG, "onAnimationUpdate, value: " + value);
+                        KLog.e(TAG, "onAnimationUpdate, value: " + value);
                         layoutParams.x = value;
                         layoutParams.y = top;
                         windowManager.updateViewLayout(floatView, layoutParams);

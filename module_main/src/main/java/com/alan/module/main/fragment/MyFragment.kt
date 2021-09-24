@@ -131,7 +131,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
             mBinding.tvLocation.gone()
         } else {
             mBinding.tvLocation.visible()
-            var address = userInfo?.address!!.split("-")[2]
+            val address = userInfo?.address!!.split("-")[2]
             mBinding.tvLocation.setText("${address}")
         }
         mBinding.tvFollowNum.setText("${userInfo?.fansCount}")

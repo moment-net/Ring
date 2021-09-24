@@ -15,7 +15,7 @@ import android.widget.Scroller;
 
 import androidx.annotation.Nullable;
 
-import com.hyphenate.util.EMLog;
+import com.socks.library.KLog;
 
 
 /**
@@ -98,7 +98,7 @@ public class EaseCallMemberViewGroup extends ViewGroup {
         super.addView(child);
         //calculatePageCount();
         if (isFullScreenMode()) {
-            EMLog.i(TAG, "addView, isFullScreenMode: " + isFullScreenMode());
+            KLog.e(TAG, "addView, isFullScreenMode: " + isFullScreenMode());
             // 全屏模式下不进行子view的大小设置和滑动
             return;
         }
@@ -185,7 +185,7 @@ public class EaseCallMemberViewGroup extends ViewGroup {
                 viewR = viewL + childW;
                 viewB = viewT + childH;
                 //child.layout(baseLeft + params.leftMargin, curTop + params.topMargin, baseLeft + params.leftMargin + child.getMeasuredWidth(), curTop + params.topMargin + child.getMeasuredHeight());
-                //EMLog.i(TAG,"新的一行:" +"   ,baseLeft:"+baseLeft +"  curTop:"+curTop+"  baseLeft+childWidth:"+(baseLeft+childWidth)+"  curTop+childHeight:"+ ( curTop+childHeight));
+                //KLog.e(TAG,"新的一行:" +"   ,baseLeft:"+baseLeft +"  curTop:"+curTop+"  baseLeft+childWidth:"+(baseLeft+childWidth)+"  curTop+childHeight:"+ ( curTop+childHeight));
                 curLeft = baseLeft + childWidth;
             } else {
                 //当前行可以放下子View:
@@ -194,7 +194,7 @@ public class EaseCallMemberViewGroup extends ViewGroup {
                 viewR = viewL + childW;
                 viewB = viewT + childH;
                 //child.layout(curLeft + params.leftMargin, curTop + params.topMargin, curLeft + params.leftMargin + child.getMeasuredWidth(), curTop + params.topMargin + child.getMeasuredHeight());
-                //EMLog.i(TAG,"当前行:"+changed +"   ,curLeft:"+curLeft +"  curTop:"+curTop+"  curLeft+childWidth:"+(curLeft+childWidth)+"  curTop+childHeight:"+(curTop+childHeight));
+                //KLog.e(TAG,"当前行:"+changed +"   ,curLeft:"+curLeft +"  curTop:"+curTop+"  curLeft+childWidth:"+(curLeft+childWidth)+"  curTop+childHeight:"+(curTop+childHeight));
                 curLeft = curLeft + childWidth;
             }
             lastChildHeight = childHeight;
@@ -301,7 +301,7 @@ public class EaseCallMemberViewGroup extends ViewGroup {
             case MotionEvent.ACTION_DOWN:
                 actionDownPoint.x = event.getX();
                 actionDownPoint.y = event.getY();
-                EMLog.i(TAG, "onInterceptTouchEvent ACTION_DOWN: downPointX: " + actionDownPoint.x);
+                KLog.e(TAG, "onInterceptTouchEvent ACTION_DOWN: downPointX: " + actionDownPoint.x);
                 //获取现在的x坐标
                 mLastMotionX = event.getX();
                 break;
@@ -312,7 +312,7 @@ public class EaseCallMemberViewGroup extends ViewGroup {
                 }
 
                 float x = event.getX();
-                EMLog.i(TAG, "onInterceptTouchEvent: move action: " + x);
+                KLog.e(TAG, "onInterceptTouchEvent: move action: " + x);
                 //计算移动的偏移量
                 float delt = mLastMotionX - x;
                 //重置手指位置
@@ -327,7 +327,7 @@ public class EaseCallMemberViewGroup extends ViewGroup {
                 break;
             //手指抬起事件
             case MotionEvent.ACTION_UP:
-                EMLog.i(TAG, "onTouchEvent: " + getScrollX());
+                KLog.e(TAG, "onTouchEvent: " + getScrollX());
                 float delta = actionDownPoint.x - event.getX();
                 if (Math.abs(delta) < touchSlop && Math.abs(actionDownPoint.y - event.getY()) < touchSlop) {
                     // 滑动距离小于系统设置的最小距离,当作点击事件处理
@@ -416,9 +416,9 @@ public class EaseCallMemberViewGroup extends ViewGroup {
         // item click
         Pair<Integer, View> result = findTargetView(x, y);
         if (result == null) {
-            EMLog.i(TAG, "onTouchEvent: no child on click point.");
+            KLog.e(TAG, "onTouchEvent: no child on click point.");
         } else {
-            EMLog.i(TAG, "onTouchEvent: child click , index: " + result.first + ", child view: " + result.second);
+            KLog.e(TAG, "onTouchEvent: child click , index: " + result.first + ", child view: " + result.second);
             handleItemClickAction(result.second, result.first);
         }
     }
@@ -446,7 +446,7 @@ public class EaseCallMemberViewGroup extends ViewGroup {
     }
 
     private void smoothScrollTo(int x, int y) {
-        EMLog.i(TAG, "smoothScrollTo: " + getScrollX() + ", target : " + x);
+        KLog.e(TAG, "smoothScrollTo: " + getScrollX() + ", target : " + x);
         int deltaX = x - getScrollX();
         int deltaY = y - getScrollY();
         mScroller.startScroll(getScrollX(), 0, deltaX, deltaY);
@@ -582,7 +582,7 @@ public class EaseCallMemberViewGroup extends ViewGroup {
 //        if (hasFocus) {
         pageWidth = this.getMeasuredWidth();
         screenHeight = this.getMeasuredHeight();
-//            EMLog.d(TAG, "onWindowFocusChanged, width= " + this.getMeasuredWidth() + " height= " + this.getMeasuredHeight());
+//            KLog.e(TAG, "onWindowFocusChanged, width= " + this.getMeasuredWidth() + " height= " + this.getMeasuredHeight());
         calculateChildrenParamsAndSet();
         // }
     }

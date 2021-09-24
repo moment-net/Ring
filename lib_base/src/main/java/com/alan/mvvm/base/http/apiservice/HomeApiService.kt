@@ -103,7 +103,7 @@ interface HomeApiService {
     /**
      * 用户查看target
      */
-    @POST("user/mealtag")
+    @GET("user/mealtag")
     suspend fun requestTarget(@Query("userId") userId: String): BaseResponse<TargetInfoBean>
 
 
@@ -1001,10 +1001,10 @@ interface HomeApiService {
     suspend fun requestMealStart(@Part img: MultipartBody.Part): BaseResponse<String>
 
     /**
-     * 停止干饭匹配
+     * 查看用户干饭状态
      */
-    @GET("meal/stop")
-    suspend fun requestMealStop(): BaseResponse<String>
+    @GET("meal/orderStatus")
+    suspend fun requestMealStatus(): BaseResponse<MealStateBean>
 
     /**
      * 修改干饭状态
@@ -1013,10 +1013,10 @@ interface HomeApiService {
     suspend fun requestEditMeal(@Query("orderStatus") orderStatus: String): BaseResponse<String>
 
     /**
-     * 查看用户干饭状态
+     * 停止干饭匹配
      */
-    @GET("meal/orderStatus")
-    suspend fun requestMealStatus(): BaseResponse<String>
+    @GET("meal/stop")
+    suspend fun requestMealStop(): BaseResponse<String>
 
 
 }

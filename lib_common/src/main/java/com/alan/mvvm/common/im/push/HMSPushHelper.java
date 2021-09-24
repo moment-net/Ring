@@ -7,7 +7,7 @@ import com.huawei.agconnect.config.AGConnectServicesConfig;
 import com.huawei.hms.aaid.HmsInstanceId;
 import com.huawei.hms.common.ApiException;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.util.EMLog;
+import com.socks.library.KLog;
 
 import java.lang.reflect.Method;
 
@@ -52,7 +52,7 @@ public class HMSPushHelper {
                 String buildVersion = (String) getMethod.invoke(classType, new Object[]{"ro.build.version.emui"});
                 //在某些手机上，invoke方法不报错
                 if (!TextUtils.isEmpty(buildVersion)) {
-                    EMLog.d("HWHMSPush", "huawei hms push is available!");
+                    KLog.e("HWHMSPush", "huawei hms push is available!");
                     new Thread() {
                         @Override
                         public void run() {
@@ -62,28 +62,28 @@ public class HMSPushHelper {
 
                                 // 申请华为推送token
                                 String token = HmsInstanceId.getInstance(activity).getToken(appId, "HCM");
-                                EMLog.d("HWHMSPush", "get huawei hms push token:" + token);
+                                KLog.e("HWHMSPush", "get huawei hms push token:" + token);
                                 if (token != null && !token.equals("")) {
                                     //没有失败回调，假定token失败时token为null
-                                    EMLog.d("HWHMSPush", "register huawei hms push token success token:" + token);
+                                    KLog.e("HWHMSPush", "register huawei hms push token success token:" + token);
                                     // 上传华为推送token
                                     EMClient.getInstance().sendHMSPushTokenToServer(token);
                                 } else {
-                                    EMLog.e("HWHMSPush", "register huawei hms push token fail!");
+                                    KLog.e("HWHMSPush", "register huawei hms push token fail!");
                                 }
                             } catch (ApiException e) {
-                                EMLog.e("HWHMSPush", "get huawei hms push token failed, " + e);
+                                KLog.e("HWHMSPush", "get huawei hms push token failed, " + e);
                             }
                         }
                     }.start();
                 } else {
-                    EMLog.d("HWHMSPush", "huawei hms push is unavailable!");
+                    KLog.e("HWHMSPush", "huawei hms push is unavailable!");
                 }
             } else {
-                EMLog.d("HWHMSPush", "no huawei hms push sdk or mobile is not a huawei phone");
+                KLog.e("HWHMSPush", "no huawei hms push sdk or mobile is not a huawei phone");
             }
         } catch (Exception e) {
-            EMLog.d("HWHMSPush", "no huawei hms push sdk or mobile is not a huawei phone");
+            KLog.e("HWHMSPush", "no huawei hms push sdk or mobile is not a huawei phone");
         }
     }
 }

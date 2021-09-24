@@ -13,7 +13,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
-import coil.load
 import com.alan.module.main.databinding.ActivityLoginWxBinding
 import com.alan.module.main.viewmodel.LoginWxViewModel
 import com.alan.mvvm.base.coil.CoilUtils
@@ -298,13 +297,12 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
                     CoilUtils.loadCircle(mBinding.ivAvator, it.fileUrl)
                 }
 
-                is Boolean -> {
+                is LoginThirdRequestBean -> {
                     //绑定微信
                     toast("微信绑定成功")
-                    val userInfoBean = SpHelper.getUserInfo()
-                    mBinding.etName.setText(userInfoBean?.userName)
-                    NetworkUtil.getImage(handler, userInfoBean?.avatar, NetworkUtil.GET_IMG)
-                    mBinding.ivAvator.load(userInfoBean?.avatar)
+                    mBinding.etName.setText(it?.nickname)
+                    NetworkUtil.getImage(handler, it?.oauthToken, NetworkUtil.GET_IMG)
+                    CoilUtils.loadCircle(mBinding.ivAvator, it?.oauthToken)
 
                     mBinding.tvBind.setText("已绑定微信")
                     mBinding.tvBind.setEnabled(false)
@@ -333,7 +331,7 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
             this,
             object : LocationPickerUtil.OnPickerListener {
                 override fun onPicker(opt1: String, opt2: String, opt3: String) {
-                    address = opt1.toString() + "-" + opt2 + "-" + opt3
+                    address = opt1 + "-" + opt2 + "-" + opt3
                     mBinding.tvHometownValue.setText(opt3)
                 }
 

@@ -29,14 +29,16 @@ import com.alan.mvvm.base.utils.*
 import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.im.listener.ChatMsgListener
+import com.alan.mvvm.common.im.listener.EMClientListener
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.huantansheng.easyphotos.EasyPhotos
 import com.huantansheng.easyphotos.models.album.entity.Photo
-import com.hyphenate.EMMessageListener
 import com.hyphenate.EMValueCallBack
 import com.hyphenate.chat.*
 import com.hyphenate.chat.EMMessage
@@ -106,10 +108,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         initListener()
 
         initRV()
-
-
-
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -186,17 +184,16 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
 
     fun initRV() {
         val userEntity = EMClientHelper.getUserById(userId)
-        userName = userEntity.userName
-        avatar = userEntity.avatar
+
 
         mAdapter = ChatMessageAdapter(userEntity)
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
             when (view.id) {
                 R.id.iv_pic -> {
                     val message = mAdapter.getItem(position).body as EMImageMessageBody
-                    val imgUri: Uri = message.getLocalUri()
+                    val imgUri: String = message.remoteUrl
                     val bundle = Bundle().apply {
-                        putParcelable("uri", imgUri)
+                        putString("uri", imgUri)
                     }
                     jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_IMAGE, bundle)
                 }
@@ -331,9 +328,19 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             when (it) {
                 is UserInfoBean -> {
                     userInfoBean = it
-                    mBinding.tvTitle.setText(it.userName)
-                    mBinding.tvTime.setText(it.onlineStatusDesc)
-                    CoilUtils.loadCircle(mBinding.ivAvatar, it.avatar)
+                    mBinding.tvTitle.setText(userInfoBean.userName)
+                    mBinding.tvTime.setText(userInfoBean.onlineStatusDesc)
+                    CoilUtils.loadCircle(mBinding.ivAvatar, userInfoBean.avatar)
+                    //加入数据库
+                    userName = userInfoBean.userName
+                    avatar = userInfoBean.avatar
+                    EMClientHelper.saveUser(
+                        UserEntity(
+                            userId,
+                            userInfoBean.userName,
+                            userInfoBean.avatar
+                        )
+                    )
                 }
                 is MatchStatusBean -> {
                     if (it.inMatch) {
@@ -421,12 +428,12 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                             try {
                                 player.setDataSource(url)
                                 player.prepare()
-                                duration = player.duration
+                                duration = player.duration / 1000
                             } catch (e: IOException) {
                                 e.printStackTrace()
                             }
 
-                            sendVideoMessage(url, path, duration)
+                            sendVideoMessage(url, path, if (duration == 0) 1 else duration)
                         }
                     }
                 }
@@ -444,48 +451,48 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             refreshMessages()
         }
         isFirst = false
-        EMClientHelper.chatManager.addMessageListener(msgListener)
-
+        registerListener()
         checkNotifi()
     }
 
     override fun onPause() {
         super.onPause()
-        EMClientHelper.chatManager.removeMessageListener(msgListener)
     }
 
 
     /**
      * 消息监听
      */
-    var msgListener = object : EMMessageListener {
-        override fun onMessageReceived(messages: MutableList<EMMessage>) {
-            refreshToLatest()
-            for (msg in messages) {
-                sendReadAck(msg)
+    fun registerListener() {
+        EMClientListener.instance.chatMsgListener = object : ChatMsgListener {
+            override fun onMessageReceived(messages: List<EMMessage>) {
+                refreshToLatest()
+                for (msg in messages) {
+                    sendReadAck(msg)
+                }
+            }
+
+            override fun onCmdMessageReceived(messages: List<EMMessage>) {
+            }
+
+            override fun onMessageRead(messages: List<EMMessage>) {
+                refreshMessages()
+            }
+
+            override fun onMessageDelivered(messages: List<EMMessage>) {
+                refreshMessages()
+            }
+
+            override fun onMessageRecalled(messages: List<EMMessage>) {
+                refreshMessages()
+            }
+
+            override fun onMessageChanged(message: EMMessage, change: Any) {
+                refreshMessages()
             }
         }
-
-        override fun onCmdMessageReceived(messages: MutableList<EMMessage>?) {
-        }
-
-        override fun onMessageRead(messages: MutableList<EMMessage>?) {
-            refreshMessages()
-        }
-
-        override fun onMessageDelivered(messages: MutableList<EMMessage>?) {
-            refreshMessages()
-        }
-
-        override fun onMessageRecalled(messages: MutableList<EMMessage>?) {
-            refreshMessages()
-        }
-
-        override fun onMessageChanged(message: EMMessage?, change: Any?) {
-            refreshMessages()
-        }
-
     }
+
 
 
     /**
@@ -558,7 +565,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
     }
 
     fun refreshToLatest() {
-        if (isActivityDisable() || conversation == null) {
+        if (isActivityDisable()) {
             return
         }
         refreshMessages()

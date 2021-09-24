@@ -2,7 +2,7 @@ package com.alan.mvvm.common.im.push;
 
 import com.huawei.hms.push.HmsMessageService;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.util.EMLog;
+import com.socks.library.KLog;
 
 /**
  * 作者：alan
@@ -15,10 +15,10 @@ public class HMSPushService extends HmsMessageService {
     public void onNewToken(String token) {
         if (token != null && !token.equals("")) {
             //没有失败回调，假定token失败时token为null
-            EMLog.d("HWHMSPush", "service register huawei hms push token success token:" + token);
+            KLog.e("HWHMSPush", "service register huawei hms push token success token:" + token);
             EMClient.getInstance().sendHMSPushTokenToServer(token);
         } else {
-            EMLog.e("HWHMSPush", "service register huawei hms push token fail!");
+            KLog.e("HWHMSPush", "service register huawei hms push token fail!");
         }
     }
 

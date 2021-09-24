@@ -32,7 +32,7 @@ data class UserInfoBean(
     var address: String? = "",
     var hometown: String? = "",
     var onlineStatus: Boolean? = false,
-    var audioDesc: String? = "",
+    var audioDesc: GreetBean? = null,
     var greeting: GreetBean? = null,
     var headsetStatus: String? = "",
     var onlineStatusDesc: String? = "",

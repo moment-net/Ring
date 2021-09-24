@@ -42,7 +42,7 @@ class SelectTypeViewModel @Inject constructor(private val mRepository: CommonRep
 
 
     fun requestSaveTarget(type: ArrayList<String>) {
-        var requestBean = TargetBean(type = type)
+        val requestBean = TargetBean(types = type)
         viewModelScope.launch {
             mRepository.requestSaveTarget(
                 RequestUtil.getPostBody(requestBean),

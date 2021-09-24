@@ -47,8 +47,10 @@ import androidx.fragment.app.FragmentActivity;
 import com.alan.module.easecallkit.R;
 import com.alan.module.easecallkit.widget.EaseImageView;
 import com.alan.mvvm.base.coil.CoilUtils;
+import com.alan.mvvm.base.utils.EventBusUtils;
 import com.alan.mvvm.common.constant.IMConstant;
 import com.alan.mvvm.common.constant.RouteUrl;
+import com.alan.mvvm.common.event.CallServiceEvent;
 import com.alan.mvvm.common.helper.SpHelper;
 import com.alan.mvvm.common.im.callkit.EaseCallKit;
 import com.alan.mvvm.common.im.callkit.base.EaseCallAction;
@@ -80,11 +82,12 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.util.EMLog;
 import com.lzf.easyfloat.interfaces.OnPermissionResult;
 import com.lzf.easyfloat.permission.PermissionUtils;
 import com.socks.library.KLog;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -109,9 +112,9 @@ import io.agora.rtc.video.VideoEncoderConfiguration;
  * 备注：
  */
 @Route(path = RouteUrl.CallModule.ACTIVITY_CALL_CALL)
-public class EaseVideoCallActivity extends FragmentActivity implements View.OnClickListener {
+public class CallActivity extends FragmentActivity implements View.OnClickListener {
 
-    private static final String TAG = EaseVideoCallActivity.class.getSimpleName();
+    private static final String TAG = CallActivity.class.getSimpleName();
 
     private static final int PERMISSION_REQ_ID = 22;
     private static final String[] REQUESTED_PERMISSIONS = {
@@ -203,7 +206,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
         @Override
         public void onError(int err) {
             super.onError(err);
-            EMLog.d(TAG, "IRtcEngineEventHandler onError:" + err);
+            KLog.e(TAG, "IRtcEngineEventHandler onError:" + err);
             if (listener != null) {
                 listener.onCallError(EaseCallKit.EaseCallError.RTC_ERROR, err, "rtc error");
             }
@@ -211,7 +214,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
 
         @Override
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
-            EMLog.d(TAG, "onJoinChannelSuccess channel:" + channel + " uid" + uid);
+            KLog.e(TAG, "onJoinChannelSuccess channel:" + channel + " uid" + uid);
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -354,15 +357,15 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
                     }
                 }
             });
-
         }
     };
+    private boolean isDialogCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ease_video_call);
-
+        EventBusUtils.INSTANCE.register(this);
         //初始化
         if (savedInstanceState == null) {
             initParams(getIntent().getExtras());
@@ -389,6 +392,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
     private void initParams(Bundle bundle) {
         if (bundle != null) {
             isInComingCall = bundle.getBoolean("isComingCall", false);
+            isDialogCall = bundle.getBoolean("isDialogCall", false);
             userId = bundle.getString("username");
             channelName = bundle.getString("channelName");
             int uId = bundle.getInt("uId", -1);
@@ -532,7 +536,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
             AudioManager am = (AudioManager) this.getApplication().getSystemService(Context.AUDIO_SERVICE);
             int ringerMode = am.getRingerMode();
             if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-                EMLog.e(TAG, "playRing start");
+                KLog.e(TAG, "playRing start");
                 playRing();
             }
         }
@@ -649,7 +653,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
 
             EaseCallFloatWindow.getInstance().setRtcEngine(getApplicationContext(), mRtcEngine);
         } catch (Exception e) {
-            EMLog.e(TAG, Log.getStackTraceString(e));
+            KLog.e(TAG, Log.getStackTraceString(e));
             throw new RuntimeException("NEED TO check rtc sdk init fatal error\n" + Log.getStackTraceString(e));
         }
     }
@@ -705,7 +709,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
             listener.onGenerateToken(EMClient.getInstance().getCurrentUser(), channelName, EMClient.getInstance().getOptions().getAppKey(), new EaseCallKitTokenCallback() {
                 @Override
                 public void onSetToken(String token, int uId) {
-                    EMLog.d(TAG, "onSetToken token:" + token + " uid: " + uId);
+                    KLog.e(TAG, "onSetToken token:" + token + " uid: " + uId);
                     //获取到Token uid加入频道
                     mRtcEngine.joinChannel(token, channelName, null, uId);
                     //自己信息加入uIdMap
@@ -714,7 +718,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
 
                 @Override
                 public void onGetTokenError(int error, String errorMsg) {
-                    EMLog.e(TAG, "onGenerateToken error :" + error + " errorMsg:" + errorMsg);
+                    KLog.e(TAG, "onGenerateToken error :" + error + " errorMsg:" + errorMsg);
                     //获取Token失败,退出呼叫
                     exitChannel();
                 }
@@ -728,6 +732,18 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
                 mRtcEngine.switchCamera();
             }
             isCameraFront = isFront;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (isDialogCall) {
+            EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(1));
+            answerBtn.performClick();
+            if (PermissionUtils.checkPermission(this)) {
+                float_btn.performClick();
+            }
         }
     }
 
@@ -1236,7 +1252,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
-                EMLog.d(TAG, "Invite call success");
+                KLog.e(TAG, "Invite call success");
                 if (listener != null) {
                     listener.onInViteCallMessageSent();
                 }
@@ -1244,7 +1260,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
 
             @Override
             public void onError(int code, String error) {
-                EMLog.e(TAG, "Invite call error " + code + ", " + error);
+                KLog.e(TAG, "Invite call error " + code + ", " + error);
                 if (listener != null) {
                     listener.onCallError(EaseCallKit.EaseCallError.IM_ERROR, code, error);
                     listener.onInViteCallMessageSent();
@@ -1299,7 +1315,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
-                EMLog.d(TAG, "Invite call success");
+                KLog.e(TAG, "Invite call success");
                 conversation.removeMessage(message.getMsgId());
                 if (event.callAction == EaseCallAction.CALL_CANCEL) {
                     //退出频道
@@ -1353,7 +1369,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
 
             @Override
             public void onError(int code, String error) {
-                EMLog.e(TAG, "Invite call error " + code + ", " + error);
+                KLog.e(TAG, "Invite call error " + code + ", " + error);
                 if (conversation != null) {
                     conversation.removeMessage(message.getMsgId());
                 }
@@ -1442,7 +1458,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
 
     public long getChronometerSeconds(MyChronometer cmt) {
         if (cmt == null) {
-            EMLog.e(TAG, "MyChronometer is null, can not get the cost seconds!");
+            KLog.e(TAG, "MyChronometer is null, can not get the cost seconds!");
             return 0;
         }
         return cmt.getCostSeconds();
@@ -1497,7 +1513,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
 
                 @Override
                 public void onSetUserAccountError(int error, String errorMsg) {
-                    EMLog.e(TAG, "onRemoteUserJoinChannel error:" + error + "  errorMsg:" + errorMsg);
+                    KLog.e(TAG, "onRemoteUserJoinChannel error:" + error + "  errorMsg:" + errorMsg);
                 }
             });
         }
@@ -1537,12 +1553,12 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
                 mediaPlayer = null;
             }
         } else {
-            EMLog.d(TAG, "playRing start play");
+            KLog.e(TAG, "playRing start play");
             if (ringtone != null) {
                 ringtone.play();
                 Log.e(TAG, "playRing play ringtone");
             }
-            EMLog.d(TAG, "playRing start play end");
+            KLog.e(TAG, "playRing start play end");
         }
     }
 
@@ -1615,7 +1631,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                EMLog.i(TAG, "exit channel channelName: " + channelName);
+                KLog.e(TAG, "exit channel channelName: " + channelName);
                 if (isInComingCall) {
                     stopPlayRing();
                 }
@@ -1707,6 +1723,15 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
         }
     }
 
+    //收到服务器加入和挂断消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleMsg(CallServiceEvent event) {
+        if (event.getType() == 2) {
+            //挂断
+            hangupBtn.performClick();
+        }
+    }
+
     /**
      * 停止事件循环
      */
@@ -1716,7 +1741,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
 
     @Override
     protected void onDestroy() {
-        EMLog.d(TAG, "onDestroy");
+        KLog.e(TAG, "onDestroy");
         super.onDestroy();
         releaseHandler();
         if (timehandler != null) {
@@ -1732,6 +1757,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
             leaveChannel();
             RtcEngine.destroy();
         }
+        EventBusUtils.INSTANCE.unRegister(this);
     }
 
     @Override
@@ -1756,9 +1782,9 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
      * 是否退出当前通话提示框
      */
     public void exitChannelDisplay() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(EaseVideoCallActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CallActivity.this);
         final AlertDialog dialog = builder.create();
-        View dialogView = View.inflate(EaseVideoCallActivity.this, R.layout.activity_exit_channel, null);
+        View dialogView = View.inflate(CallActivity.this, R.layout.activity_exit_channel, null);
         dialog.setView(dialogView);
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1772,7 +1798,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                EMLog.e(TAG, "exitChannelDisplay  exit channel:");
+                KLog.e(TAG, "exitChannelDisplay  exit channel:");
                 stopCount();
                 if (remoteUId == 0) {
                     CallCancelEvent cancelEvent = new CallCancelEvent();
@@ -1792,7 +1818,7 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                EMLog.e(TAG, "exitChannelDisplay not exit channel");
+                KLog.e(TAG, "exitChannelDisplay not exit channel");
             }
         });
     }
@@ -1808,10 +1834,10 @@ public class EaseVideoCallActivity extends FragmentActivity implements View.OnCl
             PermissionUtils.requestPermission(this, new OnPermissionResult() {
                 @Override
                 public void permissionResult(boolean b) {
-                    if (PermissionUtils.checkPermission(EaseVideoCallActivity.this)) {
+                    if (PermissionUtils.checkPermission(CallActivity.this)) {
                         doShowFloatWindow();
                     } else {
-                        Toast.makeText(EaseVideoCallActivity.this, "当前App未被授予悬浮窗权限", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CallActivity.this, "当前App未被授予悬浮窗权限", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

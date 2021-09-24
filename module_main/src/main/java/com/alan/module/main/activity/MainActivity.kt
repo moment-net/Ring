@@ -2,6 +2,7 @@ package com.alan.module.main.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -22,12 +23,16 @@ import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.event.CallEvent
+import com.alan.mvvm.common.event.CallServiceEvent
 import com.alan.mvvm.common.event.MessageEvent
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.im.callkit.EaseCallKit
 import com.alan.mvvm.common.im.push.HMSPushHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.hyphenate.chat.EMMessage
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -145,19 +150,50 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     fun checkUnreadMsg(event: MessageEvent) {
         when (event.type) {
             IMConstant.EVENT_TYPE_MESSAGE -> {
-                val count = EMClientHelper.chatManager.unreadMessageCount
-                if (count > 0) {
-                    mBinding.tvNum.visible()
-                    mBinding.tvNum.setText("$count")
-                } else {
-                    mBinding.tvNum.gone()
-                }
+                handleConversations()
             }
+
             IMConstant.EVENT_TYPE_CONNECTION -> {
                 mViewModel.loginIM()
             }
         }
     }
+
+    //处理会话未读消息
+    fun handleConversations() {
+        val list = mViewModel.requestConversations()
+        var unReadMsg: Int = 0
+        for (conversation in list) {
+            if (conversation.conversationId().length >= 16) {
+                unReadMsg += conversation.unreadMsgCount
+                if (conversation.allMsgCount > 0) {
+                    for (msg in conversation.allMessages) {
+                        if (msg.direct() == EMMessage.Direct.RECEIVE) {
+                            val userId = conversation.lastMessage.from
+                            val userName = conversation.lastMessage.getStringAttribute(
+                                IMConstant.MESSAGE_ATTR_USERNAME,
+                                ""
+                            )
+                            val avatar = conversation.lastMessage.getStringAttribute(
+                                IMConstant.MESSAGE_ATTR_AVATAR,
+                                ""
+                            )
+                            EMClientHelper.saveUser(UserEntity(userId, userName, avatar))
+                            break
+                        }
+                    }
+                }
+            }
+        }
+
+        if (unReadMsg > 0) {
+            mBinding.tvNum.visible()
+            mBinding.tvNum.setText("$unReadMsg")
+        } else {
+            mBinding.tvNum.gone()
+        }
+    }
+
 
     //获取新消息
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -165,6 +201,24 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         val dialog =
             CallFragmentDialog.newInstance(event.isComingCall, event.channelName, event.username)
         dialog.show((ActivityStackManager.getCurrentActivity() as FragmentActivity).supportFragmentManager)
+    }
+
+    //收到服务器加入和挂断消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun handleMsg(event: CallServiceEvent) {
+        if (event.type == 1) {
+            //加入
+            val sessionId = EaseCallKit.getInstance().getSessionId()
+            if (!TextUtils.isEmpty(sessionId)) {
+                mViewModel.requestChatStart(sessionId)
+            }
+        } else {
+            //挂断
+            val sessionId = EaseCallKit.getInstance().getSessionId()
+            if (!TextUtils.isEmpty(sessionId)) {
+                mViewModel.requestChatHangup(sessionId)
+            }
+        }
     }
 
 

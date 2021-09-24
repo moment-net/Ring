@@ -16,10 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.alan.module.easecallkit.R;
-import com.alan.module.easecallkit.activity.EaseVideoCallActivity;
+import com.alan.module.easecallkit.activity.CallActivity;
 import com.alan.mvvm.base.coil.CoilUtils;
 import com.alan.mvvm.common.im.callkit.utils.EaseCallKitUtils;
-import com.hyphenate.util.EMLog;
+import com.socks.library.KLog;
 
 
 /**
@@ -29,7 +29,7 @@ import com.hyphenate.util.EMLog;
  */
 public class EaseCommingCallView extends FrameLayout {
 
-    private static final String TAG = EaseVideoCallActivity.class.getSimpleName();
+    private static final String TAG = CallActivity.class.getSimpleName();
 
     private ImageButton mBtnReject;
     private ImageButton mBtnPickup;
@@ -102,7 +102,7 @@ public class EaseCommingCallView extends FrameLayout {
                 if (headBitMap != null && !headBitMap.isRecycled()) {
                     avatar_view.setImageBitmap(headBitMap);
                 } else {
-                    EMLog.d(TAG, "headBitMap is isRecycled");
+                    KLog.e(TAG, "headBitMap is isRecycled");
                 }
             }
         }

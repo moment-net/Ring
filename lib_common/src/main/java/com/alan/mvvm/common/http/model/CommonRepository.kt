@@ -107,19 +107,28 @@ class CommonRepository @Inject constructor() : BaseRepository() {
     ) = request(mApi, callback) { mApi.requestUploadPic(part) }
 
     /**
-     * 获取target信息
+     * 获取target所有列表
      */
     suspend fun requestTargetList(
         callback: RequestCallback<TargetBean>
     ) = request(mApi, callback) { mApi.requestTargetList() }
 
     /**
-     * 用户选择target
+     * 编辑用户target
      */
     suspend fun requestSaveTarget(
         requestBody: RequestBody,
         callback: RequestCallback<TargetInfoBean>
     ) = request(mApi, callback) { mApi.requestSaveTarget(requestBody) }
+
+    /**
+     * 查看用户target
+     */
+    suspend fun requestTarget(
+        userId: String,
+        callback: RequestCallback<TargetInfoBean>
+    ) = request(mApi, callback) { mApi.requestTarget(userId) }
+
 
     /**
      * 首页饭友推荐
@@ -347,6 +356,29 @@ class CommonRepository @Inject constructor() : BaseRepository() {
         callback: RequestCallback<MatchStatusBean>
     ) = request(mApi, callback) { mApi.requestCheckMatch(userId) }
 
+    /**
+     * 查看用户干饭状态
+     */
+    suspend fun requestMealStatus(
+        callback: RequestCallback<MealStateBean>
+    ) = request(mApi, callback) { mApi.requestMealStatus() }
+
+
+    /**
+     * 修改干饭状态
+     */
+    suspend fun requestEditMeal(
+        orderStatus: String,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestEditMeal(orderStatus) }
+
+
+    /**
+     * 停止匹配
+     */
+    suspend fun requestMealStop(
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestMealStop() }
 
 }
 

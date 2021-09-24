@@ -1,7 +1,6 @@
 package com.alan.mvvm.common.im.listener
 
 import android.content.Context
-import android.text.TextUtils
 import com.alan.mvvm.base.utils.ActivityStackManager
 import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.common.constant.IMConstant
@@ -13,7 +12,6 @@ import com.alan.mvvm.common.im.callkit.base.*
 import com.hyphenate.*
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.chat.EMMucSharedFile
-import com.hyphenate.util.EMLog
 import com.socks.library.KLog
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -25,10 +23,23 @@ import java.util.*
  * 备注： * 主要用于chat过程中的全局监听，并对相应的事件进行处理
  * * [.init]方法建议在登录成功以后进行调用
  */
-object EMClientListener {
-    const val TAG: String = "RING-IM"
+class EMClientListener private constructor() {
+    //聊天页面监听
+    var chatMsgListener: ChatMsgListener? = null
 
-    init {
+    companion object {
+        const val TAG: String = "RingIM"
+
+        val instance: EMClientListener by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            EMClientListener()
+        }
+    }
+
+
+    /**
+     * 将需要登录成功进入MainActivity中初始化的逻辑，放到此处进行处理
+     */
+    fun init() {
         //添加网络连接状态监听
         EMClientHelper.eMClient.addConnectionListener(ChatConnectionListener())
         //添加多端登录监听
@@ -47,17 +58,15 @@ object EMClientListener {
         EaseCallKit.getInstance().setCallKitListener(ChatCallListener())
     }
 
-    /**
-     * 将需要登录成功进入MainActivity中初始化的逻辑，放到此处进行处理
-     */
-    fun init() {}
-
 
     /**
      * IM消息监听
      */
-    class ChatMessageListener : EMMessageListener {
+    inner class ChatMessageListener : EMMessageListener {
         override fun onMessageReceived(messages: List<EMMessage>) {
+            if (chatMsgListener != null) {
+                chatMsgListener?.onMessageReceived(messages)
+            }
             EventBusUtils.postEvent(
                 MessageEvent(
                     IMConstant.EVENT_TYPE_MESSAGE,
@@ -89,8 +98,16 @@ object EMClientListener {
             }
         }
 
-        override fun onCmdMessageReceived(list: List<EMMessage>) {}
+        override fun onCmdMessageReceived(list: List<EMMessage>) {
+            if (chatMsgListener != null) {
+                chatMsgListener?.onCmdMessageReceived(list)
+            }
+        }
+
         override fun onMessageRead(list: List<EMMessage>) {
+            if (chatMsgListener != null) {
+                chatMsgListener?.onMessageRead(list)
+            }
             EventBusUtils.postEvent(
                 MessageEvent(
                     IMConstant.EVENT_TYPE_MESSAGE,
@@ -99,9 +116,23 @@ object EMClientListener {
             )
         }
 
-        override fun onMessageDelivered(list: List<EMMessage>) {}
-        override fun onMessageRecalled(list: List<EMMessage>) {}
-        override fun onMessageChanged(emMessage: EMMessage, o: Any) {}
+        override fun onMessageDelivered(list: List<EMMessage>) {
+            if (chatMsgListener != null) {
+                chatMsgListener?.onMessageDelivered(list)
+            }
+        }
+
+        override fun onMessageRecalled(list: List<EMMessage>) {
+            if (chatMsgListener != null) {
+                chatMsgListener?.onMessageRecalled(list)
+            }
+        }
+
+        override fun onMessageChanged(emMessage: EMMessage, o: Any) {
+            if (chatMsgListener != null) {
+                chatMsgListener?.onMessageChanged(emMessage, o)
+            }
+        }
     }
 
     /**
@@ -242,7 +273,7 @@ object EMClientListener {
             reason: EaseCallEndReason,
             callTime: Long
         ) {
-            EMLog.d(
+            KLog.e(
                 TAG,
                 "onEndCallWithReason" + callType.name + " reason:" + reason + " time:" + callTime
             )
@@ -259,22 +290,22 @@ object EMClientListener {
             appKey: String,
             callback: EaseCallKitTokenCallback
         ) {
-            EMLog.d(TAG, "onGenerateToken userId:$userId channelName:$channelName appKey:$appKey")
+            KLog.e(TAG, "onGenerateToken userId:$userId channelName:$channelName appKey:$appKey")
             callback.onSetToken(null, 0)
 //            requestRtcToken(channelName, callback)
         }
 
         //被叫收到通话邀请
-        override fun onReceivedCall(callType: EaseCallType, fromUserId: String, ext: JSONObject) {
+        override fun onReceivedCall(callType: EaseCallType, fromUserId: String, ext: JSONObject?) {
             //收到接听电话
-            EMLog.d(TAG, "onRecivedCall" + callType.name + " fromUserId:" + fromUserId)
-            if (!TextUtils.isEmpty(ext.toString())) {
-                //设置用户昵称 头像
-                val userId = ext.optString("userId")
-                val userName = ext.optString("userName")
-                val avatar = ext.optString("avatar")
-                EMClientHelper.setUserInfoCallKit(userId, userName, avatar)
-            }
+//            KLog.e(TAG, "onRecivedCall" + callType.name + " fromUserId:" + fromUserId)
+//            if (!TextUtils.isEmpty(ext.toString())) {
+//                //设置用户昵称 头像
+//                val userId = ext?.optString("userId")
+//                val userName = ext?.optString("userName")
+//                val avatar = ext?.optString("avatar")
+//                EMClientHelper.setUserInfoCallKit(userId!!, userName, avatar!!)
+//            }
         }
 
         //通话异常回调

@@ -2,11 +2,15 @@ package com.alan.module.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.alan.mvvm.base.http.callback.RequestCallback
+import com.alan.mvvm.base.http.requestbean.CallRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.http.model.CommonRepository
 import com.alan.mvvm.common.im.EMClientHelper
+import com.hyphenate.chat.EMConversation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,16 +29,36 @@ class MainViewModel @Inject constructor(private val mRepository: CommonRepositor
     val ldIM = MutableLiveData<BaseHttpException>()
 
     /**
-     * 模拟获取数据
+     * 开始聊天
      */
-    fun getData() {
-        viewModelScope.launch() {
-//            mRepository.getData(callback = RequestCallback(
-//                onStart = {},
-//                onSuccess = {},
-//                onFailed = {},
-//                onFinally = {}
-//            ))
+    fun requestChatStart(sessionId: String) {
+        val requestBean = CallRequestBean(sessionId = sessionId)
+        viewModelScope.launch {
+            mRepository.requestChatStart(
+                RequestUtil.getPostBody(requestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                    },
+                    onFailed = {
+                    }
+                ))
+        }
+    }
+
+    /**
+     * 挂断聊天
+     */
+    fun requestChatHangup(sessionId: String) {
+        val requestBean = CallRequestBean(sessionId = sessionId)
+        viewModelScope.launch {
+            mRepository.requestChatHangup(
+                RequestUtil.getPostBody(requestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                    },
+                    onFailed = {
+                    }
+                ))
         }
     }
 
@@ -43,5 +67,12 @@ class MainViewModel @Inject constructor(private val mRepository: CommonRepositor
      */
     fun loginIM() {
         EMClientHelper.loginEM(SpHelper.getUserInfo()!!.userId, ldIM)
+    }
+
+    /**
+     * 获取会话列表
+     */
+    fun requestConversations(): ArrayList<EMConversation> {
+        return EMClientHelper.getConversationList();
     }
 }

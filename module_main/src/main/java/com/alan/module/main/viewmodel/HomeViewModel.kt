@@ -20,6 +20,7 @@ class HomeViewModel @Inject constructor(private val mRepository: CommonRepositor
     BaseViewModel() {
 
     val ldData = MutableLiveData<Any>()
+    val ldState = MutableLiveData<Any>()
 
     /**
      * 获取首页列表
@@ -37,6 +38,24 @@ class HomeViewModel @Inject constructor(private val mRepository: CommonRepositor
                     },
                     onFailed = {
                         ldData.value = it
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 查看用户干饭状态
+     */
+    fun requestMealStatus() {
+        viewModelScope.launch() {
+            mRepository.requestMealStatus(
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldState.value = it
+                    },
+                    onFailed = {
+                        ldState.value = it
                     },
                 )
             )

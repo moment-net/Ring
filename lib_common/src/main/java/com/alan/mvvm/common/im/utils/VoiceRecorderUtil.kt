@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Message
 import android.os.SystemClock
 import com.hyphenate.EMError
-import com.hyphenate.util.EMLog
+import com.socks.library.KLog
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -40,7 +40,7 @@ class VoiceRecorderUtil(val handler: Handler) {
             isRecording = true
             recorder!!.start()
         } catch (e: IOException) {
-            EMLog.e("voice", "prepare() failed")
+            KLog.e("voice", "prepare() failed")
         }
         Thread {
             try {
@@ -51,11 +51,11 @@ class VoiceRecorderUtil(val handler: Handler) {
                     SystemClock.sleep(100)
                 }
             } catch (e: Exception) {
-                EMLog.e("voice", e.toString())
+                KLog.e("voice", e.toString())
             }
         }.start()
         startTime = Date().time
-        EMLog.d("voice", "start voice recording to file:" + file!!.absolutePath)
+        KLog.e("voice", "start voice recording to file:" + file!!.absolutePath)
         return if (file == null) null else file!!.getAbsolutePath()
     }
 
@@ -90,7 +90,7 @@ class VoiceRecorderUtil(val handler: Handler) {
                 return EMError.FILE_INVALID
             }
             val seconds = (Date().time - startTime).toInt() / 1000
-            EMLog.d(
+            KLog.e(
                 "voice",
                 "voice recording finished. seconds:" + seconds + " file length:" + file!!.length()
             )

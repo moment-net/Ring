@@ -21,7 +21,6 @@ import com.hyphenate.push.EMPushConfig
 import com.hyphenate.push.EMPushHelper
 import com.hyphenate.push.EMPushType
 import com.hyphenate.push.PushListener
-import com.hyphenate.util.EMLog
 import com.socks.library.KLog
 
 /**
@@ -122,13 +121,15 @@ object EMClientHelper {
         EMClient.getInstance().setDebugMode(true)
         isSDKInit = true
 
+        //链接状态监听事件初始化
+        EMClientListener.instance.init()
+
+
         //初始化推送
         initPush(context)
         //callKit初始化
         initCallKit(context)
 
-        //链接状态监听事件初始化
-        EMClientListener.init()
     }
 
     /**
@@ -209,7 +210,7 @@ object EMClientHelper {
         EMPushHelper.getInstance().setPushListener(object : PushListener() {
             override fun onError(pushType: EMPushType?, errorCode: Long) {
                 // TODO: 返回的errorCode仅9xx为环信内部错误，可从EMError中查询，其他错误请根据pushType去相应第三方推送网站查询。
-                EMLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
+                KLog.e("PushClient", "Push client occur a error: " + pushType + " - " + errorCode);
             }
 
             override fun isSupportPush(

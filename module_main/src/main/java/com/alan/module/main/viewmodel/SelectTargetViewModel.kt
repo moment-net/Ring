@@ -42,10 +42,26 @@ class SelectTargetViewModel @Inject constructor(private val mRepository: CommonR
 
 
     fun requestSaveTarget(like: ArrayList<String>) {
-        var requestBean = TargetBean(like = like)
+        val requestBean = TargetBean(like = like)
         viewModelScope.launch {
             mRepository.requestSaveTarget(
                 RequestUtil.getPostBody(requestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldSuccess.value = it.data!!
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+    fun requestTarget() {
+        viewModelScope.launch {
+            mRepository.requestTarget(
+                "",
                 callback = RequestCallback(
                     onSuccess = {
                         ldSuccess.value = it.data!!

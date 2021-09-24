@@ -16,6 +16,7 @@ import com.alan.mvvm.base.utils.UtilsKt;
 import com.alan.mvvm.common.constant.IMConstant;
 import com.alan.mvvm.common.constant.RouteUrl;
 import com.alan.mvvm.common.event.CallEvent;
+import com.alan.mvvm.common.event.CallServiceEvent;
 import com.alan.mvvm.common.im.callkit.base.EaseCallAction;
 import com.alan.mvvm.common.im.callkit.base.EaseCallInfo;
 import com.alan.mvvm.common.im.callkit.base.EaseCallKitConfig;
@@ -39,9 +40,10 @@ import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.exceptions.HyphenateException;
-import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
+import com.socks.library.KLog;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -59,7 +61,7 @@ import java.util.TimeZone;
  * 备注：该工具包是帮助开发人员使用 CallKit 的帮助类，它提供了启动音频和视频的方法
  */
 public class EaseCallKit {
-    private static final String TAG = EaseCallKit.class.getSimpleName();
+    private static final String TAG = "RingIM";
     private static EaseCallKit instance = null;
     private boolean callKitInit = false;
     private Context appContext = null;
@@ -222,7 +224,7 @@ public class EaseCallKit {
             public void onMessageReceived(List<EMMessage> messages) {
                 for (EMMessage message : messages) {
                     String messageType = message.getStringAttribute(EaseMsgUtils.CALL_MSG_TYPE, "");
-                    EMLog.d(TAG, "Receive msg:" + message.getMsgId() + " from:" + message.getFrom() + "  messageType:" + messageType);
+                    KLog.e(TAG, "Receive msg:" + message.getMsgId() + " from:" + message.getFrom() + "  messageType:" + messageType);
                     //有关通话控制信令
                     if (TextUtils.equals(messageType, EaseMsgUtils.CALL_MSG_INFO)
                             && !TextUtils.equals(message.getFrom(), EMClient.getInstance().getCurrentUser())) {
@@ -302,14 +304,28 @@ public class EaseCallKit {
                             && message.ext() != null
                             && message.ext().size() > 0) {
                         //自定义消息 (服务端下发的房间消息)
-                        int command = Integer.parseInt(message.ext().get(IMConstant.MESSAGE_KEY_COMMOND).toString());
-                        String data = message.ext().get(IMConstant.MESSAGE_KEY_DATA).toString();
+                        int command = Integer.parseInt(String.valueOf(message.ext().get(IMConstant.MESSAGE_KEY_COMMOND)));
+                        String data = String.valueOf(message.ext().get(IMConstant.MESSAGE_KEY_DATA));
+                        KLog.e(TAG, "服务器下发消息：command：" + command + " data:" + data);
                         if (command == IMConstant.MESSAGE_COMMOND_LAUNCH) {
-
+                            try {
+                                JSONObject jsonObject = new JSONObject(data);
+                                String sessionId = jsonObject.optString("sessionId");
+                                setSessionId(sessionId);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         } else if (command == IMConstant.MESSAGE_COMMOND_JOINED) {
-
+                            try {
+                                JSONObject jsonObject = new JSONObject(data);
+                                String sessionId = jsonObject.optString("sessionId");
+                                setSessionId(sessionId);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(1));
                         } else if (command == IMConstant.MESSAGE_COMMOND_HANGUP) {
-
+                            EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(2));
                         }
                     }
                 }
@@ -319,7 +335,7 @@ public class EaseCallKit {
             public void onCmdMessageReceived(List<EMMessage> messages) {
                 for (EMMessage message : messages) {
                     String messageType = message.getStringAttribute(EaseMsgUtils.CALL_MSG_TYPE, "");
-                    EMLog.d(TAG, "Receive cmdmsg:" + message.getMsgId() + " from:" + message.getFrom() + "  messageType:" + messageType);
+//                    KLog.e(TAG, "Receive cmdmsg:" + message.getMsgId() + " from:" + message.getFrom() + "  messageType:" + messageType);
                     //有关通话控制信令
                     if (TextUtils.equals(messageType, EaseMsgUtils.CALL_MSG_INFO)
                             && !TextUtils.equals(message.getFrom(), EMClient.getInstance().getCurrentUser())) {
@@ -329,6 +345,7 @@ public class EaseCallKit {
                         String fromUser = message.getFrom();
                         String channel = message.getStringAttribute(EaseMsgUtils.CALL_CHANNELNAME, "");
                         EaseCallAction callAction = EaseCallAction.getfrom(action);
+                        KLog.e(TAG, "Receive cmdmsg:" + message.getMsgId() + " from:" + message.getFrom() + "  messageType:" + messageType + "  callAction:" + callAction + "  callState:" + callState);
                         switch (callAction) {
                             case CALL_CANCEL: //取消通话
                                 if (callState == EaseCallState.CALL_IDLE) {
@@ -553,7 +570,7 @@ public class EaseCallKit {
      *
      * @param username
      */
-    private void sendCmdMsg(BaseEvent event, String username) {
+    public void sendCmdMsg(BaseEvent event, String username) {
         final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.CMD);
         message.setTo(username);
         String action = "rtcCall";
@@ -575,13 +592,13 @@ public class EaseCallKit {
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
-                EMLog.d(TAG, "Invite call success");
+                KLog.e(TAG, "Invite call success");
                 conversation.removeMessage(message.getMsgId());
             }
 
             @Override
             public void onError(int code, String error) {
-                EMLog.e(TAG, "Invite call error " + code + ", " + error);
+                KLog.e(TAG, "Invite call error " + code + ", " + error);
                 conversation.removeMessage(message.getMsgId());
                 if (callListener != null) {
                     callListener.onCallError(EaseCallError.IM_ERROR, code, error);
@@ -647,7 +664,7 @@ public class EaseCallKit {
 
                 //发送通知
                 if (Build.VERSION.SDK_INT >= 29 && !EasyUtils.isAppRunningForeground(appContext)) {
-                    EMLog.e(TAG, "notifier.notify:" + info);
+                    KLog.e(TAG, "notifier.notify:" + info);
                     if (callType == EaseCallType.SINGLE_VIDEO_CALL) {
                         info = userName + "发起视频邀请";
                     } else {

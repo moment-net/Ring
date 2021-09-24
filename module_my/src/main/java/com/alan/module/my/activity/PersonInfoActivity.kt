@@ -8,10 +8,13 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.activity.viewModels
 import com.alan.module.my.databinding.ActivityPersonInfoBinding
+import com.alan.module.my.dialog.LikesFragmentDialog
+import com.alan.module.my.dialog.TagFragmentDialog
 import com.alan.module.my.dialog.VoiceFragmentDialog
 import com.alan.module.my.viewmodol.PersonInfoViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.FileBean
+import com.alan.mvvm.base.http.responsebean.TargetInfoBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.gone
@@ -68,13 +71,23 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
             changeAddress()
         }
 
+        tvLikeValue.clickDelay {
+            val dialog = LikesFragmentDialog.newInstance()
+            dialog.show(supportFragmentManager)
+        }
+
+        tvLabelValue.clickDelay {
+            val dialog = TagFragmentDialog.newInstance()
+            dialog.show(supportFragmentManager)
+        }
+
         tvPlay.clickDelay {
             MediaPlayUtil.play(SpHelper.getUserInfo()?.greeting?.audioPath)
         }
 
 
         tvVoiceValue.clickDelay {
-            var voiceFragmentDialog = VoiceFragmentDialog.newInstance()
+            val voiceFragmentDialog = VoiceFragmentDialog.newInstance()
             voiceFragmentDialog.show(this@PersonInfoActivity.supportFragmentManager)
         }
 
@@ -122,8 +135,25 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
                     //用户信息更新
                     finish()
                 }
+
+                is TargetInfoBean -> {
+                    val tagList = it.typeTag
+                    val likeList = it.likes
+                    if (tagList == null || tagList.isEmpty()) {
+                        mBinding.tvLabelValue.setText("请选择")
+                    } else {
+                        mBinding.tvLabelValue.setText("重新选择")
+                    }
+
+                    if (likeList == null || likeList.isEmpty()) {
+                        mBinding.tvLikeValue.setText("请选择")
+                    } else {
+                        mBinding.tvLikeValue.setText("重新选择")
+                    }
+                }
             }
         }
+
     }
 
     /**
@@ -142,6 +172,7 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
     override fun onResume() {
         super.onResume()
         setUserInfo()
+        mViewModel.requestTarget()
     }
 
     fun setUserInfo() {

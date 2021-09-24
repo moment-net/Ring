@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="职业技能"
+        android:text="干饭标签"
         android:textColor="@color/_3A3A3A"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="请选择你的技能（可多选）"
+        android:text="请选择你的干饭标签（最多选3个）"
         android:textColor="@color/_B33A3A3A"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_skil"
+        android:id="@+id/rv_tag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -68,7 +68,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_skil"
+        app:layout_constraintTop_toBottomOf="@+id/rv_tag"
         app:sCorners="6dp"
         app:sSolidColor="@color/_FFBD2A"
         app:sStrokeColor="@color/_3A3A3A"

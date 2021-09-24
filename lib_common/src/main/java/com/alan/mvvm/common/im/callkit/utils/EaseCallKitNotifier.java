@@ -18,8 +18,8 @@ import android.text.TextUtils;
 import androidx.core.app.NotificationCompat;
 
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
+import com.socks.library.KLog;
 
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.Locale;
  * 备注：
  */
 public class EaseCallKitNotifier {
-    private final static String TAG = "EaseCallKitNotifier";
+    private final static String TAG = "RingNotify";
 
     protected final static String MSG_ENG = "%s contacts sent %s messages";
     protected final static String MSG_CH = "%s个联系人发来%s条消息";
@@ -106,7 +106,7 @@ public class EaseCallKitNotifier {
     public synchronized void notify(EMMessage message) {
         // check if app running background
         if (!EasyUtils.isAppRunningForeground(appContext)) {
-            EMLog.d(TAG, "app is running in background");
+            KLog.e(TAG, "app is running in background");
             notificationNum++;
             fromUsers.add(message.getFrom());
             handleMessage(message);
@@ -116,7 +116,7 @@ public class EaseCallKitNotifier {
     public synchronized void notify(List<EMMessage> messages) {
         // check if app running background
         if (!EasyUtils.isAppRunningForeground(appContext)) {
-            EMLog.d(TAG, "app is running in background");
+            KLog.e(TAG, "app is running in background");
             for (EMMessage message : messages) {
                 notificationNum++;
                 fromUsers.add(message.getFrom());
@@ -279,7 +279,7 @@ public class EaseCallKitNotifier {
             lastNotifyTime = System.currentTimeMillis();
             // check if in silent mode
             if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
-                EMLog.e(TAG, "in slient mode now");
+                KLog.e(TAG, "in slient mode now");
                 return;
             }
 
@@ -288,7 +288,7 @@ public class EaseCallKitNotifier {
 
                 ringtone = RingtoneManager.getRingtone(appContext, notificationUri);
                 if (ringtone == null) {
-                    EMLog.d(TAG, "cant find ringtone at:" + notificationUri.getPath());
+                    KLog.e(TAG, "cant find ringtone at:" + notificationUri.getPath());
                     return;
                 }
             }

@@ -51,7 +51,7 @@ class ChatVideoRightProvider() : BaseItemProvider<EMMessage>() {
 
         val body = item.getBody() as EMVideoMessageBody
         if (body.getDuration() > 0) {
-            val time = DateUtils.toTime(body.getDuration())
+            val time = DateUtils.toTime(body.getDuration() * 1000)
             tv_length.setText(time)
         }
         CoilUtils.load(iv_video, body.thumbnailUrl)

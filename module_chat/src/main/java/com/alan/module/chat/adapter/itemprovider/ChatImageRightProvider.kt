@@ -49,7 +49,7 @@ class ChatImageRightProvider() : BaseItemProvider<EMMessage>() {
         CoilUtils.loadCircle(iv_avatar, SpHelper.getUserInfo()?.avatar!!)
 
         val txtBody = item.getBody() as EMImageMessageBody
-        CoilUtils.loadRound(iv_pic, txtBody.localUri.toString(), 7f)
+        CoilUtils.loadRound(iv_pic, txtBody.remoteUrl.toString(), 7f)
 
         if (item.isAcked()) {
             iv_ack.setVisibility(View.VISIBLE)

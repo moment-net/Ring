@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_more"
+    android:layout_width="@dimen/dimen205"
+    android:layout_height="@dimen/dimen66"
+    android:background="@drawable/icon_state_qabg">
+
+    <TextView
+        android:id="@+id/tv_tips"
+        android:layout_width="@dimen/dimen205"
+        android:layout_height="@dimen/dimen66"
+        android:paddingTop="@dimen/dimen14"
+        android:paddingStart="@dimen/dimen6"
+        android:paddingEnd="@dimen/dimen6"
+        android:includeFontPadding="false"
+        android:text="系统会在两个小时内持续为你匹配饭友匹配成功后会收到语音聊天请求，如超时未匹配到饭友，系统会自动关闭此次匹配"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        binding:layout_constraintEnd_toEndOf="parent"
+        binding:layout_constraintStart_toStartOf="parent"
+        binding:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

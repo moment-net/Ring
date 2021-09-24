@@ -1,6 +1,5 @@
 package com.alan.module.chat.activity
 
-import android.net.Uri
 import androidx.activity.viewModels
 import com.alan.module.chat.databinding.ActivityImageBinding
 import com.alan.mvvm.base.coil.CoilUtils
@@ -23,7 +22,7 @@ class ImageActivity : BaseActivity<ActivityImageBinding, EmptyViewModel>() {
 
     @JvmField
     @Autowired
-    var uri: Uri? = null
+    var uri: String? = null
 
     /**
      * 通过 viewModels() + Hilt 获取 ViewModel 实例

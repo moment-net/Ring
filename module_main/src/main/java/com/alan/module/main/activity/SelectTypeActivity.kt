@@ -99,7 +99,7 @@ class SelectTypeActivity : BaseActivity<ActivitySelectTypeBinding, SelectTypeVie
         mViewModel.ldSuccess.observe(this) {
             when (it) {
                 is TargetBean -> {
-                    allList = it.type!!
+                    allList = it.types!!
                     for (index in 0..allList.size - 1) {
                         viewList.get(index).setText(allList.get(index))
                         viewList.get(index).visibility = View.VISIBLE
@@ -130,7 +130,7 @@ class SelectTypeActivity : BaseActivity<ActivitySelectTypeBinding, SelectTypeVie
             tv.setShapeSolidColor(ContextCompat.getColor(this, R.color._083A3A3A)).setUseShape()
             targetList.remove(allList.get(positon))
         } else {
-            if (targetList.size == 2) {
+            if (targetList.size == 3) {
                 toast("已经达到上限")
                 return
             }

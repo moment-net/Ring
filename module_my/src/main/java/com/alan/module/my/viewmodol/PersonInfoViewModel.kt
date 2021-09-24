@@ -91,4 +91,21 @@ class PersonInfoViewModel @Inject constructor(private val mRepository: CommonRep
         }
     }
 
+
+    fun requestTarget() {
+        viewModelScope.launch {
+            mRepository.requestTarget(
+                "",
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldSuccess.value = it.data!!
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
 }

@@ -71,10 +71,15 @@ object IMConstant {
 
 
     //EventBus事件-类型
+    //消息
     const val EVENT_TYPE_MESSAGE = "chatmessage"
+
+    //IM连接状态
     const val EVENT_TYPE_CONNECTION = "chatconnection"
 
+
     //EventBus事件-事件
+    //有新消息
     const val EVENT_EVENT_CHANGE = "change"
 
 
