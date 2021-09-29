@@ -1,9 +1,11 @@
 package com.alan.module.main.fragment
 
+import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alan.module.home.dialog.MatchFragmentDialog
 import com.alan.module.main.R
 import com.alan.module.main.adapter.ManagerAdapter
 import com.alan.module.main.databinding.FragmentHomeBinding
@@ -53,7 +55,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
 
     override fun FragmentHomeBinding.initView() {
-        ivAvatar.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MY) }
+        ivAvatar.clickDelay {
+            val dialog = MatchFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
+            dialog.show(requireActivity().supportFragmentManager)
+//            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MY)
+        }
         tvState.clickDelay {
             val dialog = StateFragmentDialog.newInstance()
             dialog.show(requireActivity().supportFragmentManager)
@@ -127,7 +133,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
 
         mAdapter.setOnItemClickListener { adapter, view, position ->
-            jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, mAdapter.data.get(position))
+            val userId = mAdapter.data.get(position).user.userId
+            val bundle = Bundle().apply {
+                putString("userId", userId)
+            }
+            jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
         }
 
         mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {

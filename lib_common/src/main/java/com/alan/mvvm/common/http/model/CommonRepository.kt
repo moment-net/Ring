@@ -83,6 +83,15 @@ class CommonRepository @Inject constructor() : BaseRepository() {
     ) = request(mApi, callback) { mApi.requestUserInfo(userId) }
 
     /**
+     * 获取用户信息(包含干饭信息)
+     */
+    suspend fun requestUserInfoDetail(
+        userId: String,
+        callback: RequestCallback<UserInfoBean>
+    ) = request(mApi, callback) { mApi.requestUserInfoDetail(userId) }
+
+
+    /**
      * 编辑用户信息
      */
     suspend fun requestEditUserInfo(
@@ -153,6 +162,13 @@ class CommonRepository @Inject constructor() : BaseRepository() {
         map: MutableMap<String, String>,
         callback: RequestCallback<ArrayList<SystemMessageBean>>
     ) = request(mApi, callback) { mApi.requestSystemMessage(map) }
+
+    /**
+     * 未读消息
+     */
+    suspend fun requestUnRead(
+        callback: RequestCallback<UnreadBean>
+    ) = request(mApi, callback) { mApi.requestUnRead() }
 
     /**
      * 关注/取关
@@ -374,11 +390,34 @@ class CommonRepository @Inject constructor() : BaseRepository() {
 
 
     /**
-     * 停止匹配
+     * 开启/关闭匹配
      */
     suspend fun requestMealStop(
+        status: String,
         callback: RequestCallback<String>
-    ) = request(mApi, callback) { mApi.requestMealStop() }
+    ) = request(mApi, callback) { mApi.requestMealStop(status) }
+
+    /**
+     * 匹配设置
+     */
+    suspend fun requestMatchSet(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestMatchSet(requestBody) }
+
+    /**
+     * 查看用户匹配设置
+     */
+    suspend fun requestSetInfo(
+        callback: RequestCallback<AcceptBean>
+    ) = request(mApi, callback) { mApi.requestSetInfo() }
+
+    /**
+     * 干饭匹配时间段
+     */
+    suspend fun requestMatchTime(
+        callback: RequestCallback<ArrayList<MatchTimeBean>>
+    ) = request(mApi, callback) { mApi.requestMatchTime() }
 
 }
 

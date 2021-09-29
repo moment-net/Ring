@@ -34,4 +34,22 @@ class MyViewModel @Inject constructor(private val mRepository: CommonRepository)
             ))
         }
     }
+
+    /**
+     * 未读消息
+     */
+    fun requestUnRead() {
+        viewModelScope.launch() {
+            mRepository.requestUnRead(
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldSuccess.value = it.data!!
+                    },
+                    onFailed = {
+                        ldSuccess.value = it
+                    },
+                )
+            )
+        }
+    }
 }

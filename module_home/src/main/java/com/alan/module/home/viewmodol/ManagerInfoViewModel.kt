@@ -22,11 +22,11 @@ import javax.inject.Inject
 class ManagerInfoViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
-    val ldSuccess = MutableLiveData<Int>()
+    val ldSuccess = MutableLiveData<Any>()
 
 
     fun requestChangeFollow(userId: String, tag: Int) {
-        var requestBean = FollowRequestBean(userId, tag, "0")
+        val requestBean = FollowRequestBean(userId, tag, "0")
         viewModelScope.launch {
             mRepository.requestChangeFollow(
                 RequestUtil.getPostBody(requestBean), callback = RequestCallback(
@@ -39,4 +39,25 @@ class ManagerInfoViewModel @Inject constructor(private val mRepository: CommonRe
                 ))
         }
     }
+
+
+    /**
+     * 获取个人信息
+     */
+    fun requestUserInfo(userId: String) {
+        viewModelScope.launch {
+            mRepository.requestUserInfoDetail(
+                userId,
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldSuccess.value = it.data!!
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    }
+                ))
+        }
+    }
+
+
 }

@@ -4,6 +4,7 @@ import com.alan.mvvm.base.BuildConfig
 import com.alan.mvvm.base.constant.VersionStatus
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.common.http.interceptor.CookiesInterceptor
+import com.alan.mvvm.common.http.interceptor.TokenInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,6 +46,7 @@ class DINetworkModule {
             .writeTimeout(20L * 1000L, TimeUnit.MILLISECONDS)
             .addInterceptor(logInterceptor)
             .addInterceptor(CookiesInterceptor())
+            .addInterceptor(TokenInterceptor())
             .build()
     }
 

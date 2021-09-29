@@ -40,7 +40,7 @@ object GsonUtil {
      * @param cls
      * @return
      */
-    fun <T> jsonToBean(gsonString: String, cls: Class<T>): T? {
+    fun <T> jsonToBean(gsonString: String?, cls: Class<T>): T? {
         var t: T? = null
         if (gson != null) {
             //传入json对象和对象类型,将json转成对象

@@ -1,5 +1,6 @@
 package com.alan.module.my.activity
 
+import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.viewModels
@@ -13,13 +14,19 @@ import com.alan.module.my.databinding.ActivityMessageBinding
 import com.alan.module.my.viewmodol.MessageViewModel
 import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.MessageBean
+import com.alan.mvvm.base.http.responsebean.UnreadBean
+import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
+import com.alan.mvvm.base.ktx.gone
+import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.http.exception.BaseHttpException
+import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -42,7 +49,9 @@ class MessageActivity : BaseActivity<ActivityMessageBinding, MessageViewModel>()
     override val mViewModel by viewModels<MessageViewModel>()
     lateinit var mAdapter: MessageAdapter
     private var mCursor: Int = 0
+    private var followPosition: Int = 0
     private var isLoad = false
+    lateinit var ivRed: ImageView
 
     /**
      * 初始化View
@@ -74,11 +83,48 @@ class MessageActivity : BaseActivity<ActivityMessageBinding, MessageViewModel>()
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = mAdapter
         }
+        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+            val userInfoBean: UserInfoBean? = mAdapter.data.get(position).content?.user
+            if (userInfoBean == null) {
+                return@setOnItemChildClickListener
+            }
+            when (view.id) {
+                R.id.iv_avatar -> {
+                    val bundle = Bundle().apply {
+                        putString("userId", userInfoBean.userId)
+                    }
+                    jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
+                }
+
+                R.id.tv_follow -> {
+                    followPosition = position
+                    if (userInfoBean.followStatus == 0) {
+                        mViewModel.requestChangeFollow(userInfoBean.userId, 1)
+                    } else {
+                        mViewModel.requestChangeFollow(userInfoBean.userId, 0)
+                    }
+                }
+
+                R.id.tv_chat -> {
+                    val bundle = Bundle().apply {
+                        putString("userId", userInfoBean.userId)
+                    }
+                    EMClientHelper.saveUser(
+                        UserEntity(
+                            userInfoBean.userId,
+                            userInfoBean.userName,
+                            userInfoBean.avatar
+                        )
+                    )
+                    jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
+                }
+            }
+        }
 
         //添加头布局
         val ll_msg: View = View.inflate(this, R.layout.layout_system, null)
         val clSystem = ll_msg.findViewById<ConstraintLayout>(R.id.cl_system)
-        val ivRed = ll_msg.findViewById<ImageView>(R.id.iv_red)
+        ivRed = ll_msg.findViewById<ImageView>(R.id.iv_red)
         clSystem.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_SYSTEMMSG) }
         mAdapter.addHeaderView(ll_msg)
     }
@@ -92,7 +138,7 @@ class MessageActivity : BaseActivity<ActivityMessageBinding, MessageViewModel>()
             when (it) {
                 is BaseResponse<*> -> {
                     mCursor = it.cursor
-                    var list: ArrayList<MessageBean> = it.data as ArrayList<MessageBean>
+                    val list: ArrayList<MessageBean> = it.data as ArrayList<MessageBean>
                     if (isLoad) {
                         mBinding.srfList.finishLoadMore()
                         mAdapter.addData(list)
@@ -111,6 +157,18 @@ class MessageActivity : BaseActivity<ActivityMessageBinding, MessageViewModel>()
                     toast(it.errorMessage)
                 }
 
+                is UnreadBean -> {
+                    if (it.newNoticeTotal > 0) {
+                        ivRed.visible()
+                    } else {
+                        ivRed.gone()
+                    }
+                }
+
+                is Int -> {
+                    mAdapter.data.get(followPosition).content?.user?.followStatus = it
+                    mAdapter.notifyItemChanged(followPosition + 1)
+                }
             }
         }
     }
@@ -138,6 +196,7 @@ class MessageActivity : BaseActivity<ActivityMessageBinding, MessageViewModel>()
 
 
     fun requestList() {
+        mViewModel.requestUnRead()
         mViewModel.requestList(mCursor)
     }
 }

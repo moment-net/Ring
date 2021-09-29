@@ -79,7 +79,7 @@ class VoiceViewModel @Inject constructor(private val mRepository: CommonReposito
             mediaPlayer = MediaPlayer()
             mediaPlayer.setDataSource(Constants.PATH_GREET_SELF)
             mediaPlayer.prepare()
-            duration = mediaPlayer.duration //时长
+            duration = mediaPlayer.duration / 1000 //时长
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {

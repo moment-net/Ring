@@ -3,9 +3,18 @@
     package="com.alan.module.home">
 
     <application>
-        <activity android:name=".activity.RemindSetActivity" />
-        <activity android:name=".activity.RingActivity" />
-        <activity android:name=".activity.ManagerInfoActivity" />
+        <activity
+            android:name=".activity.RemindSetActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RingActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ManagerInfoActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

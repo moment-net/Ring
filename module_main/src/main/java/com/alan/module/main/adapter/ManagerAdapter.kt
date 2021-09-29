@@ -36,9 +36,18 @@ class ManagerAdapter : BaseQuickAdapter<CookerBean, BaseViewHolder>(R.layout.ite
         val tvAge = holder.getView<ShapeView>(R.id.tv_age)
         var address = ""
         if (!TextUtils.isEmpty(item.user.address) && item.user.address!!.split("-").size == 3) {
-            address = item.user.address!!.split("-")[2]
+            address = item.user.address!!.split("-")[1]
         }
-        tvAge.setText("${item.user.age}岁  ${address}")
+        val age = if (item.user.age > 0) {
+            "${item.user.age}岁"
+        } else {
+            ""
+        }
+        if (TextUtils.isEmpty(age) && TextUtils.isEmpty(address)) {
+            tvAge.setText("")
+        } else {
+            tvAge.setText("$age  ${address}")
+        }
         if (item.user.gender == 1) {
             tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_boy, 0, 0, 0)
             tvAge.setTextColor(R.color._515FFF.getResColor())
@@ -60,7 +69,7 @@ class ManagerAdapter : BaseQuickAdapter<CookerBean, BaseViewHolder>(R.layout.ite
             tv_Voice.gone()
         } else {
             tv_Voice.visible()
-            val duration: Int = (item.user.greeting?.duration ?: 0) / 1000
+            val duration: Int = (item.user.greeting?.duration ?: 0)
             tv_Voice.setText("${duration}s")
         }
 
@@ -148,7 +157,7 @@ class ManagerAdapter : BaseQuickAdapter<CookerBean, BaseViewHolder>(R.layout.ite
     }
 
     fun startVoicePlayAnimation(duration: Int) {
-        countDownTimer = object : CountDownTimer(duration.toLong(), 1000) {
+        countDownTimer = object : CountDownTimer(duration * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val second = millisUntilFinished / 1000
                 tvVoice.setText("${second}s")
@@ -163,7 +172,6 @@ class ManagerAdapter : BaseQuickAdapter<CookerBean, BaseViewHolder>(R.layout.ite
 
     fun stopVoicePlayAnimation() {
         if (countDownTimer != null) {
-            countDownTimer?.cancel()
             countDownTimer = null;
         }
     }

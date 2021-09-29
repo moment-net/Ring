@@ -21,9 +21,13 @@ object CoilUtils {
     /**
      * 初始化
      */
-    fun initCoil() {
+    fun initCoil(placeholder: Int) {
         val imageLoader = ImageLoader.Builder(BaseApplication.mContext)
             .memoryCachePolicy(CachePolicy.ENABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .networkCachePolicy(CachePolicy.ENABLED)
+            .placeholder(placeholder)
+            .error(placeholder)
             .crossfade(true)
             .okHttpClient {
                 OkHttpClient.Builder()
@@ -64,6 +68,24 @@ object CoilUtils {
         iv.load(url) {
             transformations(
                 BlurTransformation(context, radius, sampling)
+            )
+        }
+    }
+
+    /**
+     * 加载圆形图片高斯模糊
+     */
+    fun loadCircleBlur(
+        iv: ImageView,
+        url: String,
+        context: Context,
+        radius: Float,
+        sampling: Float
+    ) {
+        iv.load(url) {
+            transformations(
+                BlurTransformation(context, radius, sampling),
+                CircleCropTransformation()
             )
         }
     }

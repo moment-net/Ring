@@ -11,6 +11,7 @@ import com.alan.module.my.databinding.ActivityMyBinding
 import com.alan.module.my.viewmodol.MyViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.DiamondBean
+import com.alan.mvvm.base.http.responsebean.UnreadBean
 import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
@@ -103,6 +104,14 @@ class MyActivity : BaseActivity<ActivityMyBinding, MyViewModel>() {
                         mBinding.tvDiamondNum.gone()
                     }
                 }
+
+                is UnreadBean -> {
+                    if (it.newNoticeTotal > 0) {
+                        mBinding.ivRed.visible()
+                    } else {
+                        mBinding.ivRed.gone()
+                    }
+                }
             }
         }
     }
@@ -117,6 +126,7 @@ class MyActivity : BaseActivity<ActivityMyBinding, MyViewModel>() {
     override fun onResume() {
         super.onResume()
         mViewModel.requestDiamond()
+        mViewModel.requestUnRead()
         setUserInfo()
     }
 
@@ -133,11 +143,16 @@ class MyActivity : BaseActivity<ActivityMyBinding, MyViewModel>() {
         mBinding.ivGender.setImageResource(if (userInfo?.gender == 1) R.drawable.icon_bing_boy else R.drawable.icon_bing_girl)
         mBinding.tvName.setText(userInfo?.userName)
         mBinding.tvAge.setText("${userInfo?.age}岁")
-        if (TextUtils.isEmpty(userInfo?.address!!)) {
+        if (userInfo?.gender == 1) {
+            mBinding.tvAge.setShapeSolidColor(R.color._698DEE.getResColor()).setUseShape()
+        } else {
+            mBinding.tvAge.setShapeSolidColor(R.color._F87585.getResColor()).setUseShape()
+        }
+        if (TextUtils.isEmpty(userInfo?.address)) {
             mBinding.tvLocation.gone()
         } else {
             mBinding.tvLocation.visible()
-            var address = userInfo?.address!!.split("-")[2]
+            val address = userInfo?.address!!.split("-")[1]
             mBinding.tvLocation.setText("${address}")
         }
         mBinding.tvFollowNum.setText("${userInfo?.fansCount}")

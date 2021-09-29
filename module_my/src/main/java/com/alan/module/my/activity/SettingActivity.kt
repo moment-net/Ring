@@ -204,7 +204,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding, SettingViewModel>()
 
         tvAppVersion.text = "v${DeviceUtil.getApkVersionName(this@SettingActivity)}"
 
-        if (SpHelper.getUserInfo()?.bindPhone!!) {
+        if (SpHelper.getUserInfo()?.bindWeChat!!) {
             tvBind.setText("已绑定")
             tvBinding.setEnabled(false)
         } else {

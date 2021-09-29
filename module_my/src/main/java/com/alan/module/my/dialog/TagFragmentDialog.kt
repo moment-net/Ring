@@ -11,13 +11,16 @@ import com.alan.module.my.R
 import com.alan.module.my.adapter.TagAdapter
 import com.alan.module.my.databinding.LayoutDialogSkilBinding
 import com.alan.module.my.viewmodol.TagViewModel
+import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.TargetBean
 import com.alan.mvvm.base.http.responsebean.TargetInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
+import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.base.utils.MyGridItemDecoration
 import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.event.TagRefreshEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -104,19 +107,26 @@ class TagFragmentDialog : BaseFrameDialogFragment<LayoutDialogSkilBinding, TagVi
         mViewModel.ldSuccess.observe(this) {
             when (it) {
                 is TargetBean -> {
-                    allList.addAll(it.like!!)
+                    allList.addAll(it.type!!)
                     mAdapter.setList(allList)
                 }
 
-                is TargetInfoBean -> {
-                    if (!mAdapter.selectList.isEmpty()) {
-                        mAdapter.selectList.clear()
+                is BaseResponse<*> -> {
+                    if (it.data != null) {
+                        val targetInfoBean = it.data as TargetInfoBean
+                        if (!mAdapter.selectList.isEmpty()) {
+                            mAdapter.selectList.clear()
+                        }
+                        val tagList = targetInfoBean.typeTag
+                        if (tagList != null && !tagList.isEmpty()) {
+                            mAdapter.selectList.addAll(tagList)
+                            mAdapter.notifyDataSetChanged()
+                        }
                     }
-                    mAdapter.selectList.addAll(it.typeTag)
-                    mAdapter.notifyDataSetChanged()
                 }
 
                 is Boolean -> {
+                    EventBusUtils.postEvent(TagRefreshEvent(1))
                     dismiss()
                 }
             }

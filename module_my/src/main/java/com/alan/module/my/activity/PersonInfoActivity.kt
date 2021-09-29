@@ -13,6 +13,7 @@ import com.alan.module.my.dialog.TagFragmentDialog
 import com.alan.module.my.dialog.VoiceFragmentDialog
 import com.alan.module.my.viewmodol.PersonInfoViewModel
 import com.alan.mvvm.base.coil.CoilUtils
+import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.FileBean
 import com.alan.mvvm.base.http.responsebean.TargetInfoBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
@@ -21,6 +22,7 @@ import com.alan.mvvm.base.ktx.gone
 import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.utils.*
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.TagRefreshEvent
 import com.alan.mvvm.common.event.UserEvent
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.ui.BaseActivity
@@ -115,6 +117,17 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
             }
         })
 
+        etDesc.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                tvLimitDesc.setText("${s?.length!!}/15");
+            }
+        })
 
     }
 
@@ -136,19 +149,22 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
                     finish()
                 }
 
-                is TargetInfoBean -> {
-                    val tagList = it.typeTag
-                    val likeList = it.likes
-                    if (tagList == null || tagList.isEmpty()) {
-                        mBinding.tvLabelValue.setText("请选择")
-                    } else {
-                        mBinding.tvLabelValue.setText("重新选择")
-                    }
+                is BaseResponse<*> -> {
+                    if (it.data != null) {
+                        val targetInfoBean = it.data as TargetInfoBean
+                        val tagList = targetInfoBean.typeTag
+                        val likeList = targetInfoBean.likes
+                        if (tagList == null || tagList.isEmpty()) {
+                            mBinding.tvLabelValue.setText("请选择")
+                        } else {
+                            mBinding.tvLabelValue.setText("重新选择")
+                        }
 
-                    if (likeList == null || likeList.isEmpty()) {
-                        mBinding.tvLikeValue.setText("请选择")
-                    } else {
-                        mBinding.tvLikeValue.setText("重新选择")
+                        if (likeList == null || likeList.isEmpty()) {
+                            mBinding.tvLikeValue.setText("请选择")
+                        } else {
+                            mBinding.tvLikeValue.setText("重新选择")
+                        }
                     }
                 }
             }
@@ -169,6 +185,12 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
         setUserInfo()
     }
 
+    //更新信息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun updaeTag(event: TagRefreshEvent) {
+        mViewModel.requestTarget()
+    }
+
     override fun onResume() {
         super.onResume()
         setUserInfo()
@@ -176,7 +198,7 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
     }
 
     fun setUserInfo() {
-        var userInfo = SpHelper.getUserInfo()
+        val userInfo = SpHelper.getUserInfo()
         CoilUtils.loadCircle(mBinding.ivAvator, userInfo?.avatar ?: "")
         if (userInfo?.gender == 1) {
             mBinding.rbBoy.isChecked = true
@@ -186,8 +208,12 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
 
         mBinding.etName.setText(userInfo?.userName)
         mBinding.etName.clearFocus()
-        mBinding.tvBirthdayValue.setText("${userInfo?.birthday}")
-        mBinding.tvHometownValue.setText("${userInfo?.address}")
+        mBinding.etDesc.setText(userInfo?.desc)
+        mBinding.etDesc.clearFocus()
+        birthday = userInfo?.birthday
+        mBinding.tvBirthdayValue.setText("${birthday}")
+        address = userInfo?.address
+        mBinding.tvHometownValue.setText("${address}")
         if (userInfo?.greeting == null) {
             mBinding.tvVoiceValue.setText("录制语音签名")
             mBinding.tvPlay.gone()
@@ -216,7 +242,7 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
             object : LocationPickerUtil.OnPickerListener {
                 override fun onPicker(opt1: String, opt2: String, opt3: String) {
                     address = opt1.toString() + "-" + opt2 + "-" + opt3
-                    mBinding.tvHometownValue.setText(opt3)
+                    mBinding.tvHometownValue.setText(address)
                 }
 
             }
@@ -290,6 +316,7 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
     fun requestEditUserInfo() {
         mViewModel.requestEditUserInfo(
             mBinding.etName.text.toString(),
+            mBinding.etDesc.text.toString(),
             imgUrl ?: "",
             birthday ?: "",
             address ?: ""

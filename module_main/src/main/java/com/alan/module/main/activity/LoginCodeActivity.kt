@@ -109,12 +109,14 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
         }
 
         mViewModel.ldIM.observe(this) {
-            dismissDialog()
             if (it.errorCode == 0) {
+                handleIMLogin()
+            } else if (it.errorCode == 200) {
                 handleIMLogin()
             } else {
                 toast(it.errorMessage)
             }
+            dismissDialog()
         }
 
 

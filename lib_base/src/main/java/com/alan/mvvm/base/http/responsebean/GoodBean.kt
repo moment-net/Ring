@@ -9,7 +9,7 @@ data class GoodBean(
     val goodsId: String? = null,
     val name: String? = null,
     val type: String? = null,
-    val amount: Int = 0,
+    val amount: Float = 0f,
     val point: Int = 0,
     val detail: String? = null,
     val date: String? = null,

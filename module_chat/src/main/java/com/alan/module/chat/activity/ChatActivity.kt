@@ -189,6 +189,14 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         mAdapter = ChatMessageAdapter(userEntity)
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
             when (view.id) {
+                R.id.iv_avatar -> {
+                    val message = mAdapter.getItem(position)
+                    val userId: String = message.from
+                    val bundle = Bundle().apply {
+                        putString("userId", userId)
+                    }
+                    jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
+                }
                 R.id.iv_pic -> {
                     val message = mAdapter.getItem(position).body as EMImageMessageBody
                     val imgUri: String = message.remoteUrl

@@ -31,12 +31,13 @@ class PersonInfoViewModel @Inject constructor(private val mRepository: CommonRep
      */
     fun requestEditUserInfo(
         userName: String,
+        desc: String,
         url: String,
         birthday: String,
         address: String
     ) {
         val requestBean = EditRequestBean(
-            userName, avatar = url, birthday = birthday, address = address
+            userName, desc, avatar = url, birthday = birthday, address = address
         )
 
         viewModelScope.launch {
@@ -95,10 +96,10 @@ class PersonInfoViewModel @Inject constructor(private val mRepository: CommonRep
     fun requestTarget() {
         viewModelScope.launch {
             mRepository.requestTarget(
-                "",
+                SpHelper.getUserInfo()?.userId!!,
                 callback = RequestCallback(
                     onSuccess = {
-                        ldSuccess.value = it.data!!
+                        ldSuccess.value = it
                     },
                     onFailed = {
                         toast(it.errorMessage)

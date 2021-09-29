@@ -1,13 +1,9 @@
 package com.alan.module.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
-import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -23,59 +19,7 @@ class StateViewModel @Inject constructor(private val mRepository: CommonReposito
     val ldSuccess = MutableLiveData<Any>()
 
 
-    /**
-     * 查看用户干饭状态
-     */
-    fun requestMealStatus() {
-        viewModelScope.launch() {
-            mRepository.requestMealStatus(
-                callback = RequestCallback(
-                    onSuccess = {
-                        ldSuccess.value = it
-                    },
-                    onFailed = {
-                        toast(it.errorMessage)
-                    },
-                )
-            )
-        }
-    }
 
-    /**
-     * 修改干饭状态
-     */
-    fun requestEditMeal(orderState: String) {
-        viewModelScope.launch() {
-            mRepository.requestEditMeal(
-                orderState,
-                callback = RequestCallback(
-                    onSuccess = {
-                        ldSuccess.value = true
-                    },
-                    onFailed = {
-                        toast(it.errorMessage)
-                    },
-                )
-            )
-        }
-    }
 
-    /**
-     * 用户是否在饭友匹配中
-     */
-    fun requestMealStop() {
-        viewModelScope.launch() {
-            mRepository.requestMealStop(
-                callback = RequestCallback(
-                    onSuccess = {
-                        ldSuccess.value = true
-                    },
-                    onFailed = {
-                        toast(it.errorMessage)
-                    },
-                )
-            )
-        }
-    }
 
 }

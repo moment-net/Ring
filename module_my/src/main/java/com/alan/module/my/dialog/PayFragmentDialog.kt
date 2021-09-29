@@ -19,7 +19,6 @@ import com.alan.mvvm.base.http.responsebean.PrepayBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
-import com.alan.mvvm.base.utils.NumberUtils
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.Constants
@@ -82,7 +81,7 @@ class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayVie
         goodBean = arguments?.getParcelable("bean")!!
 
 
-        tvMoney.setText("${NumberUtils.getDoubleNum(goodBean?.amount!!)}");
+        tvMoney.setText("${goodBean?.amount!!}");
 
         regToWx()
     }

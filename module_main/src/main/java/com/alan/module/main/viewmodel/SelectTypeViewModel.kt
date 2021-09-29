@@ -3,7 +3,7 @@ package com.alan.module.main.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
-import com.alan.mvvm.base.http.responsebean.TargetBean
+import com.alan.mvvm.base.http.requestbean.TargetRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
@@ -42,7 +42,7 @@ class SelectTypeViewModel @Inject constructor(private val mRepository: CommonRep
 
 
     fun requestSaveTarget(type: ArrayList<String>) {
-        val requestBean = TargetBean(types = type)
+        val requestBean = TargetRequestBean(types = type)
         viewModelScope.launch {
             mRepository.requestSaveTarget(
                 RequestUtil.getPostBody(requestBean),

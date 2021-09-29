@@ -27,12 +27,16 @@ import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.event.CallEvent
 import com.alan.mvvm.common.event.CallServiceEvent
 import com.alan.mvvm.common.event.MessageEvent
+import com.alan.mvvm.common.event.TokenEvent
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.im.callkit.EaseCallKit
+import com.alan.mvvm.common.im.callkit.base.EaseCallState
 import com.alan.mvvm.common.im.push.HMSPushHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.hyphenate.chat.EMMessage
+import com.socks.library.KLog
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -194,10 +198,19 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         }
     }
 
+    //Token失效
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun handleToken(event: TokenEvent) {
+        SpHelper.clearUserInfo()
+        ActivityStackManager.finishAllActivity()
+        val bundle = Bundle()
+        jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_LOGIN, bundle, Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
 
     //获取新消息
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun showCall(event: CallEvent) {
+        KLog.e("RingIM", "收到邀请弹起弹框")
         val dialog =
             CallFragmentDialog.newInstance(event.isComingCall, event.channelName, event.username)
         dialog.show((ActivityStackManager.getCurrentActivity() as FragmentActivity).supportFragmentManager)
@@ -218,6 +231,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
             if (!TextUtils.isEmpty(sessionId)) {
                 mViewModel.requestChatHangup(sessionId)
             }
+            //重置状态
+            EaseCallKit.getInstance().callState = EaseCallState.CALL_IDLE
+            EaseCallKit.getInstance().callID = null
+            EaseCallKit.getInstance().setSessionId(null)
         }
     }
 

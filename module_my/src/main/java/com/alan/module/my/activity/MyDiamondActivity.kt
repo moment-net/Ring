@@ -119,6 +119,12 @@ class MyDiamondActivity : BaseActivity<ActivityMyDiamondBinding, MyDiamondViewMo
                 PayFragmentDialog.newInstance(diamondBean.recharge, goodBean)
             payDialog.show(supportFragmentManager)
         }
+        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+            val goodBean: GoodBean = mAdapter.data.get(position)
+            val payDialog: PayFragmentDialog =
+                PayFragmentDialog.newInstance(diamondBean.recharge, goodBean)
+            payDialog.show(supportFragmentManager)
+        }
     }
 
     /**

@@ -9,6 +9,7 @@ import com.alan.module.main.viewmodel.SelectTargetViewModel
 import com.alan.mvvm.base.http.responsebean.TargetBean
 import com.alan.mvvm.base.http.responsebean.TargetInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
+import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
@@ -41,6 +42,7 @@ class SelectTargetActivity : BaseActivity<ActivitySelectTargetBinding, SelectTar
         tvJump.clickDelay { jumpNext() }
         tvNext.clickDelay {
             if (targetList.size == 0) {
+                toast("请选择你喜欢吃的")
                 return@clickDelay
             }
             mViewModel.requestSaveTarget(targetList)
@@ -127,6 +129,7 @@ class SelectTargetActivity : BaseActivity<ActivitySelectTargetBinding, SelectTar
 
     fun check(positon: Int, tv: ShapeView) {
         if (targetList.contains(allList.get(positon))) {
+            tv.setTextColor(R.color.black.getResColor())
             tv.setShapeSolidColor(ContextCompat.getColor(this, R.color._083A3A3A)).setUseShape()
             targetList.remove(allList.get(positon))
         } else {
@@ -134,6 +137,7 @@ class SelectTargetActivity : BaseActivity<ActivitySelectTargetBinding, SelectTar
                 toast("已经达到上限")
                 return
             }
+            tv.setTextColor(R.color.white.getResColor())
             tv.setShapeSolidColor(ContextCompat.getColor(this, R.color._FFBD2A)).setUseShape()
             targetList.add(allList.get(positon))
         }

@@ -1,6 +1,8 @@
 package com.alan.mvvm.common.constant
 
+import com.alan.mvvm.base.constant.VersionStatus
 import com.alan.mvvm.base.utils.StorageUtil
+import com.alan.mvvm.common.BuildConfig
 
 object Constants {
     //微信 APP_ID
@@ -12,8 +14,18 @@ object Constants {
     const val ONELOGIN_APP_ID: String = "ffdde7182d61db6a28285978e037ae46"
 
     //声网
-    const val AGORA_ID = "aef85e061fc048658a23a96860a26718"
-//const val AGORA_ID = "d90373e913834741b538844be09bcc2d"
+    var AGORA_ID = if ((BuildConfig.VERSION_TYPE != VersionStatus.RELEASE)) {
+        //测试
+        "aef85e061fc048658a23a96860a26718"
+    } else {
+        //正式
+        "4a804efb062a4e249b4dacd8a9e370ea"
+    }
+
+    //BuglyId
+    const val BUGLYID_RELEASE: String = "8005da8385";
+    const val BUGLYID_DEBUG: String = "26a0ea814f";
+
 
     const val HW_APPID = "104736151"
     const val HW_APPSECRET = "88015c60c330fcc92ddfb595a11b9063a110aad618f1bca6643430ea7c8e7115"

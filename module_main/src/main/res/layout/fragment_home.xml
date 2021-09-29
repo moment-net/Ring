@@ -105,6 +105,7 @@
         android:src="@drawable/icon_home_openmeal"
         android:layout_marginBottom="@dimen/dimen115"
         android:layout_marginEnd="@dimen/dimen15"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -10,8 +10,7 @@ android {
     resourcePrefix "common_"
 
     defaultConfig {
-        resValue "string", "BUGLY_APP_ID", ""
-
+        resValue "string", "BUGLY_APP_ID", "26a0ea814f"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += [

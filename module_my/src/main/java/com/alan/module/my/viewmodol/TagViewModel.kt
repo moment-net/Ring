@@ -3,10 +3,11 @@ package com.alan.module.my.viewmodol
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
-import com.alan.mvvm.base.http.responsebean.TargetBean
+import com.alan.mvvm.base.http.requestbean.TargetRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -41,13 +42,13 @@ class TagViewModel @Inject constructor(private val mRepository: CommonRepository
 
 
     fun requestSaveTarget(type: ArrayList<String>) {
-        val requestBean = TargetBean(types = type)
+        val requestBean = TargetRequestBean(types = type)
         viewModelScope.launch {
             mRepository.requestSaveTarget(
                 RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        ldSuccess.value = it.data!!
+                        ldSuccess.value = true
                     },
                     onFailed = {
                         toast(it.errorMessage)
@@ -60,10 +61,10 @@ class TagViewModel @Inject constructor(private val mRepository: CommonRepository
     fun requestTarget() {
         viewModelScope.launch {
             mRepository.requestTarget(
-                "",
+                SpHelper.getUserInfo()?.userId!!,
                 callback = RequestCallback(
                     onSuccess = {
-                        ldSuccess.value = it.data!!
+                        ldSuccess.value = it
                     },
                     onFailed = {
                         toast(it.errorMessage)

@@ -42,4 +42,7 @@ data class UserInfoBean(
     var hasHeadset: Boolean? = false,
     var needInvite: Int = 0,
     var starSign: String? = "",
+    val likes: List<String>,
+    val typeTag: List<String>,
+    val mealStatusTitle: String,
 )

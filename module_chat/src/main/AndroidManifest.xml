@@ -5,13 +5,19 @@
     <application>
         <activity
             android:name=".activity.CameraActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.VideoActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ImageActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ChatActivity"
             android:screenOrientation="portrait"

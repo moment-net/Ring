@@ -134,6 +134,7 @@ class CallFragmentDialog : BaseFrameDialogFragment<LayoutCallBinding, CallDialog
             event.calleeDevId = EaseCallKit.deviceId
             EaseCallKit.getInstance().sendCmdMsg(event, userId)
 
+
             EventBusUtils.postEvent(CallServiceEvent(2))
             dismiss()
         }

@@ -38,6 +38,7 @@ class DbHelper private constructor() {
      * 关闭数据库
      */
     fun closeDb() {
+        currentUser = ""
         if (mDatabase != null) {
             mDatabase!!.close()
             mDatabase = null

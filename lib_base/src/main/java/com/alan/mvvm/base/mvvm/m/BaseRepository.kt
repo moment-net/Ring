@@ -81,7 +81,11 @@ open class BaseRepository {
         val exception: BaseHttpException
         when (throwable) {
             is HttpException -> {
-                exception = BaseHttpException(throwable.code(), "服务器出了点小差", throwable)
+                if (throwable.code() == 401) {
+                    exception = BaseHttpException(throwable.code(), "认证失败，请重新登陆", throwable)
+                } else {
+                    exception = BaseHttpException(throwable.code(), "服务器出了点小差", throwable)
+                }
             }
             is ConnectException, is SocketTimeoutException, is UnknownHostException, is GeneralSecurityException, is UnknownServiceException, is IOException -> {
                 exception = BaseHttpException(ERROR_NO_NET, "没有网络，请检查网络设置", throwable)

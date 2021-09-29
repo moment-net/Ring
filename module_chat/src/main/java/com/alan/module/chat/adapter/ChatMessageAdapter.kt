@@ -23,6 +23,7 @@ class ChatMessageAdapter(userEntity: UserEntity) : BaseProviderMultiAdapter<EMMe
         addItemProvider(ChatVoiceCallLeftProvider(userEntity))
         addItemProvider(ChatVoiceCallRightProvider())
 
+        addChildClickViewIds(R.id.iv_avatar)
         addChildClickViewIds(R.id.iv_pic)
         addChildClickViewIds(R.id.iv_video)
     }

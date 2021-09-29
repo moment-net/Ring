@@ -12,6 +12,7 @@ import com.alan.mvvm.base.constant.VersionStatus
 import com.alan.mvvm.base.utils.ProcessUtils
 import com.alan.mvvm.base.utils.SpUtils
 import com.alan.mvvm.base.utils.network.NetworkStateClient
+import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.auto.service.AutoService
@@ -173,11 +174,13 @@ class CommonApplication : ApplicationLifecycle {
      */
     private fun initTencentBugly(): String {
         // 第三个参数为SDK调试模式开关
-        CrashReport.initCrashReport(
-            BaseApplication.mContext,
-            BaseApplication.mContext.getString(R.string.BUGLY_APP_ID),
-            BuildConfig.VERSION_TYPE != VersionStatus.RELEASE
-        )
+        val isDebug = BuildConfig.VERSION_TYPE != VersionStatus.RELEASE
+        val buglyId = if (isDebug) {
+            Constants.BUGLYID_RELEASE
+        } else {
+            Constants.BUGLYID_DEBUG
+        }
+        CrashReport.initCrashReport(BaseApplication.mContext, buglyId, isDebug)
         return "Bugly -->> init complete"
     }
 
@@ -195,7 +198,7 @@ class CommonApplication : ApplicationLifecycle {
      */
     private fun initCoil(): String {
         // 初始化
-        CoilUtils.initCoil()
+        CoilUtils.initCoil(R.drawable.icon_placeholder)
         return "CoilUtils -->> init complete"
     }
 

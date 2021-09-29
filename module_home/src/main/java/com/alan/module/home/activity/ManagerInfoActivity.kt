@@ -3,6 +3,7 @@ package com.alan.module.home.activity
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils
@@ -14,7 +15,7 @@ import com.alan.module.home.R
 import com.alan.module.home.databinding.ActivityManagerInfoBinding
 import com.alan.module.home.viewmodol.ManagerInfoViewModel
 import com.alan.mvvm.base.coil.CoilUtils
-import com.alan.mvvm.base.http.responsebean.CookerBean
+import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
@@ -31,20 +32,22 @@ import dagger.hilt.android.AndroidEntryPoint
 /**
  * 作者：alan
  * 时间：2021/7/30
- * 备注：
+ * 备注：饭友详情
  */
 @Route(path = RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER)
 @AndroidEntryPoint
 class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfoViewModel>() {
 
     @JvmField
-    @Autowired(name = "bean")
-    var cookerBean: CookerBean? = null
+    @Autowired(name = "userId")
+    var userId: String? = null
+    lateinit var userInfoBean: UserInfoBean
 
     /**
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
      */
     override val mViewModel by viewModels<ManagerInfoViewModel>()
+    var countDownTimer: CountDownTimer? = null
 
     /**
      * 初始化View
@@ -53,28 +56,45 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
     override fun ActivityManagerInfoBinding.initView() {
         ivBack.clickDelay { finish() }
         tvVoice.clickDelay {
-            val url = cookerBean?.user?.greeting?.audioPath
-            VoicePlayerUtil.getInstance(this@ManagerInfoActivity)
-                .play(url, MediaPlayer.OnCompletionListener {
+            val url = userInfoBean?.greeting?.audioPath
+            val duration = userInfoBean?.greeting?.duration ?: 0
+            if (VoicePlayerUtil.getInstance(this@ManagerInfoActivity).isPlaying) {
+                //无论播放的语音项是这个还是其他，都先停止语音播放
+                VoicePlayerUtil.getInstance(this@ManagerInfoActivity).stop()
+                // 停止语音播放动画。
+                stopVoicePlayAnimation()
 
-                })
+                // 如果正在播放的语音项是此项，则只需停止播放即可。
+                val playingUrl: String = VoicePlayerUtil.getInstance(this@ManagerInfoActivity).url
+                if (TextUtils.equals(url, playingUrl)) {
+                    return@clickDelay
+                }
+            }
+            if (!TextUtils.isEmpty(url) && duration != 0) {
+                VoicePlayerUtil.getInstance(this@ManagerInfoActivity)
+                    .play(url, MediaPlayer.OnCompletionListener {
+                        stopVoicePlayAnimation()
+                    })
+                // 启动语音播放动画
+                startVoicePlayAnimation(duration)
+            }
         }
         tvFocus.clickDelay {
-            if (cookerBean?.user?.followStatus == 0) {
-                mViewModel.requestChangeFollow(cookerBean?.user?.userId!!, 1)
+            if (userInfoBean?.followStatus == 0) {
+                mViewModel.requestChangeFollow(userInfoBean?.userId!!, 1)
             } else {
-                mViewModel.requestChangeFollow(cookerBean?.user?.userId!!, 0)
+                mViewModel.requestChangeFollow(userInfoBean?.userId!!, 0)
             }
         }
         tvChat.clickDelay {
             val bundle = Bundle().apply {
-                putString("userId", cookerBean!!.user.userId)
+                putString("userId", userInfoBean.userId)
             }
             EMClientHelper.saveUser(
                 UserEntity(
-                    cookerBean!!.user.userId,
-                    cookerBean!!.user.userName,
-                    cookerBean!!.user.avatar
+                    userInfoBean.userId,
+                    userInfoBean.userName,
+                    userInfoBean.avatar
                 )
             )
             jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
@@ -106,8 +126,17 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
      */
     override fun initObserve() {
         mViewModel.ldSuccess.observe(this) {
-            cookerBean?.user?.followStatus = it
-            setFocus()
+            when (it) {
+                is UserInfoBean -> {
+                    userInfoBean = it
+                    setUserInfo()
+                }
+
+                is Int -> {
+                    userInfoBean?.followStatus = it
+                    setFocus()
+                }
+            }
         }
     }
 
@@ -115,22 +144,31 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
      * 获取数据
      */
     override fun initRequestData() {
-        setUserInfo()
+
     }
 
     fun setUserInfo() {
-        if (cookerBean == null) {
+        if (userInfoBean == null) {
             return
         }
-        val userInfoBean = cookerBean?.user;
+        val userInfoBean = userInfoBean;
         CoilUtils.loadRound(mBinding.ivAvatar, userInfoBean?.avatar!!, 3f)
         CoilUtils.loadBlur(mBinding.ivAvatarBg, userInfoBean?.avatar!!, this, 25f, 1f)
         mBinding.tvName.setText(userInfoBean?.userName)
         var address = ""
-        if (!TextUtils.isEmpty(cookerBean?.user?.address) && cookerBean?.user?.address!!.split("-").size == 3) {
-            address = cookerBean?.user?.address!!.split("-")[2]
+        if (!TextUtils.isEmpty(userInfoBean?.address) && userInfoBean?.address!!.split("-").size == 3) {
+            address = userInfoBean?.address!!.split("-")[1]
         }
-        mBinding.tvAge.setText("${userInfoBean?.age}岁  ${address}")
+        val age = if (userInfoBean.age > 0) {
+            "${userInfoBean.age}岁"
+        } else {
+            ""
+        }
+        if (TextUtils.isEmpty(age) && TextUtils.isEmpty(address)) {
+            mBinding.tvAge.setText("")
+        } else {
+            mBinding.tvAge.setText("$age  ${address}")
+        }
         if (userInfoBean.gender == 1) {
             mBinding.tvAge.setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.icon_home_boy,
@@ -152,27 +190,27 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
         }
 
         mBinding.tvDeclaration.setText(userInfoBean.desc)
-        mBinding.tvState.setText(cookerBean?.title)
+        mBinding.tvState.setText(userInfoBean?.mealStatusTitle)
         if (userInfoBean.onlineStatus!!) {
             mBinding.ivOnline.visible()
         } else {
             mBinding.ivOnline.gone()
         }
 
-        if (cookerBean?.user?.greeting?.duration ?: 0 == 0) {
+        if (userInfoBean?.greeting?.duration ?: 0 == 0) {
             mBinding.tvVoice.gone()
         } else {
             mBinding.tvVoice.visible()
-            val duration: Int = userInfoBean.greeting?.duration?.div(1000) ?: 0
+            val duration: Int = userInfoBean.greeting?.duration ?: 0
             mBinding.tvVoice.setText("${duration}s")
         }
 
 
-        var tagList = cookerBean?.tag
+        val tagList = userInfoBean?.typeTag
         if (tagList != null && !tagList.isEmpty()) {
             mBinding.tvTag.visible()
-            var stringBuilder = StringBuilder()
-            var list = arrayListOf<Int>()
+            val stringBuilder = StringBuilder()
+            val list = arrayListOf<Int>()
             for (position in 0..tagList.size - 1) {
                 if (position < tagList.size - 1) {
                     stringBuilder.append("${tagList.get(position)} ")
@@ -181,7 +219,7 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
                     stringBuilder.append("${tagList.get(position)}")
                 }
             }
-            var spannableString = SpannableString(stringBuilder.toString());
+            val spannableString = SpannableString(stringBuilder.toString());
             for (index in list) {
                 val imageSpan = ImageSpan(this, R.drawable.icon_home_line)
                 spannableString.setSpan(
@@ -196,11 +234,11 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
             mBinding.tvTag.gone()
         }
 
-        var likeList = cookerBean?.likes
+        val likeList = userInfoBean?.likes
         if (likeList != null && !likeList.isEmpty()) {
             mBinding.tvLike.visible()
-            var stringBuilder = StringBuilder()
-            var list = arrayListOf<Int>()
+            val stringBuilder = StringBuilder()
+            val list = arrayListOf<Int>()
             for (position in 0..likeList.size - 1) {
                 if (position < likeList.size - 1) {
                     stringBuilder.append("${likeList.get(position)} ")
@@ -209,7 +247,7 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
                     stringBuilder.append("${likeList.get(position)}")
                 }
             }
-            var spannableString = SpannableString(stringBuilder.toString());
+            val spannableString = SpannableString(stringBuilder.toString());
 
             for (index in list) {
                 val imageSpan = ImageSpan(this, R.drawable.icon_home_line)
@@ -228,16 +266,41 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
     }
 
     fun setFocus() {
-        if (cookerBean?.user?.followStatus == 0) {
+        if (userInfoBean?.followStatus == 0) {
             mBinding.tvFocus.setText("关注")
             mBinding.tvFocus.setShapeSolidColor(R.color._FF4F78.getResColor()).setUseShape()
-        } else if (cookerBean?.user?.followStatus == 1) {
+        } else if (userInfoBean?.followStatus == 1) {
             mBinding.tvFocus.setText("已关注")
             mBinding.tvFocus.setShapeSolidColor(R.color._A49389.getResColor()).setUseShape()
-        } else if (cookerBean?.user?.followStatus == 2) {
+        } else if (userInfoBean?.followStatus == 2) {
             mBinding.tvFocus.setText("互相关注")
             mBinding.tvFocus.setShapeSolidColor(R.color._A49389.getResColor()).setUseShape()
         }
+    }
+
+    fun startVoicePlayAnimation(duration: Int) {
+        countDownTimer = object : CountDownTimer(duration * 1000L, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val second = millisUntilFinished / 1000
+                mBinding.tvVoice.setText("${second}s")
+            }
+
+            override fun onFinish() {
+                mBinding.tvVoice.setText("${duration}s")
+            }
+        }
+        countDownTimer!!.start()
+    }
+
+    fun stopVoicePlayAnimation() {
+        if (countDownTimer != null) {
+            countDownTimer = null;
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.requestUserInfo(userId!!)
     }
 
 }

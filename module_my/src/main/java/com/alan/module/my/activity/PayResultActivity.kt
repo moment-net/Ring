@@ -6,7 +6,6 @@ import com.alan.module.my.databinding.ActivityPayResultBinding
 import com.alan.module.my.viewmodol.PayResultViewModel
 import com.alan.mvvm.base.http.responsebean.OrderBean
 import com.alan.mvvm.base.ktx.clickDelay
-import com.alan.mvvm.base.utils.NumberUtils
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
@@ -50,7 +49,7 @@ class PayResultActivity : BaseActivity<ActivityPayResultBinding, PayResultViewMo
             when (it) {
                 is OrderBean -> {
                     //支付状态:1: 未支付 2: 支付成功 3: 支付失败
-                    mBinding.tvMoney.setText("${NumberUtils.getDoubleNum(it.totalFee)}")
+                    mBinding.tvMoney.setText("${it.totalFee}")
                     mBinding.tvTime.setText("交易时间：${it.tradeTime}")
                     if (it.state == 2) {
                         mBinding.ivResult.setImageResource(R.drawable.icon_payresult_success)

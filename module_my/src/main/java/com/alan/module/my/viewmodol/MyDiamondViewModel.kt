@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -39,11 +40,12 @@ class MyDiamondViewModel @Inject constructor(private val mRepository: CommonRepo
     fun requestGoodsList() {
         viewModelScope.launch {
             mRepository.requestGoodsList(
-                "1", callback = RequestCallback(
+                "android", callback = RequestCallback(
                     onSuccess = {
                         ldSuccess.value = it
                     },
                     onFailed = {
+                        toast(it.errorMessage)
                     }
                 ))
         }

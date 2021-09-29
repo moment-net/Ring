@@ -11,13 +11,16 @@ import com.alan.module.my.R
 import com.alan.module.my.adapter.LikeAdapter
 import com.alan.module.my.databinding.LayoutDialogLikeBinding
 import com.alan.module.my.viewmodol.LikeViewModel
+import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.TargetBean
 import com.alan.mvvm.base.http.responsebean.TargetInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
+import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.base.utils.MyGridItemDecoration
 import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.event.TagRefreshEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -110,15 +113,23 @@ class LikesFragmentDialog :
                     mAdapter.setList(allList)
                 }
 
-                is TargetInfoBean -> {
-                    if (!mAdapter.selectList.isEmpty()) {
-                        mAdapter.selectList.clear()
+                is BaseResponse<*> -> {
+                    if (it.data != null) {
+                        val targetInfoBean = it.data as TargetInfoBean
+                        if (!mAdapter.selectList.isEmpty()) {
+                            mAdapter.selectList.clear()
+                        }
+                        val likes = targetInfoBean.likes
+                        if (likes != null && !likes.isEmpty()) {
+                            mAdapter.selectList.addAll(likes)
+                            mAdapter.notifyDataSetChanged()
+                        }
+
                     }
-                    mAdapter.selectList.addAll(it.likes)
-                    mAdapter.notifyDataSetChanged()
                 }
 
                 is Boolean -> {
+                    EventBusUtils.postEvent(TagRefreshEvent(1))
                     dismiss()
                 }
             }

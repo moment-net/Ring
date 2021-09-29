@@ -10,6 +10,10 @@ class TagAdapter : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_skil) 
 
     val selectList = arrayListOf<String>()
 
+    init {
+        addChildClickViewIds(R.id.ctv_label)
+    }
+
     override fun convert(holder: BaseViewHolder, item: String) {
         val tv_label = holder.getView<ShapeView>(R.id.ctv_label)
         tv_label.setText(item)

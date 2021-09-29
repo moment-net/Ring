@@ -6,7 +6,6 @@ import com.alan.mvvm.base.http.responsebean.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
-import java.util.*
 
 /**
  * 作者：alan
@@ -64,6 +63,12 @@ interface HomeApiService {
      */
     @GET("user/info/{userId}")
     suspend fun requestUserInfo(@Path("userId") userId: String): BaseResponse<UserInfoBean>
+
+    /**
+     * 获取用户信息(包含干饭信息)
+     */
+    @GET("user/details/{userId}")
+    suspend fun requestUserInfoDetail(@Path("userId") userId: String): BaseResponse<UserInfoBean>
 
 
     /**
@@ -126,6 +131,11 @@ interface HomeApiService {
     @GET("user/notice/list")
     suspend fun requestSystemMessage(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<SystemMessageBean>>
 
+    /**
+     * 未读消息
+     */
+    @GET("user/common/unread")
+    suspend fun requestUnRead(): BaseResponse<UnreadBean>
 
     /**
      * 关注/取关
@@ -318,14 +328,6 @@ interface HomeApiService {
 //    @POST("user/relation/inviteByThird")
 //    suspend fun requestInviteWX(@Body requestBody:RequestBody): BaseResponse<WXInviteBean>
 //
-//
-//    /**
-//     * 未读消息
-//     *
-//     * @return
-//     */
-//    @GET("user/common/unread")
-//    suspend fun requestUnRead(): BaseResponse<UnreadBean>
 //
 //
 //    /**
@@ -751,7 +753,7 @@ interface HomeApiService {
      * 充值商品列表
      */
     @GET("shop/goodsList")
-    suspend fun requestGoodsList(@Query("type") type: String): BaseResponse<ArrayList<GoodBean>>
+    suspend fun requestGoodsList(@Query("__plat") type: String): BaseResponse<ArrayList<GoodBean>>
 
 
     /**
@@ -1017,6 +1019,30 @@ interface HomeApiService {
      */
     @GET("meal/stop")
     suspend fun requestMealStop(): BaseResponse<String>
+
+    /**
+     * 开启/关闭匹配
+     */
+    @GET("meal/manage")
+    suspend fun requestMealStop(@Query("status") status: String): BaseResponse<String>
+
+    /**
+     * 匹配设置
+     */
+    @POST("meal/setting")
+    suspend fun requestMatchSet(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 查看用户匹配设置
+     */
+    @GET("user/matchsetting")
+    suspend fun requestSetInfo(): BaseResponse<AcceptBean>
+
+    /**
+     * 干饭匹配时间段
+     */
+    @GET("meal/matchtime")
+    suspend fun requestMatchTime(): BaseResponse<ArrayList<MatchTimeBean>>
 
 
 }

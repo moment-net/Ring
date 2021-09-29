@@ -660,6 +660,7 @@ public class EaseCallKit {
 
                 //启动activity
                 isComingCall = true;
+                KLog.e("RingIM", "发起语音聊天");
                 EventBusUtils.INSTANCE.postEvent(new CallEvent(true, channelName, fromUserId));
 
                 //发送通知

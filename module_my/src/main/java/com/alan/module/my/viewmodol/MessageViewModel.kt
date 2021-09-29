@@ -3,7 +3,10 @@ package com.alan.module.my.viewmodol
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
+import com.alan.mvvm.base.http.requestbean.FollowRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.RequestUtil
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -26,7 +29,7 @@ class MessageViewModel @Inject constructor(private val mRepository: CommonReposi
      * 获取列表
      */
     fun requestList(curson: Int) {
-        var map = hashMapOf<String, String>()
+        val map = hashMapOf<String, String>()
         map.put("cursor", "${curson}")
         map.put("count", "20")
         map.put("type", "2");
@@ -46,4 +49,36 @@ class MessageViewModel @Inject constructor(private val mRepository: CommonReposi
     }
 
 
+    /**
+     * 未读消息
+     */
+    fun requestUnRead() {
+        viewModelScope.launch() {
+            mRepository.requestUnRead(
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = it.data!!
+                    },
+                    onFailed = {
+                        ldData.value = it
+                    },
+                )
+            )
+        }
+    }
+
+    fun requestChangeFollow(userId: String, tag: Int) {
+        val requestBean = FollowRequestBean(userId, tag, "0")
+        viewModelScope.launch {
+            mRepository.requestChangeFollow(
+                RequestUtil.getPostBody(requestBean), callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = tag
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    }
+                ))
+        }
+    }
 }
