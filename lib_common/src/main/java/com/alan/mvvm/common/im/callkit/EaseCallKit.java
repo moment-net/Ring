@@ -15,7 +15,9 @@ import com.alan.mvvm.base.utils.EventBusUtils;
 import com.alan.mvvm.base.utils.UtilsKt;
 import com.alan.mvvm.common.constant.IMConstant;
 import com.alan.mvvm.common.constant.RouteUrl;
+import com.alan.mvvm.common.event.CallDismissEvent;
 import com.alan.mvvm.common.event.CallEvent;
+import com.alan.mvvm.common.event.CallHangupEvent;
 import com.alan.mvvm.common.event.CallServiceEvent;
 import com.alan.mvvm.common.im.callkit.base.EaseCallAction;
 import com.alan.mvvm.common.im.callkit.base.EaseCallInfo;
@@ -326,6 +328,7 @@ public class EaseCallKit {
                             EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(1));
                         } else if (command == IMConstant.MESSAGE_COMMOND_HANGUP) {
                             EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(2));
+                            EventBusUtils.INSTANCE.postEvent(new CallHangupEvent(1));
                         }
                     }
                 }
@@ -364,6 +367,7 @@ public class EaseCallKit {
                                     //发布消息
                                     EaseLiveDataBus.get().with(EaseCallType.SINGLE_VIDEO_CALL.toString()).postValue(event);
                                 }
+                                EventBusUtils.INSTANCE.postEvent(new CallDismissEvent());
                                 break;
                             case CALL_ALERT:
                                 String calleedDeviceId = message.getStringAttribute(EaseMsgUtils.CALLED_DEVICE_ID, "");
@@ -379,6 +383,7 @@ public class EaseCallKit {
                                 //多端设备时候用于区别哪个DrviceId,
                                 // 被叫处理自己设备Id的CALL_CONFIRM_RING
                                 if (TextUtils.equals(calledDvId, deviceId)) {
+                                    EventBusUtils.INSTANCE.postEvent(new CallDismissEvent());
                                     timeHandler.stopTime();
                                     if (!vaild) {
                                         //通话无效

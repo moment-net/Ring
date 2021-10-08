@@ -19,19 +19,26 @@ import com.alan.mvvm.base.http.responsebean.PrepayBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
+import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.dialog.DialogHelper
+import com.alan.mvvm.common.event.WXPayEvent
 import com.alan.mvvm.common.helper.PayHelper
+import com.lxj.xpopup.core.BasePopupView
+import com.socks.library.KLog
 import com.tencent.mm.opensdk.modelpay.PayReq
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
+@EventBusRegister
 @AndroidEntryPoint
 class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayViewModel>() {
 
@@ -43,6 +50,7 @@ class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayVie
     var payType = 1 //0是未选择；1是微信；2是支付宝
     lateinit var orderBean: OrderBean
     lateinit var goodBean: GoodBean
+    lateinit var showMultipleDialog: BasePopupView
     var isRecharge = false
     lateinit var api: IWXAPI
 
@@ -108,6 +116,7 @@ class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayVie
         mViewModel.ldSuccess.observe(this) {
             when (it) {
                 is OrderBean -> {
+                    orderBean = it
                     if (payType == 1) {
                         mViewModel.requestPayWX(it.orderId)
                     } else if (payType == 2) {
@@ -132,6 +141,22 @@ class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayVie
     override fun initRequestData() {
     }
 
+    //获取微信Code
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun handleWXCode(event: WXPayEvent) {
+        KLog.e("xujm", "WXPayEvent支付结果：" + event.code)
+        showMultipleDialog.dismiss()
+        if (event.code == 0) {
+            dismiss()
+            val bundle = Bundle().apply {
+                putString("orderId", orderBean.orderId)
+            }
+            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_PAYRESULT, bundle)
+        } else if (event.code == -2) {
+            toast("支付已取消")
+        }
+    }
+
     /**
      * 显示支付中弹框
      */
@@ -153,18 +178,19 @@ class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayVie
      * 显示支付中弹框
      */
     fun showPayResult() {
-        DialogHelper.showMultipleDialog(mActivity, "正在等待支付结果...", "支付成功", "支付遇到问题", {
-            val bundle = Bundle().apply {
-                putString("orderId", if (orderBean == null) "" else orderBean.orderId)
-            }
-            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_PAYRESULT, bundle)
-        }, {
-            val bundle = Bundle().apply {
-                putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/QnA")
-                putString("webTitle", "常见问题")
-            }
-            jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
-        })
+        showMultipleDialog =
+            DialogHelper.showMultipleDialog(mActivity, "正在等待支付结果...", "支付成功", "支付遇到问题", {
+                val bundle = Bundle().apply {
+                    putString("orderId", if (orderBean == null) "" else orderBean.orderId)
+                }
+                jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_PAYRESULT, bundle)
+            }, {
+                val bundle = Bundle().apply {
+                    putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/QnA")
+                    putString("webTitle", "常见问题")
+                }
+                jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
+            })
     }
 
 
@@ -202,10 +228,10 @@ class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayVie
         lifecycleScope.launch {
             PayHelper.requestPayResult(mActivity, orderInfo)
                 .collect {
-                    var payResult = PayResultBean(it);
+                    val payResult = PayResultBean(it);
 
                     //对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
-                    var resultStatus: String = payResult.resultStatus!!
+                    val resultStatus: String = payResult.resultStatus!!
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。

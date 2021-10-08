@@ -37,7 +37,7 @@ class PayResultActivity : BaseActivity<ActivityPayResultBinding, PayResultViewMo
         ivBack.clickDelay { finish() }
         tvHandle.clickDelay { finish() }
 
-        tvWx.setText("微信：" + "zhishuoapp")
+        tvWx.setText("微信：zhishuoapp")
         tvOrder.setText("订单编号：$orderId")
     }
 

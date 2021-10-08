@@ -15,9 +15,11 @@ import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
+import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.CallDismissEvent
 import com.alan.mvvm.common.event.CallServiceEvent
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.im.callkit.EaseCallKit
@@ -25,8 +27,12 @@ import com.alan.mvvm.common.im.callkit.base.EaseMsgUtils
 import com.alan.mvvm.common.im.callkit.event.AnswerEvent
 import com.alan.mvvm.common.views.EaseCallFloatWindow
 import com.lzf.easyfloat.permission.PermissionUtils
+import com.socks.library.KLog
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
+@EventBusRegister
 @AndroidEntryPoint
 class CallFragmentDialog : BaseFrameDialogFragment<LayoutCallBinding, CallDialogViewModel>() {
 
@@ -96,8 +102,7 @@ class CallFragmentDialog : BaseFrameDialogFragment<LayoutCallBinding, CallDialog
                 EaseCallFloatWindow.getInstance(requireContext()).isComingCall = true
                 EaseCallFloatWindow.getInstance(requireContext()).channelName = channelName
                 EaseCallFloatWindow.getInstance(requireContext()).username = userId
-                EaseCallFloatWindow.getInstance(requireContext()).update(true, 0, 0)
-                EaseCallFloatWindow.getInstance(requireContext()).setCameraDirection(true, true)
+                EaseCallFloatWindow.getInstance(requireContext()).updateState()
             } else {
                 val bundle = Bundle()
                 bundle.putBoolean("isComingCall", isComingCall!!)
@@ -144,6 +149,12 @@ class CallFragmentDialog : BaseFrameDialogFragment<LayoutCallBinding, CallDialog
         CoilUtils.loadRoundBorder(ivAvatar, userEntity.avatar, 12f, 1f, R.color.white.getResColor())
     }
 
+    //隐藏弹框
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun dismissCall(event: CallDismissEvent) {
+        KLog.e("RingIM", "收到邀请隐藏弹框")
+        dismiss()
+    }
 
     override fun initObserve() {
     }

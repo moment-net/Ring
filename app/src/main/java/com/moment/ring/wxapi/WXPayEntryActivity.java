@@ -6,7 +6,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.alan.mvvm.base.utils.EventBusUtils;
 import com.alan.mvvm.common.constant.Constants;
+import com.alan.mvvm.common.event.WXPayEvent;
 import com.socks.library.KLog;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -46,7 +48,7 @@ public class WXPayEntryActivity extends FragmentActivity implements IWXAPIEventH
     public void onResp(BaseResp resp) {
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             KLog.e("xujm", "onPayFinish,errCode=" + resp.errCode);
-//			EventBus.getDefault().post(new WXPayEvent(resp.errCode));
+            EventBusUtils.INSTANCE.postEvent(new WXPayEvent(resp.errCode));
         }
         finish();
     }

@@ -136,7 +136,12 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
         )
         mBinding.ivGender.setImageResource(if (userInfo?.gender == 1) R.drawable.icon_bing_boy else R.drawable.icon_bing_girl)
         mBinding.tvName.setText(userInfo?.userName)
-        mBinding.tvAge.setText("${userInfo?.age}岁")
+        if (userInfo?.age != 0) {
+            mBinding.tvAge.visible()
+            mBinding.tvAge.setText("${userInfo?.age}岁")
+        } else {
+            mBinding.tvAge.gone()
+        }
         if (userInfo?.gender == 1) {
             mBinding.tvAge.setShapeSolidColor(R.color._698DEE.getResColor()).setUseShape()
         } else {

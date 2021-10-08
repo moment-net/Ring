@@ -9,7 +9,7 @@ import com.hyphenate.chat.EMMessage
 
 class ChatCustomLeftProvider(val userEntity: UserEntity) : BaseItemProvider<EMMessage>() {
     override val itemViewType: Int
-        get() = IMConstant.MESSAGE_TYPE_CUSTOM_RIGHT
+        get() = IMConstant.MESSAGE_TYPE_CUSTOM_LEFT
 
 
     override val layoutId: Int

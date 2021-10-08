@@ -28,8 +28,6 @@ import com.alan.mvvm.common.im.callkit.base.EaseCallType;
 import com.alan.mvvm.common.im.callkit.utils.EaseCallKitUtils;
 import com.socks.library.KLog;
 
-import io.agora.rtc.RtcEngine;
-
 
 /**
  * 作者：alan
@@ -40,21 +38,14 @@ public class EaseCallFloatWindow {
     private static final String TAG = "EaseCallFloatWindow";
 
     private Context context;
-
     private static EaseCallFloatWindow instance;
-
     private WindowManager windowManager = null;
     private WindowManager.LayoutParams layoutParams = null;
-
     private View floatView;
-
-
     private int screenWidth;
     private int floatViewWidth;
     private EaseCallType callType;
-    private RtcEngine rtcEngine;
     private long costSeconds;
-    private SingleCallInfo singleCallInfo;
     private RelativeLayout ll_voice;
     private MyChronometer tvTime;
     private ConstraintLayout clTime;
@@ -64,44 +55,37 @@ public class EaseCallFloatWindow {
     private boolean isComingCall;
 
 
-    public EaseCallFloatWindow(Context context) {
-        initFloatWindow(context);
-    }
-
-    private EaseCallFloatWindow() {
-    }
-
-
     public static EaseCallFloatWindow getInstance(Context context) {
-        if (instance == null) {
-            instance = new EaseCallFloatWindow(context);
-        }
-        return instance;
-    }
-
-    public static EaseCallFloatWindow getInstance() {
         if (instance == null) {
             synchronized (EaseCallFloatWindow.class) {
                 if (instance == null) {
-                    instance = new EaseCallFloatWindow();
+                    instance = new EaseCallFloatWindow(context);
                 }
             }
         }
         return instance;
     }
 
+    public EaseCallFloatWindow(Context context) {
+        initFloatWindow(context);
+    }
+
+
+    private void initFloatWindow(Context context) {
+        this.context = context;
+        windowManager = (WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        Point point = new Point();
+        windowManager.getDefaultDisplay().getSize(point);
+        screenWidth = point.x;
+    }
+
+
     public void setCallType(EaseCallType callType) {
         this.callType = callType;
     }
 
-
-    public void setRtcEngine(RtcEngine rtcEngine) {
-        this.rtcEngine = rtcEngine;
-    }
-
-    public void setRtcEngine(Context context, RtcEngine rtcEngine) {
-        this.rtcEngine = rtcEngine;
-        initFloatWindow(context);
+    public EaseCallType getCallType() {
+        return callType;
     }
 
     public String getUsername() {
@@ -126,18 +110,6 @@ public class EaseCallFloatWindow {
 
     public void setComingCall(boolean comingCall) {
         isComingCall = comingCall;
-    }
-
-    private void initFloatWindow(Context context) {
-        this.context = context;
-        windowManager = (WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-        Point point = new Point();
-        windowManager.getDefaultDisplay().getSize(point);
-        screenWidth = point.x;
-    }
-
-    public EaseCallType getCallType() {
-        return callType;
     }
 
 
@@ -176,7 +148,6 @@ public class EaseCallFloatWindow {
 
         startCount();
 
-        singleCallInfo = new SingleCallInfo();
 
 
         floatView.post(new Runnable() {
@@ -192,7 +163,6 @@ public class EaseCallFloatWindow {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("uId", singleCallInfo != null ? singleCallInfo.remoteUid : 0);
                 bundle.putBoolean("isClickByFloat", true);
                 if (!TextUtils.isEmpty(username)) {
                     bundle.putBoolean("isComingCall", isComingCall);
@@ -246,6 +216,7 @@ public class EaseCallFloatWindow {
         });
     }
 
+
     private void startCount() {
         if (tvTime != null) {
             tvTime.setBase(SystemClock.elapsedRealtime() - costSeconds * 1000);
@@ -260,18 +231,8 @@ public class EaseCallFloatWindow {
     }
 
     /**
-     * 获取秒数
-     */
-    public long getFloatCostSeconds() {
-        if (tvTime != null) {
-            return tvTime.getCostSeconds();
-        }
-        Log.e(TAG, "tvTime is null, can not get cost seconds");
-        return 0;
-    }
-
-    /**
      * 应该在调用之前调用方法{@link #dismiss()}
+     * 获取秒数
      *
      * @return 总秒数
      */
@@ -280,7 +241,7 @@ public class EaseCallFloatWindow {
             Log.e("activity", "costSeconds: " + tvTime.getCostSeconds());
         }
         if (tvTime != null) {
-            return costSeconds + tvTime.getCostSeconds();
+            return tvTime.getCostSeconds();
         }
         Log.e(TAG, "tvTime is null, can not get total cost seconds");
         return 0;
@@ -289,19 +250,7 @@ public class EaseCallFloatWindow {
 
     /**
      * 更新单呼叫状态
-     *
-     * @param isSelf
-     * @param curUid
-     * @param remoteUid
      */
-    public void update(boolean isSelf, int curUid, int remoteUid) {
-        if (singleCallInfo == null) {
-            singleCallInfo = new SingleCallInfo();
-        }
-        singleCallInfo.curUid = curUid;
-        singleCallInfo.remoteUid = remoteUid;
-    }
-
     public void updateState() {
         if (isShowing()) {
             EaseCallState state = EaseCallKit.getInstance().getCallState();
@@ -316,33 +265,11 @@ public class EaseCallFloatWindow {
         }
     }
 
-    public SingleCallInfo getSingleCallInfo() {
-        return singleCallInfo;
-    }
-
-    public void setCameraDirection(boolean isFront, boolean changeFlag) {
-        if (singleCallInfo == null) {
-            singleCallInfo = new SingleCallInfo();
-        }
-        singleCallInfo.isCameraFront = isFront;
-        singleCallInfo.changeFlag = changeFlag;
-    }
 
     public boolean isShowing() {
         return floatView != null;
     }
 
-    /**
-     * 对于单次调用，只返回远程 uid
-     *
-     * @return
-     */
-    public int getUid() {
-        if ((callType == EaseCallType.SINGLE_VIDEO_CALL || callType == EaseCallType.SINGLE_VOICE_CALL) && singleCallInfo != null) {
-            return singleCallInfo.remoteUid;
-        }
-        return -1;
-    }
 
     /**
      * 停止悬浮窗
@@ -358,12 +285,7 @@ public class EaseCallFloatWindow {
         username = null;
         channelName = null;
         isComingCall = false;
-
-        if (singleCallInfo != null) {
-            singleCallInfo = null;
-        }
     }
-
 
 
     private void smoothScrollToBorder() {
@@ -398,25 +320,6 @@ public class EaseCallFloatWindow {
                     }
                 });
         animator.start();
-    }
-
-    public static class SingleCallInfo {
-        /**
-         * 当前用户的uid
-         */
-        public int curUid;
-        /**
-         * The other size of uid
-         */
-        public int remoteUid;
-        /**
-         * 摄像头方向：正面或背面
-         */
-        public boolean isCameraFront = true;
-        /**
-         * 用于标记本地和远程视频之间切换的标签
-         */
-        public boolean changeFlag;
     }
 
 
