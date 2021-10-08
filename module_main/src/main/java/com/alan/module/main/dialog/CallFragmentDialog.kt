@@ -36,6 +36,8 @@ import org.greenrobot.eventbus.ThreadMode
 @AndroidEntryPoint
 class CallFragmentDialog : BaseFrameDialogFragment<LayoutCallBinding, CallDialogViewModel>() {
 
+//    var countDownTimer: CountDownTimer? = null
+//    var userId: String? = null
 
     /**
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
@@ -118,6 +120,7 @@ class CallFragmentDialog : BaseFrameDialogFragment<LayoutCallBinding, CallDialog
         }
 
         tvChat.clickDelay {
+            //接受消息
             val bundle = Bundle()
             bundle.putBoolean("isComingCall", isComingCall!!)
             bundle.putString("channelName", channelName)
@@ -153,6 +156,7 @@ class CallFragmentDialog : BaseFrameDialogFragment<LayoutCallBinding, CallDialog
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun dismissCall(event: CallDismissEvent) {
         KLog.e("RingIM", "收到邀请隐藏弹框")
+        EventBusUtils.postEvent(CallServiceEvent(2))
         dismiss()
     }
 
@@ -161,6 +165,37 @@ class CallFragmentDialog : BaseFrameDialogFragment<LayoutCallBinding, CallDialog
 
     override fun initRequestData() {
     }
+
+//    fun startCountDown() {
+//        countDownTimer = object : CountDownTimer(30000, 1000) {
+//            override fun onTick(millisUntilFinished: Long) {
+//
+//            }
+//
+//            override fun onFinish() {
+//                //发送拒绝消息
+//                val event = AnswerEvent()
+//                event.result = EaseMsgUtils.CALL_ANSWER_REFUSE
+//                event.callId = EaseCallKit.getInstance().callID
+//                event.callerDevId = EaseCallKit.getInstance().getClallee_devId()
+//                event.calleeDevId = EaseCallKit.deviceId
+//                EaseCallKit.getInstance().sendCmdMsg(event, userId)
+//
+//
+//                EventBusUtils.postEvent(CallServiceEvent(2))
+//                dismiss()
+//            }
+//        }
+//        countDownTimer?.start()
+//    }
+//
+//    override fun dismiss() {
+//        super.dismiss()
+//        if (countDownTimer != null) {
+//            countDownTimer!!.cancel();
+//            countDownTimer = null;
+//        }
+//    }
 
 
 }

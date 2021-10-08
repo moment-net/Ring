@@ -302,6 +302,8 @@ public class EaseCallKit {
                         }
 
                     }
+
+
                     if (message.getType() == EMMessage.Type.TXT
                             && message.ext() != null
                             && message.ext().size() > 0) {

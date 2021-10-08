@@ -2,7 +2,6 @@ package com.alan.mvvm.common.views;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -169,7 +168,7 @@ public class EaseCallFloatWindow {
                     bundle.putString("channelName", channelName);
                     bundle.putString("username", username);
                 }
-                UtilsKt.jumpARoute(RouteUrl.CallModule.ACTIVITY_CALL_CALL, bundle, Intent.FLAG_ACTIVITY_NEW_TASK);
+                UtilsKt.jumpARoute(RouteUrl.CallModule.ACTIVITY_CALL_CALL, bundle);
             }
         });
 

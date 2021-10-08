@@ -221,12 +221,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     fun handleMsg(event: CallServiceEvent) {
         if (event.type == 1) {
             //加入
+            KLog.e("RingIM", "加入")
             val sessionId = EaseCallKit.getInstance().getSessionId()
             if (!TextUtils.isEmpty(sessionId)) {
                 mViewModel.requestChatStart(sessionId)
             }
         } else {
             //挂断
+            KLog.e("RingIM", "挂断")
             val sessionId = EaseCallKit.getInstance().getSessionId()
             if (!TextUtils.isEmpty(sessionId)) {
                 mViewModel.requestChatHangup(sessionId)
@@ -241,6 +243,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun onResume() {
         super.onResume()
+        handleConversations()
         EMClientHelper.showNotificationPermissionDialog()
     }
 

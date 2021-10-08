@@ -738,6 +738,7 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
     protected void onStart() {
         super.onStart();
         if (isDialogCall) {
+            isDialogCall = false;
             EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(1));
             answerBtn.performClick();
             if (PermissionUtils.checkPermission(this)) {
@@ -1430,7 +1431,6 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                     intervalTime = EaseMsgUtils.CALL_INVITE_INTERVAL;
                 }
                 if (timePassed * 1000 == intervalTime) {
-
                     //呼叫超时
                     timehandler.stopTime();
                     if (!isInComingCall) {
@@ -1448,6 +1448,7 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                             listener.onEndCallWithReason(callType, channelName, EaseCallEndReason.EaseCallEndReasonRemoteNoResponse, 0);
                         }
                     }
+                    EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(2));
                 }
                 sendEmptyMessageDelayed(MSG_TIMER, 1000);
                 return;

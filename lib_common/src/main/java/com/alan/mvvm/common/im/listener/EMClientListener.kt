@@ -64,6 +64,7 @@ class EMClientListener private constructor() {
      */
     inner class ChatMessageListener : EMMessageListener {
         override fun onMessageReceived(messages: List<EMMessage>) {
+            KLog.e(TAG, "收到消息")
             if (chatMsgListener != null) {
                 chatMsgListener?.onMessageReceived(messages)
             }
@@ -82,7 +83,7 @@ class EMClientListener private constructor() {
                 val userName = message.getStringAttribute(IMConstant.MESSAGE_ATTR_USERNAME, "")
                 val avatar = message.getStringAttribute(IMConstant.MESSAGE_ATTR_AVATAR, "")
                 EMClientHelper.saveUser(UserEntity(message.from, userName, avatar))
-
+                EMClientHelper.setUserInfoCallKit(message.from, userName, avatar)
 
                 // 如果设置群组离线消息免打扰，则不进行消息通知
 //                val disabledIds: List<String> = EMClientHelper.pushManager.getNoPushGroups()
@@ -105,6 +106,7 @@ class EMClientListener private constructor() {
         }
 
         override fun onMessageRead(list: List<EMMessage>) {
+            KLog.e(TAG, "消息已读")
             if (chatMsgListener != null) {
                 chatMsgListener?.onMessageRead(list)
             }
@@ -144,6 +146,7 @@ class EMClientListener private constructor() {
         }
 
         override fun onConversationRead(from: String?, to: String?) {
+            KLog.e(TAG, "会话已读")
             EventBusUtils.postEvent(
                 MessageEvent(
                     IMConstant.EVENT_TYPE_MESSAGE,

@@ -77,4 +77,10 @@ class VideoActivity : BaseActivity<ActivityVideoBinding, EmptyViewModel>() {
             return@setOnErrorListener false
         }
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mBinding.videoview.stopPlayback()
+    }
 }
