@@ -10,11 +10,11 @@ class SystemMsgAdapter : BaseQuickAdapter<SystemMessageBean, BaseViewHolder>(R.l
     override fun convert(holder: BaseViewHolder, item: SystemMessageBean) {
         holder.setText(R.id.tv_title, item.title)
         holder.setText(R.id.tv_time, item.createTime)
-        if (item.source == 8) {
+        if (item.content == null) {
             holder.setGone(R.id.tv_content, true)
         } else {
             holder.setGone(R.id.tv_content, false)
-            holder.setText(R.id.tv_content, item.content)
+            holder.setText(R.id.tv_content, item.content?.msg)
         }
 
     }

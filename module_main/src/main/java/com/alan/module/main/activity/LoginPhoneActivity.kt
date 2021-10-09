@@ -16,6 +16,7 @@ import com.alan.mvvm.base.utils.PhoneCountDownManager
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -48,7 +49,12 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
      * 初始化View
      */
     override fun ActivityLoginPhoneBinding.initView() {
-        ivBack.clickDelay { finish() }
+        ivBack.clickDelay {
+            if (type == 2) {
+                SpHelper.clearUserInfo()
+            }
+            finish()
+        }
         ivClear.clickDelay { etPhone.setText("") }
         tvCommit.clickDelay { requestCode() }
 

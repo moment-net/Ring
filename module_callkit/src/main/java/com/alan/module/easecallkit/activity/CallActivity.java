@@ -89,7 +89,6 @@ import com.socks.library.KLog;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -1209,6 +1208,8 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
         message.setAttribute(EaseMsgUtils.CALL_CHANNELNAME, channelName);
         message.setAttribute(EaseMsgUtils.CALL_TYPE, callType.code);
         message.setAttribute(EaseMsgUtils.CALL_DEVICE_ID, EaseCallKit.deviceId);
+
+        //增加扩展信息
         JSONObject object = EaseCallKit.getInstance().getInviteExt();
         if (object != null) {
             message.setAttribute(CALL_INVITE_EXT, object);
@@ -1222,24 +1223,30 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
         }
 
         //增加推送字段
-        JSONObject extObject = new JSONObject();
-        try {
-            EaseCallType type = EaseCallKit.getInstance().getCallType();
-            if (type == EaseCallType.SINGLE_VOICE_CALL) {
-                String info = getApplication().getString(R.string.alert_request_voice, EMClient.getInstance().getCurrentUser());
-                extObject.putOpt("em_push_title", info);
-                extObject.putOpt("em_push_content", info);
-            } else {
-                String info = getApplication().getString(R.string.alert_request_video, EMClient.getInstance().getCurrentUser());
-                extObject.putOpt("em_push_title", info);
-                extObject.putOpt("em_push_content", info);
-            }
-            extObject.putOpt("isRtcCall", true);
-            extObject.putOpt("callType", type.code);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        message.setAttribute("em_apns_ext", extObject);
+//        JSONObject extObject = new JSONObject();
+//        try {
+//            EaseCallType type = EaseCallKit.getInstance().getCallType();
+//            if (type == EaseCallType.SINGLE_VOICE_CALL) {
+//                String info = getApplication().getString(R.string.alert_request_voice, EMClient.getInstance().getCurrentUser());
+//                extObject.putOpt("em_push_title", info);
+//                extObject.putOpt("em_push_content", info);
+//            } else {
+//                String info = getApplication().getString(R.string.alert_request_video, EMClient.getInstance().getCurrentUser());
+//                extObject.putOpt("em_push_title", info);
+//                extObject.putOpt("em_push_content", info);
+//            }
+//            extObject.putOpt("isRtcCall", true);
+//            extObject.putOpt("callType", type.code);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        message.setAttribute("em_apns_ext", extObject);
+
+        // 设置自定义扩展字段-强制推送
+//        message.setAttribute(IMConstant.MESSAGE_ATTR_FORCEPUSH, true);
+        // 设置自定义扩展字段-发送静默消息（不推送）
+//        message.setAttribute(IMConstant.MESSAGE_ATTR_IGNOREPUSH, true);
+
 
         if (EaseCallKit.getInstance().getCallID() == null) {
             EaseCallKit.getInstance().setCallID(EaseCallKitUtils.getRandomString(10));

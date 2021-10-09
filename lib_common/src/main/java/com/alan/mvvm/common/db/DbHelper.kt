@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.TextUtils
 import androidx.room.Room
 import com.alan.mvvm.common.db.dao.UserDAO
+import com.socks.library.KLog
 
 class DbHelper private constructor() {
     var mDatabase: AppDatabase? = null
@@ -19,6 +20,7 @@ class DbHelper private constructor() {
      * 初始化数据库
      */
     fun initDB(context: Context, user: String) {
+        KLog.e("DbHelper", "数据库初始化：${user}和${currentUser}")
         if (currentUser != null) {
             if (TextUtils.equals(currentUser, user)) {
                 return
@@ -38,6 +40,7 @@ class DbHelper private constructor() {
      * 关闭数据库
      */
     fun closeDb() {
+        KLog.e("DbHelper", "数据库关闭")
         currentUser = ""
         if (mDatabase != null) {
             mDatabase!!.close()

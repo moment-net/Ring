@@ -1,7 +1,6 @@
 package com.alan.mvvm.common.im.listener
 
 import android.content.Context
-import com.alan.mvvm.base.utils.ActivityStackManager
 import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.db.entity.UserEntity
@@ -76,8 +75,6 @@ class EMClientListener private constructor() {
             )
             for (message in messages) {
                 KLog.e(TAG, "收到IM消息$message")
-                KLog.e(TAG, "onMessageReceived id : " + message.msgId)
-                KLog.e(TAG, "onMessageReceived: " + message.type)
 
                 //每收到一个消息进行保存用户信息
                 val userName = message.getStringAttribute(IMConstant.MESSAGE_ATTR_USERNAME, "")
@@ -90,10 +87,11 @@ class EMClientListener private constructor() {
 //                if (disabledIds.contains(message.conversationId())) {
 //                    return
 //                }
-                //后台通知有新的消息
-                if (!ActivityStackManager.isFront()) {
-                    EMClientHelper.notifier.notify(message)
-                }
+
+//                //后台通知有新的消息
+//                if (!ActivityStackManager.isFront()) {
+//                    EMClientHelper.notifier.notify(message)
+//                }
                 //通知有新的消息
                 EMClientHelper.notifier.vibrateAndPlayTone(message)
             }

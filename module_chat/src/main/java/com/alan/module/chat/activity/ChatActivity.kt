@@ -741,7 +741,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME, SpHelper.getUserInfo()?.userName);
 
         // 设置自定义扩展字段-强制推送
-        message.setAttribute(IMConstant.MESSAGE_ATTR_FORCEPUSH, true);
+//        message.setAttribute(IMConstant.MESSAGE_ATTR_FORCEPUSH, true);
         // 设置自定义扩展字段-发送静默消息（不推送）
 //        message.setAttribute(IMConstant.MESSAGE_ATTR_IGNOREPUSH, true);
 

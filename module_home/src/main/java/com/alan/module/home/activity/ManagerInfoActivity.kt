@@ -190,7 +190,7 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
         }
 
         mBinding.tvDeclaration.setText(userInfoBean.desc)
-        mBinding.tvState.setText(userInfoBean?.mealStatusTitle)
+        mBinding.tvState.setText("\"${userInfoBean?.mealStatusTitle}\"")
         if (userInfoBean.onlineStatus!!) {
             mBinding.ivOnline.visible()
         } else {

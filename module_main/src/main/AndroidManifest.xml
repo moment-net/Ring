@@ -27,8 +27,21 @@
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <data
+                    android:host="com.moment.ring"
+                    android:path="/main/"
+                    android:scheme="ring" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

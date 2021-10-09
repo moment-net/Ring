@@ -208,7 +208,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     //获取新消息
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun showCall(event: CallEvent) {
         KLog.e("RingIM", "收到邀请弹起弹框")
         val dialog =

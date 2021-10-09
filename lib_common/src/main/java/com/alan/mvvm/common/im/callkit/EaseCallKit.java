@@ -4,6 +4,8 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -226,7 +228,7 @@ public class EaseCallKit {
             public void onMessageReceived(List<EMMessage> messages) {
                 for (EMMessage message : messages) {
                     String messageType = message.getStringAttribute(EaseMsgUtils.CALL_MSG_TYPE, "");
-                    KLog.e(TAG, "Receive msg:" + message.getMsgId() + " from:" + message.getFrom() + "  messageType:" + messageType);
+                    KLog.e(TAG, "收到消息:" + message.getMsgId() + " from:" + message.getFrom() + "  messageType:" + messageType);
                     //有关通话控制信令
                     if (TextUtils.equals(messageType, EaseMsgUtils.CALL_MSG_INFO)
                             && !TextUtils.equals(message.getFrom(), EMClient.getInstance().getCurrentUser())) {
@@ -350,7 +352,7 @@ public class EaseCallKit {
                         String fromUser = message.getFrom();
                         String channel = message.getStringAttribute(EaseMsgUtils.CALL_CHANNELNAME, "");
                         EaseCallAction callAction = EaseCallAction.getfrom(action);
-                        KLog.e(TAG, "Receive cmdmsg:" + message.getMsgId() + " from:" + message.getFrom() + "  messageType:" + messageType + "  callAction:" + callAction + "  callState:" + callState);
+                        KLog.e(TAG, "收到命令消息:" + message.getMsgId() + " from:" + message.getFrom() + "  messageType:" + messageType + "  callAction:" + callAction + "  callState:" + callState);
                         switch (callAction) {
                             case CALL_CANCEL: //取消通话
                                 if (callState == EaseCallState.CALL_IDLE) {
@@ -668,17 +670,18 @@ public class EaseCallKit {
                 //启动activity
                 isComingCall = true;
                 KLog.e("RingIM", "发起语音聊天");
-                EventBusUtils.INSTANCE.postEvent(new CallEvent(true, channelName, fromUserId));
+                EventBusUtils.INSTANCE.postStickyEvent(new CallEvent(true, channelName, fromUserId));
 
                 //发送通知
                 if (Build.VERSION.SDK_INT >= 29 && !EasyUtils.isAppRunningForeground(appContext)) {
-                    KLog.e(TAG, "notifier.notify:" + info);
+                    KLog.e(TAG, "notify:" + info);
                     if (callType == EaseCallType.SINGLE_VIDEO_CALL) {
                         info = userName + "发起视频邀请";
                     } else {
                         info = userName + "发起语音邀请";
                     }
-//                        notifier.notify(intent, "环信 ", info);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("ring://com.moment.ring/main/"));
+//                    notifier.notify(intent, "Ring", info);
                 }
 
                 //通话邀请回调
