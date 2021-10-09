@@ -788,7 +788,6 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                     listener.onEndCallWithReason(callType, channelName, EaseCallEndReason.EaseCallEndReasonHangup, time * 1000);
                 }
             }
-            EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(2));
         } else if (id == R.id.local_surface_layout) {
             changeSurface();
         } else if (id == R.id.btn_call_float) {
@@ -1030,6 +1029,7 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                         callEvent.callerDevId = answerEvent.callerDevId;
                         callEvent.result = answerEvent.result;
                         if (TextUtils.equals(answerEvent.result, EaseMsgUtils.CALL_ANSWER_BUSY)) {
+                            //对方正在忙碌中
                             if (!mConfirm_ring) {
                                 //退出频道
                                 timehandler.stopTime();
@@ -1448,7 +1448,6 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                             listener.onEndCallWithReason(callType, channelName, EaseCallEndReason.EaseCallEndReasonRemoteNoResponse, 0);
                         }
                     }
-                    EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(2));
                 }
                 sendEmptyMessageDelayed(MSG_TIMER, 1000);
                 return;
@@ -1636,7 +1635,8 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                 if (isFloatWindowShowing()) {
                     EaseCallFloatWindow.getInstance(getApplicationContext()).dismiss();
                 }
-
+                //挂断接口
+                EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(2));
                 finish();
             }
         });

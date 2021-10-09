@@ -14,6 +14,7 @@
         android:gravity="center"
         android:includeFontPadding="false"
         android:text="关注"
+        android:visibility="gone"
         android:textColor="@color/white"
         android:textSize="13sp"
         binding:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +28,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="#605B82"
+        android:visibility="gone"
         binding:layout_constraintEnd_toEndOf="parent"
         binding:layout_constraintStart_toStartOf="parent"
         binding:layout_constraintTop_toBottomOf="@+id/tv_focus" />
@@ -37,6 +39,7 @@
         android:layout_height="48dp"
         android:gravity="center"
         android:text="举报"
+        android:layout_marginTop="6dp"
         android:textColor="@color/white"
         android:textSize="13sp"
         binding:layout_constraintBottom_toBottomOf="parent"

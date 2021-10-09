@@ -150,7 +150,9 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         mBinding.ivPic.clickDelay {
             ImageSelectUtil.singlePic(this@ChatActivity)
         }
-        mBinding.ivGift.clickDelay { }
+        mBinding.ivGift.clickDelay {
+            toast("即将上线")
+        }
 
 
         mBinding.llPress.setOnTouchListener { v, event ->
@@ -324,7 +326,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         )
         popupWindow.setFocusable(true)
         popupWindow.setOutsideTouchable(false)
-        popupWindow.showAsDropDown(mBinding.ivMore, 0, 10)
+        popupWindow.showAsDropDown(mBinding.ivMore, -dp2px(88f), 10)
     }
 
 

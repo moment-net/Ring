@@ -5,7 +5,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alan.module.home.dialog.MatchFragmentDialog
 import com.alan.module.main.R
 import com.alan.module.main.adapter.ManagerAdapter
 import com.alan.module.main.databinding.FragmentHomeBinding
@@ -56,9 +55,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override fun FragmentHomeBinding.initView() {
         ivAvatar.clickDelay {
-            val dialog = MatchFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
-            dialog.show(requireActivity().supportFragmentManager)
-//            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MY)
+//            val dialog = MatchFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
+//            dialog.show(requireActivity().supportFragmentManager)
+            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MY)
         }
         tvState.clickDelay {
             val dialog = StateFragmentDialog.newInstance()
