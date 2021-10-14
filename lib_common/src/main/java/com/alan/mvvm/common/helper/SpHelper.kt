@@ -18,6 +18,22 @@ import com.socks.library.KLog
  * 备注：存储本地数据
  */
 object SpHelper {
+
+    /**
+     * 设置是否同意隐私权限
+     */
+    fun setAgree(agree: Boolean) {
+        KLog.e("xujm", "隐私权限：" + agree)
+        SpUtils.put(SpKey.KEY_ISAGREE, agree)
+    }
+
+    /**
+     * 获取是否同意隐私权限
+     */
+    fun isAgree(): Boolean {
+        return SpUtils.getBoolean(SpKey.KEY_ISAGREE, false)!!
+    }
+
     /**
      * 是否登录
      */

@@ -7,6 +7,7 @@ import android.text.TextUtils
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.alan.module.main.databinding.ActivitySplashBinding
+import com.alan.module.main.dialog.PrivacyFragmentDialog
 import com.alan.module.main.viewmodel.SplashViewModel
 import com.alan.mvvm.base.utils.ActivityStackManager
 import com.alan.mvvm.base.utils.EventBusRegister
@@ -79,9 +80,24 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
      * 初始化
      */
     override fun initRequestData() {
-        requestPermisssion()
-
         initOneLogin()
+
+        if (SpHelper.isAgree()) {
+            requestPermisssion()
+        } else {
+            showPrivacyDialog()
+        }
+    }
+
+    fun showPrivacyDialog() {
+        val dialog = PrivacyFragmentDialog.newInstance()
+        dialog.show(supportFragmentManager)
+        dialog.listener = object : PrivacyFragmentDialog.OnClickAgreeListener {
+            override fun onClick() {
+                SpHelper.setAgree(true)
+                requestPermisssion()
+            }
+        }
     }
 
     /**

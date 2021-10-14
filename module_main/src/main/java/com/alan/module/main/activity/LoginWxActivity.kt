@@ -310,7 +310,8 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
 
                 is UserInfoBean -> {
                     //用户信息更新
-                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_TARGET)
+//                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_TARGET)
+                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
                     finish()
                 }
 

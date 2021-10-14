@@ -1403,6 +1403,9 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
         EMClient.getInstance().chatManager().sendMessage(message);
     }
 
+    /**
+     * 呼叫计时，如果超时则挂断
+     */
     private class TimeHandler extends Handler {
         private final int MSG_TIMER = 0;
         private DateFormat dateFormat = null;

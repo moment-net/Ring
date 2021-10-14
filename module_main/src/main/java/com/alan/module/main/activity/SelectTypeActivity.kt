@@ -123,6 +123,7 @@ class SelectTypeActivity : BaseActivity<ActivitySelectTypeBinding, SelectTypeVie
 
 
     fun jumpNext() {
+        finish()
         jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
     }
 

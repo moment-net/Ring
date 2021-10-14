@@ -1,42 +1,28 @@
 package com.alan.module.main.fragment
 
-import android.os.Bundle
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.alan.module.main.R
-import com.alan.module.main.adapter.ManagerAdapter
+import com.alan.module.main.adapter.MainVPAdapter
 import com.alan.module.main.databinding.FragmentHomeBinding
+import com.alan.module.main.dialog.PushFragmentDialog
 import com.alan.module.main.dialog.StateFragmentDialog
 import com.alan.module.main.viewmodel.HomeViewModel
 import com.alan.mvvm.base.coil.CoilUtils
-import com.alan.mvvm.base.http.baseresp.BaseResponse
-import com.alan.mvvm.base.http.responsebean.CookerBean
 import com.alan.mvvm.base.ktx.clickDelay
-import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
-import com.alan.mvvm.base.utils.EventBusRegister
-import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
-import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
-import com.alan.mvvm.common.event.RefreshEvent
 import com.alan.mvvm.common.helper.SpHelper
-import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.ui.BaseFragment
-import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import dagger.hilt.android.AndroidEntryPoint
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 作者：alan
  * 时间：2021/7/28
  * 备注：测试fragment
  */
-@EventBusRegister
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
@@ -47,10 +33,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
+    private val mFragments = arrayListOf<Fragment>()
     override val mViewModel by viewModels<HomeViewModel>()
-    lateinit var mAdapter: ManagerAdapter
-    var isLoad = false
-    var mCursor: Int = 0
+
 
 
     override fun FragmentHomeBinding.initView() {
@@ -63,132 +48,69 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             val dialog = StateFragmentDialog.newInstance()
             dialog.show(requireActivity().supportFragmentManager)
         }
-        initRV()
+        tvNow.clickDelay {
+            changeTab(0)
+            viewpager.setCurrentItem(0, true)
+        }
+        tvThink.clickDelay {
+            changeTab(1)
+            viewpager.setCurrentItem(1, true)
+        }
+        ivAdd.clickDelay {
+            val dialog = PushFragmentDialog.newInstance()
+            dialog.show(requireActivity().supportFragmentManager)
+        }
+
+        initFragment()
     }
 
     override fun initObserve() {
-        mViewModel.ldData.observe(this) {
-            when (it) {
-                is BaseResponse<*> -> {
-                    mCursor = it.cursor
-                    val list: ArrayList<CookerBean> = it.data as ArrayList<CookerBean>
-                    if (isLoad) {
-                        mBinding.srfList.finishLoadMore()
-                        mAdapter.addData(list)
-                    } else {
-                        mBinding.srfList.finishRefresh()
-                        mAdapter.setList(list)
-                    }
 
-                }
-
-                is BaseHttpException -> {
-                    if (isLoad) {
-                        mBinding.srfList.finishLoadMore()
-                    } else {
-                        mBinding.srfList.finishRefresh()
-                    }
-                    toast(it.errorMessage)
-                }
-
-            }
-        }
-
-        mViewModel.ldState.observe(this) {
-            when (it) {
-                is BaseResponse<*> -> {
-                    if (it.data == null) {
-                        changeState(true)
-                    } else {
-                        changeState(false)
-                    }
-                }
-                is BaseHttpException -> {
-
-                }
-            }
-        }
     }
 
     override fun initRequestData() {
 
     }
 
-
-    fun initRV() {
-        mAdapter = ManagerAdapter()
-        mBinding.rvManager.apply {
-            addItemDecoration(
-                MyColorDecoration(
-                    0,
-                    0,
-                    0,
-                    dp2px(10f),
-                    ContextCompat.getColor(requireActivity(), R.color.transparent)
-                )
-            )
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = mAdapter
+    fun changeTab(position: Int) {
+        if (position == 0) {
+            mBinding.tvNow.setTextColor(R.color._3A3A3A.getResColor())
+            mBinding.tvNow.textSize = 20f
+            mBinding.tvThink.setTextColor(R.color._803A3A3A.getResColor())
+            mBinding.tvThink.textSize = 14f
+        } else {
+            mBinding.tvNow.setTextColor(R.color._803A3A3A.getResColor())
+            mBinding.tvNow.textSize = 14f
+            mBinding.tvThink.setTextColor(R.color._3A3A3A.getResColor())
+            mBinding.tvThink.textSize = 20f
         }
+    }
 
-        mAdapter.setOnItemClickListener { adapter, view, position ->
-            val userId = mAdapter.data.get(position).user.userId
-            val bundle = Bundle().apply {
-                putString("userId", userId)
-            }
-            jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
+    /**
+     * 初始化fragment
+     */
+    private fun initFragment() {
+        if (mFragments.isNotEmpty()) {
+            mFragments.clear()
         }
+        mFragments.add(NowFragment.newInstance())
+        mFragments.add(ThinkFragment.newInstance())
 
-        mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
-            override fun onLoadMore(refreshLayout: RefreshLayout) {
-                isLoad = true
-                requestList()
-            }
-
-            override fun onRefresh(refreshLayout: RefreshLayout) {
-                requestRefresh()
+        mBinding.viewpager.adapter =
+            MainVPAdapter(mFragments, requireActivity().supportFragmentManager, lifecycle)
+        mBinding.viewpager.isUserInputEnabled = false
+        mBinding.viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                changeTab(position)
             }
         })
-
-
     }
 
-
-    fun changeState(isClose: Boolean) {
-        if (isClose) {
-            mBinding.tvState.setText("暂未匹配饭友…")
-            mBinding.tvState.setTextColor(R.color._FFE26B.getResColor())
-            mBinding.tvState.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                R.drawable.icon_home_cooking,
-                0,
-                0,
-                0
-            )
-            mBinding.tvState.setShapeSolidColor(R.color._3F3317.getResColor()).setUseShape()
-        } else {
-            mBinding.tvState.setText("正在匹配饭友…")
-            mBinding.tvState.setTextColor(R.color._221800.getResColor())
-            mBinding.tvState.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                R.drawable.icon_home_cooked,
-                0,
-                0,
-                0
-            )
-            mBinding.tvState.setShapeSolidColor(R.color._FFC94F.getResColor()).setUseShape()
-        }
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun refreshHome(event: RefreshEvent?) {
-        mViewModel.requestMealStatus()
-        requestRefresh()
-    }
 
     override fun onResume() {
         super.onResume()
         setUserInfo()
-        refreshHome(null)
     }
 
     fun setUserInfo() {
@@ -203,18 +125,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         mBinding.tvName.setText(userInfoBean.userName)
     }
 
-    /**
-     * 刷新列表
-     */
-    fun requestRefresh() {
-        isLoad = false
-        mCursor = 0
-        requestList()
-    }
 
-
-    fun requestList() {
-        mViewModel.requestList(mCursor)
-    }
 
 }

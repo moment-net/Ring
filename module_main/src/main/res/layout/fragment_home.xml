@@ -3,23 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    >
-
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_height="@dimen/dimen532"
-        android:background="@drawable/shape_home_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:background="@color/white">
 
 
     <ImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="15dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="@dimen/dimen46"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,7 +26,7 @@
         android:maxLines="1"
         android:singleLine="true"
         android:text="今天也要吃"
-        android:textColor="@color/_221800"
+        android:textColor="@color/_3A3A3A"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
         app:layout_constraintEnd_toStartOf="@+id/tv_state"
@@ -44,70 +35,78 @@
 
     <leifu.shapelibrary.ShapeView
         android:id="@+id/tv_state"
-        android:layout_width="@dimen/dimen136"
+        android:layout_width="@dimen/dimen95"
         android:layout_height="@dimen/dimen28"
         android:layout_marginEnd="20dp"
-        android:drawableStart="@drawable/icon_home_cooked"
+        android:drawableStart="@drawable/icon_home_match"
         android:drawablePadding="@dimen/dimen4"
-        android:text="正在匹配饭友…"
-        android:textColor="@color/_221800"
+        android:text="快速匹配"
+        android:textColor="@color/white"
         android:textSize="14sp"
         android:paddingTop="@dimen/dimen0"
         android:paddingBottom="@dimen/dimen0"
-        android:paddingStart="@dimen/dimen11"
-        android:paddingEnd="@dimen/dimen11"
-        android:visibility="gone"
+        android:paddingStart="@dimen/dimen8"
+        android:paddingEnd="@dimen/dimen8"
         app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_avatar"
-        app:sCorners="14dp"
-        app:sSolidColor="@color/_FFBD2A"
+        app:sCorners="4dp"
+        app:sSolidColor="@color/_3A3A3A"
         app:sStrokeColor="@color/_3A3A3A"
         app:sStrokeWidth="0dp" />
 
-    <ImageView
-        android:id="@+id/main_imageview5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_avatar"
-        android:src="@drawable/icon_home_manager" />
 
-
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
-        android:id="@+id/srf_list"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_constraintlayout2"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="14dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_imageview5">
+        app:layout_constraintTop_toBottomOf="@+id/iv_avatar">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_manager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="@dimen/dimen10"
-            android:paddingEnd="@dimen/dimen10"
-            app:layout_constraintEnd_toEndOf="parent"
+        <TextView
+            android:id="@+id/tv_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="正在"
+            android:textSize="20sp"
+            android:textColor="@color/_3A3A3A"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tv_think"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:text="想法"
+            android:textSize="14sp"
+            android:textColor="@color/_803A3A3A"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tv_now"
+            app:layout_constraintStart_toEndOf="@+id/tv_now" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_constraintlayout2" />
+
 
     <ImageView
         android:id="@+id/iv_add"
-        android:layout_width="@dimen/dimen64"
-        android:layout_height="@dimen/dimen64"
-        android:src="@drawable/icon_home_openmeal"
+        android:layout_width="@dimen/dimen60"
+        android:layout_height="@dimen/dimen69"
+        android:src="@drawable/icon_home_push"
         android:layout_marginBottom="@dimen/dimen115"
         android:layout_marginEnd="@dimen/dimen15"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,9 @@ package com.alan.mvvm.common.constant
  * 备注：本地存储的键 放在此类中
  */
 object SpKey {
+    //是否同意
+    const val KEY_ISAGREE: String = "key_isagree";
+
     //是否登录
     const val KEY_ISLOGIN: String = "key_islogin";
 

@@ -59,4 +59,6 @@ object SpUtils {
         MMKV.defaultMMKV()?.decodeBool(key, defValue)
 
     fun contains(key: String): Boolean? = MMKV.defaultMMKV()?.contains(key)
+
+    fun clearAll() = MMKV.defaultMMKV()?.clearAll()
 }
