@@ -1,6 +1,5 @@
 package com.alan.module.main.activity
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -31,7 +30,6 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.huantansheng.easyphotos.EasyPhotos
 import com.huantansheng.easyphotos.models.album.entity.Photo
-import com.permissionx.guolindev.PermissionX
 import com.tencent.mm.opensdk.modelmsg.SendAuth
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
@@ -212,7 +210,7 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
      */
     override fun ActivityLoginWxBinding.initView() {
         ivAvator.clickDelay {
-            requestPermission()
+            ImageSelectUtil.singlePic(this@LoginWxActivity)
         }
         tvBind.clickDelay {
             requestWX()
@@ -402,18 +400,6 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
         }
     }
 
-
-    fun requestPermission() {
-        PermissionX.init(this).permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .request { allGranted, grantedList, deniedList ->
-                //不给权限可以进
-                if (allGranted) {
-                    this@LoginWxActivity?.let { ImageSelectUtil.singlePic(it) }
-                } else {
-                    toast("没有图片读取权限")
-                }
-            }
-    }
 
 
     fun requestEditUserInfo() {

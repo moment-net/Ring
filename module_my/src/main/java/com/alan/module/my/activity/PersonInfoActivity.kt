@@ -46,6 +46,10 @@ import java.util.*
 @Route(path = RouteUrl.MyModule.ACTIVITY_MY_PERSONINFO)
 @AndroidEntryPoint
 class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoViewModel>() {
+    val REQUESTED_PERMISSIONS = mutableListOf<String>(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.RECORD_AUDIO,
+    )
 
     var birthday: String? = null
     var address: String? = null
@@ -62,7 +66,7 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
     override fun ActivityPersonInfoBinding.initView() {
         ivBack.clickDelay { finish() }
         ivAvator.clickDelay {
-            requestPermission()
+            ImageSelectUtil.singlePic(this@PersonInfoActivity)
         }
 
         tvBirthdayValue.clickDelay {
@@ -89,8 +93,14 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
 
 
         tvVoiceValue.clickDelay {
-            val voiceFragmentDialog = VoiceFragmentDialog.newInstance()
-            voiceFragmentDialog.show(this@PersonInfoActivity.supportFragmentManager)
+            PermissionX.init(this@PersonInfoActivity).permissions(REQUESTED_PERMISSIONS)
+                .request { allGranted, grantedList, deniedList ->
+                    //不给权限可以进
+                    if (allGranted) {
+                        val voiceFragmentDialog = VoiceFragmentDialog.newInstance()
+                        voiceFragmentDialog.show(this@PersonInfoActivity.supportFragmentManager)
+                    }
+                }
         }
 
 
@@ -224,17 +234,6 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
     }
 
 
-    fun requestPermission() {
-        PermissionX.init(this).permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .request { allGranted, grantedList, deniedList ->
-                //不给权限可以进
-                if (allGranted) {
-                    this@PersonInfoActivity?.let { ImageSelectUtil.singlePic(it) }
-                } else {
-                    toast("没有图片读取权限")
-                }
-            }
-    }
 
     fun changeAddress() {
         LocationPickerUtil.showPickerView(

@@ -7,6 +7,9 @@ package com.alan.mvvm.common.constant
  */
 object SpKey {
     //是否登录
+    const val KEY_ISAGREE: String = "key_isagree";
+
+    //是否登录
     const val KEY_ISLOGIN: String = "key_islogin";
 
     //登录token

@@ -7,6 +7,7 @@ import android.text.TextUtils
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.alan.module.main.databinding.ActivitySplashBinding
+import com.alan.module.main.dialog.PrivacyFragmentDialog
 import com.alan.module.main.viewmodel.SplashViewModel
 import com.alan.mvvm.base.utils.ActivityStackManager
 import com.alan.mvvm.base.utils.EventBusRegister
@@ -37,11 +38,6 @@ import org.greenrobot.eventbus.ThreadMode
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
     val REQUESTED_PERMISSIONS = mutableListOf<String>(
         Manifest.permission.READ_PHONE_STATE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.RECORD_AUDIO,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.CAMERA
     )
 
     /**
@@ -79,10 +75,26 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
      * 初始化
      */
     override fun initRequestData() {
-        requestPermisssion()
-
         initOneLogin()
+
+        if (SpHelper.isAgree()) {
+            requestPermisssion()
+        } else {
+            showPrivacyDialog()
+        }
     }
+
+    fun showPrivacyDialog() {
+        val dialog = PrivacyFragmentDialog.newInstance()
+        dialog.show(supportFragmentManager)
+        dialog.listener = object : PrivacyFragmentDialog.OnClickAgreeListener {
+            override fun onClick() {
+                SpHelper.setAgree(true)
+                requestPermisssion()
+            }
+        }
+    }
+
 
     /**
      * 极验初始化

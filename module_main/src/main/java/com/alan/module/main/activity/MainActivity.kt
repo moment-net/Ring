@@ -1,5 +1,6 @@
 package com.alan.module.main.activity
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -36,6 +37,7 @@ import com.alan.mvvm.common.im.push.HMSPushHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.hyphenate.chat.EMMessage
+import com.permissionx.guolindev.PermissionX
 import com.socks.library.KLog
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
@@ -50,6 +52,10 @@ import org.greenrobot.eventbus.ThreadMode
 @Route(path = RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
+    val REQUESTED_PERMISSIONS = mutableListOf<String>(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.RECORD_AUDIO,
+    )
 
     /**
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
@@ -214,6 +220,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         val dialog =
             CallFragmentDialog.newInstance(event.isComingCall, event.channelName, event.username)
         dialog.show((ActivityStackManager.getCurrentActivity() as FragmentActivity).supportFragmentManager)
+        PermissionX.init(this).permissions(REQUESTED_PERMISSIONS)
+            .request { allGranted, grantedList, deniedList ->
+                //不给权限可以进
+            }
     }
 
     //收到服务器加入和挂断消息
