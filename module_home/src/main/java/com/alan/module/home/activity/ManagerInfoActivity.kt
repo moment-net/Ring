@@ -4,22 +4,27 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.text.SpannableString
-import android.text.Spanned
 import android.text.TextUtils
-import android.text.style.ImageSpan
 import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alan.module.home.R
+import com.alan.module.home.adapter.TaThinkAdapter
 import com.alan.module.home.databinding.ActivityManagerInfoBinding
 import com.alan.module.home.viewmodol.ManagerInfoViewModel
 import com.alan.mvvm.base.coil.CoilUtils
+import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.ThinkBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.*
+import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.db.entity.UserEntity
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.im.utils.VoicePlayerUtil
 import com.alan.mvvm.common.ui.BaseActivity
@@ -42,6 +47,9 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
     @Autowired(name = "userId")
     var userId: String? = null
     lateinit var userInfoBean: UserInfoBean
+    lateinit var mAdapter: TaThinkAdapter
+    var isLoad = false
+    var mCursor: Int = 0
 
     /**
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
@@ -79,13 +87,13 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
                 startVoicePlayAnimation(duration)
             }
         }
-        tvFocus.clickDelay {
-            if (userInfoBean?.followStatus == 0) {
-                mViewModel.requestChangeFollow(userInfoBean?.userId!!, 1)
-            } else {
-                mViewModel.requestChangeFollow(userInfoBean?.userId!!, 0)
-            }
-        }
+//        tvFocus.clickDelay {
+//            if (userInfoBean?.followStatus == 0) {
+//                mViewModel.requestChangeFollow(userInfoBean?.userId!!, 1)
+//            } else {
+//                mViewModel.requestChangeFollow(userInfoBean?.userId!!, 0)
+//            }
+//        }
         tvChat.clickDelay {
             val bundle = Bundle().apply {
                 putString("userId", userInfoBean.userId)
@@ -100,6 +108,8 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
             jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
         }
         initScrollView()
+
+        initRv()
     }
 
 
@@ -136,6 +146,36 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
                     userInfoBean?.followStatus = it
                     setFocus()
                 }
+
+                is BaseResponse<*> -> {
+                    mCursor = it.cursor
+                    val list: ArrayList<ThinkBean> = it.data as ArrayList<ThinkBean>
+                    if (isLoad) {
+                        mAdapter.addData(list)
+                    } else {
+                        mAdapter.setList(list)
+                    }
+                    if (it.hasMore) {
+                        mAdapter.loadMoreModule.loadMoreComplete()
+                    } else {
+                        mAdapter.loadMoreModule.loadMoreEnd()
+                    }
+
+                }
+
+                is Pair<*, *> -> {
+                    val action = it.first
+                    val position = it.second as Int
+                    val favoriteCount = mAdapter.data.get(position).favoriteCount
+                    mAdapter.data.get(position).isFavorite = if (action == 0) {
+                        mAdapter.data.get(position).favoriteCount = favoriteCount - 1
+                        false
+                    } else {
+                        mAdapter.data.get(position).favoriteCount = favoriteCount + 1
+                        true
+                    }
+                    mAdapter.notifyItemChanged(position)
+                }
             }
         }
     }
@@ -153,7 +193,6 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
         }
         val userInfoBean = userInfoBean;
         CoilUtils.loadRound(mBinding.ivAvatar, userInfoBean?.avatar!!, 3f)
-        CoilUtils.loadBlur(mBinding.ivAvatarBg, userInfoBean?.avatar!!, this, 25f, 1f)
         mBinding.tvName.setText(userInfoBean?.userName)
         var address = ""
         if (!TextUtils.isEmpty(userInfoBean?.address) && userInfoBean?.address!!.split("-").size == 3) {
@@ -189,8 +228,8 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
             mBinding.tvAge.setShapeSolidColor(R.color._1AFF517A.getResColor())
         }
 
-        mBinding.tvDeclaration.setText(userInfoBean.desc)
-        mBinding.tvState.setText("\"${userInfoBean?.mealStatusTitle}\"")
+        mBinding.tvState.setText(userInfoBean.recentDoing)
+        mBinding.tvDesc.setText(userInfoBean.desc)
         if (userInfoBean.onlineStatus!!) {
             mBinding.ivOnline.visible()
         } else {
@@ -205,77 +244,20 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
             mBinding.tvVoice.setText("${duration}s")
         }
 
-
-        val tagList = userInfoBean?.typeTag
-        if (tagList != null && !tagList.isEmpty()) {
-            mBinding.tvTag.visible()
-            val stringBuilder = StringBuilder()
-            val list = arrayListOf<Int>()
-            for (position in 0..tagList.size - 1) {
-                if (position < tagList.size - 1) {
-                    stringBuilder.append("${tagList.get(position)} ")
-                    list.add(stringBuilder.length - 1)
-                } else {
-                    stringBuilder.append("${tagList.get(position)}")
-                }
-            }
-            val spannableString = SpannableString(stringBuilder.toString());
-            for (index in list) {
-                val imageSpan = ImageSpan(this, R.drawable.icon_home_line)
-                spannableString.setSpan(
-                    imageSpan,
-                    index,
-                    index + 1,
-                    Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-                );
-            }
-            mBinding.tvTag.setText(spannableString)
-        } else {
-            mBinding.tvTag.gone()
-        }
-
-        val likeList = userInfoBean?.likes
-        if (likeList != null && !likeList.isEmpty()) {
-            mBinding.tvLike.visible()
-            val stringBuilder = StringBuilder()
-            val list = arrayListOf<Int>()
-            for (position in 0..likeList.size - 1) {
-                if (position < likeList.size - 1) {
-                    stringBuilder.append("${likeList.get(position)} ")
-                    list.add(stringBuilder.length - 1)
-                } else {
-                    stringBuilder.append("${likeList.get(position)}")
-                }
-            }
-            val spannableString = SpannableString(stringBuilder.toString());
-
-            for (index in list) {
-                val imageSpan = ImageSpan(this, R.drawable.icon_home_line)
-                spannableString.setSpan(
-                    imageSpan,
-                    index,
-                    index + 1,
-                    Spanned.SPAN_INCLUSIVE_EXCLUSIVE
-                );
-            }
-            mBinding.tvLike.setText(spannableString)
-        } else {
-            mBinding.tvLike.gone()
-        }
         setFocus()
     }
 
     fun setFocus() {
-        if (userInfoBean?.followStatus == 0) {
-            mBinding.tvFocus.setText("关注")
-            mBinding.tvFocus.setShapeSolidColor(R.color._FF4F78.getResColor()).setUseShape()
-        } else if (userInfoBean?.followStatus == 1) {
-            mBinding.tvFocus.setText("已关注")
-            mBinding.tvFocus.setShapeSolidColor(R.color._A49389.getResColor()).setUseShape()
-        } else if (userInfoBean?.followStatus == 2) {
-            mBinding.tvFocus.setText("互相关注")
-            mBinding.tvFocus.setShapeSolidColor(R.color._A49389.getResColor()).setUseShape()
-        }
+//        if (userInfoBean?.followStatus == 0) {
+//            mBinding.tvFocus.setText("关注")
+//            mBinding.tvFocus.setShapeSolidColor(R.color._FF4F78.getResColor()).setUseShape()
+//        } else if (userInfoBean?.followStatus == 1) {
+//            mBinding.tvFocus.setText("已关注")
+//            mBinding.tvFocus.setShapeSolidColor(R.color._A49389.getResColor()).setUseShape()
+//        } else if (userInfoBean?.followStatus == 2) {
+//            mBinding.tvFocus.setText("互相关注")
+//            mBinding.tvFocus.setShapeSolidColor(R.color._A49389.getResColor()).setUseShape()
+//        }
     }
 
     fun startVoicePlayAnimation(duration: Int) {
@@ -301,6 +283,55 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
     override fun onResume() {
         super.onResume()
         mViewModel.requestUserInfo(userId!!)
+        requestRefresh()
     }
 
+
+    fun initRv() {
+        mAdapter = TaThinkAdapter()
+        mBinding.rvList.apply {
+            addItemDecoration(
+                MyColorDecoration(
+                    0, 0, 0, dp2px(30f),
+                    ContextCompat.getColor(context, R.color.white)
+                )
+            )
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            adapter = mAdapter
+        }
+        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+            when (view.id) {
+                R.id.iv_zan -> {
+                    val item = mAdapter.data.get(position)
+                    val favorite = item.isFavorite
+                    if (favorite) {
+                        mViewModel.requestZan(item.id, 0, position)
+                    } else {
+                        mViewModel.requestZan(item.id, 1, position)
+                    }
+                }
+            }
+        }
+        mAdapter.loadMoreModule.isEnableLoadMoreIfNotFullPage = false
+        mAdapter.loadMoreModule.setOnLoadMoreListener {
+            mBinding.rvList.postDelayed(Runnable {
+                isLoad = true
+                requestList()
+            }, 1000)
+        }
+    }
+
+    /**
+     * 刷新列表
+     */
+    fun requestRefresh() {
+        isLoad = false
+        mCursor = 0
+        requestList()
+    }
+
+
+    fun requestList() {
+        mViewModel.requestList(mCursor, SpHelper.getUserInfo()?.userId!!)
+    }
 }

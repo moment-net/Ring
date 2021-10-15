@@ -3,7 +3,10 @@ package com.alan.module.main.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
+import com.alan.mvvm.base.http.requestbean.BanRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.RequestUtil
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,17 +23,16 @@ class ThinkViewModel @Inject constructor(private val mRepository: CommonReposito
     BaseViewModel() {
 
     val ldData = MutableLiveData<Any>()
-    val ldState = MutableLiveData<Any>()
 
     /**
      * 获取首页列表
      */
     fun requestList(curson: Int) {
-        var map = hashMapOf<String, String>()
+        val map = hashMapOf<String, String>()
         map.put("cursor", "${curson}")
         map.put("count", "20")
         viewModelScope.launch() {
-            mRepository.requestMealList(
+            mRepository.requestThinkList(
                 map,
                 callback = RequestCallback(
                     onSuccess = {
@@ -45,17 +47,39 @@ class ThinkViewModel @Inject constructor(private val mRepository: CommonReposito
     }
 
     /**
-     * 查看用户干饭状态
+     * 屏蔽
      */
-    fun requestMealStatus() {
+    fun requestBanThink(id: String, position: Int) {
+        val banRequestBean = BanRequestBean(id, "-1")
         viewModelScope.launch() {
-            mRepository.requestMealStatus(
+            mRepository.requestBanThink(
+                RequestUtil.getPostBody(banRequestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        ldState.value = it
+                        ldData.value = position
                     },
                     onFailed = {
-                        ldState.value = it
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 赞、取消
+     */
+    fun requestZan(id: String, action: Int, position: Int) {
+        val banRequestBean = BanRequestBean(id, "$action")
+        viewModelScope.launch() {
+            mRepository.requestZan(
+                RequestUtil.getPostBody(banRequestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = Pair<Int, Int>(action, position)
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
                     },
                 )
             )

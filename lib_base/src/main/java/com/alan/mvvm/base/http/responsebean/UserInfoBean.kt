@@ -45,4 +45,5 @@ data class UserInfoBean(
     val likes: List<String>,
     val typeTag: List<String>,
     val mealStatusTitle: String,
+    val recentDoing: String,
 )

@@ -7,13 +7,19 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alan.module.main.R
+import com.alan.module.main.adapter.MyThinkAdapter
 import com.alan.module.main.databinding.FragmentMyBinding
 import com.alan.module.main.viewmodel.MyViewModel
 import com.alan.mvvm.base.coil.CoilUtils
+import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.DiamondBean
+import com.alan.mvvm.base.http.responsebean.ThinkBean
 import com.alan.mvvm.base.http.responsebean.UnreadBean
 import com.alan.mvvm.base.ktx.*
+import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.helper.SpHelper
@@ -40,6 +46,9 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
     }
 
     override val mViewModel by viewModels<MyViewModel>()
+    lateinit var mAdapter: MyThinkAdapter
+    var isLoad = false
+    var mCursor: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun FragmentMyBinding.initView() {
@@ -71,6 +80,8 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
             2f,
             ContextCompat.getColor(requireContext(), R.color.white)
         )
+
+        initRv()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -109,6 +120,36 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
                         mBinding.ivRed.gone()
                     }
                 }
+
+                is BaseResponse<*> -> {
+                    mCursor = it.cursor
+                    val list: ArrayList<ThinkBean> = it.data as ArrayList<ThinkBean>
+                    if (isLoad) {
+                        mAdapter.addData(list)
+                    } else {
+                        mAdapter.setList(list)
+                    }
+                    if (it.hasMore) {
+                        mAdapter.loadMoreModule.loadMoreComplete()
+                    } else {
+                        mAdapter.loadMoreModule.loadMoreEnd()
+                    }
+
+                }
+
+                is Pair<*, *> -> {
+                    val action = it.first
+                    val position = it.second as Int
+                    val favoriteCount = mAdapter.data.get(position).favoriteCount
+                    mAdapter.data.get(position).isFavorite = if (action == 0) {
+                        mAdapter.data.get(position).favoriteCount = favoriteCount - 1
+                        false
+                    } else {
+                        mAdapter.data.get(position).favoriteCount = favoriteCount + 1
+                        true
+                    }
+                    mAdapter.notifyItemChanged(position)
+                }
             }
         }
     }
@@ -121,6 +162,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
         super.onResume()
         mViewModel.requestDiamond()
         mViewModel.requestUnRead()
+        requestRefresh()
         setUserInfo()
     }
 
@@ -159,4 +201,52 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
     }
 
+
+    fun initRv() {
+        mAdapter = MyThinkAdapter()
+        mBinding.rvList.apply {
+            addItemDecoration(
+                MyColorDecoration(
+                    0, 0, 0, dp2px(30f),
+                    ContextCompat.getColor(context, R.color.white)
+                )
+            )
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            adapter = mAdapter
+        }
+        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+            when (view.id) {
+                R.id.iv_zan -> {
+                    val item = mAdapter.data.get(position)
+                    val favorite = item.isFavorite
+                    if (favorite) {
+                        mViewModel.requestZan(item.id, 0, position)
+                    } else {
+                        mViewModel.requestZan(item.id, 1, position)
+                    }
+                }
+            }
+        }
+        mAdapter.loadMoreModule.isEnableLoadMoreIfNotFullPage = false
+        mAdapter.loadMoreModule.setOnLoadMoreListener {
+            mBinding.rvList.postDelayed(Runnable {
+                isLoad = true
+                requestList()
+            }, 1000)
+        }
+    }
+
+    /**
+     * 刷新列表
+     */
+    fun requestRefresh() {
+        isLoad = false
+        mCursor = 0
+        requestList()
+    }
+
+
+    fun requestList() {
+        mViewModel.requestList(mCursor, SpHelper.getUserInfo()?.userId!!)
+    }
 }

@@ -1,9 +1,12 @@
-package com.alan.module.my.viewmodol
+package com.alan.module.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
+import com.alan.mvvm.base.http.requestbean.ThinkRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.RequestUtil
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,38 +19,26 @@ import javax.inject.Inject
  * @property mRepository CommonRepository 仓库层 通过Hilt注入
  */
 @HiltViewModel
-class MyViewModel @Inject constructor(private val mRepository: CommonRepository) :
+class PushThinkViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
-    val ldSuccess = MutableLiveData<Any>()
-
-
-    fun requestDiamond() {
-        viewModelScope.launch {
-            mRepository.requestDiamond(callback = RequestCallback(
-                onSuccess = {
-                    ldSuccess.value = it.data!!
-                },
-                onFailed = {
-
-                }
-            ))
-        }
-    }
+    val ldData = MutableLiveData<Any>()
 
 
     /**
-     * 未读消息
+     * 发布想法
      */
-    fun requestUnRead() {
+    fun requestPushThink(content: String) {
+        val requestBean = ThinkRequestBean(content)
         viewModelScope.launch() {
-            mRepository.requestUnRead(
+            mRepository.requestPushThink(
+                RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        ldSuccess.value = it.data!!
+                        ldData.value = true
                     },
                     onFailed = {
-                        ldSuccess.value = it
+                        toast(it.errorMessage)
                     },
                 )
             )

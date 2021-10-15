@@ -72,7 +72,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/tv_online"
             app:layout_constraintStart_toEndOf="@+id/tv_online"
             app:layout_constraintTop_toTopOf="@+id/tv_online"
-            app:sCorners="3dp"
+            app:sCorners="2dp"
             app:sSizeHeight="14dp"
             app:sSolidColor="@color/_FF516D"
             app:sStrokeWidth="0dp" />

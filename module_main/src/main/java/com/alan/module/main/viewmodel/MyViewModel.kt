@@ -3,7 +3,10 @@ package com.alan.module.main.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
+import com.alan.mvvm.base.http.requestbean.BanRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.RequestUtil
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -29,7 +32,7 @@ class MyViewModel @Inject constructor(private val mRepository: CommonRepository)
                     ldSuccess.value = it.data!!
                 },
                 onFailed = {
-
+                    toast(it.errorMessage)
                 }
             ))
         }
@@ -47,6 +50,51 @@ class MyViewModel @Inject constructor(private val mRepository: CommonRepository)
                     },
                     onFailed = {
                         ldSuccess.value = it
+                    },
+                )
+            )
+        }
+    }
+
+
+    /**
+     * 获取列表
+     */
+    fun requestList(curson: Int, userId: String) {
+        val map = hashMapOf<String, String>()
+        map.put("cursor", "${curson}")
+        map.put("count", "20")
+        map.put("userId", userId)
+        viewModelScope.launch() {
+            mRepository.requestThinkHistory(
+                map,
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldSuccess.value = it
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+
+    /**
+     * 赞、取消
+     */
+    fun requestZan(id: String, action: Int, position: Int) {
+        val banRequestBean = BanRequestBean(id, "$action")
+        viewModelScope.launch() {
+            mRepository.requestZan(
+                RequestUtil.getPostBody(banRequestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldSuccess.value = Pair<Int, Int>(action, position)
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
                     },
                 )
             )

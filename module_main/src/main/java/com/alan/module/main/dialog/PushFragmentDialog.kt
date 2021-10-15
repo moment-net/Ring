@@ -12,6 +12,8 @@ import com.alan.module.main.viewmodel.PushViewModel
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
+import com.alan.mvvm.base.utils.jumpARoute
+import com.alan.mvvm.common.constant.RouteUrl
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,6 +56,15 @@ class PushFragmentDialog : BaseFrameDialogFragment<LayoutPushBinding, PushViewMo
     override fun LayoutPushBinding.initView() {
         ivClose.clickDelay {
             dismiss()
+        }
+
+        ivNow.clickDelay {
+            dismiss()
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_NOW)
+        }
+        ivThink.clickDelay {
+            dismiss()
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_THINK)
         }
 
     }

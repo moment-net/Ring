@@ -15,13 +15,16 @@ import com.alan.module.main.databinding.FragmentNowBinding
 import com.alan.module.main.viewmodel.NowViewModel
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.NowBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
+import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.ChangeThinkEvent
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.ui.BaseFragment
@@ -59,15 +62,18 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
             when (it) {
                 is BaseResponse<*> -> {
                     mCursor = it.cursor
-//                    val list: ArrayList<CookerBean> = it.data as ArrayList<CookerBean>
-//                    if (isLoad) {
-//                        mBinding.srfList.finishLoadMore()
-//                        mAdapter.addData(list)
-//                    } else {
-//                        mBinding.srfList.finishRefresh()
-//                        mAdapter.setList(list)
-//                    }
+                    val list: ArrayList<NowBean> = it.data as ArrayList<NowBean>
+                    if (isLoad) {
+                        mBinding.srfList.finishLoadMore()
+                        mAdapter.addData(list)
+                    } else {
+                        mBinding.srfList.finishRefresh()
+                        mAdapter.setList(list)
+                    }
 
+                    if (mAdapter.data.size == 0) {
+                        EventBusUtils.postEvent(ChangeThinkEvent())
+                    }
                 }
 
                 is BaseHttpException -> {
@@ -79,12 +85,16 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                     toast(it.errorMessage)
                 }
 
+                is Int -> {
+                    mAdapter.removeAt(it)
+                    mAdapter.notifyItemRemoved(it)
+                }
             }
         }
     }
 
     override fun initRequestData() {
-
+        requestList()
     }
 
     fun initRV() {
@@ -104,15 +114,17 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
         }
 
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
+            val id = mAdapter.data.get(position).id
+            val userId = mAdapter.data.get(position).user.userId
             when (view.id) {
                 R.id.iv_avatar -> {
                     val bundle = Bundle().apply {
-                        putString("userId", "")
+                        putString("userId", userId)
                     }
                     jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
                 }
                 R.id.iv_more -> {
-                    showPopupWindow(view)
+                    showPopupWindow(view, id, userId, position)
                 }
                 R.id.tv_chat -> {
 
@@ -130,19 +142,12 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                 requestRefresh()
             }
         })
-
-        mAdapter.addData("")
-        mAdapter.addData("")
-        mAdapter.addData("")
-        mAdapter.addData("")
-        mAdapter.addData("")
-        mAdapter.addData("")
     }
 
     /**
      * 显示菜单项
      */
-    fun showPopupWindow(view: View) {
+    fun showPopupWindow(view: View, id: String, userId: String, position: Int) {
         val contentview: View =
             LayoutInflater.from(requireActivity()).inflate(R.layout.layout_more_menu, null)
         contentview.isFocusable = true
@@ -156,7 +161,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
             val bundle = Bundle().apply {
                 putString(
                     "webUrl",
-                    HttpBaseUrlConstant.BASE_URL + "&reportFromUserid=${SpHelper.getUserInfo()!!.userId}&reportToUserid=${view.id}"
+                    HttpBaseUrlConstant.BASE_URL + "&reportFromUserid=${SpHelper.getUserInfo()!!.userId}&reportToUserid=${userId}"
                 )
                 putString("webTitle", "举报")
             }
@@ -164,7 +169,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
         }
         tvShield.clickDelay {
             popupWindow.dismiss()
-
+            mViewModel.requestBanNow(id, position)
         }
 
         popupWindow = PopupWindow(

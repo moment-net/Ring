@@ -15,6 +15,7 @@ import com.alan.module.main.databinding.FragmentThinkBinding
 import com.alan.module.main.viewmodel.ThinkViewModel
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.ThinkBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
@@ -60,15 +61,14 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
             when (it) {
                 is BaseResponse<*> -> {
                     mCursor = it.cursor
-//                    val list: ArrayList<CookerBean> = it.data as ArrayList<CookerBean>
-//                    if (isLoad) {
-//                        mBinding.srfList.finishLoadMore()
-//                        mAdapter.addData(list)
-//                    } else {
-//                        mBinding.srfList.finishRefresh()
-//                        mAdapter.setList(list)
-//                    }
-
+                    val list: ArrayList<ThinkBean> = it.data as ArrayList<ThinkBean>
+                    if (isLoad) {
+                        mBinding.srfList.finishLoadMore()
+                        mAdapter.addData(list)
+                    } else {
+                        mBinding.srfList.finishRefresh()
+                        mAdapter.setList(list)
+                    }
                 }
 
                 is BaseHttpException -> {
@@ -80,12 +80,31 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                     toast(it.errorMessage)
                 }
 
+
+                is Int -> {
+                    mAdapter.removeAt(it)
+                    mAdapter.notifyItemRemoved(it)
+                }
+
+                is Pair<*, *> -> {
+                    val action = it.first
+                    val position = it.second as Int
+                    val favoriteCount = mAdapter.data.get(position).favoriteCount
+                    mAdapter.data.get(position).isFavorite = if (action == 0) {
+                        mAdapter.data.get(position).favoriteCount = favoriteCount - 1
+                        false
+                    } else {
+                        mAdapter.data.get(position).favoriteCount = favoriteCount + 1
+                        true
+                    }
+                    mAdapter.notifyItemChanged(position)
+                }
             }
         }
     }
 
     override fun initRequestData() {
-
+        requestList()
     }
 
     fun initRV() {
@@ -105,6 +124,8 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
         }
 
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
+            val item = mAdapter.data.get(position)
+            val userId = item.user.userId
             when (view.id) {
                 R.id.iv_avatar -> {
                     val bundle = Bundle().apply {
@@ -113,10 +134,15 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                     jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
                 }
                 R.id.iv_more -> {
-                    showPopupWindow(view)
+                    showPopupWindow(view, item.id, userId, position)
                 }
                 R.id.iv_zan -> {
-
+                    val favorite = item.isFavorite
+                    if (favorite) {
+                        mViewModel.requestZan(item.id, 0, position)
+                    } else {
+                        mViewModel.requestZan(item.id, 1, position)
+                    }
                 }
             }
         }
@@ -131,19 +157,12 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                 requestRefresh()
             }
         })
-
-        mAdapter.addData("")
-        mAdapter.addData("")
-        mAdapter.addData("")
-        mAdapter.addData("")
-        mAdapter.addData("")
-        mAdapter.addData("")
     }
 
     /**
      * 显示菜单项
      */
-    fun showPopupWindow(view: View) {
+    fun showPopupWindow(view: View, id: String, userId: String, position: Int) {
         val contentview: View =
             LayoutInflater.from(requireActivity()).inflate(R.layout.layout_more_menu, null)
         contentview.isFocusable = true
@@ -157,7 +176,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
             val bundle = Bundle().apply {
                 putString(
                     "webUrl",
-                    HttpBaseUrlConstant.BASE_URL + "&reportFromUserid=${SpHelper.getUserInfo()!!.userId}&reportToUserid=${view.id}"
+                    HttpBaseUrlConstant.BASE_URL + "&reportFromUserid=${SpHelper.getUserInfo()!!.userId}&reportToUserid=${userId}"
                 )
                 putString("webTitle", "举报")
             }
@@ -165,7 +184,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
         }
         tvShield.clickDelay {
             popupWindow.dismiss()
-
+            mViewModel.requestBanThink(id, position)
         }
 
         popupWindow = PopupWindow(

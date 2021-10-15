@@ -33,6 +33,15 @@ object RouteUrl {
 
         //选择标签类型
         const val ACTIVITY_MAIN_TYPE: String = "/main/type"
+
+        //发布想法
+        const val ACTIVITY_MAIN_THINK: String = "/main/think"
+
+        //发布Now
+        const val ACTIVITY_MAIN_NOW: String = "/main/now"
+
+        //我的页面
+        const val ACTIVITY_MAIN_MY: String = "/main/my";
     }
 
     object HomeModule {
@@ -66,8 +75,6 @@ object RouteUrl {
     }
 
     object MyModule {
-        //我的页面
-        const val ACTIVITY_MY_MY: String = "/my/my";
 
         //设置页面
         const val ACTIVITY_MY_SET: String = "/my/set";

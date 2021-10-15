@@ -3,7 +3,7 @@ package com.alan.module.main.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
-import com.alan.mvvm.base.http.requestbean.BanRequestBean
+import com.alan.mvvm.base.http.requestbean.NowRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
@@ -19,27 +19,23 @@ import javax.inject.Inject
  * @property mRepository CommonRepository 仓库层 通过Hilt注入
  */
 @HiltViewModel
-class NowViewModel @Inject constructor(private val mRepository: CommonRepository) :
+class PushNowViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
     val ldData = MutableLiveData<Any>()
 
     /**
-     * 获取首页列表
+     * 发布想法
      */
-    fun requestList(curson: Int) {
-        val map = hashMapOf<String, String>()
-        map.put("cursor", "${curson}")
-        map.put("count", "20")
+    fun requestNowTagList() {
         viewModelScope.launch() {
-            mRepository.requestNowList(
-                map,
+            mRepository.requestNowTagList(
                 callback = RequestCallback(
                     onSuccess = {
                         ldData.value = it
                     },
                     onFailed = {
-                        ldData.value = it
+                        toast(it.errorMessage)
                     },
                 )
             )
@@ -47,16 +43,16 @@ class NowViewModel @Inject constructor(private val mRepository: CommonRepository
     }
 
     /**
-     * 屏蔽
+     * 发布正在
      */
-    fun requestBanNow(id: String, position: Int) {
-        val banRequestBean = BanRequestBean(id, "-1")
+    fun requestPushNow(tag: String, content: String) {
+        val requestBean = NowRequestBean(tag, content)
         viewModelScope.launch() {
-            mRepository.requestBanNow(
-                RequestUtil.getPostBody(banRequestBean),
+            mRepository.requestPushNow(
+                RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        ldData.value = position
+                        ldData.value = true
                     },
                     onFailed = {
                         toast(it.errorMessage)

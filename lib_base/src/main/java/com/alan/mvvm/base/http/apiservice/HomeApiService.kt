@@ -1045,4 +1045,70 @@ interface HomeApiService {
     suspend fun requestMatchTime(): BaseResponse<ArrayList<MatchTimeBean>>
 
 
+    /**
+     * 发布正在状态
+     */
+    @POST("doing/add")
+    suspend fun requestPushNow(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 首页“正在”列表
+     */
+    @GET("doing/list")
+    suspend fun requestNowList(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<NowBean>>
+
+    /**
+     * 正在的状态列表
+     */
+    @GET("doing/taglist")
+    suspend fun requestNowTagList(): BaseResponse<ArrayList<NowTagBean>>
+
+    /**
+     * 屏蔽正在
+     */
+    @POST("doing/ban")
+    suspend fun requestBanNow(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 回复一起(被发起人的聊天消息)
+     */
+    @POST("doing/chat/reply")
+    suspend fun requestReply(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 检测一起是否被已回复
+     */
+    @POST("doing/chat/isReply")
+    suspend fun requestIsReply(@Body requestBody: RequestBody): BaseResponse<ReplyBean>
+
+    /**
+     * 发布想法状态
+     */
+    @POST("thought/add")
+    suspend fun requestPushThink(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 首页“想法”列表
+     */
+    @GET("thought/list")
+    suspend fun requestThinkList(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<ThinkBean>>
+
+    /**
+     * 屏蔽想法
+     */
+    @POST("thought/ban")
+    suspend fun requestBanThink(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 点赞/取消点赞
+     */
+    @POST("thought/favorite")
+    suspend fun requestZan(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 根据用户id查询所有想法
+     */
+    @GET("thought/history")
+    suspend fun requestThinkHistory(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<ThinkBean>>
+
 }

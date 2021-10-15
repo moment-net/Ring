@@ -3,6 +3,7 @@ package com.alan.module.main.activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.KeyEvent
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -21,6 +22,7 @@ import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.utils.ActivityStackManager
 import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.jumpARoute
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.db.entity.UserEntity
@@ -57,7 +59,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     override val mViewModel by viewModels<MainViewModel>()
     private val mFragments = arrayListOf<Fragment>()
     private var mPagePosition = 0
-
+    private var time: Long = 0
 
     /**
      * 初始化View
@@ -247,5 +249,21 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         EMClientHelper.showNotificationPermissionDialog()
     }
 
-
+    /**
+     * 双击返回桌面
+     */
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        return if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //双击退出app
+            if (System.currentTimeMillis() - time > 1000) {
+                toast("再按一次返回桌面")
+                time = System.currentTimeMillis()
+            } else {
+                ActivityStackManager.exitApp()
+            }
+            true
+        } else {
+            super.onKeyDown(keyCode, event)
+        }
+    }
 }

@@ -72,7 +72,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/tv_online"
             app:layout_constraintStart_toEndOf="@+id/tv_online"
             app:layout_constraintTop_toTopOf="@+id/tv_online"
-            app:sCorners="3dp"
+            app:sCorners="2dp"
             app:sSizeHeight="14dp"
             app:sSolidColor="@color/_FF516D"
             app:sStrokeWidth="0dp" />
@@ -124,27 +124,51 @@
         app:layout_constraintTop_toBottomOf="@+id/iv_avatar" />
 
 
-    <leifu.shapelibrary.ShapeView
-        android:id="@+id/tv_label"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="24dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:paddingTop="@dimen/dimen0"
-        android:paddingBottom="@dimen/dimen0"
-        android:paddingStart="@dimen/dimen10"
-        android:paddingEnd="@dimen/dimen10"
-        android:drawablePadding="@dimen/dimen4"
-        android:drawableStart="@drawable/icon_home_game_on"
-        android:text="打王者"
-        android:textColor="@color/_FFBE4F"
-        android:textSize="14sp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content"
-        app:sCorners="14dp"
-        app:sSolidColor="@color/_33FFBE4F"
-        app:sStrokeWidth="0dp" />
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <leifu.shapelibrary.ShapeView
+            android:id="@+id/tv_label_bg"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dimen28"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:sCorners="14dp"
+            app:sSolidColor="@color/_F4F4F4"
+            app:sStrokeWidth="0dp" />
+
+        <ImageView
+            android:id="@+id/iv_label"
+            android:layout_width="@dimen/dimen16"
+            android:layout_height="@dimen/dimen12"
+            android:layout_marginStart="@dimen/dimen8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/icon_home_wm_off" />
+
+        <TextView
+            android:id="@+id/tv_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen4"
+            android:layout_marginEnd="@dimen/dimen8"
+            android:text="玩游戏"
+            android:textColor="@color/_9C9C9C"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_label"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <leifu.shapelibrary.ShapeView
         android:id="@+id/tv_chat"

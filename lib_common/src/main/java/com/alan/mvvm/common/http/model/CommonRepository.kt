@@ -419,5 +419,94 @@ class CommonRepository @Inject constructor() : BaseRepository() {
         callback: RequestCallback<ArrayList<MatchTimeBean>>
     ) = request(mApi, callback) { mApi.requestMatchTime() }
 
+
+    /**
+     * 发布正在状态
+     */
+    suspend fun requestPushNow(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestPushNow(requestBody) }
+
+    /**
+     * 首页“正在”列表
+     */
+    suspend fun requestNowList(
+        map: MutableMap<String, String>,
+        callback: RequestCallback<ArrayList<NowBean>>
+    ) = request(mApi, callback) { mApi.requestNowList(map) }
+
+    /**
+     * 正在的状态列表
+     */
+    suspend fun requestNowTagList(
+        callback: RequestCallback<ArrayList<NowTagBean>>
+    ) = request(mApi, callback) { mApi.requestNowTagList() }
+
+    /**
+     * 屏蔽正在
+     */
+    suspend fun requestBanNow(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestBanNow(requestBody) }
+
+    /**
+     * 回复一起(被发起人的聊天消息)
+     */
+    suspend fun requestReply(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestReply(requestBody) }
+
+    /**
+     * 检测一起是否被已回复
+     */
+    suspend fun requestIsReply(
+        requestBody: RequestBody,
+        callback: RequestCallback<ReplyBean>
+    ) = request(mApi, callback) { mApi.requestIsReply(requestBody) }
+
+    /**
+     * 发布想法
+     */
+    suspend fun requestPushThink(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestPushThink(requestBody) }
+
+    /**
+     * 首页“想法”列表
+     */
+    suspend fun requestThinkList(
+        map: MutableMap<String, String>,
+        callback: RequestCallback<ArrayList<ThinkBean>>
+    ) = request(mApi, callback) { mApi.requestThinkList(map) }
+
+    /**
+     * 屏蔽想法
+     */
+    suspend fun requestBanThink(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestBanThink(requestBody) }
+
+    /**
+     * 点赞/取消点赞
+     */
+    suspend fun requestZan(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestZan(requestBody) }
+
+    /**
+     * 根据用户id查询所有想法
+     */
+    suspend fun requestThinkHistory(
+        map: MutableMap<String, String>,
+        callback: RequestCallback<ArrayList<ThinkBean>>
+    ) = request(mApi, callback) { mApi.requestThinkHistory(map) }
+
+
 }
 

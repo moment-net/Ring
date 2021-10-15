@@ -75,6 +75,7 @@ dependencies {
     api DependencyConfig.GitHub.Lottie
     api DependencyConfig.GitHub.Camera
     api DependencyConfig.GitHub.EasyFloat
+    api DependencyConfig.GitHub.Flexbox
 
 
     api DependencyConfig.SDK.WeChat

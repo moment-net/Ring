@@ -3,20 +3,12 @@
     package="com.alan.module.main">
 
     <application>
-        <activity android:name=".activity.SelectTypeActivity" />
-        <activity android:name=".activity.TaRemindActivity" />
-        <activity android:name=".activity.MyRemindActivity" />
-        <activity android:name=".activity.SelectTargetActivity" />
-        <activity android:name=".activity.LoginWxActivity" />
-        <activity android:name=".activity.LoginCodeActivity" />
-        <activity android:name=".activity.LoginPhoneActivity" />
-        <activity android:name=".activity.LoginActivity" />
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
-            android:theme="@style/SplashTheme"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:exported="true">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -42,6 +34,53 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.NowActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait"
+            android:exported="true" />
+        <activity
+            android:name=".activity.ThinkActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait"
+            android:exported="true" />
+        <activity
+            android:name=".activity.SelectTypeActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TaRemindActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyRemindActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SelectTargetActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginWxActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginCodeActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginPhoneActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.alan.module.main.activity.MyActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -12,17 +12,22 @@ import com.alan.module.main.viewmodel.HomeViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.getResColor
+import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.ChangeThinkEvent
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 作者：alan
  * 时间：2021/7/28
  * 备注：测试fragment
  */
+@EventBusRegister
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
@@ -42,7 +47,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         ivAvatar.clickDelay {
 //            val dialog = MatchFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
 //            dialog.show(requireActivity().supportFragmentManager)
-            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MY)
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MY)
         }
         tvState.clickDelay {
             val dialog = StateFragmentDialog.newInstance()
@@ -125,6 +130,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         mBinding.tvName.setText(userInfoBean.userName)
     }
 
-
+    //切换
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showCall(event: ChangeThinkEvent) {
+        mBinding.viewpager.setCurrentItem(1)
+    }
 
 }

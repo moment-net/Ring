@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/dimen420"
-    android:maxHeight="@dimen/dimen600"
+    android:paddingBottom="@dimen/dimen72"
     android:background="@drawable/shape_white10">
 
 
@@ -30,5 +29,61 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/icon_dialog_close" />
+
+    <ImageView
+        android:id="@+id/iv_now"
+        android:layout_width="@dimen/dimen60"
+        android:layout_height="@dimen/dimen60"
+        android:layout_marginTop="78dp"
+        app:layout_constraintEnd_toStartOf="@+id/iv_think"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        android:src="@drawable/icon_push_now" />
+
+    <ImageView
+        android:id="@+id/iv_think"
+        android:layout_width="@dimen/dimen60"
+        android:layout_height="@dimen/dimen60"
+        android:layout_marginTop="78dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_now"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        android:src="@drawable/icon_push_think" />
+
+    <View
+        android:id="@+id/main_imageview5"
+        android:layout_width="1dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="52dp"
+        android:background="@color/_4D9C9C9C"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_now" />
+
+    <TextView
+        android:id="@+id/main_textview4"
+        android:layout_width="@dimen/dimen116"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="你此刻的状态，只会保留2个小时"
+        android:textColor="@color/_3A3A3A"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_now"
+        app:layout_constraintStart_toStartOf="@+id/iv_now"
+        app:layout_constraintTop_toBottomOf="@+id/iv_now" />
+
+    <TextView
+        android:id="@+id/main_textview5"
+        android:layout_width="@dimen/dimen116"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="生活的想法，会一直保留，也可能会被推荐至首页"
+        android:textColor="@color/_3A3A3A"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_think"
+        app:layout_constraintStart_toStartOf="@+id/iv_think"
+        app:layout_constraintTop_toBottomOf="@+id/iv_think" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

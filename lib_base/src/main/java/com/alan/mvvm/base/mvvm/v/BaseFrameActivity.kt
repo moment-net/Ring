@@ -5,7 +5,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
-import com.alan.mvvm.base.utils.*
+import com.alan.mvvm.base.utils.BindingReflex
+import com.alan.mvvm.base.utils.EventBusRegister
+import com.alan.mvvm.base.utils.EventBusUtils
+import com.alan.mvvm.base.utils.ViewRecreateHelper
 import com.alan.mvvm.base.utils.network.AutoRegisterNetListener
 import com.alan.mvvm.base.utils.network.NetworkStateChangeListener
 import com.alibaba.android.arouter.launcher.ARouter
@@ -74,7 +77,7 @@ abstract class BaseFrameActivity<VB : ViewBinding, VM : BaseViewModel> : AppComp
      * @return Unit
      */
     override fun networkConnectChange(isConnected: Boolean) {
-        toast(if (isConnected) "网络已连接" else "网络已断开")
+//        toast(if (isConnected) "网络已连接" else "网络已断开")
     }
 
     override fun isRecreate(): Boolean = mStatusHelper?.isRecreate ?: false
