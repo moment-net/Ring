@@ -1,5 +1,6 @@
 package com.alan.module.main.fragment
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -7,9 +8,9 @@ import com.alan.module.main.R
 import com.alan.module.main.adapter.MainVPAdapter
 import com.alan.module.main.databinding.FragmentHomeBinding
 import com.alan.module.main.dialog.PushFragmentDialog
-import com.alan.module.main.dialog.StateFragmentDialog
 import com.alan.module.main.viewmodel.HomeViewModel
 import com.alan.mvvm.base.coil.CoilUtils
+import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.utils.EventBusRegister
@@ -50,8 +51,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MY)
         }
         tvState.clickDelay {
-            val dialog = StateFragmentDialog.newInstance()
-            dialog.show(requireActivity().supportFragmentManager)
+//            val dialog = StateFragmentDialog.newInstance()
+//            dialog.show(requireActivity().supportFragmentManager)
+            mViewModel.requestNowMatch()
         }
         tvNow.clickDelay {
             changeTab(0)
@@ -70,7 +72,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initObserve() {
-
+        mViewModel.ldData.observe(this) {
+            when (it) {
+                is UserInfoBean -> {
+                    val bundle = Bundle().apply {
+                        putString("userId", it.userId)
+                    }
+                    jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
+                }
+            }
+        }
     }
 
     override fun initRequestData() {

@@ -129,7 +129,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
             when (view.id) {
                 R.id.iv_avatar -> {
                     val bundle = Bundle().apply {
-                        putString("userId", "")
+                        putString("userId", userId)
                     }
                     jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
                 }

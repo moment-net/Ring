@@ -29,6 +29,13 @@ class MyActivity : BaseActivity<ActivityMyBinding, MyViewModel>() {
      */
     override fun ActivityMyBinding.initView() {
         val fragment = MyFragment.newInstance()
+        fragment.isShow = true
+        fragment.listener = object : MyFragment.OnClickFinishListener {
+            override fun onClick() {
+                finish()
+            }
+        }
+
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.fl_content, fragment).commitAllowingStateLoss()
     }

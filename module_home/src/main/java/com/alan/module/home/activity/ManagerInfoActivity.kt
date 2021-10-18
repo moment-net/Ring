@@ -24,7 +24,6 @@ import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.db.entity.UserEntity
-import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.im.utils.VoicePlayerUtil
 import com.alan.mvvm.common.ui.BaseActivity
@@ -332,6 +331,6 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
 
 
     fun requestList() {
-        mViewModel.requestList(mCursor, SpHelper.getUserInfo()?.userId!!)
+        mViewModel.requestList(mCursor, userId!!)
     }
 }

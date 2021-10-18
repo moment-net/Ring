@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.http.requestbean.BanRequestBean
+import com.alan.mvvm.base.http.requestbean.ToUserIdRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
@@ -57,6 +58,26 @@ class NowViewModel @Inject constructor(private val mRepository: CommonRepository
                 callback = RequestCallback(
                     onSuccess = {
                         ldData.value = position
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 聊天检测（是否被已回复）
+     */
+    fun requestIsReply(userId: String, userName: String) {
+        val requestBean = ToUserIdRequestBean(userId)
+        viewModelScope.launch() {
+            mRepository.requestIsReply(
+                RequestUtil.getPostBody(requestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = Pair<String, String>(userId, userName)
                     },
                     onFailed = {
                         toast(it.errorMessage)

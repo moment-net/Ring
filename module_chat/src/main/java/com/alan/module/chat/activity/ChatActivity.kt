@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.PopupWindow
@@ -60,6 +61,10 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
     @JvmField
     @Autowired
     var userId = ""
+
+    @JvmField
+    @Autowired
+    var content = ""
 
     var userName = ""
     var avatar = ""
@@ -388,6 +393,9 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
 
         mViewModel.requestUserInfo(userId)
         mViewModel.requestCheckMatch(userId)
+        if (!TextUtils.isEmpty(content)) {
+            sendTextMessage(content)
+        }
     }
 
 
@@ -672,6 +680,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
      * @param content
      */
     protected fun sendTextMessage(content: String?) {
+        mViewModel.requestReply(userId)
         val message = EMMessage.createTxtSendMessage(content, userId)
         sendMessage(message)
     }

@@ -86,7 +86,7 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
                 override fun onClick(view: View) {
                     val bundle = Bundle().apply {
                         putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/privacy-policy")
-                        putString("webTitle", "用户协议")
+                        putString("webTitle", "隐私政策")
                     }
                     jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
                 }

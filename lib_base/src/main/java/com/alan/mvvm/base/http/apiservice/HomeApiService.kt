@@ -1072,14 +1072,20 @@ interface HomeApiService {
     /**
      * 回复一起(被发起人的聊天消息)
      */
-    @POST("doing/chat/reply")
+    @POST("doing/chat")
     suspend fun requestReply(@Body requestBody: RequestBody): BaseResponse<String>
 
     /**
      * 检测一起是否被已回复
      */
-    @POST("doing/chat/isReply")
+    @POST("doing/chat/check")
     suspend fun requestIsReply(@Body requestBody: RequestBody): BaseResponse<ReplyBean>
+
+    /**
+     * 检测一起是否被已回复
+     */
+    @POST("doing/match")
+    suspend fun requestNowMatch(): BaseResponse<UserInfoBean>
 
     /**
      * 发布想法状态

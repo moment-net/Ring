@@ -468,6 +468,13 @@ class CommonRepository @Inject constructor() : BaseRepository() {
     ) = request(mApi, callback) { mApi.requestIsReply(requestBody) }
 
     /**
+     * 获取匹配用户
+     */
+    suspend fun requestNowMatch(
+        callback: RequestCallback<UserInfoBean>
+    ) = request(mApi, callback) { mApi.requestNowMatch() }
+
+    /**
      * 发布想法
      */
     suspend fun requestPushThink(

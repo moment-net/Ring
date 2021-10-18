@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +21,6 @@ class HomeViewModel @Inject constructor(private val mRepository: CommonRepositor
     BaseViewModel() {
 
     val ldData = MutableLiveData<Any>()
-    val ldState = MutableLiveData<Any>()
 
     /**
      * 获取首页列表
@@ -52,10 +52,28 @@ class HomeViewModel @Inject constructor(private val mRepository: CommonRepositor
             mRepository.requestMealStatus(
                 callback = RequestCallback(
                     onSuccess = {
-                        ldState.value = it
+                        ldData.value = it
                     },
                     onFailed = {
-                        ldState.value = it
+                        ldData.value = it
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 获取匹配用户
+     */
+    fun requestNowMatch() {
+        viewModelScope.launch() {
+            mRepository.requestNowMatch(
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = it.data!!
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
                     },
                 )
             )

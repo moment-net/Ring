@@ -47,11 +47,18 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
     override val mViewModel by viewModels<MyViewModel>()
     lateinit var mAdapter: MyThinkAdapter
+    var listener: OnClickFinishListener? = null
+    var isShow: Boolean = false
     var isLoad = false
     var mCursor: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun FragmentMyBinding.initView() {
+        ivBack.clickDelay {
+            if (listener != null) {
+                listener!!.onClick()
+            }
+        }
         ivSet.clickDelay {
             jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_SET)
         }
@@ -71,6 +78,12 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
         }
         clDiamond.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_DIAMOND) }
         clWallet.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_WALLET) }
+
+        if (isShow) {
+            mBinding.ivBack.visible()
+        } else {
+            mBinding.ivBack.gone()
+        }
 
         initScrollView()
         CoilUtils.loadRoundBorder(
@@ -248,5 +261,9 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
     fun requestList() {
         mViewModel.requestList(mCursor, SpHelper.getUserInfo()?.userId!!)
+    }
+
+    interface OnClickFinishListener {
+        fun onClick()
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.http.requestbean.CallRequestBean
 import com.alan.mvvm.base.http.requestbean.FollowRequestBean
+import com.alan.mvvm.base.http.requestbean.ToUserIdRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
@@ -97,6 +98,26 @@ class ChatDetailViewModel @Inject constructor(private val mRepository: CommonRep
                         toast(it.errorMessage)
                     }
                 ))
+        }
+    }
+
+    /**
+     * 聊天回复
+     */
+    fun requestReply(userId: String) {
+        val requestBean = ToUserIdRequestBean(userId)
+        viewModelScope.launch() {
+            mRepository.requestReply(
+                RequestUtil.getPostBody(requestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
         }
     }
 }

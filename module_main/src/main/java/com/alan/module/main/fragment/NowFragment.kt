@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alan.module.main.R
 import com.alan.module.main.adapter.NowAdapter
 import com.alan.module.main.databinding.FragmentNowBinding
+import com.alan.module.main.dialog.InputFragmentDialog
 import com.alan.module.main.viewmodel.NowViewModel
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.base.http.baseresp.BaseResponse
@@ -89,6 +90,14 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                     mAdapter.removeAt(it)
                     mAdapter.notifyItemRemoved(it)
                 }
+
+                is Pair<*, *> -> {
+                    val userId = it.first as String
+                    val userName = it.second as String
+
+                    val inputDialog = InputFragmentDialog.newInstance(userId, userName)
+                    inputDialog.show(requireActivity().supportFragmentManager)
+                }
             }
         }
     }
@@ -116,6 +125,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
             val id = mAdapter.data.get(position).id
             val userId = mAdapter.data.get(position).user.userId
+            val userName = mAdapter.data.get(position).user.userName
             when (view.id) {
                 R.id.iv_avatar -> {
                     val bundle = Bundle().apply {
@@ -127,7 +137,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                     showPopupWindow(view, id, userId, position)
                 }
                 R.id.tv_chat -> {
-
+                    mViewModel.requestIsReply(userId, userName)
                 }
             }
         }
