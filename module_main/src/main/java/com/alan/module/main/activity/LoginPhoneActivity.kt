@@ -86,7 +86,7 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
                 override fun onClick(view: View) {
                     val bundle = Bundle().apply {
                         putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/privacy-policy")
-                        putString("webTitle", "用户协议")
+                        putString("webTitle", "隐私政策")
                     }
                     jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
                 }
@@ -94,6 +94,7 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
             tvAgreement.setHighlightColor(Color.TRANSPARENT) //设置点击后的颜色为透明，否则会一直出现高亮
             tvAgreement.setText(spanText)
             tvAgreement.setMovementMethod(LinkMovementMethod.getInstance()) //开始响应点击事件
+            tvAgreement.visibility = View.INVISIBLE
         } else {
             tvPhoneTitle.setText(getString(R.string.string_phone_bind))
             tvAgreement.setText(getString(R.string.string_phone_bing_info))

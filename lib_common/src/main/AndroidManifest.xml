@@ -171,42 +171,42 @@
         </service>
 
 
-        <meta-data
-            android:name="JPUSH_CHANNEL"
-            android:value="${JPUSH_CHANNEL}" />
-        <meta-data
-            android:name="JPUSH_APPKEY"
-            android:value="${JPUSH_APPKEY}" />
+        <!--        <meta-data-->
+        <!--            android:name="JPUSH_CHANNEL"-->
+        <!--            android:value="${JPUSH_CHANNEL}" />-->
+        <!--        <meta-data-->
+        <!--            android:name="JPUSH_APPKEY"-->
+        <!--            android:value="${JPUSH_APPKEY}" />-->
 
 
-        <!-- 小米开始-->
-        <meta-data
-            android:name="XIAOMI_APPKEY"
-            android:value="${XIAOMI_APPKEY}" />
-        <meta-data
-            android:name="XIAOMI_APPID"
-            android:value="${XIAOMI_APPID}" />
-        <!-- 小米结束-->
+        <!--        &lt;!&ndash; 小米开始&ndash;&gt;-->
+        <!--        <meta-data-->
+        <!--            android:name="XIAOMI_APPKEY"-->
+        <!--            android:value="${XIAOMI_APPKEY}" />-->
+        <!--        <meta-data-->
+        <!--            android:name="XIAOMI_APPID"-->
+        <!--            android:value="${XIAOMI_APPID}" />-->
+        <!--        &lt;!&ndash; 小米结束&ndash;&gt;-->
 
-        <!--oppo start-->
-        <meta-data
-            android:name="OPPO_APPKEY"
-            android:value="${OPPO_APPKEY}" />
-        <meta-data
-            android:name="OPPO_APPID"
-            android:value="${OPPO_APPID}" />
-        <meta-data
-            android:name="OPPO_APPSECRET"
-            android:value="${OPPO_APPSECRET}" />
-        <!--oppo end-->
+        <!--        &lt;!&ndash;oppo start&ndash;&gt;-->
+        <!--        <meta-data-->
+        <!--            android:name="OPPO_APPKEY"-->
+        <!--            android:value="${OPPO_APPKEY}" />-->
+        <!--        <meta-data-->
+        <!--            android:name="OPPO_APPID"-->
+        <!--            android:value="${OPPO_APPID}" />-->
+        <!--        <meta-data-->
+        <!--            android:name="OPPO_APPSECRET"-->
+        <!--            android:value="${OPPO_APPSECRET}" />-->
+        <!--        &lt;!&ndash;oppo end&ndash;&gt;-->
 
-        <!--vivo start-->
-        <meta-data
-            android:name="com.vivo.push.api_key"
-            android:value="${VIVO_APPKEY}" />
-        <meta-data
-            android:name="com.vivo.push.app_id"
-            android:value="${VIVO_APPID}" />
+        <!--        &lt;!&ndash;vivo start&ndash;&gt;-->
+        <!--        <meta-data-->
+        <!--            android:name="com.vivo.push.api_key"-->
+        <!--            android:value="${VIVO_APPKEY}" />-->
+        <!--        <meta-data-->
+        <!--            android:name="com.vivo.push.app_id"-->
+        <!--            android:value="${VIVO_APPID}" />-->
         <!--vivo end-->
         <!--推送相关=====end-->
 
