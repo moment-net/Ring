@@ -22,10 +22,13 @@ import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
+import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.ui.BaseFragment
+import com.hyphenate.chat.EMMessage
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,6 +98,8 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                         false
                     } else {
                         mAdapter.data.get(position).favoriteCount = favoriteCount + 1
+                        val user = mAdapter.data.get(position).user
+                        sendTextMessage("${SpHelper.getUserInfo()?.userName}认同了你的想法", user.userId)
                         true
                     }
                     mAdapter.notifyItemChanged(position)
@@ -189,12 +194,12 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
 
         popupWindow = PopupWindow(
             contentview,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
+            dp2px(88f),
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         popupWindow.setFocusable(true)
         popupWindow.setOutsideTouchable(false)
-        popupWindow.showAsDropDown(view, -dp2px(130f), 10)
+        popupWindow.showAsDropDown(view, -dp2px(50f), 0)
     }
 
 
@@ -210,5 +215,22 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
 
     fun requestList() {
         mViewModel.requestList(mCursor)
+    }
+
+    /**
+     * 发送点赞IM消息
+     */
+    fun sendTextMessage(content: String, userId: String) {
+        val message = EMMessage.createTxtSendMessage(content, userId)
+        // 增加自己特定的属性
+        message.setAttribute(IMConstant.MESSAGE_ATTR_AVATAR, SpHelper.getUserInfo()?.avatar);
+        message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME, SpHelper.getUserInfo()?.userName);
+
+        // 设置自定义扩展字段-强制推送
+//        message.setAttribute(IMConstant.MESSAGE_ATTR_FORCEPUSH, true);
+        // 设置自定义扩展字段-发送静默消息（不推送）
+//        message.setAttribute(IMConstant.MESSAGE_ATTR_IGNOREPUSH, true);
+
+        EMClientHelper.chatManager.sendMessage(message)
     }
 }

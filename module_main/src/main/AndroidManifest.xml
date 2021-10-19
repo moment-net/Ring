@@ -37,13 +37,11 @@
         <activity
             android:name=".activity.NowActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:screenOrientation="portrait"
-            android:exported="true" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ThinkActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:screenOrientation="portrait"
-            android:exported="true" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SelectTypeActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"

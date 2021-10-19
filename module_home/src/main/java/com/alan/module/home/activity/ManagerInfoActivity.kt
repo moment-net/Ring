@@ -1,5 +1,6 @@
 package com.alan.module.home.activity
 
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -106,6 +107,8 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
             )
             jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
         }
+
+        mBinding.llTitle.setBackgroundColor(Color.argb(0, 255, 255, 255))
         initScrollView()
 
         initRv()
@@ -118,7 +121,7 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
             val location = IntArray(2)
             mBinding.ivAvatar.getLocationOnScreen(location)
             val locationY = location[1]
-            var scale: Float = ((locationY - dp2px(52f).toFloat()) / dp2px(40f).toFloat()).toFloat()
+            var scale: Float = ((locationY - dp2px(85f).toFloat()) / dp2px(40f).toFloat()).toFloat()
             if (scale <= 0) {
                 scale = 0f
                 mBinding.ivBack.setImageResource(R.drawable.icon_back)
@@ -126,7 +129,9 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
                 mBinding.ivBack.setImageResource(R.drawable.icon_back_white)
             }
             KLog.d("xujm", "locationY:$locationY===scale:$scale")
-            mBinding.llTitle.background.alpha = (255 * (1 - scale)).toInt();
+            val alpha = (255 * (1 - scale)).toInt()
+//            mBinding.llTitle.background.alpha = (255 * (1 - scale)).toInt()
+            mBinding.llTitle.setBackgroundColor(Color.argb(alpha, 255, 255, 255))
         }
     }
 
@@ -192,6 +197,7 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
         }
         val userInfoBean = userInfoBean;
         CoilUtils.loadRound(mBinding.ivAvatar, userInfoBean?.avatar!!, 3f)
+        mBinding.tvTitle.setText(userInfoBean?.userName)
         mBinding.tvName.setText(userInfoBean?.userName)
         var address = ""
         if (!TextUtils.isEmpty(userInfoBean?.address) && userInfoBean?.address!!.split("-").size == 3) {

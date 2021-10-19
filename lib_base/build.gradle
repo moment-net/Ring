@@ -93,6 +93,7 @@ dependencies {
     api DependencyConfig.SDK.Xiaomiplugin
     api DependencyConfig.SDK.Oppoplugin
     api DependencyConfig.SDK.Vivoplugin
+    api DependencyConfig.SDK.Amplitude
 
 
     kapt DependencyConfig.JetPack.HiltApt

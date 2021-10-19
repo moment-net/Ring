@@ -9,11 +9,11 @@ import coil.ImageLoader
 import coil.load
 import coil.request.CachePolicy
 import coil.transform.BlurTransformation
-import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
 import coil.util.CoilUtils
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.coil.transformation.CircleCropBorderTransformation
+import com.alan.mvvm.base.coil.transformation.CircleCropOverTransformation
 import com.scwang.smart.refresh.layout.util.SmartUtil.dp2px
 import okhttp3.OkHttpClient
 
@@ -85,7 +85,7 @@ object CoilUtils {
         iv.load(url) {
             transformations(
                 BlurTransformation(context, radius, sampling),
-                CircleCropTransformation()
+                CircleCropOverTransformation()
             )
         }
     }
@@ -99,7 +99,7 @@ object CoilUtils {
     ) {
         iv.load(url) {
             transformations(
-                CircleCropTransformation()
+                CircleCropOverTransformation()
             )
         }
     }

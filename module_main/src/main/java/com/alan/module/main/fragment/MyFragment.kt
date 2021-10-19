@@ -1,9 +1,13 @@
 package com.alan.module.main.fragment
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -79,10 +83,11 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
         clDiamond.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_DIAMOND) }
         clWallet.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_WALLET) }
 
+        mBinding.llTitle.setBackgroundColor(Color.argb(0, 255, 255, 255))
         if (isShow) {
             mBinding.ivBack.visible()
         } else {
-            mBinding.ivBack.gone()
+            mBinding.ivBack.visibility = View.INVISIBLE
         }
 
         initScrollView()
@@ -103,12 +108,23 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
             val location = IntArray(2)
             mBinding.ivAvatar.getLocationOnScreen(location)
             val locationY = location[1]
-            var scale: Float = ((locationY - dp2px(52f).toFloat()) / dp2px(40f).toFloat()).toFloat()
+            var scale: Float = ((locationY - dp2px(72f).toFloat()) / dp2px(40f).toFloat()).toFloat()
             if (scale < 0) {
                 scale = 0f
             }
+            if (scale == 0f) {
+                mBinding.ivBack.setImageResource(R.drawable.icon_back)
+                mBinding.ivMsg.setImageResource(R.drawable.icon_my_msg_black)
+                mBinding.ivSet.setImageResource(R.drawable.icon_my_set_black)
+            } else {
+                mBinding.ivBack.setImageResource(R.drawable.icon_back_white)
+                mBinding.ivMsg.setImageResource(R.drawable.icon_my_msg)
+                mBinding.ivSet.setImageResource(R.drawable.icon_my_set)
+            }
             KLog.d("xujm", "locationY:$locationY===scale:$scale")
-            mBinding.llTitle.background.alpha = (255 * (1 - scale)).toInt();
+            val alpha = (255 * (1 - scale)).toInt()
+//            mBinding.llTitle.background.alpha = (255 * (1 - scale)).toInt()
+            mBinding.llTitle.setBackgroundColor(Color.argb(alpha, 255, 255, 255))
         }
     }
 
@@ -240,6 +256,17 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
                 }
             }
         }
+
+        mAdapter.setEmptyView(TextView(activity).apply {
+            setText("当前还没有想法，快去发布想法吧！")
+            setTextSize(16f)
+            setTextColor(R.color._263A3A3A.getResColor())
+            gravity = Gravity.CENTER
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                dp2px(260f)
+            )
+        })
         mAdapter.loadMoreModule.isEnableLoadMoreIfNotFullPage = false
         mAdapter.loadMoreModule.setOnLoadMoreListener {
             mBinding.rvList.postDelayed(Runnable {

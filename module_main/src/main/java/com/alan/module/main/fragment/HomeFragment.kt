@@ -114,7 +114,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
         mBinding.viewpager.adapter =
             MainVPAdapter(mFragments, requireActivity().supportFragmentManager, lifecycle)
-        mBinding.viewpager.isUserInputEnabled = false
         mBinding.viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

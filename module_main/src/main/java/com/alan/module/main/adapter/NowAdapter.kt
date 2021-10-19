@@ -7,6 +7,7 @@ import android.widget.TextView
 import com.alan.module.main.R
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.NowBean
+import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -22,7 +23,8 @@ class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now) 
     }
 
     override fun convert(holder: BaseViewHolder, item: NowBean) {
-        CoilUtils.loadCircle(holder.getView(R.id.iv_avatar), item.user.avatar)
+        val ivAvatar = holder.getView<ImageView>(R.id.iv_avatar)
+        CoilUtils.loadCircle(ivAvatar, item.user.avatar)
         holder.setText(R.id.tv_name, item.user.userName)
         val tvAge = holder.getView<ShapeView>(R.id.tv_age)
         val tvLabelBg = holder.getView<ShapeView>(R.id.tv_label_bg)
@@ -36,8 +38,10 @@ class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now) 
         }
         if (TextUtils.isEmpty(age)) {
             tvAge.setText("")
+            tvAge.compoundDrawablePadding = 0
         } else {
             tvAge.setText("$age")
+            tvAge.compoundDrawablePadding = context.dp2px(2f)
         }
         if (item.user.gender == 1) {
             tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_boy_white, 0, 0, 0)

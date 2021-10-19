@@ -8,10 +8,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
-import android.view.inputmethod.EditorInfo
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.jpush.android.api.JPushInterface
@@ -144,9 +144,15 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             if (mBinding.llPress.isVisible) {
                 mBinding.ivVoice.setImageResource(R.drawable.icon_chat_voice)
                 mBinding.llPress.gone()
+                if (!TextUtils.isEmpty(mBinding.etMsg.text.toString())) {
+                    mBinding.tvSend.visible()
+                } else {
+                    mBinding.tvSend.gone()
+                }
             } else {
                 mBinding.ivVoice.setImageResource(R.drawable.icon_chat_input)
                 mBinding.llPress.visible()
+                mBinding.tvSend.gone()
             }
         }
         mBinding.ivCall.clickDelay {
@@ -158,7 +164,14 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         mBinding.ivGift.clickDelay {
             toast("即将上线")
         }
-
+        mBinding.tvSend.clickDelay {
+            val msg: String = mBinding.etMsg.getText().toString()
+            if (TextUtils.isEmpty(msg)) {
+                return@clickDelay
+            }
+            mBinding.etMsg.setText("")
+            sendTextMessage(msg)
+        }
 
         mBinding.llPress.setOnTouchListener { v, event ->
             mBinding.rlRecording.onPressToSpeakBtnTouch(
@@ -175,18 +188,25 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             true
         }
 
-        mBinding.etMsg.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_SEND ||
-                event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN
-            ) {
-                val msg: String = mBinding.etMsg.getText().toString()
-                mBinding.etMsg.setText("")
-                sendTextMessage(msg)
-                true
+        mBinding.etMsg.addTextChangedListener {
+            if (!TextUtils.isEmpty(it.toString())) {
+                mBinding.tvSend.visible()
             } else {
-                false
+                mBinding.tvSend.gone()
             }
-        })
+        }
+//        mBinding.etMsg.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+//            if (actionId == EditorInfo.IME_ACTION_SEND ||
+//                event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN
+//            ) {
+//                val msg: String = mBinding.etMsg.getText().toString()
+//                mBinding.etMsg.setText("")
+//                sendTextMessage(msg)
+//                true
+//            } else {
+//                false
+//            }
+//        })
     }
 
     fun initRV() {

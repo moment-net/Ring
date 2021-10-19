@@ -1,6 +1,5 @@
 package com.alan.module.my.activity
 
-import android.Manifest
 import android.content.Intent
 import android.text.Editable
 import android.text.TextUtils
@@ -30,7 +29,6 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.huantansheng.easyphotos.EasyPhotos
 import com.huantansheng.easyphotos.models.album.entity.Photo
-import com.permissionx.guolindev.PermissionX
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -225,15 +223,7 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
 
 
     fun requestPermission() {
-        PermissionX.init(this).permissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .request { allGranted, grantedList, deniedList ->
-                //不给权限可以进
-                if (allGranted) {
-                    this@PersonInfoActivity?.let { ImageSelectUtil.singlePic(it) }
-                } else {
-                    toast("没有图片读取权限")
-                }
-            }
+        ImageSelectUtil.singlePic(this)
     }
 
     fun changeAddress() {
@@ -241,7 +231,7 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
             this,
             object : LocationPickerUtil.OnPickerListener {
                 override fun onPicker(opt1: String, opt2: String, opt3: String) {
-                    address = opt1.toString() + "-" + opt2 + "-" + opt3
+                    address = opt1 + "-" + opt2 + "-" + opt3
                     mBinding.tvHometownValue.setText(address)
                 }
 

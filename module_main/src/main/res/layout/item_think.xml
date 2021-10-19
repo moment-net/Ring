@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -9,9 +8,10 @@
         android:id="@+id/iv_avatar"
         android:layout_width="42dp"
         android:layout_height="42dp"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:src="@drawable/icon_placeholder" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -83,7 +83,7 @@
 
     <ImageView
         android:id="@+id/iv_more"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dimen19"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/dimen10"
         android:paddingBottom="@dimen/dimen10"

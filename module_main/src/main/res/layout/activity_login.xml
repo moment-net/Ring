@@ -33,7 +33,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen18"
-        android:text="饭点到了 边吃边聊"
+        android:text="随时随地有人帮你打发时间"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="@dimen/sp18"

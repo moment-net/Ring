@@ -184,12 +184,12 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
 
         popupWindow = PopupWindow(
             contentview,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
+            dp2px(88f),
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         popupWindow.setFocusable(true)
         popupWindow.setOutsideTouchable(false)
-        popupWindow.showAsDropDown(view, -dp2px(88f), 10)
+        popupWindow.showAsDropDown(view, -dp2px(50f), 0)
     }
 
 
