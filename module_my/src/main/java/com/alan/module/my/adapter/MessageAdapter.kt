@@ -5,8 +5,10 @@ import androidx.core.content.ContextCompat
 import com.alan.module.my.R
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.MessageBean
+import com.alan.mvvm.base.ktx.getResColor
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import leifu.shapelibrary.ShapeView
 
 class MessageAdapter() : BaseMultiItemQuickAdapter<MessageBean, BaseViewHolder>() {
 
@@ -40,21 +42,24 @@ class MessageAdapter() : BaseMultiItemQuickAdapter<MessageBean, BaseViewHolder>(
                         R.id.tv_follow,
                         ContextCompat.getColor(context, R.color.white)
                     )
-                    holder.setBackgroundResource(R.id.tv_follow, R.drawable.shape_yellow4)
+                    holder.getView<ShapeView>(R.id.tv_follow)
+                        .setShapeSolidColor(R.color._FF4F78.getResColor()).setUseShape()
                 } else if (followStatus == 1) {
                     holder.setText(R.id.tv_follow, "已关注")
                     holder.setTextColor(
                         R.id.tv_follow,
                         ContextCompat.getColor(context, R.color.white)
                     )
-                    holder.setBackgroundResource(R.id.tv_follow, R.drawable.shape_gray4)
+                    holder.getView<ShapeView>(R.id.tv_follow)
+                        .setShapeSolidColor(R.color._988778.getResColor()).setUseShape()
                 } else if (followStatus == 2) {
                     holder.setText(R.id.tv_follow, "互相关注")
                     holder.setTextColor(
                         R.id.tv_follow,
                         ContextCompat.getColor(context, R.color.white)
                     )
-                    holder.setBackgroundResource(R.id.tv_follow, R.drawable.shape_gray4)
+                    holder.getView<ShapeView>(R.id.tv_follow)
+                        .setShapeSolidColor(R.color._988778.getResColor()).setUseShape()
                 }
             }
             MessageBean.GIFT_MSG -> {

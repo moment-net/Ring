@@ -19,7 +19,7 @@
 
     <ImageView
         android:id="@+id/iv_label"
-        android:layout_width="@dimen/dimen16"
+        android:layout_width="@dimen/dimen14"
         android:layout_height="@dimen/dimen12"
         android:layout_marginStart="@dimen/dimen8"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,6 +35,7 @@
         android:textSize="14sp"
         android:layout_marginStart="@dimen/dimen4"
         android:layout_marginEnd="@dimen/dimen8"
+        android:layout_marginBottom="@dimen/dimen1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_label"

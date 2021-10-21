@@ -108,31 +108,33 @@
         android:id="@+id/iv_zan"
         android:layout_width="47dp"
         android:layout_height="20dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="2dp"
         android:src="@drawable/icon_home_zan_off"
-        app:layout_constraintEnd_toStartOf="@+id/main_textview14"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/main_textview14" />
 
     <TextView
         android:id="@+id/tv_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="0"
         android:textColor="@color/_BAB9B9"
         android:textSize="14sp"
         android:typeface="monospace"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 
     <View
         android:id="@+id/main_textview14"
         android:layout_width="1dp"
         android:layout_height="10dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="30dp"
         android:background="@color/_33BAB9B9"
         app:layout_constraintBottom_toBottomOf="@+id/tv_num"
-        app:layout_constraintEnd_toStartOf="@+id/tv_num"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_num" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

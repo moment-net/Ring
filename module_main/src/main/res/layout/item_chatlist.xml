@@ -43,13 +43,18 @@
 
     <TextView
         android:id="@+id/tv_msg"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/dimen10"
         android:includeFontPadding="false"
         android:text=""
+        android:singleLine="true"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="@color/_803A3A3A"
         android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/tv_time"
         app:layout_constraintStart_toEndOf="@+id/iv_read"
         app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 

@@ -152,7 +152,6 @@
                 android:layout_marginTop="40dp"
                 android:layout_marginRight="30dp"
                 android:background="@drawable/icon_placeholder"
-                android:padding="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_gender_desc" />
 

@@ -49,8 +49,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="80dp"
+                    android:includeFontPadding="false"
                     android:singleLine="true"
-                    android:maxLines="1"
                     android:maxEms="12"
                     android:ellipsize="end"
                     android:text="番茄会害羞番茄会害羞番茄会害羞番茄会害羞番茄会害羞"
@@ -63,7 +63,7 @@
                     android:id="@+id/iv_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dimen10"
+                    android:layout_marginStart="@dimen/dimen0"
                     android:padding="@dimen/dimen5"
                     android:src="@drawable/icon_my_edit"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_name"
@@ -196,12 +196,11 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_remind"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_height="@dimen/dimen72"
+                    android:layout_marginStart="14dp"
                     android:layout_marginTop="46dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/shape_white10"
-                    android:elevation="@dimen/dimen5"
+                    android:layout_marginEnd="14dp"
+                    android:background="@drawable/icon_my_clickbg"
                     android:paddingStart="@dimen/dimen20"
                     android:paddingEnd="@dimen/dimen20"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -212,9 +211,10 @@
                         android:id="@+id/cl_diamond"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
                             android:id="@+id/tv_diamond"

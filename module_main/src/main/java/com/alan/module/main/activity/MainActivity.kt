@@ -67,8 +67,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     private val mFragments = arrayListOf<Fragment>()
     private var mPagePosition = 0
     private var time: Long = 0
-
-    /**
+     /**
      * 初始化View
      */
     override fun ActivityMainBinding.initView() {
