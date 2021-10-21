@@ -144,6 +144,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                     DataPointUtil.reportHomeMenu(SpHelper.getUserInfo()?.userId!!)
                 }
                 R.id.tv_chat -> {
+                    DataPointUtil.reportTogether(SpHelper.getUserInfo()?.userId!!, userId)
                     if (TextUtils.equals(userId, SpHelper.getUserInfo()?.userId)) {
                         toast("不可以和自己一起，试试点击他人一起按钮吧！")
                         return@setOnItemChildClickListener
@@ -156,7 +157,6 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                         )
                     )
                     mViewModel.requestIsReply(userId, userName)
-                    DataPointUtil.reportTogether(SpHelper.getUserInfo()?.userId!!, userId)
                 }
             }
         }

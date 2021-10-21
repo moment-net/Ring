@@ -108,7 +108,6 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
                 is LoginBean -> {
                     loginBean = it
                     mViewModel.loginIM(it.user!!)
-                    DataPointUtil.reportRegister(it.user!!.userId!!, 1)
                 }
             }
         }
@@ -175,6 +174,7 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
                 putInt("type", type)
             }
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_WXINFO, bundle)
+            DataPointUtil.reportRegister(SpHelper.getUserInfo()?.userId!!, 1)
         } else {
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
         }

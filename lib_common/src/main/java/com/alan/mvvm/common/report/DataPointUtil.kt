@@ -362,14 +362,11 @@ object DataPointUtil {
      * 点击语音通话按钮
      * type
      * 1. 已接通 Success
-     * 2. 对方拒绝 Refuse
-     * 3. 占线/忙碌中 Busy
+     * 2. 占线/忙碌中 Busy
      */
-    fun reportCall(userId: String, type: Int) {
+    fun reportCall(userId: String, sessionId: String, type: Int) {
         val status = if (type == 1) {
             ReportConstant.VALUE_SUCCESS
-        } else if (type == 2) {
-            ReportConstant.VALUE_REFUSE
         } else {
             ReportConstant.VALUE_BUSY
         }
@@ -377,6 +374,7 @@ object DataPointUtil {
             ReportConstant.EVENT_CHAT_CALL,
             ReportConstant.KEY_USERID, userId,
             ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+            ReportConstant.KEY_SESSIONID, sessionId,
             ReportConstant.KEY_CALLSTATUS, status,
         )
     }
@@ -384,13 +382,24 @@ object DataPointUtil {
     /**
      * 点击挂断按钮
      */
-    fun reportHangup(userId: String, waitTime: Long, callTime: Long) {
+    fun reportHangup(userId: String, sessionId: String) {
         AmplitudeUtil.instance.logEvent(
             ReportConstant.EVENT_CHAT_HANGUP,
             ReportConstant.KEY_USERID, userId,
             ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
-            ReportConstant.KEY_WAITTIME, "${waitTime}",
-            ReportConstant.KEY_CALLTIME, "${callTime}",
+            ReportConstant.KEY_SESSIONID, sessionId,
+        )
+    }
+
+    /**
+     * 点击接通
+     */
+    fun reportConnect(userId: String, sessionId: String) {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CHAT_CONNECT,
+            ReportConstant.KEY_USERID, userId,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+            ReportConstant.KEY_SESSIONID, sessionId,
         )
     }
 

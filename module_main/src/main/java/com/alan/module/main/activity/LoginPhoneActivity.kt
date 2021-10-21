@@ -51,10 +51,7 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
      */
     override fun ActivityLoginPhoneBinding.initView() {
         ivBack.clickDelay {
-            if (type == 2) {
-                SpHelper.clearUserInfo()
-            }
-            finish()
+            onBackPressed()
         }
         ivClear.clickDelay { etPhone.setText("") }
         tvCommit.clickDelay {
@@ -98,6 +95,7 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
             tvAgreement.setHighlightColor(Color.TRANSPARENT) //设置点击后的颜色为透明，否则会一直出现高亮
             tvAgreement.setText(spanText)
             tvAgreement.setMovementMethod(LinkMovementMethod.getInstance()) //开始响应点击事件
+            tvAgreement.visibility = View.INVISIBLE
         } else {
             tvPhoneTitle.setText(getString(R.string.string_phone_bind))
             tvAgreement.setText(getString(R.string.string_phone_bing_info))
@@ -184,6 +182,7 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
             DataPointUtil.reportLoginPhoneBack()
         } else {
             DataPointUtil.reportBindBack(SpHelper.getUserInfo()?.userId!!)
+            SpHelper.clearUserInfo()
         }
     }
 }

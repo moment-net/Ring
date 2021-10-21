@@ -16,10 +16,7 @@ import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.MessageBean
 import com.alan.mvvm.base.http.responsebean.UnreadBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
-import com.alan.mvvm.base.ktx.clickDelay
-import com.alan.mvvm.base.ktx.dp2px
-import com.alan.mvvm.base.ktx.gone
-import com.alan.mvvm.base.ktx.visible
+import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
@@ -145,6 +142,11 @@ class MessageActivity : BaseActivity<ActivityMessageBinding, MessageViewModel>()
                     } else {
                         mBinding.srfList.finishRefresh()
                         mAdapter.setList(list)
+                    }
+                    if (mAdapter.data.size == 0) {
+                        mBinding.tvEmpty.visible()
+                    } else {
+                        mBinding.tvEmpty.gone()
                     }
                 }
 

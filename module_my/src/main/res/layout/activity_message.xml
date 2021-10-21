@@ -74,6 +74,20 @@
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/dimen20"
             android:layout_marginEnd="@dimen/dimen20" />
+
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="暂无消息"
+        android:textColor="@color/_263A3A3A"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/srf_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/srf_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

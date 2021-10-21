@@ -751,6 +751,8 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_refuse_call) {
+            DataPointUtil.INSTANCE.reportHangup(SpHelper.INSTANCE.getUserInfo().getUserId(), EaseCallKit.getInstance().getSessionId());
+
             stopPlayRing();
             if (isInComingCall) {
                 stopCount();
@@ -764,6 +766,7 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                 sendCmdMsg(event, userId);
             }
         } else if (id == R.id.btn_answer_call) {
+            DataPointUtil.INSTANCE.reportConnect(SpHelper.INSTANCE.getUserInfo().getUserId(), EaseCallKit.getInstance().getSessionId());
             if (isInComingCall) {
                 stopPlayRing();
                 //发送接听消息
@@ -775,6 +778,8 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                 sendCmdMsg(event, userId);
             }
         } else if (id == R.id.btn_hangup_call) {
+            DataPointUtil.INSTANCE.reportHangup(SpHelper.INSTANCE.getUserInfo().getUserId(), EaseCallKit.getInstance().getSessionId());
+
             stopCount();
             if (remoteUId == 0) {
                 //发送取消消息
@@ -785,7 +790,6 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                 if (listener != null) {
                     //通话结束原因挂断
                     long time = getChronometerSeconds(chronometer);
-                    DataPointUtil.INSTANCE.reportHangup(SpHelper.INSTANCE.getUserInfo().getUserId(), 0, time);
                     listener.onEndCallWithReason(callType, channelName, EaseCallEndReason.EaseCallEndReasonHangup, time * 1000);
                 }
             }
@@ -1022,7 +1026,6 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                             //对方取消
                             listener.onEndCallWithReason(callType, channelName, EaseCallEndReason.EaseCallEndReasonRemoteCancel, 0);
                         }
-                        DataPointUtil.INSTANCE.reportCall(SpHelper.INSTANCE.getUserInfo().getUserId(), 2);
                         break;
                     case CALL_ANSWER:
                         AnswerEvent answerEvent = (AnswerEvent) event;
@@ -1044,7 +1047,6 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                                         Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT).show();
                                         //退出通话
                                         exitChannel();
-                                        DataPointUtil.INSTANCE.reportCall(SpHelper.INSTANCE.getUserInfo().getUserId(), 3);
                                         if (listener != null) {
                                             //对方正在忙碌中
                                             listener.onEndCallWithReason(callType, channelName, EaseCallEndReason.EaseCallEndReasonBusy, 0);
@@ -1109,11 +1111,9 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                                 //加入频道
                                 initEngineAndJoinChannel();
                                 makeOngoingStatus();
-                                DataPointUtil.INSTANCE.reportCall(SpHelper.INSTANCE.getUserInfo().getUserId(), 1);
                             } else if (TextUtils.equals(result, EaseMsgUtils.CALL_ANSWER_REFUSE)) {
                                 //退出通话
                                 exitChannel();
-                                DataPointUtil.INSTANCE.reportCall(SpHelper.INSTANCE.getUserInfo().getUserId(), 2);
                             }
                         } else {
                             runOnUiThread(new Runnable() {

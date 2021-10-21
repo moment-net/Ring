@@ -124,8 +124,6 @@
                         android:id="@+id/tv_online"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/dimen18"
-                        android:drawableStart="@drawable/icon_my_wifi_on"
-                        android:drawablePadding="@dimen/dimen2"
                         android:gravity="center"
                         app:layout_goneMarginStart="@dimen/dimen0"
                         android:layout_marginStart="@dimen/dimen10"
@@ -140,7 +138,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:sCorners="4dp"
-                        app:sSolidColor="@color/_51CA9D"
+                        app:sSolidColor="@color/_27CFA1"
                         app:sStrokeColor="@color/_3A3A3A"
                         app:sStrokeWidth="0dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>

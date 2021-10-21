@@ -25,6 +25,7 @@ import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.event.ChangeThinkEvent
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
@@ -156,6 +157,13 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                         mViewModel.requestZan(item.id, 1, position)
                     }
                     DataPointUtil.reportLike(SpHelper.getUserInfo()?.userId!!, userId)
+                    EMClientHelper.saveUser(
+                        UserEntity(
+                            userId,
+                            item.user.userName,
+                            item.user.avatar
+                        )
+                    )
                 }
             }
         }

@@ -250,9 +250,9 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
         mBinding.tvState.setText(userInfoBean.recentDoing)
         mBinding.tvDesc.setText(userInfoBean.desc)
         if (userInfoBean.onlineStatus!!) {
-            mBinding.ivOnline.visible()
+            mBinding.tvOnline.visible()
         } else {
-            mBinding.ivOnline.gone()
+            mBinding.tvOnline.gone()
         }
 
         if (userInfoBean?.greeting?.duration ?: 0 == 0) {

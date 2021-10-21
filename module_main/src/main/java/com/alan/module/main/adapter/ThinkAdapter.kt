@@ -59,8 +59,10 @@ class ThinkAdapter : BaseQuickAdapter<ThinkBean, BaseViewHolder>(R.layout.item_t
         holder.setText(R.id.tv_content, item.content)
 
         if (item.isFavorite) {
+            holder.setTextColor(R.id.tv_num, R.color._FF6464.getResColor())
             holder.setImageResource(R.id.iv_zan, R.drawable.icon_home_zan_on)
         } else {
+            holder.setTextColor(R.id.tv_num, R.color._BAB9B9.getResColor())
             holder.setImageResource(R.id.iv_zan, R.drawable.icon_home_zan_off)
         }
         holder.setText(R.id.tv_num, "${item.favoriteCount}")

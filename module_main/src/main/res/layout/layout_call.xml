@@ -44,6 +44,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:maxEms="12"
                 android:text="番茄会害羞正在邀请你边吃边聊"
                 android:textColor="@color/white"
                 android:textSize="14sp"

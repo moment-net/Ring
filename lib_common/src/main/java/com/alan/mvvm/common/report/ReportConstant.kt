@@ -117,16 +117,19 @@ object ReportConstant {
     //35、点击挂断按钮
     var EVENT_CHAT_HANGUP = "Click_Hangup"
 
-    //36、点击最小化
+    //36、点击接通按钮
+    var EVENT_CHAT_CONNECT = "Click_Connect"
+
+    //37、点击最小化
     var EVENT_CALL_SCALE = "Click_Call_Background"
 
-    //37、点击通话页面关注
+    //38、点击通话页面关注
     var EVENT_CHAT_FOLLOW = "Click_CallPage_Follow"
 
-    //38、点击通话页面送礼物
+    //39、点击通话页面送礼物
     var EVENT_SEND_GIFT = "Click_bottomSend_Gift"
 
-    //39、点击弹窗 - 立即聊天
+    //40、点击弹窗 - 立即聊天
     var EVENT_WINDOW_CHAT = "Click_window_ChatButton"
 
     //--------------------点击事件Value----------------------------------------------
@@ -172,6 +175,9 @@ object ReportConstant {
 
     //商品
     var KEY_PRODUCTID = "ProductID"
+
+    //通话记录id
+    var KEY_SESSIONID = "SessionId"
 
     //接听状态
     var KEY_CALLSTATUS = "CallStatus"

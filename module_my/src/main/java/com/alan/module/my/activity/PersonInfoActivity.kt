@@ -1,5 +1,6 @@
 package com.alan.module.my.activity
 
+import android.Manifest
 import android.content.Intent
 import android.text.Editable
 import android.text.TextUtils
@@ -29,6 +30,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.huantansheng.easyphotos.EasyPhotos
 import com.huantansheng.easyphotos.models.album.entity.Photo
+import com.permissionx.guolindev.PermissionX
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -44,6 +46,10 @@ import java.util.*
 @Route(path = RouteUrl.MyModule.ACTIVITY_MY_PERSONINFO)
 @AndroidEntryPoint
 class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoViewModel>() {
+    val REQUESTED_PERMISSIONS = mutableListOf<String>(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.RECORD_AUDIO,
+    )
 
     var birthday: String? = null
     var address: String? = null
@@ -60,7 +66,7 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
     override fun ActivityPersonInfoBinding.initView() {
         ivBack.clickDelay { finish() }
         ivAvator.clickDelay {
-            requestPermission()
+            ImageSelectUtil.singlePic(this@PersonInfoActivity)
         }
 
         tvBirthdayValue.clickDelay {
@@ -87,8 +93,14 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
 
 
         tvVoiceValue.clickDelay {
-            val voiceFragmentDialog = VoiceFragmentDialog.newInstance()
-            voiceFragmentDialog.show(this@PersonInfoActivity.supportFragmentManager)
+            PermissionX.init(this@PersonInfoActivity).permissions(REQUESTED_PERMISSIONS)
+                .request { allGranted, grantedList, deniedList ->
+                    //不给权限可以进
+                    if (allGranted) {
+                        val voiceFragmentDialog = VoiceFragmentDialog.newInstance()
+                        voiceFragmentDialog.show(this@PersonInfoActivity.supportFragmentManager)
+                    }
+                }
         }
 
 
@@ -222,9 +234,6 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
     }
 
 
-    fun requestPermission() {
-        ImageSelectUtil.singlePic(this)
-    }
 
     fun changeAddress() {
         LocationPickerUtil.showPickerView(

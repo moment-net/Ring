@@ -1,5 +1,8 @@
 package com.alan.module.my.activity
 
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +15,7 @@ import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.SystemMessageBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
+import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
@@ -69,6 +73,17 @@ class SystemMessageActivity : BaseActivity<ActivitySystemMessageBinding, SystemM
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = mAdapter
         }
+
+        mAdapter.setEmptyView(TextView(this).apply {
+            setText("暂无系统消息")
+            setTextSize(16f)
+            setTextColor(R.color._263A3A3A.getResColor())
+            gravity = Gravity.CENTER
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        })
     }
 
     /**

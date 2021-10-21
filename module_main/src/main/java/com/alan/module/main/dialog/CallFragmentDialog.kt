@@ -21,10 +21,12 @@ import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.event.CallDismissEvent
 import com.alan.mvvm.common.event.CallServiceEvent
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.im.callkit.EaseCallKit
 import com.alan.mvvm.common.im.callkit.base.EaseMsgUtils
 import com.alan.mvvm.common.im.callkit.event.AnswerEvent
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.views.EaseCallFloatWindow
 import com.lzf.easyfloat.permission.PermissionUtils
 import com.socks.library.KLog
@@ -134,6 +136,10 @@ class CallFragmentDialog : BaseFrameDialogFragment<LayoutCallBinding, CallDialog
             dismiss()
         }
         tvCancel.clickDelay {
+            DataPointUtil.reportHangup(
+                SpHelper.getUserInfo()?.userId!!,
+                EaseCallKit.getInstance().sessionId
+            )
             //发送拒绝消息
             val event = AnswerEvent()
             event.result = EaseMsgUtils.CALL_ANSWER_REFUSE

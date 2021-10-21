@@ -9,7 +9,9 @@ import com.alan.mvvm.base.http.requestbean.ToUserIdRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.model.CommonRepository
+import com.alan.mvvm.common.report.DataPointUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -93,9 +95,15 @@ class ChatDetailViewModel @Inject constructor(private val mRepository: CommonRep
                 callback = RequestCallback(
                     onSuccess = {
                         ldSuccess.value = it.data!!
+                        DataPointUtil.reportCall(
+                            SpHelper.getUserInfo()?.userId!!,
+                            it.data?.sessionId,
+                            1
+                        )
                     },
                     onFailed = {
                         toast(it.errorMessage)
+                        DataPointUtil.reportCall(SpHelper.getUserInfo()?.userId!!, "", 2)
                     }
                 ))
         }

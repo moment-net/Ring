@@ -1,5 +1,6 @@
 package com.alan.module.chat.activity
 
+import android.Manifest
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -45,6 +46,7 @@ import com.hyphenate.chat.*
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.exceptions.HyphenateException
 import com.jaeger.library.StatusBarUtil
+import com.permissionx.guolindev.PermissionX
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
 
@@ -57,6 +59,11 @@ import java.io.IOException
 @Route(path = RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL)
 @AndroidEntryPoint
 class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
+    val REQUESTED_PERMISSIONS = mutableListOf<String>(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.CAMERA
+    )
 
     @JvmField
     @Autowired
@@ -138,25 +145,47 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         }
 
         mBinding.ivCamera.clickDelay {
-            jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_CAMERA, this@ChatActivity, CAMERA_CODE)
+            PermissionX.init(this).permissions(REQUESTED_PERMISSIONS)
+                .request { allGranted, grantedList, deniedList ->
+                    //不给权限可以进
+                    if (allGranted) {
+                        jumpARoute(
+                            RouteUrl.ChatModule.ACTIVITY_CHAT_CAMERA,
+                            this@ChatActivity,
+                            CAMERA_CODE
+                        )
+                    }
+                }
         }
         mBinding.ivVoice.clickDelay {
-            if (mBinding.llPress.isVisible) {
-                mBinding.ivVoice.setImageResource(R.drawable.icon_chat_voice)
-                mBinding.llPress.gone()
-                if (!TextUtils.isEmpty(mBinding.etMsg.text.toString())) {
-                    mBinding.tvSend.visible()
-                } else {
-                    mBinding.tvSend.gone()
+            PermissionX.init(this).permissions(REQUESTED_PERMISSIONS[0], REQUESTED_PERMISSIONS[1])
+                .request { allGranted, grantedList, deniedList ->
+                    //不给权限可以进
+                    if (allGranted) {
+                        if (mBinding.llPress.isVisible) {
+                            mBinding.ivVoice.setImageResource(R.drawable.icon_chat_voice)
+                            mBinding.llPress.gone()
+                            if (!TextUtils.isEmpty(mBinding.etMsg.text.toString())) {
+                                mBinding.tvSend.visible()
+                            } else {
+                                mBinding.tvSend.gone()
+                            }
+                        } else {
+                            mBinding.ivVoice.setImageResource(R.drawable.icon_chat_input)
+                            mBinding.llPress.visible()
+                            mBinding.tvSend.gone()
+                        }
+                    }
                 }
-            } else {
-                mBinding.ivVoice.setImageResource(R.drawable.icon_chat_input)
-                mBinding.llPress.visible()
-                mBinding.tvSend.gone()
-            }
         }
         mBinding.ivCall.clickDelay {
-            mViewModel.requestChatStart(userId)
+            PermissionX.init(this).permissions(REQUESTED_PERMISSIONS[0], REQUESTED_PERMISSIONS[1])
+                .request { allGranted, grantedList, deniedList ->
+                    //不给权限可以进
+                    if (allGranted) {
+                        mViewModel.requestChatStart(userId)
+                    }
+                }
         }
         mBinding.ivPic.clickDelay {
             ImageSelectUtil.singlePic(this@ChatActivity)
@@ -701,7 +730,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
      * @param content
      */
     protected fun sendTextMessage(content: String?) {
-        mViewModel.requestReply(userId)
         val message = EMMessage.createTxtSendMessage(content, userId)
         sendMessage(message)
     }

@@ -14,11 +14,9 @@ import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.DeviceUtil
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
-import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.http.model.CommonRepository
 import com.alan.mvvm.common.im.EMClientHelper
-import com.alan.mvvm.common.report.DataPointUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -43,7 +41,6 @@ class LoginViewModel @Inject constructor(private val mRepository: CommonReposito
             mRepository.requestCheckPhone(
                 RequestUtil.getPostBody(requestBean), callback = RequestCallback(
                     onSuccess = {
-                        DataPointUtil.reportRegister(SpHelper.getUserInfo()?.userId!!, 3)
                         ldSuccess.value = it.data!!
                     },
                     onFailed = {
@@ -84,7 +81,6 @@ class LoginViewModel @Inject constructor(private val mRepository: CommonReposito
                 callback = RequestCallback(
                     onSuccess = {
                         ldSuccess.value = it.data!!
-                        DataPointUtil.reportRegister(SpHelper.getUserInfo()?.userId!!, 2)
                     },
                     onFailed = {
                         toast(it.errorMessage)

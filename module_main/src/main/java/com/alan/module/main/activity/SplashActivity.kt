@@ -38,11 +38,6 @@ import org.greenrobot.eventbus.ThreadMode
 class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
     val REQUESTED_PERMISSIONS = mutableListOf<String>(
         Manifest.permission.READ_PHONE_STATE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.RECORD_AUDIO,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.CAMERA
     )
 
     /**
