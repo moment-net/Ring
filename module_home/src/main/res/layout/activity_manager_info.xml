@@ -215,7 +215,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="TA的想法"
+                android:text="想法"
                 android:textColor="@color/_803A3A3A"
                 android:textSize="16sp"
                 android:layout_marginStart="@dimen/dimen25"

@@ -17,6 +17,7 @@ import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -56,7 +57,10 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
             finish()
         }
         ivClear.clickDelay { etPhone.setText("") }
-        tvCommit.clickDelay { requestCode() }
+        tvCommit.clickDelay {
+            requestCode()
+            DataPointUtil.reportGetCode()
+        }
 
         if (type == 1) {
             tvPhoneTitle.setText(getString(R.string.string_phone_login))
@@ -174,4 +178,12 @@ class LoginPhoneActivity : BaseActivity<ActivityLoginPhoneBinding, LoginPhoneVie
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (type == 1) {
+            DataPointUtil.reportLoginPhoneBack()
+        } else {
+            DataPointUtil.reportBindBack(SpHelper.getUserInfo()?.userId!!)
+        }
+    }
 }

@@ -25,8 +25,10 @@ import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.db.entity.UserEntity
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.im.utils.VoicePlayerUtil
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -106,6 +108,11 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
                 )
             )
             jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
+            DataPointUtil.reportChat(
+                SpHelper.getUserInfo()?.userId!!,
+                userInfoBean.userId,
+                userInfoBean.onlineStatus!!
+            )
         }
 
         mBinding.llTitle.setBackgroundColor(Color.argb(0, 255, 255, 255))
@@ -196,7 +203,14 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
             return
         }
         val userInfoBean = userInfoBean;
-        CoilUtils.loadRound(mBinding.ivAvatar, userInfoBean?.avatar!!, 3f)
+
+        if (!TextUtils.equals(userInfoBean.userId, SpHelper.getUserInfo()?.userId)) {
+            mBinding.tvChat.visible()
+        } else {
+            mBinding.tvChat.gone()
+        }
+
+        CoilUtils.loadCircle(mBinding.ivAvatar, userInfoBean?.avatar!!)
         mBinding.tvTitle.setText(userInfoBean?.userName)
         mBinding.tvName.setText(userInfoBean?.userName)
         var address = ""

@@ -10,8 +10,10 @@ import com.alan.module.main.viewmodel.PushThinkViewModel
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.ktx.getResDrawable
+import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.ChangeThinkEvent
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import dagger.hilt.android.AndroidEntryPoint
@@ -71,6 +73,7 @@ class ThinkActivity : BaseActivity<ActivityThinkBinding, PushThinkViewModel>() {
             when (it) {
                 is Boolean -> {
                     toast("发布成功")
+                    EventBusUtils.postEvent(ChangeThinkEvent(1))
                     finish()
                 }
             }
@@ -94,6 +97,13 @@ class ThinkActivity : BaseActivity<ActivityThinkBinding, PushThinkViewModel>() {
             mBinding.tvRight.setTextColor(R.color._80393939.getResColor())
             mBinding.tvRight.background = R.drawable.icon_push_bt_disenable.getResDrawable()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mBinding.etContent.isFocusable = true
+        mBinding.etContent.isFocusableInTouchMode = true
+        mBinding.etContent.requestFocus()
     }
 
 }

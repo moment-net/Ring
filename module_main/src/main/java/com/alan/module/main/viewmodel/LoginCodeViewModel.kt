@@ -17,6 +17,7 @@ import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.http.model.CommonRepository
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -65,9 +66,11 @@ class LoginCodeViewModel @Inject constructor(private val mRepository: CommonRepo
             mRepository.requestLogin(RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
+                        DataPointUtil.reportCodeNext(true)
                         ldLogin.value = it.data!!
                     },
                     onFailed = {
+                        DataPointUtil.reportCodeNext(false)
                         toast(it.errorMessage)
                         ldFailed.value = false
                     }
@@ -85,9 +88,11 @@ class LoginCodeViewModel @Inject constructor(private val mRepository: CommonRepo
             mRepository.requestBindPhone(RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
+                        DataPointUtil.reportCodeNext(true)
                         ldBind.value = true
                     },
                     onFailed = {
+                        DataPointUtil.reportCodeNext(false)
                         toast(it.errorMessage)
                         ldFailed.value = false
                     }

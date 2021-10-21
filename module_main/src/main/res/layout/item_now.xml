@@ -109,7 +109,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_avatar"
-        app:srcCompat="@drawable/icon_chat_more" />
+        app:srcCompat="@drawable/icon_home_more" />
 
     <TextView
         android:id="@+id/tv_content"

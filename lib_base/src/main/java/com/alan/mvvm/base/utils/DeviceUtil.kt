@@ -27,9 +27,8 @@ object DeviceUtil {
             version = packageInfo.versionCode
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
-        } finally {
-            return version
         }
+        return version
     }
 
     fun getApkVersionName(context: Context): String? {
@@ -40,9 +39,8 @@ object DeviceUtil {
             versionName = packageInfo.versionName
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
-        } finally {
-            return versionName
         }
+        return versionName
     }
 
     /**

@@ -181,7 +181,10 @@ class SettingActivity : BaseActivity<ActivitySettingBinding, SettingViewModel>()
 
 
         ivBack.clickDelay { finish() }
-        tvBinding.clickDelay { requestWX() }
+        tvBinding.clickDelay {
+            tvBinding.isEnabled = false
+            requestWX()
+        }
         tvAgreement.clickDelay {
             val bundle = Bundle().apply {
                 putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/user-agreement")
@@ -192,7 +195,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding, SettingViewModel>()
         tvPrivacy.clickDelay {
             val bundle = Bundle().apply {
                 putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/privacy-policy")
-                putString("webTitle", "用户协议")
+                putString("webTitle", "隐私政策")
             }
             jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
         }
@@ -218,6 +221,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding, SettingViewModel>()
      */
     override fun initObserve() {
         mViewModel.ldSuccess.observe(this) {
+            dismissDialog()
+            mBinding.tvBinding.isEnabled = true
             if (it) {
                 toast("微信绑定成功")
                 mBinding.tvBind.setText("已绑定")

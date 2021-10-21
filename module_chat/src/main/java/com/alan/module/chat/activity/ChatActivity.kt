@@ -365,6 +365,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                     userInfoBean = it
                     mBinding.tvTitle.setText(userInfoBean.userName)
                     mBinding.tvTime.setText(userInfoBean.onlineStatusDesc)
+                    CoilUtils.loadCircle(mBinding.ivAvatarTop, userInfoBean.avatar)
                     CoilUtils.loadCircle(mBinding.ivAvatar, userInfoBean.avatar)
                     //加入数据库
                     userName = userInfoBean.userName

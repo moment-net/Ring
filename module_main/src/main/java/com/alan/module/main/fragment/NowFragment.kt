@@ -1,6 +1,8 @@
 package com.alan.module.main.fragment
 
 import android.os.Bundle
+import android.text.TextUtils
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,24 +22,27 @@ import com.alan.mvvm.base.http.responsebean.NowBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
-import com.alan.mvvm.base.utils.EventBusUtils
-import com.alan.mvvm.base.utils.MyColorDecoration
-import com.alan.mvvm.base.utils.jumpARoute
-import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.base.utils.*
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.event.ChangeThinkEvent
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
+import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseFragment
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 作者：alan
  * 时间：2021/7/28
  * 备注：
  */
+@EventBusRegister
 @AndroidEntryPoint
 class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
 
@@ -73,7 +78,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                     }
 
                     if (mAdapter.data.size == 0) {
-                        EventBusUtils.postEvent(ChangeThinkEvent())
+                        EventBusUtils.postEvent(ChangeThinkEvent(1))
                     }
                 }
 
@@ -126,6 +131,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
             val id = mAdapter.data.get(position).id
             val userId = mAdapter.data.get(position).user.userId
             val userName = mAdapter.data.get(position).user.userName
+            val avatar = mAdapter.data.get(position).user.avatar
             when (view.id) {
                 R.id.iv_avatar -> {
                     val bundle = Bundle().apply {
@@ -135,12 +141,35 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                 }
                 R.id.iv_more -> {
                     showPopupWindow(view, id, userId, position)
+                    DataPointUtil.reportHomeMenu(SpHelper.getUserInfo()?.userId!!)
                 }
                 R.id.tv_chat -> {
+                    if (TextUtils.equals(userId, SpHelper.getUserInfo()?.userId)) {
+                        toast("不可以和自己一起，试试点击他人一起按钮吧！")
+                        return@setOnItemChildClickListener
+                    }
+                    EMClientHelper.saveUser(
+                        UserEntity(
+                            userId,
+                            userName,
+                            avatar
+                        )
+                    )
                     mViewModel.requestIsReply(userId, userName)
+                    DataPointUtil.reportTogether(SpHelper.getUserInfo()?.userId!!, userId)
                 }
             }
         }
+        mAdapter.setEmptyView(TextView(requireActivity()).apply {
+            setText("当前还没有正在状态，\n快去点击发布描述一下你当前的状态吧！")
+            setTextSize(16f)
+            setTextColor(R.color._263A3A3A.getResColor())
+            gravity = Gravity.CENTER
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        })
 
         mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
@@ -176,10 +205,12 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                 putString("webTitle", "举报")
             }
             jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
+            DataPointUtil.reportReport(SpHelper.getUserInfo()?.userId!!)
         }
         tvShield.clickDelay {
             popupWindow.dismiss()
             mViewModel.requestBanNow(id, position)
+            DataPointUtil.reportBlock(SpHelper.getUserInfo()?.userId!!)
         }
 
         popupWindow = PopupWindow(
@@ -205,5 +236,13 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
 
     fun requestList() {
         mViewModel.requestList(mCursor)
+    }
+
+    //切换
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showCall(event: ChangeThinkEvent) {
+        if (event.position == 0) {
+            requestRefresh()
+        }
     }
 }

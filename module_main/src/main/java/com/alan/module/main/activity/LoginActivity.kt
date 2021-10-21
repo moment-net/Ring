@@ -34,6 +34,7 @@ import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.event.WXCodeEvent
 import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.geetest.onelogin.OneLoginHelper
@@ -219,6 +220,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             }
             loginType = 2
             requestWX()
+            DataPointUtil.reportLogin(2)
         }
     }
 
@@ -281,11 +283,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
         mViewModel.ldFailed.observe(this) {
             when (it) {
                 1 -> {
+                    //手机号登录
                     val bundle = Bundle().apply {
                         putInt("type", 1)
                     }
                     jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_PHONE, bundle)
                     OneLoginHelper.with().dismissAuthActivity()
+                    DataPointUtil.reportLogin(1)
                 }
                 2 -> {
                     dismissDialog()
@@ -352,6 +356,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 finish()
                 jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
             } else {
+                //绑定微信
                 val bundle = Bundle().apply {
                     putInt("type", 2)
                 }
@@ -443,13 +448,16 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                                 )
                             ) {
                                 //-20302点击返回按钮
+                                DataPointUtil.reportAutoPhoneBack()
                             } else {
                                 //用户切换登录方式:-20303;用户手机没有网络:-20200;当前手机没有手机号码:-20201;
                                 val bundle = Bundle().apply {
                                     putInt("type", 1)
                                 }
+                                //手机号登陆
                                 jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_PHONE, bundle)
                                 OneLoginHelper.with().dismissAuthActivity()
+                                DataPointUtil.reportLogin(1)
                             }
                         } else {
                             //以下为获取成功
@@ -472,6 +480,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                     super.onAuthActivityCreate(activity)
                     dismissDialog()
                     toast("请同意服务条款")
+                    DataPointUtil.reportLogin(3)
                 }
             })
     }

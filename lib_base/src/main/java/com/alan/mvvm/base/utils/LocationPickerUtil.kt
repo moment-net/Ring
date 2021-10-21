@@ -20,16 +20,16 @@ object LocationPickerUtil {
     fun showPickerView(mContext: Context, listener: OnPickerListener) {
         CoroutineScope(Dispatchers.Main).launch {
             getProvince(mContext).collect {
-                var list1: ArrayList<String> = arrayListOf();
-                var list2: ArrayList<MutableList<String>> = arrayListOf()
-                var list3: ArrayList<MutableList<MutableList<String>>> = arrayListOf()
+                val list1: ArrayList<String> = arrayListOf();
+                val list2: ArrayList<MutableList<String>> = arrayListOf()
+                val list3: ArrayList<MutableList<MutableList<String>>> = arrayListOf()
 
 
                 for (provinceBean in it) {
                     list1.add(provinceBean.name)
 
-                    var cityList = arrayListOf<String>();
-                    var areaList = arrayListOf<MutableList<String>>();
+                    val cityList = arrayListOf<String>();
+                    val areaList = arrayListOf<MutableList<String>>();
 
                     for (city in provinceBean.city) {
                         cityList.add(city.name)
@@ -61,9 +61,9 @@ object LocationPickerUtil {
                         .setTitleText("城市选择")
                         .build<String>()
 
-                var option1 = 0
-                var option2 = 0
-                var option3 = 0
+                val option1 = 0
+                val option2 = 0
+                val option3 = 0
 //                if (!TextUtils.isEmpty(location)) {
 //                    val array: Array<String> = location.split("-".toRegex()).toTypedArray()
 //                    if (array.size < 2) return
@@ -106,8 +106,8 @@ object LocationPickerUtil {
      */
     fun getProvince(mContext: Context): Flow<List<ProvinceBean>> {
         return flow<List<ProvinceBean>> {
-            var json: String = AssetUtil.toJson(mContext, "province.json")
-            var provinceList = GsonUtil.jsonToList(json, ProvinceBean::class.java)
+            val json: String = AssetUtil.toJson(mContext, "province.json")
+            val provinceList = GsonUtil.jsonToList(json, ProvinceBean::class.java)
             if (provinceList != null) {
                 emit(provinceList)
             }

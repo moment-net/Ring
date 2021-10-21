@@ -14,6 +14,8 @@ import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -61,10 +63,12 @@ class PushFragmentDialog : BaseFrameDialogFragment<LayoutPushBinding, PushViewMo
         ivNow.clickDelay {
             dismiss()
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_NOW)
+            DataPointUtil.reportPublishNow(SpHelper.getUserInfo()?.userId!!)
         }
         ivThink.clickDelay {
             dismiss()
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_THINK)
+            DataPointUtil.reportPublishThink(SpHelper.getUserInfo()?.userId!!)
         }
 
     }

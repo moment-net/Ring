@@ -34,7 +34,7 @@ class ChatListAdapter : BaseQuickAdapter<EMConversation, BaseViewHolder>(R.layou
         if (item.allMsgCount != 0) {
             val lastMessage = item.lastMessage
             holder.setText(R.id.tv_msg, getMessageText(lastMessage))
-            holder.setText(R.id.tv_time, DateUtils.getTimestampString(Date(lastMessage.msgTime)))
+            holder.setText(R.id.tv_time, DateUtils.getTimeFormatString(Date(lastMessage.msgTime)))
             if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.isAcked) {
                 holder.setGone(R.id.iv_read, false)
             } else {

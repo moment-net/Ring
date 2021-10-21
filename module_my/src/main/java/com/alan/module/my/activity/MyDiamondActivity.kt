@@ -28,6 +28,8 @@ import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +54,10 @@ class MyDiamondActivity : BaseActivity<ActivityMyDiamondBinding, MyDiamondViewMo
      * 初始化View
      */
     override fun ActivityMyDiamondBinding.initView() {
-        ivBack.clickDelay { finish() }
+        ivBack.clickDelay {
+            DataPointUtil.reportDiamondBack(SpHelper.getUserInfo()?.userId!!)
+            finish()
+        }
         tvRight.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_PAYRECORD) }
 
         val spanText = SpannableString("已阅读并同意《充值服务协议》，充值成功后到账可能会存在延迟，有问题请查看《常见问题》")

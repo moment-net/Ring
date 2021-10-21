@@ -10,6 +10,7 @@ import com.alan.mvvm.common.constant.SpKey
 import com.alan.mvvm.common.db.DbHelper
 import com.alan.mvvm.common.event.UserEvent
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.report.AmplitudeUtil
 import com.socks.library.KLog
 
 /**
@@ -83,7 +84,7 @@ object SpHelper {
      * 获取token
      */
     fun getUserInfo(): UserInfoBean? {
-        var userinfo: String? = SpUtils.getString(SpKey.KEY_USERINFO, "")
+        val userinfo: String? = SpUtils.getString(SpKey.KEY_USERINFO, "")
         return GsonUtil.jsonToBean(userinfo, UserInfoBean::class.java)
     }
 
@@ -101,13 +102,16 @@ object SpHelper {
     fun updateUserInfo(obj: Any?) {
         when (obj) {
             is UserInfoBean -> {
+                //更新用户
                 setUserInfo(obj)
             }
             is LoginBean -> {
+                //登陆
                 setLogin(true)
                 setToken(obj.token?.token ?: "")
                 setNewUser(obj.newUser)
                 setUserInfo(obj.user)
+                AmplitudeUtil.instance.setUserId(obj.user!!.userId)
                 DbHelper.instance.initDB(BaseApplication.mContext, obj.user!!.userId)
             }
         }

@@ -1,7 +1,9 @@
 package com.alan.module.main.adapter
 
+import android.graphics.Typeface
 import android.text.TextUtils
 import android.widget.ImageView
+import android.widget.TextView
 import com.alan.module.main.R
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.ThinkBean
@@ -62,6 +64,7 @@ class ThinkAdapter : BaseQuickAdapter<ThinkBean, BaseViewHolder>(R.layout.item_t
             holder.setImageResource(R.id.iv_zan, R.drawable.icon_home_zan_off)
         }
         holder.setText(R.id.tv_num, "${item.favoriteCount}")
+        holder.getView<TextView>(R.id.tv_num).setTypeface(Typeface.MONOSPACE)
     }
 
 

@@ -19,6 +19,7 @@ import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -58,7 +59,10 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
      */
     override fun ActivityLoginCodeBinding.initView() {
         ivBack.clickDelay { finish() }
-        tvSend.clickDelay { mViewModel.requestCode(phone ?: "") }
+        tvSend.clickDelay {
+            mViewModel.requestCode(phone ?: "")
+            DataPointUtil.reportReGetCode()
+        }
         tvCommit.clickDelay {
             if (!TextUtils.isEmpty(phone) && !TextUtils.isEmpty(etCode.text)) {
                 when (type) {
@@ -104,6 +108,7 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
                 is LoginBean -> {
                     loginBean = it
                     mViewModel.loginIM(it.user!!)
+                    DataPointUtil.reportRegister(it.user!!.userId!!, 1)
                 }
             }
         }

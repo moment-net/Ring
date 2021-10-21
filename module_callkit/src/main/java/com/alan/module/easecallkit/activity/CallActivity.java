@@ -75,6 +75,7 @@ import com.alan.mvvm.common.im.callkit.event.InviteEvent;
 import com.alan.mvvm.common.im.callkit.event.VideoToVoiceeEvent;
 import com.alan.mvvm.common.im.callkit.livedatas.EaseLiveDataBus;
 import com.alan.mvvm.common.im.callkit.utils.EaseCallKitUtils;
+import com.alan.mvvm.common.report.DataPointUtil;
 import com.alan.mvvm.common.views.EaseCallFloatWindow;
 import com.alan.mvvm.common.views.MyChronometer;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -784,12 +785,14 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                 if (listener != null) {
                     //通话结束原因挂断
                     long time = getChronometerSeconds(chronometer);
+                    DataPointUtil.INSTANCE.reportHangup(SpHelper.INSTANCE.getUserInfo().getUserId(), 0, time);
                     listener.onEndCallWithReason(callType, channelName, EaseCallEndReason.EaseCallEndReasonHangup, time * 1000);
                 }
             }
         } else if (id == R.id.local_surface_layout) {
             changeSurface();
         } else if (id == R.id.btn_call_float) {
+            DataPointUtil.INSTANCE.reportCallScale(SpHelper.INSTANCE.getUserInfo().getUserId());
             showFloatWindow();
         } else if (id == R.id.iv_mute) { // mute
             if (isMuteState) {
@@ -1019,6 +1022,7 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                             //对方取消
                             listener.onEndCallWithReason(callType, channelName, EaseCallEndReason.EaseCallEndReasonRemoteCancel, 0);
                         }
+                        DataPointUtil.INSTANCE.reportCall(SpHelper.INSTANCE.getUserInfo().getUserId(), 2);
                         break;
                     case CALL_ANSWER:
                         AnswerEvent answerEvent = (AnswerEvent) event;
@@ -1040,7 +1044,7 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                                         Toast.makeText(getApplicationContext(), info, Toast.LENGTH_SHORT).show();
                                         //退出通话
                                         exitChannel();
-
+                                        DataPointUtil.INSTANCE.reportCall(SpHelper.INSTANCE.getUserInfo().getUserId(), 3);
                                         if (listener != null) {
                                             //对方正在忙碌中
                                             listener.onEndCallWithReason(callType, channelName, EaseCallEndReason.EaseCallEndReasonBusy, 0);
@@ -1105,10 +1109,11 @@ public class CallActivity extends FragmentActivity implements View.OnClickListen
                                 //加入频道
                                 initEngineAndJoinChannel();
                                 makeOngoingStatus();
-
+                                DataPointUtil.INSTANCE.reportCall(SpHelper.INSTANCE.getUserInfo().getUserId(), 1);
                             } else if (TextUtils.equals(result, EaseMsgUtils.CALL_ANSWER_REFUSE)) {
                                 //退出通话
                                 exitChannel();
+                                DataPointUtil.INSTANCE.reportCall(SpHelper.INSTANCE.getUserInfo().getUserId(), 2);
                             }
                         } else {
                             runOnUiThread(new Runnable() {

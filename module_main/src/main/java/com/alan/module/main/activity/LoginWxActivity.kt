@@ -25,6 +25,7 @@ import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.event.WXCodeEvent
 import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -224,6 +225,7 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
             gender = 2
         }
         tvCommit.clickDelay {
+            DataPointUtil.reportProfileNext(SpHelper.getUserInfo()?.userId!!)
             requestEditUserInfo()
         }
         tvBirthdayValue.clickDelay {

@@ -86,7 +86,7 @@
         android:layout_height="wrap_content"
         android:background="@color/transparent"
         android:maxLength="500"
-        android:hint="说点什么，让大家看到不一样的你…"
+        android:hint="和大家分享一下你当前的状态吧！"
         android:padding="@dimen/dimen20"
         android:textColor="@color/_3A3A3A"
         android:textColorHint="@color/_663A3A3A"

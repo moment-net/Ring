@@ -14,6 +14,7 @@ import com.alan.mvvm.base.utils.SpUtils
 import com.alan.mvvm.base.utils.network.NetworkStateClient
 import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.report.AmplitudeUtil
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.auto.service.AutoService
 import com.scwang.smart.refresh.footer.ClassicsFooter
@@ -96,6 +97,7 @@ class CommonApplication : ApplicationLifecycle {
             worker.add { initARouter() }
             worker.add { initKlog() }
             worker.add { initCoil() }
+            worker.add { initAmplitudeSdk() }
             main.add { initChatSdk() }
             main.add { initNetworkStateClient() }
         }
@@ -209,5 +211,14 @@ class CommonApplication : ApplicationLifecycle {
         // 初始化
         EMClientHelper.init(BaseApplication.mContext)
         return "ChatSDK -->> init complete"
+    }
+
+    /**
+     * 数据上报 初始化
+     */
+    private fun initAmplitudeSdk(): String {
+        // 初始化
+        AmplitudeUtil.instance.init(BaseApplication.mApplication)
+        return "AmplitudeSDK -->> init complete"
     }
 }

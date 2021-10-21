@@ -27,6 +27,7 @@ import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseFragment
 import com.socks.library.KLog
 import dagger.hilt.android.AndroidEntryPoint
@@ -80,7 +81,10 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
             val bundle = Bundle().apply { putString("type", "2") }
             jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_FOCUS, bundle)
         }
-        clDiamond.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_DIAMOND) }
+        clDiamond.clickDelay {
+            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_DIAMOND)
+            DataPointUtil.reportMyDiamond(SpHelper.getUserInfo()?.userId!!)
+        }
         clWallet.clickDelay { jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_WALLET) }
 
         mBinding.llTitle.setBackgroundColor(Color.argb(0, 255, 255, 255))
@@ -91,13 +95,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
         }
 
         initScrollView()
-        CoilUtils.loadRoundBorder(
-            ivAvatar,
-            "",
-            15f,
-            2f,
-            ContextCompat.getColor(requireContext(), R.color.white)
-        )
+
 
         initRv()
     }
@@ -198,13 +196,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
     fun setUserInfo() {
         val userInfo = SpHelper.getUserInfo()
-        CoilUtils.loadRoundBorder(
-            mBinding.ivAvatar,
-            userInfo?.avatar ?: "",
-            15f,
-            2f,
-            R.color.white.getResColor()
-        )
+        CoilUtils.loadCircle(mBinding.ivAvatar, SpHelper.getUserInfo()?.avatar!!)
         mBinding.ivGender.setImageResource(if (userInfo?.gender == 1) R.drawable.icon_bing_boy else R.drawable.icon_bing_girl)
         mBinding.tvName.setText(userInfo?.userName)
         if (userInfo?.age != 0) {

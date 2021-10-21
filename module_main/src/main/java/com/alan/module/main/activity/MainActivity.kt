@@ -35,6 +35,7 @@ import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.im.callkit.EaseCallKit
 import com.alan.mvvm.common.im.callkit.base.EaseCallState
 import com.alan.mvvm.common.im.push.HMSPushHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.hyphenate.chat.EMMessage
@@ -69,14 +70,17 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         rbHome.clickDelay {
             mPagePosition = 0
             setPageState(mPagePosition)
+            DataPointUtil.reportTabHome(SpHelper.getUserInfo()?.userId!!)
         }
         rbChat.clickDelay {
             mPagePosition = 1
             setPageState(mPagePosition)
+            DataPointUtil.reportTabChat(SpHelper.getUserInfo()?.userId!!)
         }
         rbMy.clickDelay {
             mPagePosition = 2
             setPageState(mPagePosition)
+            DataPointUtil.reportTabMy(SpHelper.getUserInfo()?.userId!!)
         }
     }
 

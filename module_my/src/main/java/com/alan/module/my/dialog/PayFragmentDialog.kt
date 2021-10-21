@@ -27,6 +27,8 @@ import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.dialog.DialogHelper
 import com.alan.mvvm.common.event.WXPayEvent
 import com.alan.mvvm.common.helper.PayHelper
+import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.lxj.xpopup.core.BasePopupView
 import com.socks.library.KLog
 import com.tencent.mm.opensdk.modelpay.PayReq
@@ -69,6 +71,7 @@ class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayVie
 
     override fun LayoutDialogPayBinding.initView() {
         ivClose.clickDelay {
+            DataPointUtil.reportDiamondCancel(SpHelper.getUserInfo()?.userId!!, goodBean.goodsId!!)
             showClose()
         }
         ivWx.clickDelay {
@@ -87,7 +90,7 @@ class PayFragmentDialog : BaseFrameDialogFragment<LayoutDialogPayBinding, PayVie
 
         isRecharge = arguments?.getBoolean("isRecharge", false)!!
         goodBean = arguments?.getParcelable("bean")!!
-
+        DataPointUtil.reportBuyDiamond(SpHelper.getUserInfo()?.userId!!, goodBean.goodsId!!)
 
         tvMoney.setText("${goodBean?.amount!!}");
 

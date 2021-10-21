@@ -16,8 +16,11 @@ import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.event.ChangeThinkEvent
 import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
@@ -49,23 +52,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 //            val dialog = MatchFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
 //            dialog.show(requireActivity().supportFragmentManager)
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MY)
+            DataPointUtil.reportHomeMy(SpHelper.getUserInfo()?.userId!!)
         }
         tvState.clickDelay {
 //            val dialog = StateFragmentDialog.newInstance()
 //            dialog.show(requireActivity().supportFragmentManager)
             mViewModel.requestNowMatch()
+            DataPointUtil.reportHomeMatch(SpHelper.getUserInfo()?.userId!!)
         }
         tvNow.clickDelay {
             changeTab(0)
             viewpager.setCurrentItem(0, true)
+            DataPointUtil.reportHomeNow(SpHelper.getUserInfo()?.userId!!)
         }
         tvThink.clickDelay {
             changeTab(1)
             viewpager.setCurrentItem(1, true)
+            DataPointUtil.reportHomeThink(SpHelper.getUserInfo()?.userId!!)
         }
         ivAdd.clickDelay {
             val dialog = PushFragmentDialog.newInstance()
             dialog.show(requireActivity().supportFragmentManager)
+            DataPointUtil.reportPublish(SpHelper.getUserInfo()?.userId!!)
         }
 
         initFragment()
@@ -78,6 +86,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                     val bundle = Bundle().apply {
                         putString("userId", it.userId)
                     }
+                    EMClientHelper.saveUser(
+                        UserEntity(
+                            it.userId,
+                            it.userName,
+                            it.avatar
+                        )
+                    )
                     jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
                 }
             }
@@ -143,7 +158,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     //切换
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun showCall(event: ChangeThinkEvent) {
-        mBinding.viewpager.setCurrentItem(1)
+        mBinding.viewpager.setCurrentItem(event.position)
     }
 
 }

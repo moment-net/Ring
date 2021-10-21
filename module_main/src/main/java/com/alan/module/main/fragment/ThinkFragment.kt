@@ -19,25 +19,31 @@ import com.alan.mvvm.base.http.responsebean.ThinkBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
+import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.ChangeThinkEvent
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseFragment
 import com.hyphenate.chat.EMMessage
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 作者：alan
  * 时间：2021/7/28
  * 备注：
  */
+@EventBusRegister
 @AndroidEntryPoint
 class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
 
@@ -140,6 +146,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                 }
                 R.id.iv_more -> {
                     showPopupWindow(view, item.id, userId, position)
+                    DataPointUtil.reportHomeMenu(SpHelper.getUserInfo()?.userId!!)
                 }
                 R.id.iv_zan -> {
                     val favorite = item.isFavorite
@@ -148,6 +155,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                     } else {
                         mViewModel.requestZan(item.id, 1, position)
                     }
+                    DataPointUtil.reportLike(SpHelper.getUserInfo()?.userId!!, userId)
                 }
             }
         }
@@ -186,10 +194,12 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                 putString("webTitle", "举报")
             }
             jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
+            DataPointUtil.reportReport(SpHelper.getUserInfo()?.userId!!)
         }
         tvShield.clickDelay {
             popupWindow.dismiss()
             mViewModel.requestBanThink(id, position)
+            DataPointUtil.reportBlock(SpHelper.getUserInfo()?.userId!!)
         }
 
         popupWindow = PopupWindow(
@@ -215,6 +225,14 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
 
     fun requestList() {
         mViewModel.requestList(mCursor)
+    }
+
+    //切换
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showCall(event: ChangeThinkEvent) {
+        if (event.position == 1) {
+            requestRefresh()
+        }
     }
 
     /**

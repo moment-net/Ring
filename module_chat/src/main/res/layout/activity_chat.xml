@@ -40,10 +40,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_back" />
 
+        <ImageView
+            android:id="@+id/iv_avatar_top"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+            app:layout_constraintEnd_toStartOf="@+id/tv_title"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title"
+            tools:srcCompat="@tools:sample/avatars" />
+
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:layout_marginBottom="2dp"
             android:ellipsize="end"
             android:maxEms="8"
@@ -54,7 +66,7 @@
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/tv_time"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_avatar_top"
             app:layout_constraintTop_toTopOf="@+id/iv_back"
             tools:text="番茄会害羞" />
 

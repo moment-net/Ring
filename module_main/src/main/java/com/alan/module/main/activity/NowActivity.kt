@@ -15,9 +15,11 @@ import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.ktx.getResDrawable
+import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.event.ChangeThinkEvent
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.flexbox.FlexDirection
@@ -51,6 +53,9 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
             if (TextUtils.isEmpty(content)) {
                 toast("请输入您的想法")
                 return@clickDelay
+            }
+            if (TextUtils.isEmpty(tag)) {
+                tag = "正在"
             }
             mViewModel.requestPushNow(tag, content)
         }
@@ -90,6 +95,7 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
 
                 is Boolean -> {
                     toast("发布成功")
+                    EventBusUtils.postEvent(ChangeThinkEvent(0))
                     finish()
                 }
             }
@@ -135,9 +141,16 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
                     mAdapter.notifyDataSetChanged()
                     tag = mAdapter.data.get(position).tag
                     mBinding.etContent.setText(mAdapter.data.get(position).defaultText)
+                    mBinding.etContent.setSelection(mBinding.etContent.text.length)
                 }
             }
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        mBinding.etContent.isFocusable = true
+        mBinding.etContent.isFocusableInTouchMode = true
+        mBinding.etContent.requestFocus()
+    }
 }

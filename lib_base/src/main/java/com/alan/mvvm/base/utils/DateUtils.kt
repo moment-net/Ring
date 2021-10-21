@@ -230,4 +230,49 @@ object DateUtils {
         val yStartAndEndTime = DateUtils.getYesterdayStartAndEndTime()
         return if (inputTime > yStartAndEndTime.startTime && inputTime < yStartAndEndTime.endTime) true else false
     }
+
+
+    fun getTimeFormatString(messageDate: Date): String? {
+        // 当前时间
+        val nowCalendar = Calendar.getInstance()
+        nowCalendar.time = Date()
+        val msgCalendar = Calendar.getInstance()
+        msgCalendar.time = messageDate
+
+        // 相差年份
+        val year = nowCalendar.get(Calendar.YEAR) - msgCalendar.get(Calendar.YEAR)
+        // 相差月数
+        val month = nowCalendar.get(Calendar.MONTH) - msgCalendar.get(Calendar.MONTH)
+        // 相差天数
+        val day = nowCalendar.get(Calendar.DAY_OF_YEAR) - msgCalendar.get(Calendar.DAY_OF_YEAR)
+        // 相差小时
+        val hour = nowCalendar.get(Calendar.HOUR_OF_DAY) - msgCalendar.get(Calendar.DAY_OF_YEAR)
+        // 相差分钟
+        val minute = nowCalendar.get(Calendar.MINUTE) - msgCalendar.get(Calendar.MINUTE)
+        // 相差秒数
+        val second = nowCalendar.get(Calendar.SECOND) - msgCalendar.get(Calendar.SECOND)
+
+
+        val format = if (year != 0) {
+            "Y年M月d日 hh:mm"
+        } else if (month > 0 || day > 7) {
+            "M月d日 hh:mm"
+        } else if (day > 2) {
+            "M月d日 hh:mm"
+        } else if (day == 2) {
+            "前天 hh:mm"
+        } else if (day == 1) {
+            "昨天 hh:mm"
+        } else if (hour > 0) {
+            "hh:mm"
+        } else if (minute > 0) {
+            "${minute}分钟前"
+        } else if (second > 3) {
+            "${second}秒前"
+        } else {
+            "刚刚"
+        }
+
+        return SimpleDateFormat(format, Locale.CHINESE).format(messageDate)
+    }
 }
