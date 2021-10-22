@@ -77,7 +77,7 @@ class PrivacyFragmentDialog : BaseFrameDialogFragment<LayoutPrivacyBinding, Empt
         }
 
         val spanText =
-            SpannableString("1、我们会遵循隐私政策收集、使用信息，但不会强制捆绑；\n2、在仅浏览时，为保证帐号登陆安全及信息安全，我们会收集设备信息与日志信息；\n3、地理位置信息、摄像头、麦克风、相册杈限均需要经过授权才会为实现功能或服务时使用。您可以查看完整版《用戶隐私政策》")
+            SpannableString("1、我们会遵循隐私政策收集、使用信息，但不会强制捆绑；\n2、地理位置信息、摄像头、麦克风、相册杈限均需要经过授权才会为实现功能或服务时使用。您可以查看完整版《用戶隐私政策》")
         spanText.setSpan(object : ClickableSpan() {
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)

@@ -21,6 +21,15 @@ object HttpBaseUrlConstant {
         }
 
 
-    val BASE_H5URL = "https://h5test-carchat.moment-network.com/"
+    val BASE_H5URL: String
+        get() {
+            if (BuildConfig.DEBUG) {
+                //测试环境
+                return "https://h5test-freedomspeak.moment-network.com/"
+            } else {
+                //正式环境
+                return "https://h5-freedomspeak.moment-network.com/"
+            }
+        }
 
 }

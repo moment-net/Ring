@@ -197,7 +197,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
             val bundle = Bundle().apply {
                 putString(
                     "webUrl",
-                    HttpBaseUrlConstant.BASE_URL + "&reportFromUserid=${SpHelper.getUserInfo()!!.userId}&reportToUserid=${userId}"
+                    HttpBaseUrlConstant.BASE_H5URL + "#/freedomspeak-report?reportFromUserid=${SpHelper.getUserInfo()!!.userId}&reportToUserid=${userId}"
                 )
                 putString("webTitle", "举报")
             }
