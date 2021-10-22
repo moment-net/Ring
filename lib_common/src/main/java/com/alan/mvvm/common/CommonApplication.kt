@@ -25,6 +25,7 @@ import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.QbSdk.PreInitCallback
+import me.jessyan.autosize.AutoSizeConfig
 
 /**
  * 作者：alan
@@ -75,7 +76,12 @@ class CommonApplication : ApplicationLifecycle {
      * 同[Application.onCreate]
      * @param application Application
      */
-    override fun onCreate(application: Application) {}
+    override fun onCreate(application: Application) {
+        //配置一些设置
+        //设置字体不随系统改变
+        AutoSizeConfig.getInstance().isExcludeFontScale = true
+
+    }
 
     /**
      * 同[Application.onTerminate]
