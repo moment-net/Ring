@@ -32,6 +32,11 @@ interface HomeApiService {
     @POST("user/login/third")
     suspend fun requestLoginWX(@Body requestBody: RequestBody): BaseResponse<LoginBean>
 
+    /**
+     * 注销账号
+     */
+    @GET("user/logoff")
+    suspend fun requestLogoff(): BaseResponse<String>
 
     /**
      * 自动登陆

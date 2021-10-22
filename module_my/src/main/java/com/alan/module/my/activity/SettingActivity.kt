@@ -185,6 +185,9 @@ class SettingActivity : BaseActivity<ActivitySettingBinding, SettingViewModel>()
             tvBinding.isEnabled = false
             requestWX()
         }
+        tvSafe.clickDelay {
+            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_SAFE)
+        }
         tvAgreement.clickDelay {
             val bundle = Bundle().apply {
                 putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/user-agreement")
@@ -338,8 +341,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding, SettingViewModel>()
     fun logout() {
         DialogHelper.showMultipleDialog(this, "确定退出登录吗？", "确定", "取消", {
             SpHelper.clearUserInfo()
+            ActivityStackManager.finishAllActivity()
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_LOGIN)
-            finish()
         }, {
 
         })

@@ -4,6 +4,9 @@
 
     <application>
         <activity
+            android:name=".activity.SafeActivity"
+            android:exported="true" />
+        <activity
             android:name=".activity.SettingActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />

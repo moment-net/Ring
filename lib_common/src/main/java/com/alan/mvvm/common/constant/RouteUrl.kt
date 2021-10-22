@@ -111,6 +111,9 @@ object RouteUrl {
 
         //提现详情
         const val ACTIVITY_MY_WITHDRAWDETAIL: String = "/my/withdrawdetail";
+
+        //账号与安全
+        const val ACTIVITY_MY_SAFE: String = "/my/safe";
     }
 
     object WebModule {

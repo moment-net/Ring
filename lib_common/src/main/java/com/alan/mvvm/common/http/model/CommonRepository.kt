@@ -44,6 +44,13 @@ class CommonRepository @Inject constructor() : BaseRepository() {
     ) = request(mApi, callback) { mApi.requestLoginWX(requestBody) }
 
     /**
+     * 注销账号
+     */
+    suspend fun requestLogoff(
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestLogoff() }
+
+    /**
      * 自动登陆
      */
     suspend fun requestAutoLogin(

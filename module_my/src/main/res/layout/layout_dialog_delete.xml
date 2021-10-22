@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_white12">
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="注销提示"
+        android:textColor="@color/_3A3A3A"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:text="1.我们将在7日内处理你的注销申请，期间若重新登录Ring App，该审核将会被撤销。 \n2.成功注销后所有的账号信息会被删除且无法找回，使用原来登录信息将会自动创建一个新账号，请谨慎操作。"
+        android:textColor="@color/_3A3A3A"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+
+    <leifu.shapelibrary.ShapeView
+        android:id="@+id/tv_commit"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dimen40"
+        android:layout_marginStart="@dimen/dimen38"
+        android:layout_marginTop="@dimen/dimen30"
+        android:layout_marginBottom="34dp"
+        android:padding="0dp"
+        android:text="提交（5s）"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content"
+        app:sCorners="9dp"
+        app:sSolidColor="@color/_8D8C96"
+        app:sStrokeColor="@color/_3A3A3A"
+        app:sStrokeWidth="0dp" />
+
+    <leifu.shapelibrary.ShapeView
+        android:id="@+id/tv_cancel"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dimen40"
+        android:layout_marginStart="@dimen/dimen14"
+        android:layout_marginTop="@dimen/dimen30"
+        android:layout_marginEnd="@dimen/dimen38"
+        android:layout_marginBottom="34dp"
+        android:padding="0dp"
+        android:text="取消"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_commit"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content"
+        app:sCorners="9dp"
+        app:sSolidColor="@color/_8D8C96"
+        app:sStrokeColor="@color/_3A3A3A"
+        app:sStrokeWidth="0dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
