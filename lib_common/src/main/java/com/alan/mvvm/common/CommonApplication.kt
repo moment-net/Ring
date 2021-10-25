@@ -14,7 +14,6 @@ import com.alan.mvvm.base.utils.SpUtils
 import com.alan.mvvm.base.utils.network.NetworkStateClient
 import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.im.EMClientHelper
-import com.alan.mvvm.common.report.AmplitudeUtil
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.auto.service.AutoService
 import com.scwang.smart.refresh.footer.ClassicsFooter
@@ -22,9 +21,6 @@ import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.socks.library.KLog
 import com.tencent.bugly.crashreport.CrashReport
-import com.tencent.smtt.export.external.TbsCoreSettings
-import com.tencent.smtt.sdk.QbSdk
-import com.tencent.smtt.sdk.QbSdk.PreInitCallback
 import me.jessyan.autosize.AutoSizeConfig
 
 /**
@@ -103,7 +99,6 @@ class CommonApplication : ApplicationLifecycle {
             worker.add { initARouter() }
             worker.add { initKlog() }
             worker.add { initCoil() }
-            worker.add { initAmplitudeSdk() }
             main.add { initChatSdk() }
             main.add { initNetworkStateClient() }
         }
@@ -115,7 +110,7 @@ class CommonApplication : ApplicationLifecycle {
      * 不需要立即初始化的放在这里进行后台初始化
      */
     override fun initByBackstage() {
-        initX5WebViewCore()
+
     }
 
     /**
@@ -127,32 +122,6 @@ class CommonApplication : ApplicationLifecycle {
         return "NetworkStateClient -->> init complete"
     }
 
-    /**
-     * 腾讯TBS WebView X5 内核初始化
-     */
-    private fun initX5WebViewCore() {
-        // dex2oat优化方案
-        val map = HashMap<String, Any>()
-        map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
-        map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
-        QbSdk.initTbsSettings(map)
-
-        // 允许使用非wifi网络进行下载
-        QbSdk.setDownloadWithoutWifi(true)
-
-        // 初始化
-        QbSdk.initX5Environment(BaseApplication.mContext, object : PreInitCallback {
-
-            override fun onCoreInitFinished() {
-                KLog.d("ApplicationInit", " TBS X5 init finished")
-            }
-
-            override fun onViewInitFinished(p0: Boolean) {
-                // 初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核
-                KLog.d("ApplicationInit", " TBS X5 init is $p0")
-            }
-        })
-    }
 
     /**
      * 腾讯 MMKV 初始化
@@ -219,12 +188,5 @@ class CommonApplication : ApplicationLifecycle {
         return "ChatSDK -->> init complete"
     }
 
-    /**
-     * 数据上报 初始化
-     */
-    private fun initAmplitudeSdk(): String {
-        // 初始化
-        AmplitudeUtil.instance.init(BaseApplication.mApplication)
-        return "AmplitudeSDK -->> init complete"
-    }
+
 }

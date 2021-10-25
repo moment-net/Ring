@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.alan.module.main.databinding.ActivitySplashBinding
 import com.alan.module.main.dialog.PrivacyFragmentDialog
 import com.alan.module.main.viewmodel.SplashViewModel
+import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.utils.ActivityStackManager
 import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.jumpARoute
@@ -16,9 +17,13 @@ import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.event.TokenEvent
 import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.report.AmplitudeUtil
 import com.alan.mvvm.common.ui.BaseActivity
 import com.geetest.onelogin.OneLoginHelper
 import com.permissionx.guolindev.PermissionX
+import com.socks.library.KLog
+import com.tencent.smtt.export.external.TbsCoreSettings
+import com.tencent.smtt.sdk.QbSdk
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -75,8 +80,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
      * 初始化
      */
     override fun initRequestData() {
-        initOneLogin()
-
         if (SpHelper.isAgree()) {
             requestPermisssion()
         } else {
@@ -95,18 +98,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
         }
     }
 
-    /**
-     * 极验初始化
-     */
-    fun initOneLogin() {
-        //极验初始化
-        OneLoginHelper
-            .with() //开启 SDK 日志打印功能
-            .setLogEnable(true) //第一个参数为当前 Application 或 Activity 的 Context
-            //第二个参数为所需要配置的 APPID, 注意与服务端保持一致
-            .init(this, Constants.ONELOGIN_APP_ID)
-            .register("", 5000)
-    }
+
 
     fun requestPermisssion() {
         PermissionX.init(this).permissions(REQUESTED_PERMISSIONS)
@@ -122,6 +114,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
 
 
     fun intentHome() {
+        initOneLogin()
+        initAmplitudeSdk()
+        initX5WebViewCore()
+
         lifecycleScope.launch(Dispatchers.IO) {
             delay(3000)
             withContext(Dispatchers.Main) {
@@ -145,4 +141,57 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
         jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_LOGIN, bundle, Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 
+
+    //--------------------初始化相关--------------------------------------------------------------------------
+    /**
+     * 极验初始化
+     */
+    fun initOneLogin() {
+        //极验初始化
+        OneLoginHelper
+            .with() //开启 SDK 日志打印功能
+            .setLogEnable(true) //第一个参数为当前 Application 或 Activity 的 Context
+            //第二个参数为所需要配置的 APPID, 注意与服务端保持一致
+            .init(this, Constants.ONELOGIN_APP_ID)
+            .register("", 5000)
+    }
+
+
+    /**
+     * 腾讯TBS WebView X5 内核初始化
+     * 会获取设备ID
+     */
+    private fun initX5WebViewCore() {
+        // dex2oat优化方案
+        val map = HashMap<String, Any>()
+        map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
+        map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
+        QbSdk.initTbsSettings(map)
+
+        // 允许使用非wifi网络进行下载
+        QbSdk.setDownloadWithoutWifi(true)
+
+        // 初始化
+        QbSdk.initX5Environment(BaseApplication.mContext, object : QbSdk.PreInitCallback {
+
+            override fun onCoreInitFinished() {
+                KLog.d("ApplicationInit", " TBS X5 init finished")
+            }
+
+            override fun onViewInitFinished(p0: Boolean) {
+                // 初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核
+                KLog.d("ApplicationInit", " TBS X5 init is $p0")
+            }
+        })
+    }
+
+    /**
+     * 数据上报 初始化
+     * 会获取设备ID
+     */
+    private fun initAmplitudeSdk(): String {
+        // 初始化
+        AmplitudeUtil.instance.init(BaseApplication.mApplication)
+        return "AmplitudeSDK -->> init complete"
+    }
 }
