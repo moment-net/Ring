@@ -12,12 +12,14 @@ import com.alan.module.main.R
 import com.alan.module.main.databinding.LayoutMatchBinding
 import com.alan.module.main.viewmodel.MatchDialogViewModel
 import com.alan.mvvm.base.coil.CoilUtils
+import com.alan.mvvm.base.http.responsebean.MatchSuccessBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
+import com.alan.mvvm.common.helper.SpHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,11 +31,12 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
      */
     override val mViewModel by viewModels<MatchDialogViewModel>()
     lateinit var userId: String
+    var matchTime: Int = 0
 
     companion object {
-        fun newInstance(userId: String): MatchFragmentDialog {
+        fun newInstance(bean: MatchSuccessBean): MatchFragmentDialog {
             val bundle = Bundle().apply {
-                putString("userId", userId)
+                putParcelable("bean", bean)
             }
             val dialog = MatchFragmentDialog()
             dialog.setArguments(bundle)
@@ -61,7 +64,15 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
     }
 
     override fun LayoutMatchBinding.initView() {
-        userId = arguments?.getString("userId", "")!!
+        val bean = arguments?.getParcelable<MatchSuccessBean>("bean")
+        if (TextUtils.equals(SpHelper.getUserInfo()?.userId, bean?.user?.userId)) {
+            userId = bean?.host?.userId!!
+            matchTime = bean.hostTimes
+        } else {
+            userId = bean?.user?.userId!!
+            matchTime = bean.userTimes
+        }
+
 
         ivClose.clickDelay {
             dismiss()
@@ -98,7 +109,7 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
             }
         }
 
-        mBinding.tvNum.setText("免费匹配次数：3")
+        mBinding.tvNum.setText("免费匹配次数：${matchTime}")
     }
 
 

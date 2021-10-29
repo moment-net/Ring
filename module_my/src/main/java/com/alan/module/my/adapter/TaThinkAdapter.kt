@@ -1,6 +1,6 @@
-package com.alan.module.home.adapter
+package com.alan.module.my.adapter
 
-import com.alan.module.home.R
+import com.alan.module.my.R
 import com.alan.mvvm.base.http.responsebean.ThinkBean
 import com.alan.mvvm.base.ktx.getResColor
 import com.chad.library.adapter.base.BaseQuickAdapter

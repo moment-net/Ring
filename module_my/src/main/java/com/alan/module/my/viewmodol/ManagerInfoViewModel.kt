@@ -1,4 +1,4 @@
-package com.alan.module.home.viewmodol
+package com.alan.module.my.viewmodol
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.alan.module.home.dialog.CallFragmentDialog
+import com.alan.module.home.dialog.MatchFragmentDialog
 import com.alan.module.main.R
 import com.alan.module.main.adapter.MainVPAdapter
 import com.alan.module.main.databinding.ActivityMainBinding
@@ -17,20 +18,15 @@ import com.alan.module.main.fragment.ChatFragment
 import com.alan.module.main.fragment.HomeFragment
 import com.alan.module.main.fragment.MyFragment
 import com.alan.module.main.viewmodel.MainViewModel
+import com.alan.mvvm.base.http.responsebean.MatchSuccessBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.gone
 import com.alan.mvvm.base.ktx.visible
-import com.alan.mvvm.base.utils.ActivityStackManager
-import com.alan.mvvm.base.utils.EventBusRegister
-import com.alan.mvvm.base.utils.jumpARoute
-import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.base.utils.*
 import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.db.entity.UserEntity
-import com.alan.mvvm.common.event.CallEvent
-import com.alan.mvvm.common.event.CallServiceEvent
-import com.alan.mvvm.common.event.MessageEvent
-import com.alan.mvvm.common.event.TokenEvent
+import com.alan.mvvm.common.event.*
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.im.callkit.EaseCallKit
@@ -253,6 +249,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
             EaseCallKit.getInstance().callID = null
             EaseCallKit.getInstance().setSessionId(null)
         }
+    }
+
+    //收到服务器匹配消息
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun handleMsg(event: MatchEvent) {
+        val bean = GsonUtil.jsonToBean(event.data, MatchSuccessBean::class.java)!!
+        val dialog = MatchFragmentDialog.newInstance(bean)
+        dialog.show(supportFragmentManager)
     }
 
 

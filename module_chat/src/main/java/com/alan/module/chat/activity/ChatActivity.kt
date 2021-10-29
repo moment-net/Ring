@@ -251,7 +251,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                     val bundle = Bundle().apply {
                         putString("userId", userId)
                     }
-                    jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
+                    jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MANAGER, bundle)
                 }
                 R.id.iv_pic -> {
                     val message = mAdapter.getItem(position).body as EMImageMessageBody

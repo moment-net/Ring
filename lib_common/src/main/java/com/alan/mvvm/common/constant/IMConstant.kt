@@ -87,6 +87,9 @@ object IMConstant {
     const val MESSAGE_KEY_COMMOND = "command"
     const val MESSAGE_KEY_DATA = "data"
 
+    //匹配成功,等待聊天
+    const val MESSAGE_COMMOND_MATCH_SUCCESS = 300100
+
     //发起聊天，等待加入
     const val MESSAGE_COMMOND_LAUNCH = 300210
 

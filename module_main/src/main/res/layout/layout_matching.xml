@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.alan.mvvm.common.views.BottomToTopFinishLayout
+        android:id="@+id/cl_finish"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen195"
+        android:layout_marginTop="@dimen/dimen60"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/icon_matching_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lv_match"
+                android:layout_width="44dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_loop="true"
+                app:lottie_fileName="lottie_matching.json"
+                app:lottie_imageAssetsFolder="images1" />
+
+
+            <ImageView
+                android:id="@+id/main_imageview8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lv_match"
+                app:srcCompat="@drawable/icon_matching_title_match" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.alan.mvvm.common.views.BottomToTopFinishLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

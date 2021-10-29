@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alan.module.main.R
+import com.alan.module.main.adapter.CardAdapter
 import com.alan.module.main.adapter.MyThinkAdapter
 import com.alan.module.main.databinding.FragmentMyBinding
 import com.alan.module.main.viewmodel.MyViewModel
@@ -29,6 +30,9 @@ import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseFragment
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.socks.library.KLog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,6 +56,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
     override val mViewModel by viewModels<MyViewModel>()
     lateinit var mAdapter: MyThinkAdapter
+    lateinit var mCardAdapter: CardAdapter
     var listener: OnClickFinishListener? = null
     var isShow: Boolean = false
     var isLoad = false
@@ -73,14 +78,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
         ivEdit.clickDelay {
             jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_PERSONINFO)
         }
-        tvFocusNum.clickDelay {
-            val bundle = Bundle().apply { putString("type", "1") }
-            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_FOCUS, bundle)
-        }
-        tvFollowNum.clickDelay {
-            val bundle = Bundle().apply { putString("type", "2") }
-            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_FOCUS, bundle)
-        }
+
         clDiamond.clickDelay {
             jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_DIAMOND)
             DataPointUtil.reportMyDiamond(SpHelper.getUserInfo()?.userId!!)
@@ -98,19 +96,18 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
 
         initRv()
+
+        initRvCard()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun initScrollView() {
-        mBinding.scrollView.setOnScrollChangeListener { view: View, i: Int, i1: Int, i2: Int, i3: Int ->
-            val location = IntArray(2)
-            mBinding.ivAvatar.getLocationOnScreen(location)
-            val locationY = location[1]
-            var scale: Float = ((locationY - dp2px(72f).toFloat()) / dp2px(40f).toFloat()).toFloat()
-            if (scale < 0) {
-                scale = 0f
+        mBinding.scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            var scale: Float = (scrollY / dp2px(320f).toFloat())
+            if (scale > 1) {
+                scale = 1f
             }
-            if (scale == 0f) {
+            if (scale == 1f) {
                 mBinding.ivBack.setImageResource(R.drawable.icon_back)
                 mBinding.ivMsg.setImageResource(R.drawable.icon_my_msg_black)
                 mBinding.ivSet.setImageResource(R.drawable.icon_my_set_black)
@@ -119,9 +116,8 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
                 mBinding.ivMsg.setImageResource(R.drawable.icon_my_msg)
                 mBinding.ivSet.setImageResource(R.drawable.icon_my_set)
             }
-            KLog.d("xujm", "locationY:$locationY===scale:$scale")
-            val alpha = (255 * (1 - scale)).toInt()
-//            mBinding.llTitle.background.alpha = (255 * (1 - scale)).toInt()
+            KLog.d("xujm", "locationY:$scrollY===scale:$scale")
+            val alpha = (255 * scale).toInt()
             mBinding.llTitle.setBackgroundColor(Color.argb(alpha, 255, 255, 255))
         }
     }
@@ -196,38 +192,71 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
     fun setUserInfo() {
         val userInfo = SpHelper.getUserInfo()
-        CoilUtils.loadRoundBorder(
+        CoilUtils.load(mBinding.ivAvatarBg, SpHelper.getUserInfo()?.avatar!!)
+        CoilUtils.loadCircle(
             mBinding.ivAvatar,
-            SpHelper.getUserInfo()?.avatar!!,
-            42f,
-            2f,
-            R.color.white.getResColor()
+            SpHelper.getUserInfo()?.avatar!!
         )
-        mBinding.ivGender.setImageResource(if (userInfo?.gender == 1) R.drawable.icon_bing_boy else R.drawable.icon_bing_girl)
         mBinding.tvName.setText(userInfo?.userName)
-        if (userInfo?.age != 0) {
-            mBinding.tvAge.visible()
-            mBinding.tvAge.setText("${userInfo?.age}岁")
-        } else {
-            mBinding.tvAge.gone()
+
+        var address = ""
+        if (!TextUtils.isEmpty(userInfo?.address) && userInfo?.address!!.split("-").size == 3) {
+            address = userInfo?.address!!.split("-")[1]
         }
-        if (userInfo?.gender == 1) {
-            mBinding.tvAge.setShapeSolidColor(R.color._698DEE.getResColor()).setUseShape()
+        val age = if (userInfo?.age!! > 0) {
+            "${userInfo.age}岁"
         } else {
-            mBinding.tvAge.setShapeSolidColor(R.color._F87585.getResColor()).setUseShape()
+            ""
         }
-        if (TextUtils.isEmpty(userInfo?.address)) {
-            mBinding.tvLocation.gone()
+        if (TextUtils.isEmpty(age)) {
+            mBinding.tvAge.setText("")
+            mBinding.tvAge.compoundDrawablePadding = 0
         } else {
-            mBinding.tvLocation.visible()
-            val address = userInfo?.address!!.split("-")[1]
-            mBinding.tvLocation.setText("${address}")
+            mBinding.tvAge.setText("$age $address")
+            mBinding.tvAge.compoundDrawablePadding = dp2px(2f)
         }
-        mBinding.tvFollowNum.setText("${userInfo?.fansCount}")
-        mBinding.tvFocusNum.setText("${userInfo?.followCount}")
+        if (userInfo.gender == 1) {
+            mBinding.tvAge.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.icon_home_boy_blue,
+                0,
+                0,
+                0
+            )
+            mBinding.tvAge.setTextColor(R.color._7F89FF.getResColor())
+        } else {
+            mBinding.tvAge.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.icon_home_girl_blue,
+                0,
+                0,
+                0
+            )
+            mBinding.tvAge.setTextColor(R.color._F27E9A.getResColor())
+        }
 
     }
 
+    fun initRvCard() {
+        mCardAdapter = CardAdapter()
+        mBinding.rvCard.apply {
+            addItemDecoration(
+                MyColorDecoration(
+                    0, 0, dp2px(10f), dp2px(10f),
+                    ContextCompat.getColor(context, R.color.white)
+                )
+            )
+            layoutManager =
+                FlexboxLayoutManager(requireActivity(), FlexDirection.ROW, FlexWrap.WRAP)
+            adapter = mCardAdapter
+        }
+
+        mCardAdapter.setOnItemChildClickListener { adapter, view, position ->
+            when (view.id) {
+                R.id.tv_label_bg -> {
+
+                }
+            }
+        }
+    }
 
     fun initRv() {
         mAdapter = MyThinkAdapter()

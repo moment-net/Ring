@@ -118,7 +118,7 @@
                 android:gravity="center"
                 android:padding="0dp"
                 android:text="立即接通"
-                android:textColor="@color/_60EADA"
+                android:textColor="@color/_FFD54A"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

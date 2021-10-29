@@ -33,8 +33,6 @@ import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseFragment
 import com.hyphenate.chat.EMMessage
-import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -73,20 +71,13 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                     mCursor = it.cursor
                     val list: ArrayList<ThinkBean> = it.data as ArrayList<ThinkBean>
                     if (isLoad) {
-                        mBinding.srfList.finishLoadMore()
                         mAdapter.addData(list)
                     } else {
-                        mBinding.srfList.finishRefresh()
                         mAdapter.setList(list)
                     }
                 }
 
                 is BaseHttpException -> {
-                    if (isLoad) {
-                        mBinding.srfList.finishLoadMore()
-                    } else {
-                        mBinding.srfList.finishRefresh()
-                    }
                     toast(it.errorMessage)
                 }
 
@@ -143,7 +134,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                     val bundle = Bundle().apply {
                         putString("userId", userId)
                     }
-                    jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
+                    jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MANAGER, bundle)
                 }
                 R.id.iv_more -> {
                     showPopupWindow(view, item.id, userId, position)
@@ -168,16 +159,16 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
             }
         }
 
-        mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
-            override fun onLoadMore(refreshLayout: RefreshLayout) {
-                isLoad = true
-                requestList()
-            }
-
-            override fun onRefresh(refreshLayout: RefreshLayout) {
-                requestRefresh()
-            }
-        })
+//        mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
+//            override fun onLoadMore(refreshLayout: RefreshLayout) {
+//                isLoad = true
+//                requestList()
+//            }
+//
+//            override fun onRefresh(refreshLayout: RefreshLayout) {
+//                requestRefresh()
+//            }
+//        })
     }
 
     /**

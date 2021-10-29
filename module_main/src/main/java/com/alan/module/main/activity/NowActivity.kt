@@ -142,6 +142,9 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
                     tag = mAdapter.data.get(position).tag
                     mBinding.etContent.setText(mAdapter.data.get(position).defaultText)
                     mBinding.etContent.setSelection(mBinding.etContent.text.length)
+
+//                    val inputDialog = InputFragmentDialog.newInstance(userId, userName)
+//                    inputDialog.show(requireActivity().supportFragmentManager)
                 }
             }
         }

@@ -90,7 +90,7 @@ class MessageActivity : BaseActivity<ActivityMessageBinding, MessageViewModel>()
                     val bundle = Bundle().apply {
                         putString("userId", userInfoBean.userId)
                     }
-                    jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
+                    jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MANAGER, bundle)
                 }
 
                 R.id.tv_follow -> {

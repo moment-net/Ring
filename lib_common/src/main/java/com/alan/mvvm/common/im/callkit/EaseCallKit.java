@@ -21,6 +21,7 @@ import com.alan.mvvm.common.event.CallDismissEvent;
 import com.alan.mvvm.common.event.CallEvent;
 import com.alan.mvvm.common.event.CallHangupEvent;
 import com.alan.mvvm.common.event.CallServiceEvent;
+import com.alan.mvvm.common.event.MatchEvent;
 import com.alan.mvvm.common.im.callkit.base.EaseCallAction;
 import com.alan.mvvm.common.im.callkit.base.EaseCallInfo;
 import com.alan.mvvm.common.im.callkit.base.EaseCallKitConfig;
@@ -333,6 +334,8 @@ public class EaseCallKit {
                         } else if (command == IMConstant.MESSAGE_COMMOND_HANGUP) {
                             EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(2));
                             EventBusUtils.INSTANCE.postEvent(new CallHangupEvent(1));
+                        } else if (command == IMConstant.MESSAGE_COMMOND_MATCH_SUCCESS) {
+                            EventBusUtils.INSTANCE.postEvent(new MatchEvent(data));
                         }
                     }
                 }

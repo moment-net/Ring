@@ -396,6 +396,9 @@ public void openFileChooser(...);
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+-keepclassmembers class ** {
+    public void onEvent*(**);
+}
 
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule

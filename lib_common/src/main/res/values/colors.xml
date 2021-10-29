@@ -128,7 +128,7 @@
     <color name="_80A7A7A7">#80FF6900</color>
     <color name="_FF9438">#FF9438</color>
     <color name="_FFB955">#FFB955</color>
-    <color name="_f9f9f9">#f9f9f9</color>
+    <color name="_F9F9F9">#F9F9F9</color>
     <color name="_3BBB88">#3BBB88</color>
     <color name="_FF6767">#FF6767</color>
     <color name="_AAAAAA">#AAAAAA</color>
@@ -154,14 +154,17 @@
     <color name="_00FFD25C">#00FFD25C</color>
     <color name="_FFE26B">#FFE26B</color>
     <color name="_3F3317">#3F3317</color>
-    <color name="_FF517A">#FF517A</color>
+    <color name="_F27E9A">#F27E9A</color>
+    <color name="_7F89FF">#7F89FF</color>
     <color name="_1AFF517A">#1AFF517A</color>
     <color name="_FF6800">#FF6800</color>
     <color name="_26FF6800">#26FF6800</color>
     <color name="_CCFF6800">#CCFF6800</color>
+    <color name="_FF517A">#FF517A</color>
     <color name="_515FFF">#515FFF</color>
     <color name="_1A515FFF">#1A515FFF</color>
     <color name="_FFBF2F">#FFBF2F</color>
+    <color name="_33FFBF2F">#33FFBF2F</color>
     <color name="_0D2F1E00">#0D2F1E00</color>
     <color name="_7D7D7D">#7D7D7D</color>
     <color name="_C3911E">#C3911E</color>
@@ -183,5 +186,9 @@
     <color name="_33FFBE4F">#33FFBE4F</color>
     <color name="_F4F4F4">#F4F4F4</color>
     <color name="_FF6464">#FF6464</color>
+    <color name="_FFD54A">#FFD54A</color>
+    <color name="_FFD148">#FFD148</color>
+    <color name="_FBB426">#FBB426</color>
+    <color name="_EAEAEA">#EAEAEA</color>
 
 </resources>

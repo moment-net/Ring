@@ -4,6 +4,9 @@
 
     <application>
         <activity
+            android:name=".activity.SelectStateActivity"
+            android:exported="true" />
+        <activity
             android:name=".activity.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
@@ -77,10 +80,10 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.alan.module.main.activity.MyActivity"
+            android:name=".activity.MyActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:screenOrientation="portrait"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

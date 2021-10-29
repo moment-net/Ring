@@ -34,6 +34,9 @@ object RouteUrl {
         //选择标签类型
         const val ACTIVITY_MAIN_TYPE: String = "/main/type"
 
+        //选择状态标签
+        const val ACTIVITY_MAIN_STATE: String = "/main/state"
+
         //发布想法
         const val ACTIVITY_MAIN_THINK: String = "/main/think"
 
@@ -45,9 +48,6 @@ object RouteUrl {
     }
 
     object HomeModule {
-        //管家详情页面
-        const val ACTIVITY_HOME_MANAGER: String = "/home/manager";
-
         //更换铃声
         const val ACTIVITY_HOME_RING: String = "/home/ring";
 
@@ -114,6 +114,12 @@ object RouteUrl {
 
         //账号与安全
         const val ACTIVITY_MY_SAFE: String = "/my/safe";
+
+        //选择类型卡片
+        const val ACTIVITY_MY_CARD: String = "/my/card";
+
+        //管家详情页面
+        const val ACTIVITY_MY_MANAGER: String = "/my/manager";
     }
 
     object WebModule {

@@ -31,8 +31,6 @@ import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseFragment
-import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnRefreshLoadMoreListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -70,10 +68,8 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                     mCursor = it.cursor
                     val list: ArrayList<NowBean> = it.data as ArrayList<NowBean>
                     if (isLoad) {
-                        mBinding.srfList.finishLoadMore()
                         mAdapter.addData(list)
                     } else {
-                        mBinding.srfList.finishRefresh()
                         mAdapter.setList(list)
                     }
 
@@ -83,11 +79,6 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                 }
 
                 is BaseHttpException -> {
-                    if (isLoad) {
-                        mBinding.srfList.finishLoadMore()
-                    } else {
-                        mBinding.srfList.finishRefresh()
-                    }
                     toast(it.errorMessage)
                 }
 
@@ -137,7 +128,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                     val bundle = Bundle().apply {
                         putString("userId", userId)
                     }
-                    jumpARoute(RouteUrl.HomeModule.ACTIVITY_HOME_MANAGER, bundle)
+                    jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MANAGER, bundle)
                 }
                 R.id.iv_more -> {
                     showPopupWindow(view, id, userId, position)
@@ -167,20 +158,20 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
             gravity = Gravity.CENTER
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
+                dp2px(200f)
             )
         })
 
-        mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
-            override fun onLoadMore(refreshLayout: RefreshLayout) {
-                isLoad = true
-                requestList()
-            }
-
-            override fun onRefresh(refreshLayout: RefreshLayout) {
-                requestRefresh()
-            }
-        })
+//        mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
+//            override fun onLoadMore(refreshLayout: RefreshLayout) {
+//                isLoad = true
+//                requestList()
+//            }
+//
+//            override fun onRefresh(refreshLayout: RefreshLayout) {
+//                requestRefresh()
+//            }
+//        })
     }
 
     /**
