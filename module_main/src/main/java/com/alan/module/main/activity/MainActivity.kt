@@ -255,8 +255,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun handleMsg(event: MatchEvent) {
         val bean = GsonUtil.jsonToBean(event.data, MatchSuccessBean::class.java)!!
+        val currentActivity = ActivityStackManager.getCurrentActivity() as FragmentActivity
         val dialog = MatchFragmentDialog.newInstance(bean)
-        dialog.show(supportFragmentManager)
+        dialog.show(currentActivity.supportFragmentManager)
     }
 
 

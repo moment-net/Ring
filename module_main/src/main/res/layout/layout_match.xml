@@ -44,6 +44,7 @@
                 android:text="免费匹配次数：3"
                 android:textColor="@color/white"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -133,7 +134,7 @@
                 android:layout_width="@dimen/dimen0"
                 android:layout_height="@dimen/dimen0"
                 android:visibility="gone"
-                app:constraint_referenced_ids="tv_num,iv_avatar,iv_close,tv_age,tv_desc,tv_chat" />
+                app:constraint_referenced_ids="iv_avatar,iv_close,tv_age,tv_desc,tv_chat" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

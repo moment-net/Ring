@@ -329,7 +329,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             .setOnItemClickListener(OnItemClickListener { position ->
                 val bundle = Bundle().apply {
                     putString("webUrl", list.get(position).url)
-                    putString("webTitle", "用户协议")
+                    putString("webTitle", list.get(position).title)
                 }
                 jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
             })

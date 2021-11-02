@@ -55,9 +55,12 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
      */
     override fun ActivitySplashBinding.initView() {
         //home键退出，点击app再进时重启bug修改
-        if (!isTaskRoot) {
-            finish()
-            return
+        if (!isTaskRoot() && intent != null) {
+            val action = intent.action
+            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN == action) {
+                finish()
+                return
+            }
         }
     }
 

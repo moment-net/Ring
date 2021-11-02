@@ -100,6 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="正在刷抖音，求分享沙雕视频"
+        android:lineSpacingExtra="@dimen/dimen3"
         android:textColor="@color/_3A3A3A"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"

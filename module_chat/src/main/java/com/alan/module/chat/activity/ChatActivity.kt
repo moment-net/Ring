@@ -140,6 +140,13 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             }
         }
 
+        mBinding.ivAvatarTop.clickDelay {
+            val bundle = Bundle().apply {
+                putString("userId", userId)
+            }
+            jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_MANAGER, bundle)
+        }
+
         mBinding.tvOpen.clickDelay {
             JPushInterface.goToAppNotificationSettings(this@ChatActivity)
         }

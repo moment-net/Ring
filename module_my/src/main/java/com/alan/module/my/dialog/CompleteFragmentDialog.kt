@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.alan.module.my.R
 import com.alan.module.my.databinding.LayoutDialogCompleteBinding
 import com.alan.mvvm.base.ktx.clickDelay
+import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
 import com.alan.mvvm.base.mvvm.vm.EmptyViewModel
 import com.alan.mvvm.base.utils.jumpARoute
@@ -43,7 +44,7 @@ class CompleteFragmentDialog :
             )
         )
         window.setBackgroundDrawable(colorDrawable)
-        params.width = WindowManager.LayoutParams.MATCH_PARENT
+        params.width = dp2px(300f)
         params.height = WindowManager.LayoutParams.WRAP_CONTENT
         params.gravity = Gravity.CENTER
         setCanceledOnTouchOutside(false)
@@ -53,10 +54,12 @@ class CompleteFragmentDialog :
 
     override fun LayoutDialogCompleteBinding.initView() {
         ivClose.clickDelay { dismiss() }
+
         tvCommit.clickDelay {
             dismiss()
             jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_CARD)
         }
+
     }
 
 

@@ -49,7 +49,8 @@ class SelectStateActivity : BaseActivity<ActivitySelectStateBinding, StateViewMo
         }
         tvNext.clickDelay {
             if (TextUtils.isEmpty(tag)) {
-                tag = "正在"
+                toast("请选择")
+                return@clickDelay
             }
             mViewModel.requestPushNow(tag, defaultText)
         }

@@ -19,7 +19,11 @@ import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
+import com.alan.mvvm.base.utils.jumpARoute
+import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.im.EMClientHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +35,8 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
      */
     override val mViewModel by viewModels<MatchDialogViewModel>()
     lateinit var userId: String
+    lateinit var userName: String
+    lateinit var avatar: String
     var matchTime: Int = 0
 
     companion object {
@@ -67,9 +73,13 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
         val bean = arguments?.getParcelable<MatchSuccessBean>("bean")
         if (TextUtils.equals(SpHelper.getUserInfo()?.userId, bean?.user?.userId)) {
             userId = bean?.host?.userId!!
+            userName = bean?.host?.userName!!
+            avatar = bean?.host?.avatar!!
             matchTime = bean.hostTimes
         } else {
             userId = bean?.user?.userId!!
+            userName = bean?.user?.userName!!
+            avatar = bean?.user?.avatar!!
             matchTime = bean.userTimes
         }
 
@@ -80,6 +90,17 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
 
         tvChat.clickDelay {
             dismiss()
+            val bundle = Bundle().apply {
+                putString("userId", userId)
+            }
+            EMClientHelper.saveUser(
+                UserEntity(
+                    userId,
+                    userName,
+                    avatar
+                )
+            )
+            jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
         }
 
         clBg.clickDelay {
@@ -109,7 +130,6 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
             }
         }
 
-        mBinding.tvNum.setText("免费匹配次数：${matchTime}")
     }
 
 
@@ -137,8 +157,10 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
                     }
                     if (TextUtils.isEmpty(age) && TextUtils.isEmpty(address)) {
                         mBinding.tvAge.setText("")
+                        mBinding.tvAge.compoundDrawablePadding = 0
                     } else {
                         mBinding.tvAge.setText("$age  ${address}")
+                        mBinding.tvAge.compoundDrawablePadding = dp2px(2f)
                     }
                     if (it.gender == 1) {
                         mBinding.tvAge.setCompoundDrawablesWithIntrinsicBounds(

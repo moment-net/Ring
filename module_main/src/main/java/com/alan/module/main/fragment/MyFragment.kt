@@ -221,7 +221,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
         } else {
             ""
         }
-        if (TextUtils.isEmpty(age)) {
+        if (TextUtils.isEmpty(address) && TextUtils.isEmpty(age)) {
             mBinding.tvAge.setText("")
             mBinding.tvAge.compoundDrawablePadding = 0
         } else {
