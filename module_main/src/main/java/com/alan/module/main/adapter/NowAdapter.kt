@@ -10,11 +10,12 @@ import com.alan.mvvm.base.http.responsebean.NowBean
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import leifu.shapelibrary.ShapeView
 
 
-class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now) {
+class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now), LoadMoreModule {
 
     init {
         addChildClickViewIds(R.id.iv_avatar)

@@ -20,6 +20,7 @@ import com.alan.module.main.databinding.FragmentMyBinding
 import com.alan.module.main.viewmodel.MyViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.CardInfoBean
 import com.alan.mvvm.base.http.responsebean.DiamondBean
 import com.alan.mvvm.base.http.responsebean.ThinkBean
 import com.alan.mvvm.base.http.responsebean.UnreadBean
@@ -175,6 +176,17 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
                 }
             }
         }
+        mViewModel.ldCard.observe(this) {
+            when (it) {
+                is BaseResponse<*> -> {
+                    mCursor = it.cursor
+                    val list: ArrayList<CardInfoBean> = it.data as ArrayList<CardInfoBean>
+                    list.add(CardInfoBean())
+                    mCardAdapter.setList(list)
+
+                }
+            }
+        }
     }
 
     override fun initRequestData() {
@@ -185,6 +197,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
         super.onResume()
         mViewModel.requestDiamond()
         mViewModel.requestUnRead()
+        mViewModel.requestCardList(SpHelper.getUserInfo()?.userId!!)
         requestRefresh()
         setUserInfo()
     }
@@ -250,9 +263,18 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
         }
 
         mCardAdapter.setOnItemChildClickListener { adapter, view, position ->
+            val cardInfoBean = mCardAdapter.data.get(position)
             when (view.id) {
                 R.id.tv_label_bg -> {
+                    val bundle = Bundle().apply {
+                        putString("userId", SpHelper.getUserInfo()?.userId!!)
+                        putString("name", cardInfoBean.cardName)
+                    }
+                    jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_CARDSET, bundle)
+                }
 
+                R.id.tv_add -> {
+                    jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_CARD)
                 }
             }
         }

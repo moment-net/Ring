@@ -23,6 +23,7 @@ class MyViewModel @Inject constructor(private val mRepository: CommonRepository)
     BaseViewModel() {
 
     val ldSuccess = MutableLiveData<Any>()
+    val ldCard = MutableLiveData<Any>()
 
 
     fun requestDiamond() {
@@ -71,6 +72,26 @@ class MyViewModel @Inject constructor(private val mRepository: CommonRepository)
                 callback = RequestCallback(
                     onSuccess = {
                         ldSuccess.value = it
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+
+    /**
+     * 获取列表
+     */
+    fun requestCardList(userId: String) {
+        viewModelScope.launch() {
+            mRepository.requestCardList(
+                userId,
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldCard.value = it
                     },
                     onFailed = {
                         toast(it.errorMessage)

@@ -17,21 +17,24 @@ import javax.inject.Inject
  * @property mRepository CommonRepository 仓库层 通过Hilt注入
  */
 @HiltViewModel
-class SelectCardViewModel @Inject constructor(private val mRepository: CommonRepository) :
+class CardInfoViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
     val ldData = MutableLiveData<Any>()
 
     /**
-     * 列表
+     * 查询详情
      */
-    fun requestCardAllList() {
+    fun requestCardDetail(userId: String, name: String) {
+        val map = hashMapOf<String, String>()
+        map.put("userId", userId)
+        map.put("keyword", name)
         viewModelScope.launch() {
-            mRepository.requestCardAllList(
-                "card",
+            mRepository.requestCardDetail(
+                map,
                 callback = RequestCallback(
                     onSuccess = {
-                        ldData.value = it
+                        ldData.value = it.data!!
                     },
                     onFailed = {
                         toast(it.errorMessage)

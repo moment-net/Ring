@@ -54,6 +54,7 @@ class CompleteFragmentDialog :
     override fun LayoutDialogCompleteBinding.initView() {
         ivClose.clickDelay { dismiss() }
         tvCommit.clickDelay {
+            dismiss()
             jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_CARD)
         }
     }

@@ -5,13 +5,15 @@ import androidx.core.content.ContextCompat
 import com.alan.module.my.R
 import com.alan.module.my.adapter.SelectCardAdapter
 import com.alan.module.my.databinding.ActivitySelectCardBinding
+import com.alan.module.my.dialog.CardSetFragmentDialog
 import com.alan.module.my.viewmodol.SelectCardViewModel
 import com.alan.mvvm.base.http.baseresp.BaseResponse
-import com.alan.mvvm.base.http.responsebean.NowTagBean
+import com.alan.mvvm.base.http.responsebean.CardTagBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.flexbox.FlexDirection
@@ -50,7 +52,7 @@ class SelectCardActivity : BaseActivity<ActivitySelectCardBinding, SelectCardVie
         mViewModel.ldData.observe(this) {
             when (it) {
                 is BaseResponse<*> -> {
-                    val list = it.data as ArrayList<NowTagBean>
+                    val list = it.data as ArrayList<CardTagBean>
 
                     mAdapter.setList(list)
                 }
@@ -63,7 +65,7 @@ class SelectCardActivity : BaseActivity<ActivitySelectCardBinding, SelectCardVie
      * 获取数据
      */
     override fun initRequestData() {
-        mViewModel.requestNowTagList()
+        mViewModel.requestCardAllList()
     }
 
     fun initRv() {
@@ -81,10 +83,16 @@ class SelectCardActivity : BaseActivity<ActivitySelectCardBinding, SelectCardVie
         }
 
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
+            val bean = mAdapter.data.get(position)
             when (view.id) {
                 R.id.tv_label_bg -> {
                     mAdapter.selectPosition = position
                     mAdapter.notifyDataSetChanged()
+                    val dialog = CardSetFragmentDialog.newInstance(
+                        SpHelper.getUserInfo()?.userId!!,
+                        bean.tag
+                    )
+                    dialog.show(supportFragmentManager)
                 }
             }
         }

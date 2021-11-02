@@ -39,7 +39,7 @@
         android:text="最多选择5个标签"
         android:textColor="@color/_803A3A3A"
         android:textSize="14sp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
@@ -51,6 +51,7 @@
         android:layout_marginTop="40dp"
         android:paddingStart="@dimen/dimen30"
         android:paddingEnd="@dimen/dimen30"
+        android:paddingBottom="@dimen/dimen30"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

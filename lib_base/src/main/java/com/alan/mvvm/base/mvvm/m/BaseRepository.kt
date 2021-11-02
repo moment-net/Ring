@@ -48,7 +48,7 @@ open class BaseRepository {
                 "数据非法，获取响应数据为空",
                 null
             )
-            KLog.e("http", "结果==>response:${response}")
+//            KLog.e("http", "结果==>response:${response}")
             if (!response.httpIsSuccess) {
                 throw  BaseHttpException(response.resultCode, response.msg, null)
             }
@@ -63,7 +63,7 @@ open class BaseRepository {
                 KLog.e("http", "onCompletion==>cause:${cause}")
                 callback.onFinally?.invoke()
             }.collect {
-                KLog.e("http", "collect==>it:${it}")
+//                KLog.e("http", "collect==>it:${it}")
                 callback.onSuccess?.invoke(it)
             }
     }

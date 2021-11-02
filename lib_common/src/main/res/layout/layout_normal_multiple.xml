@@ -11,16 +11,6 @@
     binding:layout_constraintStart_toStartOf="parent"
     binding:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/tv_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        android:padding="@dimen/dimen5"
-        binding:layout_constraintEnd_toEndOf="parent"
-        binding:layout_constraintTop_toTopOf="parent"
-        binding:srcCompat="@drawable/icon_dialog_close" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -56,7 +46,24 @@
         binding:layout_goneMarginTop="@dimen/dimen45" />
 
 
-
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="125dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:padding="0dp"
+        android:text="取消"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:background="@drawable/shape_cancel"
+        binding:layout_constraintBottom_toBottomOf="parent"
+        binding:layout_constraintEnd_toStartOf="@+id/tv_confirm"
+        binding:layout_constraintHorizontal_chainStyle="packed"
+        binding:layout_constraintStart_toStartOf="parent"
+        binding:layout_constraintTop_toBottomOf="@+id/tv_content" />
 
     <TextView
         android:id="@+id/tv_confirm"

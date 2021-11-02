@@ -393,7 +393,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                 is UserInfoBean -> {
                     userInfoBean = it
                     mBinding.tvTitle.setText(userInfoBean.userName)
-                    mBinding.tvTime.setText(userInfoBean.onlineStatusDesc)
+                    mBinding.tvTime.setText("${userInfoBean.onlineStatusDesc}·${userInfoBean.recentDoingTag}")
                     CoilUtils.loadCircle(mBinding.ivAvatarTop, userInfoBean.avatar)
                     CoilUtils.loadCircle(mBinding.ivAvatar, userInfoBean.avatar)
                     //加入数据库

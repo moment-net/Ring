@@ -7,9 +7,9 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.alan.module.my.R
-import com.alan.module.my.adapter.CardAdapter
 import com.alan.module.my.databinding.LayoutDialogCardInputBinding
 import com.alan.mvvm.base.ktx.clickDelay
+import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
 import com.alan.mvvm.base.mvvm.vm.EmptyViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,11 +22,14 @@ class CardInputFragmentDialog :
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
      */
     override val mViewModel by viewModels<EmptyViewModel>()
-    lateinit var mAdapter: CardAdapter
+    var inputListener: OnInputListener? = null
+
 
     companion object {
-        fun newInstance(): CardInputFragmentDialog {
+        fun newInstance(tagName: String, name: String): CardInputFragmentDialog {
             val args = Bundle()
+            args.putString("tagName", tagName)
+            args.putString("name", name)
             val fragment = CardInputFragmentDialog()
             fragment.arguments = args
             return fragment
@@ -44,7 +47,7 @@ class CardInputFragmentDialog :
         )
         window.setBackgroundDrawable(colorDrawable)
         params.width = WindowManager.LayoutParams.MATCH_PARENT
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT
+        params.height = dp2px(600f)
         params.gravity = Gravity.BOTTOM
         setCanceledOnTouchOutside(false)
         isCancelable = false
@@ -52,9 +55,20 @@ class CardInputFragmentDialog :
     }
 
     override fun LayoutDialogCardInputBinding.initView() {
-        ivClose.clickDelay { dismiss() }
-        tvCommit.clickDelay { dismiss() }
+        ivClose.clickDelay {
+            dismiss()
+        }
+        tvCommit.clickDelay {
+            dismiss()
+            if (inputListener != null) {
+                inputListener!!.onInput(etName.text.toString())
+            }
+        }
 
+        val tagName = arguments?.getString("tagName", "")
+        val name = arguments?.getString("name", "")
+        tvTitle.setText(tagName)
+        etName.setText(name)
     }
 
 
@@ -65,5 +79,7 @@ class CardInputFragmentDialog :
     override fun initRequestData() {
     }
 
-
+    interface OnInputListener {
+        fun onInput(input: String)
+    }
 }

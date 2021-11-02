@@ -4,11 +4,18 @@
 
     <application>
         <activity
+            android:name=".activity.CardSetActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SelectCardActivity"
-            android:exported="true" />
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SafeActivity"
-            android:exported="true" />
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SettingActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"

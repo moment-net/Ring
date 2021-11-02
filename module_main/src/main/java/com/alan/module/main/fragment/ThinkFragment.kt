@@ -75,6 +75,12 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                     } else {
                         mAdapter.setList(list)
                     }
+
+                    if (it.hasMore) {
+                        mAdapter.loadMoreModule.loadMoreComplete()
+                    } else {
+                        mAdapter.loadMoreModule.loadMoreEnd()
+                    }
                 }
 
                 is BaseHttpException -> {
@@ -159,6 +165,13 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
             }
         }
 
+        mAdapter.loadMoreModule.isEnableLoadMoreIfNotFullPage = false
+        mAdapter.loadMoreModule.setOnLoadMoreListener {
+            mBinding.rvList.postDelayed(Runnable {
+                isLoad = true
+                requestList()
+            }, 1000)
+        }
 //        mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
 //            override fun onLoadMore(refreshLayout: RefreshLayout) {
 //                isLoad = true
@@ -233,6 +246,20 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
             requestRefresh()
         }
     }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            requestRefresh()
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        requestRefresh()
+    }
+
 
     /**
      * 发送点赞IM消息

@@ -13,8 +13,12 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alan.mvvm.base.BaseApplication;
 import com.alan.mvvm.base.utils.EventBusUtils;
+import com.alan.mvvm.base.utils.SoundPoolUtil;
 import com.alan.mvvm.base.utils.UtilsKt;
+import com.alan.mvvm.base.utils.VibrateUtil;
+import com.alan.mvvm.common.R;
 import com.alan.mvvm.common.constant.IMConstant;
 import com.alan.mvvm.common.constant.RouteUrl;
 import com.alan.mvvm.common.event.CallDismissEvent;
@@ -335,6 +339,8 @@ public class EaseCallKit {
                             EventBusUtils.INSTANCE.postEvent(new CallServiceEvent(2));
                             EventBusUtils.INSTANCE.postEvent(new CallHangupEvent(1));
                         } else if (command == IMConstant.MESSAGE_COMMOND_MATCH_SUCCESS) {
+                            SoundPoolUtil.getInstance().playSound(BaseApplication.mContext, R.raw.voice_ring);
+                            VibrateUtil.INSTANCE.starVibrate();
                             EventBusUtils.INSTANCE.postEvent(new MatchEvent(data));
                         }
                     }

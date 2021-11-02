@@ -20,10 +20,8 @@ import com.alan.module.main.dialog.FilterFragmentDialog
 import com.alan.module.main.dialog.PushFragmentDialog
 import com.alan.module.main.viewmodel.HomeViewModel
 import com.alan.mvvm.base.coil.CoilUtils
-import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
-import com.alan.mvvm.base.http.responsebean.NowTagBean
-import com.alan.mvvm.base.http.responsebean.TabItemBean
-import com.alan.mvvm.base.http.responsebean.UserInfoBean
+import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.*
 import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.MyColorDecoration
@@ -33,6 +31,7 @@ import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.dialog.DialogHelper
 import com.alan.mvvm.common.event.ChangeThinkEvent
+import com.alan.mvvm.common.event.RefreshEvent
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.report.DataPointUtil
@@ -64,7 +63,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     private val mFragments = arrayListOf<Fragment>()
     override val mViewModel by viewModels<HomeViewModel>()
     lateinit var mAdapter: HomeMatchAdapter
-
+    lateinit var matchInfoBean: MatchInfoBean
+    var gender: Int = 1
+    var isOpenRing: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun FragmentHomeBinding.initView() {
@@ -79,43 +80,41 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         ivFilter.clickDelay {
 //            val dialog = StateFragmentDialog.newInstance()
 //            dialog.show(requireActivity().supportFragmentManager)
-            val dialog = FilterFragmentDialog.newInstance()
+            val dialog = FilterFragmentDialog.newInstance(gender)
             dialog.show(requireActivity().supportFragmentManager)
         }
         ivFilterHide.clickDelay {
 //            val dialog = StateFragmentDialog.newInstance()
 //            dialog.show(requireActivity().supportFragmentManager)
-            val dialog = FilterFragmentDialog.newInstance()
+            val dialog = FilterFragmentDialog.newInstance(gender)
             dialog.show(requireActivity().supportFragmentManager)
         }
         clMatch.clickDelay {
-            val dialog = MatchingFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
+            val dialog = MatchingFragmentDialog.newInstance("")
             dialog.show(requireActivity().supportFragmentManager)
-            mViewModel.requestNowMatch()
             DataPointUtil.reportHomeMatch(SpHelper.getUserInfo()?.userId!!)
         }
         clMatchHide.clickDelay {
-            val dialog = MatchingFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
+            val dialog = MatchingFragmentDialog.newInstance("")
             dialog.show(requireActivity().supportFragmentManager)
-            mViewModel.requestNowMatch()
             DataPointUtil.reportHomeMatch(SpHelper.getUserInfo()?.userId!!)
         }
         clRing.clickDelay {
 //            val dialog = MatchFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
 //            dialog.show(requireActivity().supportFragmentManager)
-            if (true) {
+            if (isOpenRing) {
                 showCloseDialog()
             } else {
-                toast("Ring已开启，很快就能收到附近的小伙伴发来的信号啦！")
+                mViewModel.requestMatchJoin()
             }
         }
         clRingHide.clickDelay {
 //            val dialog = MatchFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
 //            dialog.show(requireActivity().supportFragmentManager)
-            if (true) {
+            if (isOpenRing) {
                 showCloseDialog()
             } else {
-                toast("Ring已开启，很快就能收到附近的小伙伴发来的信号啦！")
+                mViewModel.requestMatchJoin()
             }
         }
         tvNow.clickDelay {
@@ -168,12 +167,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
 
 
-        val list = ArrayList<String>()
-        list.add("")
-        list.add("")
-        list.add("")
-        list.add("")
-        initBanner(list)
+
         initRv()
         initFragment()
     }
@@ -194,6 +188,48 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                     )
                     jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
                 }
+
+                is MatchInfoBean -> {
+                    matchInfoBean = it
+                    mBinding.tvRingNum.setText("今日剩余${matchInfoBean.times}次")
+                    isOpenRing = it.status == 1
+                    changeStatus(isOpenRing)
+                    gender = it.setting.sex
+                }
+
+                1 -> {
+                    //开始匹配
+                    isOpenRing = true
+                    changeStatus(isOpenRing)
+                    toast("Ring已开启，很快就能收到附近的小伙伴发来的信号啦！")
+                }
+                2 -> {
+                    //停止匹配
+                    isOpenRing = false
+                    changeStatus(isOpenRing)
+                }
+            }
+        }
+
+        mViewModel.ldCard.observe(this) {
+            when (it) {
+                is BaseResponse<*> -> {
+                    val list = it.data as ArrayList<CardTagBean>
+
+                    mAdapter.setList(list)
+                }
+
+            }
+        }
+
+        mViewModel.ldBanner.observe(this) {
+            when (it) {
+                is BaseResponse<*> -> {
+                    val list = it.data as ArrayList<BannerBean>
+
+                    initBanner(list)
+                }
+
             }
         }
     }
@@ -221,6 +257,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             mBinding.tvNowHide.textSize = 14f
             mBinding.tvThinkHide.setTextColor(R.color._3A3A3A.getResColor())
             mBinding.tvThinkHide.textSize = 20f
+        }
+    }
+
+    fun changeStatus(isOpen: Boolean) {
+        if (isOpen) {
+            mBinding.tvStatus.setText("ON")
+            mBinding.tvStatusHide.setText("ON")
+        } else {
+            mBinding.tvStatus.setText("OFF")
+            mBinding.tvStatusHide.setText("OFF")
         }
     }
 
@@ -260,7 +306,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     /**
      * 初始化banner
      */
-    private fun initBanner(list: ArrayList<String>) {
+    private fun initBanner(list: ArrayList<BannerBean>) {
         //自定义你的Holder，实现更多复杂的界面，不一定是图片翻页，其他任何控件翻页亦可。
         mBinding.banner.setPages(
             object : CBViewHolderCreator {
@@ -282,24 +328,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             )
             .setOnItemClickListener(OnItemClickListener { position ->
                 val bundle = Bundle().apply {
-                    putString("webUrl", HttpBaseUrlConstant.BASE_URL + "page/user-agreement")
+                    putString("webUrl", list.get(position).url)
                     putString("webTitle", "用户协议")
                 }
                 jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
-            }).startTurning()
+            })
+        if (list.size > 1) {
+            mBinding.banner.startTurning()
+        }
     }
 
     /**
      * banner的Item
      */
     class LocalImageHolderView(itemView: View?) :
-        Holder<String>(itemView) {
+        Holder<BannerBean>(itemView) {
         private var imageView: ImageView? = null
         override fun initView(itemView: View) {
             imageView = itemView.findViewById(R.id.iv_banner)
         }
 
-        override fun updateUI(data: String) {
+        override fun updateUI(data: BannerBean) {
+            CoilUtils.loadCircle(imageView!!, data.bgUrl)
         }
     }
 
@@ -317,39 +367,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
 
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
+            val bean = mAdapter.data.get(position)
             when (view.id) {
                 R.id.tv_label_bg -> {
-
+                    val dialog = MatchingFragmentDialog.newInstance(bean.tag)
+                    dialog.show(requireActivity().supportFragmentManager)
                 }
             }
         }
-        mAdapter.addData(NowTagBean("", 1f, "", "", "", "", "", 1f))
-        mAdapter.addData(NowTagBean("", 1f, "", "", "", "", "", 1f))
-        mAdapter.addData(NowTagBean("", 1f, "", "", "", "", "", 1f))
-        mAdapter.addData(NowTagBean("", 1f, "", "", "", "", "", 1f))
     }
 
-    /**
-     * 显示关闭弹框
-     */
-    fun showCloseDialog() {
-        DialogHelper.showMultipleDialog(
-            requireActivity(),
-            "关闭后你将错过附近的小伙伴发来的Ring信号哦",
-            "保持开启",
-            "确认关闭",
-            {
-
-            },
-            {
-
-            })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setUserInfo()
-    }
 
     fun setUserInfo() {
         val userInfoBean = SpHelper.getUserInfo()
@@ -371,10 +398,52 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         mBinding.tvNameHide.setText(userInfoBean.userName)
     }
 
+
+    /**
+     * 显示关闭弹框
+     */
+    fun showCloseDialog() {
+        DialogHelper.showMultipleDialog(
+            requireActivity(),
+            "关闭后你将错过附近的小伙伴发来的Ring信号哦",
+            "保持开启",
+            "确认关闭",
+            {
+
+            },
+            {
+                mViewModel.requestMatchStop()
+            })
+    }
+
     //切换
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun showCall(event: ChangeThinkEvent) {
         mBinding.viewpager.setCurrentItem(event.position)
     }
+
+    //切换
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun refresh(event: RefreshEvent) {
+        mViewModel.requestMatchInfo()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            mViewModel.requestBanner()
+            mViewModel.requestCardAllList()
+            mViewModel.requestMatchInfo()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.requestBanner()
+        mViewModel.requestCardAllList()
+        mViewModel.requestMatchInfo()
+        setUserInfo()
+    }
+
 
 }

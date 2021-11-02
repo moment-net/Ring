@@ -118,6 +118,9 @@ object RouteUrl {
         //选择类型卡片
         const val ACTIVITY_MY_CARD: String = "/my/card";
 
+        //卡片
+        const val ACTIVITY_MY_CARDSET: String = "/my/cardset";
+
         //管家详情页面
         const val ACTIVITY_MY_MANAGER: String = "/my/manager";
     }

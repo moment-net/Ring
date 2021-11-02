@@ -1087,7 +1087,7 @@ interface HomeApiService {
     suspend fun requestIsReply(@Body requestBody: RequestBody): BaseResponse<ReplyBean>
 
     /**
-     * 检测一起是否被已回复
+     * 获取匹配用户
      */
     @POST("doing/match")
     suspend fun requestNowMatch(): BaseResponse<UserInfoBean>
@@ -1121,5 +1121,80 @@ interface HomeApiService {
      */
     @GET("thought/history")
     suspend fun requestThinkHistory(@QueryMap map: MutableMap<String, String>): BaseResponse<ArrayList<ThinkBean>>
+
+    /**
+     * 匹配信息（配置设置和匹配次数）
+     */
+    @GET("match/info")
+    suspend fun requestMatchInfo(): BaseResponse<MatchInfoBean>
+
+    /**
+     * 匹配设置
+     */
+    @POST("match/setting")
+    suspend fun requestMatchFilter(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 快速比配
+     */
+    @POST("doing/match")
+    suspend fun requestFastMatch(@Body requestBody: RequestBody): BaseResponse<UserInfoBean>
+
+    /**
+     * 开始匹配（加入）
+     */
+    @POST("match/join")
+    suspend fun requestMatchJoin(): BaseResponse<String>
+
+    /**
+     * 开始匹配（加入）
+     */
+    @POST("match/stop")
+    suspend fun requestMatchStop(): BaseResponse<String>
+
+    /**
+     * 所有类型的社交卡片的字段列表
+     */
+    @GET("user/cardtaglist")
+    suspend fun requestCardAllList(@Query("type") type: String): BaseResponse<ArrayList<CardTagBean>>
+
+    /**
+     * 添加社交卡片
+     */
+    @POST("user/addcard")
+    suspend fun requestAddCard(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 编辑社交卡片
+     */
+    @POST("user/editcard")
+    suspend fun requestEditCard(
+        @Query("id") cardId: String,
+        @Body requestBody: RequestBody
+    ): BaseResponse<String>
+
+    /**
+     * 删除社交卡片
+     */
+    @GET("user/delcard")
+    suspend fun requestDeleteCard(@Query("id") cardId: String): BaseResponse<String>
+
+    /**
+     * 查询用户的社交卡片列表
+     */
+    @GET("user/briefcardlist")
+    suspend fun requestCardList(@Query("userId") userId: String): BaseResponse<ArrayList<CardInfoBean>>
+
+    /**
+     * 根据卡片名称查询用户的社交卡片列表
+     */
+    @GET("user/card")
+    suspend fun requestCardDetail(@QueryMap map: MutableMap<String, String>): BaseResponse<CardDetailBean>
+
+    /**
+     * banner列表
+     */
+    @GET("banner/list")
+    suspend fun requestBanner(): BaseResponse<ArrayList<BannerBean>>
 
 }

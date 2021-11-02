@@ -13,14 +13,17 @@ import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
+import com.alan.mvvm.base.utils.EventBusUtils
+import com.alan.mvvm.common.event.RefreshEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FilterFragmentDialog : BaseFrameDialogFragment<LayoutDialogFilterBinding, FilterViewModel>() {
 
     companion object {
-        fun newInstance(): FilterFragmentDialog {
+        fun newInstance(gender: Int): FilterFragmentDialog {
             val bundle = Bundle()
+            bundle.putInt("gender", gender)
             val dialog = FilterFragmentDialog()
             dialog.setArguments(bundle)
             return dialog
@@ -31,7 +34,7 @@ class FilterFragmentDialog : BaseFrameDialogFragment<LayoutDialogFilterBinding, 
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
      */
     override val mViewModel by viewModels<FilterViewModel>()
-
+    var gender: Int = 2
 
     override fun initWindow() {
         super.initWindow()
@@ -53,6 +56,10 @@ class FilterFragmentDialog : BaseFrameDialogFragment<LayoutDialogFilterBinding, 
 
 
     override fun LayoutDialogFilterBinding.initView() {
+        arguments?.apply {
+            gender = getInt("gender", 2)
+            changeMatch(gender)
+        }
         ivClose.clickDelay {
             dismiss()
         }
@@ -62,12 +69,16 @@ class FilterFragmentDialog : BaseFrameDialogFragment<LayoutDialogFilterBinding, 
         tvAll.clickDelay { changeMatch(3) }
 
         tvCommit.clickDelay {
-
+            mViewModel.requestMatchFilter("$gender")
         }
     }
 
 
     override fun initObserve() {
+        mViewModel.ldData.observe(this) {
+            EventBusUtils.postEvent(RefreshEvent("main"))
+            dismiss()
+        }
     }
 
     override fun initRequestData() {
@@ -85,12 +96,15 @@ class FilterFragmentDialog : BaseFrameDialogFragment<LayoutDialogFilterBinding, 
         mBinding.tvAll.setTextColor(R.color._9C9C9C.getResColor())
         mBinding.tvAll.setShapeSolidColor(R.color._F4F4F4.getResColor()).setUseShape()
         if (position == 1) {
+            gender = 1
             mBinding.tvBoy.setTextColor(R.color.black.getResColor())
             mBinding.tvBoy.setShapeSolidColor(R.color._FFD54A.getResColor()).setUseShape()
         } else if (position == 2) {
+            gender = 2
             mBinding.tvGirl.setTextColor(R.color.black.getResColor())
             mBinding.tvGirl.setShapeSolidColor(R.color._FFD54A.getResColor()).setUseShape()
         } else if (position == 3) {
+            gender = 3
             mBinding.tvAll.setTextColor(R.color.black.getResColor())
             mBinding.tvAll.setShapeSolidColor(R.color._FFD54A.getResColor()).setUseShape()
         }

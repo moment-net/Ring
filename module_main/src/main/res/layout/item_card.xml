@@ -65,4 +65,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view_line"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tv_label_bg,iv_label,tv_type,view_line,tv_level" />
+
+    <TextView
+        android:id="@+id/tv_add"
+        android:layout_width="@dimen/dimen110"
+        android:layout_height="@dimen/dimen26"
+        android:text="添加社交卡片"
+        android:gravity="center"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="@color/_CFCDC6"
+        android:textSize="13sp"
+        android:visibility="gone"
+        android:background="@drawable/shape_dash"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

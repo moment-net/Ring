@@ -24,6 +24,8 @@ class ManagerInfoViewModel @Inject constructor(private val mRepository: CommonRe
     BaseViewModel() {
 
     val ldSuccess = MutableLiveData<Any>()
+    val ldCard = MutableLiveData<Any>()
+    val ldSelf = MutableLiveData<Any>()
 
 
     fun requestChangeFollow(userId: String, tag: Int) {
@@ -83,6 +85,44 @@ class ManagerInfoViewModel @Inject constructor(private val mRepository: CommonRe
         }
     }
 
+
+    /**
+     * 获取列表
+     */
+    fun requestCardList(userId: String) {
+        viewModelScope.launch() {
+            mRepository.requestCardList(
+                userId,
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldCard.value = it
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 获取自己的列表
+     */
+    fun requestSelfCardList(userId: String) {
+        viewModelScope.launch() {
+            mRepository.requestCardList(
+                userId,
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldSelf.value = it
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
 
     /**
      * 赞、取消

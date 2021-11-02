@@ -21,6 +21,8 @@ class HomeViewModel @Inject constructor(private val mRepository: CommonRepositor
     BaseViewModel() {
 
     val ldData = MutableLiveData<Any>()
+    val ldCard = MutableLiveData<Any>()
+    val ldBanner = MutableLiveData<Any>()
 
     /**
      * 获取首页列表
@@ -71,6 +73,97 @@ class HomeViewModel @Inject constructor(private val mRepository: CommonRepositor
                 callback = RequestCallback(
                     onSuccess = {
                         ldData.value = it.data!!
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 列表
+     */
+    fun requestCardAllList() {
+        viewModelScope.launch() {
+            mRepository.requestCardAllList(
+                "match",
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldCard.value = it
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 列表
+     */
+    fun requestBanner() {
+        viewModelScope.launch() {
+            mRepository.requestBanner(
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldBanner.value = it
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 匹配信息
+     */
+    fun requestMatchInfo() {
+        viewModelScope.launch() {
+            mRepository.requestMatchInfo(
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = it.data!!
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 开始匹配
+     */
+    fun requestMatchJoin() {
+        viewModelScope.launch() {
+            mRepository.requestMatchJoin(
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = 1
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 结束匹配
+     */
+    fun requestMatchStop() {
+        viewModelScope.launch() {
+            mRepository.requestMatchStop(
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = 2
                     },
                     onFailed = {
                         toast(it.errorMessage)

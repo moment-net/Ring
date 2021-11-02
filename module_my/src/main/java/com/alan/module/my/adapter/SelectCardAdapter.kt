@@ -5,21 +5,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.alan.module.my.R
 import com.alan.mvvm.base.coil.CoilUtils
-import com.alan.mvvm.base.http.responsebean.NowTagBean
+import com.alan.mvvm.base.http.responsebean.CardTagBean
 import com.alan.mvvm.base.ktx.getResColor
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import leifu.shapelibrary.ShapeView
 
 
-class SelectCardAdapter : BaseQuickAdapter<NowTagBean, BaseViewHolder>(R.layout.item_select_card) {
+class SelectCardAdapter : BaseQuickAdapter<CardTagBean, BaseViewHolder>(R.layout.item_select_card) {
     var selectPosition: Int = -1
 
     init {
         addChildClickViewIds(R.id.tv_label_bg)
     }
 
-    override fun convert(holder: BaseViewHolder, item: NowTagBean) {
+    override fun convert(holder: BaseViewHolder, item: CardTagBean) {
         val itemPosition = getItemPosition(item)
         val tvLabelBg = holder.getView<ShapeView>(R.id.tv_label_bg)
         val tvLabel = holder.getView<TextView>(R.id.tv_label)

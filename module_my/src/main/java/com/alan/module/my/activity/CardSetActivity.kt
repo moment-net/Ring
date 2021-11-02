@@ -1,73 +1,70 @@
-package com.alan.module.my.dialog
+package com.alan.module.my.activity
 
 import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alan.module.my.R
 import com.alan.module.my.adapter.CardItemAdapter
-import com.alan.module.my.databinding.LayoutDialogCardBinding
+import com.alan.module.my.databinding.ActivityCardSetBinding
+import com.alan.module.my.dialog.CardInputFragmentDialog
+import com.alan.module.my.dialog.CardSelectFragmentDialog
 import com.alan.module.my.viewmodol.CardSetViewModel
 import com.alan.mvvm.base.http.requestbean.Tag
 import com.alan.mvvm.base.http.responsebean.CardDetailBean
-import com.alan.mvvm.base.ktx.clickDelay
-import com.alan.mvvm.base.ktx.dp2px
-import com.alan.mvvm.base.ktx.gone
-import com.alan.mvvm.base.ktx.visible
-import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
+import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.ui.BaseActivity
+import com.alibaba.android.arouter.facade.annotation.Autowired
+import com.alibaba.android.arouter.facade.annotation.Route
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * 作者：alan
+ * 时间：2021/7/30
+ * 备注：
+ */
+@Route(path = RouteUrl.MyModule.ACTIVITY_MY_CARDSET)
 @AndroidEntryPoint
-class CardSetFragmentDialog :
-    BaseFrameDialogFragment<LayoutDialogCardBinding, CardSetViewModel>() {
+class CardSetActivity : BaseActivity<ActivityCardSetBinding, CardSetViewModel>() {
 
     /**
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
      */
     override val mViewModel by viewModels<CardSetViewModel>()
     lateinit var mAdapter: CardItemAdapter
-    lateinit var userId: String
-    lateinit var name: String
     lateinit var cardBean: CardDetailBean
 
+    @JvmField
+    @Autowired
+    var userId = ""
 
-    companion object {
-        fun newInstance(userId: String, name: String): CardSetFragmentDialog {
-            val args = Bundle()
-            args.putString("userId", userId)
-            args.putString("name", name)
-            val fragment = CardSetFragmentDialog()
-            fragment.arguments = args
-            return fragment
-        }
-    }
+    @JvmField
+    @Autowired
+    var name = ""
 
-    override fun initWindow() {
-        super.initWindow()
-        val window = dialog!!.window
+    fun initWindow() {
         val params = window!!.attributes
-        val colorDrawable = ColorDrawable(
-            ContextCompat.getColor(
-                mActivity, R.color.transparent
-            )
-        )
+        val colorDrawable = ColorDrawable(R.color.transparent.getResColor())
         window.setBackgroundDrawable(colorDrawable)
         params.width = WindowManager.LayoutParams.MATCH_PARENT
         params.height = dp2px(600f)
         params.gravity = Gravity.BOTTOM
-        setCanceledOnTouchOutside(false)
-        isCancelable = false
         window.attributes = params
     }
 
-    override fun LayoutDialogCardBinding.initView() {
-        ivClose.clickDelay { dismiss() }
+    /**
+     * 初始化View
+     */
+    override fun ActivityCardSetBinding.initView() {
+        initWindow()
+
+        ivClose.clickDelay { finish() }
         tvCommit.clickDelay {
             val tags = arrayListOf<Tag>()
             for (item in mAdapter.data) {
@@ -94,16 +91,15 @@ class CardSetFragmentDialog :
             mViewModel.requestDeleteCard(cardBean.id)
         }
 
-        arguments?.apply {
-            userId = getString("userId", "")
-            name = getString("name", "")
-        }
+
         tvTitle.setText(name)
 
         initRV()
     }
 
-
+    /**
+     * 订阅数据
+     */
     override fun initObserve() {
         mViewModel.ldData.observe(this) {
             when (it) {
@@ -119,20 +115,23 @@ class CardSetFragmentDialog :
                 }
                 1 -> {
                     //增加成功
-                    dismiss()
+                    finish()
                 }
                 2 -> {
                     //编辑成功
-                    dismiss()
+                    finish()
                 }
                 3 -> {
                     //删除成功
-                    dismiss()
+                    finish()
                 }
             }
         }
     }
 
+    /**
+     * 获取数据
+     */
     override fun initRequestData() {
         mViewModel.requestCardDetail(userId, name)
     }
@@ -144,7 +143,7 @@ class CardSetFragmentDialog :
                 MyColorDecoration(
                     0, 0, 0,
                     dp2px(20f),
-                    ContextCompat.getColor(requireActivity(), R.color.white)
+                    ContextCompat.getColor(this@CardSetActivity, R.color.white)
                 )
             )
             layoutManager = LinearLayoutManager(context)
@@ -160,7 +159,7 @@ class CardSetFragmentDialog :
                     bean.checkedValues.get(0)
                 }
                 val dialog = CardInputFragmentDialog.newInstance(tagName, name)
-                dialog.show(requireActivity().supportFragmentManager)
+                dialog.show(supportFragmentManager)
                 dialog.inputListener = object : CardInputFragmentDialog.OnInputListener {
                     override fun onInput(input: String) {
                         val arrayListOf = arrayListOf<String>()
@@ -176,7 +175,7 @@ class CardSetFragmentDialog :
                     bean.checkedValues ?: arrayListOf(),
                     bean.values
                 )
-                dialog.show(requireActivity().supportFragmentManager)
+                dialog.show(supportFragmentManager)
                 dialog.listener = object : CardSelectFragmentDialog.OnCheckListener {
                     override fun onCheck(list: List<String>) {
                         val arrayListOf = arrayListOf<String>()
@@ -188,6 +187,4 @@ class CardSetFragmentDialog :
             }
         }
     }
-
-
 }

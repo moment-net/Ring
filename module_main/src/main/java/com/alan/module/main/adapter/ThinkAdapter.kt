@@ -10,11 +10,13 @@ import com.alan.mvvm.base.http.responsebean.ThinkBean
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import leifu.shapelibrary.ShapeView
 
 
-class ThinkAdapter : BaseQuickAdapter<ThinkBean, BaseViewHolder>(R.layout.item_think) {
+class ThinkAdapter : BaseQuickAdapter<ThinkBean, BaseViewHolder>(R.layout.item_think),
+    LoadMoreModule {
 
     init {
         addChildClickViewIds(R.id.iv_avatar)

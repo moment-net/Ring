@@ -7,28 +7,39 @@ import android.view.Gravity
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.alan.module.main.R
 import com.alan.module.main.databinding.LayoutMatchingBinding
+import com.alan.module.main.viewmodel.MatchingViewModel
+import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
-import com.alan.mvvm.base.mvvm.vm.EmptyViewModel
+import com.alan.mvvm.base.utils.jumpARoute
+import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.db.entity.UserEntity
+import com.alan.mvvm.common.im.EMClientHelper
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MatchingFragmentDialog : BaseFrameDialogFragment<LayoutMatchingBinding, EmptyViewModel>() {
+class MatchingFragmentDialog : BaseFrameDialogFragment<LayoutMatchingBinding, MatchingViewModel>() {
 
 
     /**
      * 通过 viewModels() + Hilt 获取 ViewModel 实例
      */
-    override val mViewModel by viewModels<EmptyViewModel>()
-    lateinit var userId: String
+    override val mViewModel by viewModels<MatchingViewModel>()
+    lateinit var tagName: String
 
     companion object {
-        fun newInstance(userId: String): MatchingFragmentDialog {
+        fun newInstance(tagName: String): MatchingFragmentDialog {
             val bundle = Bundle().apply {
-                putString("userId", userId)
+                putString("tagName", tagName)
             }
             val dialog = MatchingFragmentDialog()
             dialog.setArguments(bundle)
@@ -56,8 +67,9 @@ class MatchingFragmentDialog : BaseFrameDialogFragment<LayoutMatchingBinding, Em
     }
 
     override fun LayoutMatchingBinding.initView() {
-        userId = arguments?.getString("userId", "")!!
-
+        arguments?.apply {
+            tagName = getString("tagName", "")
+        }
 
 
         clBg.clickDelay {
@@ -91,11 +103,42 @@ class MatchingFragmentDialog : BaseFrameDialogFragment<LayoutMatchingBinding, Em
 
 
     override fun initObserve() {
-
+        mViewModel.ldData.observe(this) {
+            when (it) {
+                is UserInfoBean -> {
+                    dismiss()
+                    toast("匹配小伙伴成功")
+                    val bundle = Bundle().apply {
+                        putString("userId", it.userId)
+                    }
+                    EMClientHelper.saveUser(
+                        UserEntity(
+                            it.userId,
+                            it.userName,
+                            it.avatar
+                        )
+                    )
+                    jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
+                }
+                is Boolean -> {
+                    dismiss()
+                }
+            }
+        }
     }
 
     override fun initRequestData() {
         mBinding.lvMatch.playAnimation()
+        lifecycleScope.launch {
+            flow<Int> {
+                delay(2000)
+                emit(2)
+            }.collect {
+                if (it == 2) {
+                    mViewModel.requestFastMatch(tagName)
+                }
+            }
+        }
     }
 
 }

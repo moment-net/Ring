@@ -15,6 +15,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/iv_avatar_alpha"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/black40"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -38,6 +49,18 @@
                 android:src="@drawable/icon_placeholder"
                 app:layout_constraintBottom_toTopOf="@+id/cl_info"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lv_avatar"
+                android:layout_width="@dimen/dimen70"
+                android:layout_height="@dimen/dimen70"
+                app:lottie_fileName="lottie_avatar.json"
+                app:lottie_loop="true"
+                app:lottie_autoPlay="true"
+                app:layout_constraintTop_toTopOf="@+id/iv_avatar"
+                app:layout_constraintStart_toStartOf="@+id/iv_avatar"
+                app:layout_constraintEnd_toEndOf="@id/iv_avatar"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_avatar" />
 
             <TextView
                 android:id="@+id/tv_name"
@@ -82,7 +105,7 @@
                 android:id="@+id/tv_doing"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dimen35"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="18dp"
                 android:background="@drawable/icon_manager_label_bg"
                 android:ellipsize="end"
                 android:gravity="center"
@@ -215,7 +238,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:text=""
-            android:textColor="@color/_3F3317"
+            android:textColor="@color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_back"
             app:layout_constraintEnd_toEndOf="parent"

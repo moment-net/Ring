@@ -521,6 +521,100 @@ class CommonRepository @Inject constructor() : BaseRepository() {
         callback: RequestCallback<ArrayList<ThinkBean>>
     ) = request(mApi, callback) { mApi.requestThinkHistory(map) }
 
+    /**
+     * 匹配信息（配置设置和匹配次数）
+     */
+    suspend fun requestMatchInfo(
+        callback: RequestCallback<MatchInfoBean>
+    ) = request(mApi, callback) { mApi.requestMatchInfo() }
+
+    /**
+     * 匹配设置
+     */
+    suspend fun requestMatchFilter(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestMatchFilter(requestBody) }
+
+    /**
+     * 快速比配
+     */
+    suspend fun requestFastMatch(
+        requestBody: RequestBody,
+        callback: RequestCallback<UserInfoBean>
+    ) = request(mApi, callback) { mApi.requestFastMatch(requestBody) }
+
+    /**
+     * 开始匹配（加入）
+     */
+    suspend fun requestMatchJoin(
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestMatchJoin() }
+
+    /**
+     * 开始匹配（停止）
+     */
+    suspend fun requestMatchStop(
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestMatchStop() }
+
+
+    /**
+     * 所有类型的社交卡片的字段列表
+     * type :match=首页匹配 card=社交卡片 默认社交卡片
+     */
+    suspend fun requestCardAllList(
+        type: String,
+        callback: RequestCallback<ArrayList<CardTagBean>>
+    ) = request(mApi, callback) { mApi.requestCardAllList(type) }
+
+    /**
+     * 添加社交卡片
+     */
+    suspend fun requestAddCard(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestAddCard(requestBody) }
+
+    /**
+     * 编辑社交卡片
+     */
+    suspend fun requestEditCard(
+        cardId: String,
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestEditCard(cardId, requestBody) }
+
+    /**
+     * 删除社交卡片
+     */
+    suspend fun requestDeleteCard(
+        cardId: String,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestDeleteCard(cardId) }
+
+    /**
+     * 查询用户的社交卡片列表
+     */
+    suspend fun requestCardList(
+        userId: String,
+        callback: RequestCallback<ArrayList<CardInfoBean>>
+    ) = request(mApi, callback) { mApi.requestCardList(userId) }
+
+    /**
+     * 根据卡片名称查询用户的社交卡片列表
+     */
+    suspend fun requestCardDetail(
+        map: MutableMap<String, String>,
+        callback: RequestCallback<CardDetailBean>
+    ) = request(mApi, callback) { mApi.requestCardDetail(map) }
+
+    /**
+     * banner列表
+     */
+    suspend fun requestBanner(
+        callback: RequestCallback<ArrayList<BannerBean>>
+    ) = request(mApi, callback) { mApi.requestBanner() }
 
 }
 

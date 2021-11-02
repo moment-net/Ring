@@ -73,6 +73,12 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                         mAdapter.setList(list)
                     }
 
+                    if (it.hasMore) {
+                        mAdapter.loadMoreModule.loadMoreComplete()
+                    } else {
+                        mAdapter.loadMoreModule.loadMoreEnd()
+                    }
+
                     if (mAdapter.data.size == 0) {
                         EventBusUtils.postEvent(ChangeThinkEvent(1))
                     }
@@ -162,6 +168,14 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
             )
         })
 
+        mAdapter.loadMoreModule.isEnableLoadMoreIfNotFullPage = false
+        mAdapter.loadMoreModule.setOnLoadMoreListener {
+            mBinding.rvList.postDelayed(Runnable {
+                isLoad = true
+                requestList()
+            }, 1000)
+        }
+
 //        mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
 //            override fun onLoadMore(refreshLayout: RefreshLayout) {
 //                isLoad = true
@@ -235,5 +249,18 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
         if (event.position == 0) {
             requestRefresh()
         }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            requestRefresh()
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        requestRefresh()
     }
 }

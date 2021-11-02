@@ -50,4 +50,5 @@ data class UserInfoBean(
     val typeTag: List<String>,
     val mealStatusTitle: String,
     val recentDoing: String,
+    val recentDoingTag: String,
 ) : Parcelable

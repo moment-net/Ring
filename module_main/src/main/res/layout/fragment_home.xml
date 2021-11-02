@@ -69,6 +69,7 @@
                     android:layout_height="155dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="20dp"
+                    android:padding="@dimen/dimen10"
                     android:background="@drawable/icon_home_banner_bg"
                     app:autoTurningTime="3000"
                     app:canLoop="true"
@@ -153,6 +154,19 @@
                         android:textSize="9sp"
                         app:layout_constraintStart_toStartOf="@+id/main_imageview81"
                         app:layout_constraintTop_toBottomOf="@+id/main_imageview81" />
+
+                    <TextView
+                        android:id="@+id/tv_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ON"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:layout_marginStart="@dimen/dimen3"
+                        android:background="@drawable/icon_home_status_bg"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -313,6 +327,19 @@
                 android:textSize="8sp"
                 app:layout_constraintStart_toStartOf="@+id/main_imageview81_hide"
                 app:layout_constraintTop_toBottomOf="@+id/main_imageview81_hide" />
+
+            <TextView
+                android:id="@+id/tv_status_hide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ON"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:layout_marginStart="@dimen/dimen3"
+                android:background="@drawable/icon_home_status_bg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
