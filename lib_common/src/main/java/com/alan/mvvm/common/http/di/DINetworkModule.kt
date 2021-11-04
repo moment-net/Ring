@@ -1,8 +1,7 @@
 package com.alan.mvvm.common.http.di
 
-import com.alan.mvvm.base.BuildConfig
-import com.alan.mvvm.base.constant.VersionStatus
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
+import com.alan.mvvm.common.BuildConfig
 import com.alan.mvvm.common.http.interceptor.CookiesInterceptor
 import com.alan.mvvm.common.http.interceptor.TokenInterceptor
 import dagger.Module
@@ -36,7 +35,7 @@ class DINetworkModule {
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
         // 日志拦截器部分
-        val level = if (BuildConfig.VERSION_TYPE != VersionStatus.RELEASE) BODY else NONE
+        val level = if (BuildConfig.DEBUG) BODY else NONE
         val logInterceptor = HttpLoggingInterceptor().setLevel(level)
 
         return OkHttpClient.Builder()

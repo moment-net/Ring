@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.alan.module.main.R
 import com.alan.module.main.databinding.LayoutMatchBinding
 import com.alan.module.main.viewmodel.MatchDialogViewModel
@@ -24,7 +25,12 @@ import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.db.entity.UserEntity
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDialogViewModel>() {
@@ -101,6 +107,7 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
                 )
             )
             jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
+            DataPointUtil.reportClickMatchChat(userId)
         }
 
         clBg.clickDelay {
@@ -189,6 +196,22 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
     override fun initRequestData() {
         mBinding.lvMatch.playAnimation()
         mViewModel.requestUserInfo(userId)
+        handleTime()
     }
+
+
+    fun handleTime() {
+        lifecycleScope.launch {
+            flow<Int> {
+                delay(20000)
+                emit(2)
+            }.collect {
+                if (it == 2) {
+                    dismiss()
+                }
+            }
+        }
+    }
+
 
 }

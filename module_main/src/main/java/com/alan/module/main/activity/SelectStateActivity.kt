@@ -15,6 +15,8 @@ import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.helper.SpHelper
+import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.android.flexbox.FlexDirection
@@ -44,6 +46,7 @@ class SelectStateActivity : BaseActivity<ActivitySelectStateBinding, StateViewMo
      */
     override fun ActivitySelectStateBinding.initView() {
         tvJump.clickDelay {
+            DataPointUtil.reportClickSkipStatus(SpHelper.getUserInfo()?.userId!!)
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
             finish()
         }
@@ -53,6 +56,7 @@ class SelectStateActivity : BaseActivity<ActivitySelectStateBinding, StateViewMo
                 return@clickDelay
             }
             mViewModel.requestPushNow(tag, defaultText)
+            DataPointUtil.reportClickStatus(SpHelper.getUserInfo()?.userId!!, tag)
         }
 
         initRv()

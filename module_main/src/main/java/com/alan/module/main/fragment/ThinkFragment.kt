@@ -103,7 +103,11 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                     } else {
                         mAdapter.data.get(position).favoriteCount = favoriteCount + 1
                         val user = mAdapter.data.get(position).user
-                        sendTextMessage("${SpHelper.getUserInfo()?.userName}认同了你的想法", user.userId)
+                        sendTextMessage(
+                            "我认同了你的想法",
+                            user.userId,
+                            mAdapter.data.get(position).content
+                        )
                         true
                     }
                     mAdapter.notifyItemChanged(position)
@@ -124,7 +128,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                     0,
                     0,
                     0,
-                    dp2px(30f),
+                    dp2px(15f),
                     R.color.transparent.getResColor()
                 )
             )
@@ -247,12 +251,6 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
         }
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if (!hidden) {
-            requestRefresh()
-        }
-    }
 
 
     override fun onResume() {
@@ -264,11 +262,12 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
     /**
      * 发送点赞IM消息
      */
-    fun sendTextMessage(content: String, userId: String) {
+    fun sendTextMessage(content: String, userId: String, zan: String) {
         val message = EMMessage.createTxtSendMessage(content, userId)
         // 增加自己特定的属性
-        message.setAttribute(IMConstant.MESSAGE_ATTR_AVATAR, SpHelper.getUserInfo()?.avatar);
-        message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME, SpHelper.getUserInfo()?.userName);
+        message.setAttribute(IMConstant.MESSAGE_ATTR_AVATAR, SpHelper.getUserInfo()?.avatar)
+        message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME, SpHelper.getUserInfo()?.userName)
+        message.setAttribute(IMConstant.MESSAGE_ATTR_ZANCONTENT, zan)
 
         // 设置自定义扩展字段-强制推送
 //        message.setAttribute(IMConstant.MESSAGE_ATTR_FORCEPUSH, true);

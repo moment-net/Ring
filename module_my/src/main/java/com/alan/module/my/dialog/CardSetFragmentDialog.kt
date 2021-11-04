@@ -34,7 +34,7 @@ class CardSetFragmentDialog :
     lateinit var mAdapter: CardItemAdapter
     lateinit var userId: String
     lateinit var name: String
-    lateinit var cardBean: CardDetailBean
+    var cardBean: CardDetailBean? = null
 
 
     companion object {
@@ -84,14 +84,20 @@ class CardSetFragmentDialog :
                     tags.add(tag)
                 }
             }
-            if (cardBean.exist) {
-                mViewModel.requestEditCard(cardBean.id, cardBean.cardName, tags)
+            if (cardBean == null) {
+                return@clickDelay
+            }
+            if (cardBean?.exist!!) {
+                mViewModel.requestEditCard(cardBean?.id!!, cardBean?.cardName!!, tags)
             } else {
-                mViewModel.requestAddCard(cardBean.cardName, tags)
+                mViewModel.requestAddCard(cardBean?.cardName!!, tags)
             }
         }
         tvDelete.clickDelay {
-            mViewModel.requestDeleteCard(cardBean.id)
+            if (cardBean == null) {
+                return@clickDelay
+            }
+            mViewModel.requestDeleteCard(cardBean?.id!!)
         }
 
         arguments?.apply {
@@ -153,13 +159,14 @@ class CardSetFragmentDialog :
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val bean = mAdapter.data.get(position)
             val tagName = bean.tagName
+            val limit = bean.limit
             if (TextUtils.equals(bean.tagType, "input")) {
                 val name = if (bean.checkedValues == null) {
                     ""
                 } else {
                     bean.checkedValues.get(0)
                 }
-                val dialog = CardInputFragmentDialog.newInstance(tagName, name)
+                val dialog = CardInputFragmentDialog.newInstance(tagName, name, limit)
                 dialog.show(requireActivity().supportFragmentManager)
                 dialog.inputListener = object : CardInputFragmentDialog.OnInputListener {
                     override fun onInput(input: String) {

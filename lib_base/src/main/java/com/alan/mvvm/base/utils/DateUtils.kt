@@ -246,17 +246,15 @@ object DateUtils {
         // 相差天数
         val day = nowCalendar.get(Calendar.DAY_OF_YEAR) - msgCalendar.get(Calendar.DAY_OF_YEAR)
         // 相差小时
-        val hour = nowCalendar.get(Calendar.HOUR_OF_DAY) - msgCalendar.get(Calendar.DAY_OF_YEAR)
+        val hour = nowCalendar.get(Calendar.HOUR_OF_DAY) - msgCalendar.get(Calendar.HOUR_OF_DAY)
         // 相差分钟
         val minute = nowCalendar.get(Calendar.MINUTE) - msgCalendar.get(Calendar.MINUTE)
         // 相差秒数
         val second = nowCalendar.get(Calendar.SECOND) - msgCalendar.get(Calendar.SECOND)
 
 
-        val format = if (year != 0) {
+        val format = if (year > 0) {
             "Y年M月d日 hh:mm"
-        } else if (month > 0 || day > 7) {
-            "M月d日 hh:mm"
         } else if (day > 2) {
             "M月d日 hh:mm"
         } else if (day == 2) {

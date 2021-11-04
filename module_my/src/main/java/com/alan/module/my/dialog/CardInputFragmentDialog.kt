@@ -2,6 +2,7 @@ package com.alan.module.my.dialog
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.Gravity
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
@@ -26,10 +27,11 @@ class CardInputFragmentDialog :
 
 
     companion object {
-        fun newInstance(tagName: String, name: String): CardInputFragmentDialog {
+        fun newInstance(tagName: String, name: String, limit: Int): CardInputFragmentDialog {
             val args = Bundle()
             args.putString("tagName", tagName)
             args.putString("name", name)
+            args.putInt("limit", limit)
             val fragment = CardInputFragmentDialog()
             fragment.arguments = args
             return fragment
@@ -57,18 +59,18 @@ class CardInputFragmentDialog :
     override fun LayoutDialogCardInputBinding.initView() {
         ivClose.clickDelay {
             dismiss()
-        }
-        tvCommit.clickDelay {
-            dismiss()
             if (inputListener != null) {
                 inputListener!!.onInput(etName.text.toString())
             }
         }
 
+
         val tagName = arguments?.getString("tagName", "")
         val name = arguments?.getString("name", "")
+        val limit = arguments?.getInt("limit", 16)!!
         tvTitle.setText(tagName)
         etName.setText(name)
+        etName.filters = arrayOf(InputFilter.LengthFilter(limit))
     }
 
 

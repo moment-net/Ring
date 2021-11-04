@@ -84,8 +84,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             dialog.show(requireActivity().supportFragmentManager)
         }
         ivFilterHide.clickDelay {
-//            val dialog = StateFragmentDialog.newInstance()
-//            dialog.show(requireActivity().supportFragmentManager)
             val dialog = FilterFragmentDialog.newInstance(gender)
             dialog.show(requireActivity().supportFragmentManager)
         }
@@ -100,39 +98,37 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             DataPointUtil.reportHomeMatch(SpHelper.getUserInfo()?.userId!!)
         }
         clRing.clickDelay {
-//            val dialog = MatchFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
-//            dialog.show(requireActivity().supportFragmentManager)
             if (isOpenRing) {
                 showCloseDialog()
             } else {
                 mViewModel.requestMatchJoin()
             }
+            DataPointUtil.reportClickRing(isOpenRing)
         }
         clRingHide.clickDelay {
-//            val dialog = MatchFragmentDialog.newInstance(SpHelper.getUserInfo()?.userId!!)
-//            dialog.show(requireActivity().supportFragmentManager)
             if (isOpenRing) {
                 showCloseDialog()
             } else {
                 mViewModel.requestMatchJoin()
             }
+            DataPointUtil.reportClickRing(isOpenRing)
         }
-        tvNow.clickDelay {
+        ivNow.clickDelay {
             changeTab(0)
             viewpager.setCurrentItem(0, true)
             DataPointUtil.reportHomeNow(SpHelper.getUserInfo()?.userId!!)
         }
-        tvNowHide.clickDelay {
+        ivNowHide.clickDelay {
             changeTab(0)
             viewpager.setCurrentItem(0, true)
             DataPointUtil.reportHomeNow(SpHelper.getUserInfo()?.userId!!)
         }
-        tvThink.clickDelay {
+        ivThink.clickDelay {
             changeTab(1)
             viewpager.setCurrentItem(1, true)
             DataPointUtil.reportHomeThink(SpHelper.getUserInfo()?.userId!!)
         }
-        tvThinkHide.clickDelay {
+        ivThinkHide.clickDelay {
             changeTab(1)
             viewpager.setCurrentItem(1, true)
             DataPointUtil.reportHomeThink(SpHelper.getUserInfo()?.userId!!)
@@ -240,23 +236,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     fun changeTab(position: Int) {
         if (position == 0) {
-            mBinding.tvNow.setTextColor(R.color._3A3A3A.getResColor())
-            mBinding.tvNow.textSize = 20f
-            mBinding.tvThink.setTextColor(R.color._803A3A3A.getResColor())
-            mBinding.tvThink.textSize = 14f
-            mBinding.tvNowHide.setTextColor(R.color._3A3A3A.getResColor())
-            mBinding.tvNowHide.textSize = 20f
-            mBinding.tvThinkHide.setTextColor(R.color._803A3A3A.getResColor())
-            mBinding.tvThinkHide.textSize = 14f
+            mBinding.ivNow.setImageResource(R.drawable.icon_home_title_now_big)
+            mBinding.ivNowHide.setImageResource(R.drawable.icon_home_title_now_big)
+            mBinding.ivThink.setImageResource(R.drawable.icon_home_title_think)
+            mBinding.ivThinkHide.setImageResource(R.drawable.icon_home_title_think)
         } else {
-            mBinding.tvNow.setTextColor(R.color._803A3A3A.getResColor())
-            mBinding.tvNow.textSize = 14f
-            mBinding.tvThink.setTextColor(R.color._3A3A3A.getResColor())
-            mBinding.tvThink.textSize = 20f
-            mBinding.tvNowHide.setTextColor(R.color._803A3A3A.getResColor())
-            mBinding.tvNowHide.textSize = 14f
-            mBinding.tvThinkHide.setTextColor(R.color._3A3A3A.getResColor())
-            mBinding.tvThinkHide.textSize = 20f
+            mBinding.ivNow.setImageResource(R.drawable.icon_home_title_now)
+            mBinding.ivNowHide.setImageResource(R.drawable.icon_home_title_now)
+            mBinding.ivThink.setImageResource(R.drawable.icon_home_title_think_big)
+            mBinding.ivThinkHide.setImageResource(R.drawable.icon_home_title_think_big)
         }
     }
 
@@ -332,9 +320,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                     putString("webTitle", list.get(position).title)
                 }
                 jumpARoute(RouteUrl.WebModule.ACTIVITY_WEB_WEB, bundle)
+                DataPointUtil.reportCLickBanner(list.get(position).title)
             })
         if (list.size > 1) {
+            mBinding.banner.setPointViewVisible(true)
             mBinding.banner.startTurning()
+        } else {
+            mBinding.banner.setPointViewVisible(false)
         }
     }
 
@@ -349,7 +341,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
 
         override fun updateUI(data: BannerBean) {
-            CoilUtils.loadCircle(imageView!!, data.bgUrl)
+            CoilUtils.load(imageView!!, data.bgUrl)
         }
     }
 
@@ -372,6 +364,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 R.id.tv_label_bg -> {
                     val dialog = MatchingFragmentDialog.newInstance(bean.tag)
                     dialog.show(requireActivity().supportFragmentManager)
+                    DataPointUtil.reportClickFastMatch(bean.tag)
                 }
             }
         }
@@ -409,9 +402,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             "保持开启",
             "确认关闭",
             {
-
+                DataPointUtil.reportClickStartMatch()
             },
             {
+                DataPointUtil.reportClickStopMatch()
                 mViewModel.requestMatchStop()
             })
     }

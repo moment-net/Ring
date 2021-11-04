@@ -103,7 +103,7 @@ class FollowActivity : BaseActivity<ActivityFollowBinding, FollowViewModel>() {
         })
         mAdapter.setEmptyView(TextView(this).apply {
             setText("暂无数据")
-            setTextSize(16f)
+            setTextSize(14f)
             setTextColor(R.color._263A3A3A.getResColor())
             gravity = Gravity.CENTER
             layoutParams = ViewGroup.LayoutParams(

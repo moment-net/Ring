@@ -160,7 +160,7 @@ class MessageActivity : BaseActivity<ActivityMessageBinding, MessageViewModel>()
                 }
 
                 is UnreadBean -> {
-                    if (it.newNoticeTotal > 0) {
+                    if (it.newSystemNoticeTotal > 0) {
                         ivRed.visible()
                     } else {
                         ivRed.gone()

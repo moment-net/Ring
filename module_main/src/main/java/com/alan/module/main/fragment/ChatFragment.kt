@@ -87,7 +87,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>() {
         }
         messageAdapter.setEmptyView(TextView(activity).apply {
             setText("暂无聊天记录，快去聊天吧")
-            setTextSize(16f)
+            setTextSize(14f)
             setTextColor(R.color._263A3A3A.getResColor())
             gravity = Gravity.CENTER
             layoutParams = ViewGroup.LayoutParams(

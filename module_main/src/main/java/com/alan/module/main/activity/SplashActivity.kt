@@ -55,12 +55,15 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
      */
     override fun ActivitySplashBinding.initView() {
         //home键退出，点击app再进时重启bug修改
-        if (!isTaskRoot() && intent != null) {
-            val action = intent.action
-            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN == action) {
-                finish()
-                return
-            }
+        if (!isTaskRoot()) {
+            finish()
+            return
+        }
+
+        if (SpHelper.isAgree()) {
+            requestPermisssion()
+        } else {
+            showPrivacyDialog()
         }
     }
 
@@ -83,11 +86,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
      * 初始化
      */
     override fun initRequestData() {
-        if (SpHelper.isAgree()) {
-            requestPermisssion()
-        } else {
-            showPrivacyDialog()
-        }
+
     }
 
     fun showPrivacyDialog() {

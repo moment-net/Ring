@@ -18,6 +18,7 @@ import com.alan.module.main.fragment.ChatFragment
 import com.alan.module.main.fragment.HomeFragment
 import com.alan.module.main.fragment.MyFragment
 import com.alan.module.main.viewmodel.MainViewModel
+import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.http.responsebean.MatchSuccessBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.gone
@@ -252,12 +253,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     //收到服务器匹配消息
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun handleMsg(event: MatchEvent) {
+        SoundPoolUtil.instance.playSound(BaseApplication.mContext, R.raw.voice_ring)
+        VibrateUtil.starVibrate()
         val bean = GsonUtil.jsonToBean(event.data, MatchSuccessBean::class.java)!!
         val currentActivity = ActivityStackManager.getCurrentActivity() as FragmentActivity
+        KLog.e("RingIM", "服务器下发消息：$currentActivity")
         val dialog = MatchFragmentDialog.newInstance(bean)
         dialog.show(currentActivity.supportFragmentManager)
+        EventBusUtils.removeStickyEvent(MatchEvent::class.java)
     }
 
 

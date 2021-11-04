@@ -103,10 +103,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                 it == StateLayoutEnum.HIDE -> {
                     dismissDialog()
                 }
-                it == StateLayoutEnum.ERROR -> {
-                }
-                it == StateLayoutEnum.NO_DATA -> {
-                }
             }
         }
     }
@@ -400,7 +396,11 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                 is UserInfoBean -> {
                     userInfoBean = it
                     mBinding.tvTitle.setText(userInfoBean.userName)
-                    mBinding.tvTime.setText("${userInfoBean.onlineStatusDesc}·${userInfoBean.recentDoingTag}")
+                    if (userInfoBean.onlineStatus!! && !TextUtils.isEmpty(userInfoBean.recentDoingTag)) {
+                        mBinding.tvTime.setText("${userInfoBean.onlineStatusDesc}·${userInfoBean.recentDoingTag}")
+                    } else {
+                        mBinding.tvTime.setText("${userInfoBean.onlineStatusDesc}")
+                    }
                     CoilUtils.loadCircle(mBinding.ivAvatarTop, userInfoBean.avatar)
                     CoilUtils.loadCircle(mBinding.ivAvatar, userInfoBean.avatar)
                     //加入数据库
@@ -530,9 +530,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         checkNotifi()
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
 
 
     /**

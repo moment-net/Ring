@@ -1,5 +1,7 @@
 package com.alan.mvvm.common.report
 
+import com.alan.mvvm.common.helper.SpHelper
+
 object DataPointUtil {
 
 
@@ -413,4 +415,128 @@ object DataPointUtil {
             ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
         )
     }
+
+
+    //41、点击补充资料状态 - 下一步按钮
+    fun reportClickStatus(userId: String, id: String) {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_SELECTSTATUS,
+            ReportConstant.KEY_USERID, userId,
+            ReportConstant.KEY_ID, id,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+    //42、点击补充资料状态  - 跳过按钮
+    fun reportClickSkipStatus(userId: String) {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_SKIP_SLEECTSTATUS,
+            ReportConstant.KEY_USERID, userId,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+
+    //43、点击banner -
+    fun reportCLickBanner(bannerID: String) {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_BANNER,
+            ReportConstant.KEY_USERID, SpHelper.getUserInfo()?.userId!!,
+            ReportConstant.KEY_BANNERID, bannerID,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+    //44、点击Ring -
+    fun reportClickRing(isOpen: Boolean) {
+        val status = if (isOpen) {
+            ReportConstant.VALUE_START
+        } else {
+            ReportConstant.VALUE_STOP
+        }
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_RING,
+            ReportConstant.KEY_USERID, SpHelper.getUserInfo()?.userId!!,
+            ReportConstant.KEY_PAIRTYPE, status,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+    //45、点击快捷匹配按钮
+    fun reportClickFastMatch(id: String) {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_FASTMATCH,
+            ReportConstant.KEY_USERID, SpHelper.getUserInfo()?.userId!!,
+            ReportConstant.KEY_PAIRTYPEID, id,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+    //46、点击Ring 弹窗关闭匹配
+    fun reportClickStopMatch() {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_STOPMATCH,
+            ReportConstant.KEY_USERID, SpHelper.getUserInfo()?.userId!!,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+    //47、点击Ring 弹窗开启匹配
+    fun reportClickStartMatch() {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_STARTMATCH,
+            ReportConstant.KEY_USERID, SpHelper.getUserInfo()?.userId!!,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+    //48、点击弹窗 - 立即聊天
+    fun reportClickMatchChat(id: String) {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_MATCH_CHAT,
+            ReportConstant.KEY_USERID, SpHelper.getUserInfo()?.userId!!,
+            ReportConstant.KEY_PAIRID, id,
+            ReportConstant.KEY_CHATTYPE, ReportConstant.VALUE_TEXT,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+    //49、点击我的 - 添加社交卡片
+    fun reportClickAddCard() {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_ADDCARD,
+            ReportConstant.KEY_USERID, SpHelper.getUserInfo()?.userId!!,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+    //50、点击完善社交卡片类型
+    fun reportClickCardType(id: String) {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_CARDTYPE,
+            ReportConstant.KEY_USERID, SpHelper.getUserInfo()?.userId!!,
+            ReportConstant.KEY_CARDTYPEID, id,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+    //51、点击查看对方卡片
+    fun reportClickOtherCard(id: String) {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_OTHERCARD,
+            ReportConstant.KEY_USERID, SpHelper.getUserInfo()?.userId!!,
+            ReportConstant.KEY_CARDTYPEID, id,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
+    //52、点击完善自己的卡片信息才可以查看他人卡片信息弹窗按钮
+    fun reportClickCardCommit() {
+        AmplitudeUtil.instance.logEvent(
+            ReportConstant.EVENT_CLICK_CARD_COMMIT,
+            ReportConstant.KEY_USERID, SpHelper.getUserInfo()?.userId!!,
+            ReportConstant.KEY_TIME, System.currentTimeMillis().toString(),
+        )
+    }
+
 }

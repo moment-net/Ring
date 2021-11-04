@@ -6,5 +6,6 @@ data class TagBean(
     var tagEnName: String,
     var tagName: String,
     var tagType: String,
+    var limit: Int,
     var values: ArrayList<String> = arrayListOf()
 )

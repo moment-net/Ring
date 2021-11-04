@@ -1,6 +1,5 @@
 package com.alan.mvvm.common.constant
 
-import com.alan.mvvm.base.constant.VersionStatus
 import com.alan.mvvm.base.utils.StorageUtil
 import com.alan.mvvm.common.BuildConfig
 
@@ -14,7 +13,7 @@ object Constants {
     const val ONELOGIN_APP_ID: String = "ffdde7182d61db6a28285978e037ae46"
 
     //声网
-    var AGORA_ID = if ((BuildConfig.VERSION_TYPE != VersionStatus.RELEASE)) {
+    var AGORA_ID = if ((BuildConfig.DEBUG)) {
         //测试
         "aef85e061fc048658a23a96860a26718"
     } else {

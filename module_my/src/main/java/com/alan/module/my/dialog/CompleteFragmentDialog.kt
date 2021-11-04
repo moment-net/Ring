@@ -14,6 +14,7 @@ import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
 import com.alan.mvvm.base.mvvm.vm.EmptyViewModel
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.report.DataPointUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -58,6 +59,7 @@ class CompleteFragmentDialog :
         tvCommit.clickDelay {
             dismiss()
             jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_CARD)
+            DataPointUtil.reportClickCardCommit()
         }
 
     }

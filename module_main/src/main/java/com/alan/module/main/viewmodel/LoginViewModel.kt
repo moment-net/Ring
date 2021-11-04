@@ -98,9 +98,7 @@ class LoginViewModel @Inject constructor(private val mRepository: CommonReposito
             "2",
             JPushInterface.getRegistrationID(BaseApplication.mContext),
             DeviceUtil.getBrand(),
-            DeviceUtil.getImei(BaseApplication.mContext),
-            DeviceUtil.getAndroidID(BaseApplication.mContext),
-            DeviceUtil.getMacAddress()
+            DeviceUtil.getImei(BaseApplication.mContext)
         )
 
         viewModelScope.launch {

@@ -20,11 +20,17 @@ object IMConstant {
     @JvmField
     var type = 0;
 
+    //==================================================================
+
 
     //头像
     const val MESSAGE_ATTR_AVATAR = "avatar"
+
     //名字
     const val MESSAGE_ATTR_USERNAME = "userName"
+
+    //点赞内容
+    const val MESSAGE_ATTR_ZANCONTENT = "zancontent"
 
 
     //强制推送通知和发送静默消息（不推送）
@@ -33,6 +39,7 @@ object IMConstant {
 
     //是否是语音通话
     const val MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call"
+
     //是否是视频通话
     const val MESSAGE_ATTR_IS_VIDEO_CALL = "is_video_call"
 
@@ -70,6 +77,9 @@ object IMConstant {
     const val MESSAGE_TYPE_VIDEOCALL_RIGHT = 16
 
 
+    //==================================================================
+
+
     //EventBus事件-类型
     //消息
     const val EVENT_TYPE_MESSAGE = "chatmessage"
@@ -81,6 +91,9 @@ object IMConstant {
     //EventBus事件-事件
     //有新消息
     const val EVENT_EVENT_CHANGE = "change"
+
+
+    //==================================================================
 
 
     //服务器长链消息key

@@ -45,15 +45,15 @@ android {
         //极光推送key
         manifestPlaceholders = [
                 JPUSH_CHANNEL: "moment",
-                JPUSH_APPKEY : "681b4ee25715ed9fa415e426",
+                JPUSH_APPKEY : "47e2b181ee6a8ed0675f45ef",
                 JPUSH_PKGNAME: "${applicationId}",
-                XIAOMI_APPID:"MI-2882303761518745008",
-                XIAOMI_APPKEY:"MI-5811874578008",
-                OPPO_APPKEY:"OP-3217d0b2165a4c40b20a2ea1fb70b83b",
-                OPPO_APPID:"OP-30394955",
-                OPPO_APPSECRET:"OP-eb52fddb5b8b42628f600e09412f6ad7",
-                VIVO_APPKEY:"6a6fdb8106f423a5ae982001c6fed921",
-                VIVO_APPID:"104943129",
+                XIAOMI_APPID:"MI-2882303761520047113",
+                XIAOMI_APPKEY:"MI-5802004721113",
+                OPPO_APPKEY:"OP-2cb595af8790499c8547156e3ad329e6",
+                OPPO_APPID:"OP-30634863",
+                OPPO_APPSECRET:"OP-c38b1e106e9249aeae436fc41f5d461e",
+                VIVO_APPKEY:"bb6ff20740684c791f2f51147fca6d41",
+                VIVO_APPID:"105510561",
         ]
     }
 
@@ -100,23 +100,13 @@ android {
     buildTypes {
         // 对应 ALPHA 版本
         debug {
-            buildConfigField "String", "VERSION_TYPE", "\"${ProjectBuildConfig.Version.ALPHA}\""
             minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        beta {
-            buildConfigField "String", "VERSION_TYPE", "\"${ProjectBuildConfig.Version.BETA}\""
-            minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
-            signingConfig signingConfigs.debug
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
         release {
-            buildConfigField "String", "VERSION_TYPE", "\"${ProjectBuildConfig.Version.RELEASE}\""
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true

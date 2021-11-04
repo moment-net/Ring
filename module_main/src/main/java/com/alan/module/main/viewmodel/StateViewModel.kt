@@ -25,11 +25,12 @@ class StateViewModel @Inject constructor(private val mRepository: CommonReposito
     val ldData = MutableLiveData<Any>()
 
     /**
-     * 发布想法
+     * 正在列表
      */
     fun requestNowTagList() {
         viewModelScope.launch() {
             mRepository.requestNowTagList(
+                "1",
                 callback = RequestCallback(
                     onSuccess = {
                         ldData.value = it

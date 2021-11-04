@@ -132,6 +132,41 @@ object ReportConstant {
     //40、点击弹窗 - 立即聊天
     var EVENT_WINDOW_CHAT = "Click_window_ChatButton"
 
+    //41、点击补充资料状态 - 下一步按钮
+    var EVENT_CLICK_SELECTSTATUS = "Click_SelectStatus"
+
+    //42、点击补充资料状态  - 跳过按钮
+    var EVENT_CLICK_SKIP_SLEECTSTATUS = "Click_Skip_SelectStatus"
+
+    //43、点击banner -
+    var EVENT_CLICK_BANNER = "Click_Banner"
+
+    //44、点击Ring -
+    var EVENT_CLICK_RING = "Click_RingCard"
+
+    //45、点击快捷匹配按钮
+    var EVENT_CLICK_FASTMATCH = "Click_QucikPairButton"
+
+    //46、点击Ring 弹窗关闭匹配
+    var EVENT_CLICK_STOPMATCH = "Click_RingWindow_StopPair"
+
+    //47、点击Ring 弹窗保持开启
+    var EVENT_CLICK_STARTMATCH = "Click_RingWindow_StillPair"
+
+    //48、点击弹窗 - 立即聊天
+    var EVENT_CLICK_MATCH_CHAT = "Click_window_ChatButton"
+
+    //49、点击我的 - 添加社交卡片
+    var EVENT_CLICK_ADDCARD = "Click_Add_MySocialCard"
+
+    //50、点击完善社交卡片类型
+    var EVENT_CLICK_CARDTYPE = "Click_MySocialCardType"
+
+    //51、点击查看对方卡片
+    var EVENT_CLICK_OTHERCARD = "Click_FriendsSocialCard"
+
+    //52、点击完善自己的卡片信息才可以查看他人卡片信息弹窗按钮
+    var EVENT_CLICK_CARD_COMMIT = "Click_ProfileJustice_Window"
     //--------------------点击事件Value----------------------------------------------
 
     //时间
@@ -210,5 +245,28 @@ object ReportConstant {
 
     //类型-语音
     var VALUE_VOICE = "Voice"
+
+    //ID
+    var KEY_ID = "ID"
+
+    //BannerID
+    var KEY_BANNERID = "BannerID"
+
+    //匹配状态
+    var KEY_PAIRTYPE = "PairType"
+
+    //匹配状态-开启
+    var VALUE_START = "StartPair"
+
+    //匹配状态-关闭
+    var VALUE_STOP = "StopPair"
+
+
+    //匹配类型ID
+    var KEY_PAIRTYPEID = "PairTypeID"
+
+    //CardTypeID
+    var KEY_CARDTYPEID = "CardTypeID"
+
 
 }

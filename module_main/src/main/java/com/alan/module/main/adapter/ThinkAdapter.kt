@@ -43,13 +43,13 @@ class ThinkAdapter : BaseQuickAdapter<ThinkBean, BaseViewHolder>(R.layout.item_t
             tvAge.compoundDrawablePadding = context.dp2px(2f)
         }
         if (item.user.gender == 1) {
-            tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_boy_white, 0, 0, 0)
-            tvAge.setTextColor(R.color.white.getResColor())
-            tvAge.setShapeSolidColor(R.color._515FFF.getResColor()).setUseShape()
+            tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_boy_blue, 0, 0, 0)
+            tvAge.setTextColor(R.color._515FFF.getResColor())
+            tvAge.setShapeSolidColor(R.color._33515FFF.getResColor()).setUseShape()
         } else {
-            tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_girl_white, 0, 0, 0)
-            tvAge.setTextColor(R.color.white.getResColor())
-            tvAge.setShapeSolidColor(R.color._FF517A.getResColor()).setUseShape()
+            tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_girl_blue, 0, 0, 0)
+            tvAge.setTextColor(R.color._FF516D.getResColor())
+            tvAge.setShapeSolidColor(R.color._33FF516D.getResColor()).setUseShape()
         }
 
         if (item.user.onlineStatus!!) {

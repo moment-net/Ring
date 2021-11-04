@@ -19,6 +19,7 @@ import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.dialog.DialogHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -88,7 +89,11 @@ class CardSetActivity : BaseActivity<ActivityCardSetBinding, CardSetViewModel>()
             }
         }
         tvDelete.clickDelay {
-            mViewModel.requestDeleteCard(cardBean.id)
+            DialogHelper.showMultipleDialog(this@CardSetActivity, "确认要删除该卡片吗？", "取消", "确定", {
+
+            }, {
+                mViewModel.requestDeleteCard(cardBean.id)
+            })
         }
 
 
@@ -152,13 +157,14 @@ class CardSetActivity : BaseActivity<ActivityCardSetBinding, CardSetViewModel>()
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val bean = mAdapter.data.get(position)
             val tagName = bean.tagName
+            val limit = bean.limit
             if (TextUtils.equals(bean.tagType, "input")) {
                 val name = if (bean.checkedValues == null) {
                     ""
                 } else {
                     bean.checkedValues.get(0)
                 }
-                val dialog = CardInputFragmentDialog.newInstance(tagName, name)
+                val dialog = CardInputFragmentDialog.newInstance(tagName, name, limit)
                 dialog.show(supportFragmentManager)
                 dialog.inputListener = object : CardInputFragmentDialog.OnInputListener {
                     override fun onInput(input: String) {

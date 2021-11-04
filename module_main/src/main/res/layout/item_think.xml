@@ -45,14 +45,14 @@
             android:paddingEnd="@dimen/dimen5"
             android:paddingBottom="0dp"
             android:text="在线"
-            android:textColor="@color/white"
+            android:textColor="@color/_27CFA1"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:sCorners="2dp"
+            app:sCorners="7dp"
             app:sSizeHeight="14dp"
-            app:sSolidColor="@color/_27CFA1"
+            app:sSolidColor="@color/_3327CFA1"
             app:sStrokeWidth="0dp" />
 
         <leifu.shapelibrary.ShapeView
@@ -60,7 +60,8 @@
             android:layout_width="wrap_content"
             android:layout_height="14dp"
             android:layout_marginStart="4dp"
-            android:drawableStart="@drawable/icon_home_girl_white"
+            app:layout_goneMarginStart="@dimen/dimen0"
+            android:drawableStart="@drawable/icon_home_girl_blue"
             android:drawablePadding="@dimen/dimen2"
             android:gravity="center_vertical"
             android:includeFontPadding="false"
@@ -69,14 +70,14 @@
             android:paddingEnd="@dimen/dimen5"
             android:paddingBottom="0dp"
             android:text="19岁"
-            android:textColor="@color/white"
+            android:textColor="@color/_FF516D"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_online"
             app:layout_constraintStart_toEndOf="@+id/tv_online"
             app:layout_constraintTop_toTopOf="@+id/tv_online"
-            app:sCorners="2dp"
+            app:sCorners="7dp"
             app:sSizeHeight="14dp"
-            app:sSolidColor="@color/_FF516D"
+            app:sSolidColor="@color/_33FF516D"
             app:sStrokeWidth="0dp" />
 
 

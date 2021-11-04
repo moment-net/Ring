@@ -1066,7 +1066,7 @@ interface HomeApiService {
      * 正在的状态列表
      */
     @GET("doing/taglist")
-    suspend fun requestNowTagList(): BaseResponse<ArrayList<NowTagBean>>
+    suspend fun requestNowTagList(@Query("type") type: String): BaseResponse<ArrayList<NowTagBean>>
 
     /**
      * 屏蔽正在

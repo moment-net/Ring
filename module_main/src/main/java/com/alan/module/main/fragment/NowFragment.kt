@@ -116,7 +116,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                     0,
                     0,
                     0,
-                    dp2px(30f),
+                    dp2px(15f),
                     R.color.transparent.getResColor()
                 )
             )
@@ -159,7 +159,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
         }
         mAdapter.setEmptyView(TextView(requireActivity()).apply {
             setText("当前还没有正在状态，\n快去点击发布描述一下你当前的状态吧！")
-            setTextSize(16f)
+            setTextSize(14f)
             setTextColor(R.color._263A3A3A.getResColor())
             gravity = Gravity.CENTER
             layoutParams = ViewGroup.LayoutParams(
@@ -247,13 +247,6 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun showCall(event: ChangeThinkEvent) {
         if (event.position == 0) {
-            requestRefresh()
-        }
-    }
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        if (!hidden) {
             requestRefresh()
         }
     }

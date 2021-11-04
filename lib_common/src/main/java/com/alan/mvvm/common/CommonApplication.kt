@@ -3,17 +3,19 @@ package com.alan.mvvm.common
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import android.os.Build
 import androidx.core.content.ContextCompat
+import cn.jpush.android.api.JPushInterface
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.app.ApplicationLifecycle
 import com.alan.mvvm.base.app.InitDepend
 import com.alan.mvvm.base.coil.CoilUtils
-import com.alan.mvvm.base.constant.VersionStatus
 import com.alan.mvvm.base.utils.ProcessUtils
 import com.alan.mvvm.base.utils.SpUtils
 import com.alan.mvvm.base.utils.network.NetworkStateClient
 import com.alan.mvvm.common.constant.Constants
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.push.NotificationPushManager
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.auto.service.AutoService
 import com.scwang.smart.refresh.footer.ClassicsFooter
@@ -99,6 +101,7 @@ class CommonApplication : ApplicationLifecycle {
             worker.add { initARouter() }
             worker.add { initKlog() }
             worker.add { initCoil() }
+            worker.add { initJPushSdk() }
             main.add { initChatSdk() }
             main.add { initNetworkStateClient() }
         }
@@ -136,7 +139,7 @@ class CommonApplication : ApplicationLifecycle {
      */
     private fun initARouter(): String {
         // 测试环境下打开ARouter的日志和调试模式 正式环境需要关闭
-        if (BuildConfig.VERSION_TYPE != VersionStatus.RELEASE) {
+        if (BuildConfig.DEBUG) {
             ARouter.openLog()     // 打印日志
             ARouter.openDebug()   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         }
@@ -151,11 +154,11 @@ class CommonApplication : ApplicationLifecycle {
      */
     private fun initTencentBugly(): String {
         // 第三个参数为SDK调试模式开关
-        val isDebug = BuildConfig.VERSION_TYPE != VersionStatus.RELEASE
+        val isDebug = BuildConfig.DEBUG
         val buglyId = if (isDebug) {
-            Constants.BUGLYID_RELEASE
-        } else {
             Constants.BUGLYID_DEBUG
+        } else {
+            Constants.BUGLYID_RELEASE
         }
         CrashReport.initCrashReport(BaseApplication.mContext, buglyId, isDebug)
         return "Bugly -->> init complete"
@@ -166,7 +169,7 @@ class CommonApplication : ApplicationLifecycle {
      */
     private fun initKlog(): String {
         // 测试环境下打开Klog的日志和调试模式 正式环境需要关闭
-        KLog.init(BuildConfig.VERSION_TYPE != VersionStatus.RELEASE)
+        KLog.init(BuildConfig.DEBUG)
         return "KLog -->> init complete"
     }
 
@@ -188,5 +191,16 @@ class CommonApplication : ApplicationLifecycle {
         return "ChatSDK -->> init complete"
     }
 
-
+    /**
+     * 极光推送 初始化
+     */
+    private fun initJPushSdk(): String {
+        // 初始化
+        JPushInterface.setDebugMode(true)
+        JPushInterface.init(BaseApplication.mContext)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationPushManager.getInstance().createChannel()
+        }
+        return "JPushSDK -->> init complete"
+    }
 }

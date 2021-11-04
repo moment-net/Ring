@@ -274,6 +274,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
                 }
 
                 R.id.tv_add -> {
+                    DataPointUtil.reportClickAddCard()
                     jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_CARD)
                 }
             }
@@ -308,7 +309,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
         mAdapter.setEmptyView(TextView(activity).apply {
             setText("当前还没有想法，快去发布想法吧！")
-            setTextSize(16f)
+            setTextSize(14f)
             setTextColor(R.color._263A3A3A.getResColor())
             gravity = Gravity.CENTER
             layoutParams = ViewGroup.LayoutParams(

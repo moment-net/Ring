@@ -45,6 +45,7 @@ class ChatVoiceRightProvider() : BaseItemProvider<EMMessage>() {
         val iv_voice = helper.getView<ImageView>(R.id.iv_voice);
         val tv_length = helper.getView<TextView>(R.id.tv_length);
         val cl_voice = helper.getView<ConstraintLayout>(R.id.cl_voice);
+        val iv_ack = helper.getView<ImageView>(R.id.iv_ack);
 
         val position = getAdapter()?.getItemPosition(item);
         if (position == 0) {
@@ -64,6 +65,13 @@ class ChatVoiceRightProvider() : BaseItemProvider<EMMessage>() {
             }
         }
         CoilUtils.loadCircle(iv_avatar, SpHelper.getUserInfo()?.avatar!!)
+
+        if (item.isAcked()) {
+            iv_ack.setVisibility(View.VISIBLE)
+        } else {
+            iv_ack.setVisibility(View.INVISIBLE)
+        }
+
 
         val voiceBody = item.getBody() as EMVoiceMessageBody
         val len = voiceBody.length

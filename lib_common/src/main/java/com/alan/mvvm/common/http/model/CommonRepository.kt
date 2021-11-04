@@ -447,8 +447,9 @@ class CommonRepository @Inject constructor() : BaseRepository() {
      * 正在的状态列表
      */
     suspend fun requestNowTagList(
+        type: String,
         callback: RequestCallback<ArrayList<NowTagBean>>
-    ) = request(mApi, callback) { mApi.requestNowTagList() }
+    ) = request(mApi, callback) { mApi.requestNowTagList(type) }
 
     /**
      * 屏蔽正在

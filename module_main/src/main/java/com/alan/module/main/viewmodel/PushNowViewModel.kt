@@ -30,6 +30,7 @@ class PushNowViewModel @Inject constructor(private val mRepository: CommonReposi
     fun requestNowTagList() {
         viewModelScope.launch() {
             mRepository.requestNowTagList(
+                "0",
                 callback = RequestCallback(
                     onSuccess = {
                         ldData.value = it
