@@ -188,6 +188,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                 is MatchInfoBean -> {
                     matchInfoBean = it
                     mBinding.tvRingNum.setText("今日剩余${matchInfoBean.times}次")
+                    mBinding.tvRingNumHide.setText("今日剩余${matchInfoBean.times}次")
                     isOpenRing = it.status == 1
                     changeStatus(isOpenRing)
                     gender = it.setting.sex

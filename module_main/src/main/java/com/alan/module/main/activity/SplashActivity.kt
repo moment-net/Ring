@@ -60,6 +60,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
             return
         }
 
+
+        initOneLogin()
+        initAmplitudeSdk()
+        initX5WebViewCore()
+
         if (SpHelper.isAgree()) {
             requestPermisssion()
         } else {
@@ -116,10 +121,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
 
 
     fun intentHome() {
-        initOneLogin()
-        initAmplitudeSdk()
-        initX5WebViewCore()
-
         lifecycleScope.launch(Dispatchers.IO) {
             delay(3000)
             withContext(Dispatchers.Main) {

@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dimen20"
                 android:layout_marginTop="@dimen/dimen5"
-                android:drawableStart="@drawable/icon_home_girl"
+                android:drawableStart="@drawable/icon_home_girl_blue"
                 android:drawablePadding="@dimen/dimen3"
                 android:gravity="center_vertical"
                 android:includeFontPadding="false"
@@ -160,6 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="40dp"
+                    app:layout_goneMarginTop="@dimen/dimen30"
                     android:text="个性签名："
                     android:textColor="@color/_993A3A3A"
                     android:textSize="14sp"
@@ -186,7 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dimen20"
                     android:layout_marginTop="40dp"
-                    android:src="@drawable/icon_home_title_think_big"
+                    android:src="@drawable/icon_my_think_title"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 

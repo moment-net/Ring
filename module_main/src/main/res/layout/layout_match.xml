@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dimen16"
                 android:layout_marginTop="10dp"
-                android:drawableStart="@drawable/icon_home_girl"
+                android:drawableStart="@drawable/icon_home_girl_blue"
                 android:drawablePadding="@dimen/dimen3"
                 android:gravity="center_vertical"
                 android:includeFontPadding="false"

@@ -171,7 +171,7 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
                     }
                     if (it.gender == 1) {
                         mBinding.tvAge.setCompoundDrawablesWithIntrinsicBounds(
-                            R.drawable.icon_home_boy,
+                            R.drawable.icon_home_boy_blue,
                             0,
                             0,
                             0
@@ -180,7 +180,7 @@ class MatchFragmentDialog : BaseFrameDialogFragment<LayoutMatchBinding, MatchDia
                         mBinding.tvAge.setShapeSolidColor(R.color._EAECFF.getResColor())
                     } else {
                         mBinding.tvAge.setCompoundDrawablesWithIntrinsicBounds(
-                            R.drawable.icon_home_girl,
+                            R.drawable.icon_home_girl_blue,
                             0,
                             0,
                             0

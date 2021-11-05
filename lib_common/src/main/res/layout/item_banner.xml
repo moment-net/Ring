@@ -3,8 +3,5 @@
     android:id="@+id/iv_banner"
     android:layout_width="140dp"
     android:layout_height="135dp"
-    android:paddingTop="@dimen/dimen30"
-    android:paddingStart="@dimen/dimen30"
-    android:paddingEnd="@dimen/dimen30"
-    android:paddingBottom="@dimen/dimen40"
+    android:paddingBottom="@dimen/dimen10"
     android:src="@drawable/icon_home_ring" />

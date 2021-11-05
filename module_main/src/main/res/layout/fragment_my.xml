@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dimen20"
                 android:layout_marginTop="@dimen/dimen5"
-                android:drawableStart="@drawable/icon_home_girl"
+                android:drawableStart="@drawable/icon_home_girl_blue"
                 android:drawablePadding="@dimen/dimen3"
                 android:gravity="center_vertical"
                 android:includeFontPadding="false"
@@ -249,7 +249,7 @@
                         android:id="@+id/tv_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_home_title_think_big"
+                        android:src="@drawable/icon_my_think_title"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

@@ -49,11 +49,11 @@ class ManagerAdapter : BaseQuickAdapter<CookerBean, BaseViewHolder>(R.layout.ite
             tvAge.setText("$age  ${address}")
         }
         if (item.user.gender == 1) {
-            tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_boy, 0, 0, 0)
+            tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_boy_blue, 0, 0, 0)
             tvAge.setTextColor(R.color._515FFF.getResColor())
             tvAge.setShapeSolidColor(R.color._1A515FFF.getResColor()).setUseShape()
         } else {
-            tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_girl, 0, 0, 0)
+            tvAge.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_home_girl_blue, 0, 0, 0)
             tvAge.setTextColor(R.color._FF517A.getResColor())
             tvAge.setShapeSolidColor(R.color._1AFF517A.getResColor()).setUseShape()
         }
