@@ -63,7 +63,8 @@ object DependencyConfig {
         const val LottieVersion = "3.5.0"                   // Lottie框架
         const val CameraVersion = "1.1.9"                   // Camera框架
         const val EasyFloatVersion = "2.0.3"                // 悬浮窗权限框架
-        const val FlexboxVersion = "3.0.0"                  // 悬浮窗权限框架
+        const val FlexboxVersion = "3.0.0"                  // 流式排列框架
+        const val PictureselectorVersion = "v2.7.3-rc09"    // 图片选择框架
 
         // 第三方SDK--------------------------------------------------------------
         const val WeChat = "6.6.4"                          // 腾讯开放平台微信
@@ -175,6 +176,8 @@ object DependencyConfig {
         const val Camera = "cjt.library.wheel:camera:${Version.CameraVersion}"
         const val EasyFloat = "com.github.princekin-f:EasyFloat:${Version.EasyFloatVersion}"
         const val Flexbox = "com.google.android.flexbox:flexbox:${Version.FlexboxVersion}"
+        const val Pictureselector =
+            "io.github.lucksiege:pictureselector:${Version.PictureselectorVersion}"
     }
 
     /**

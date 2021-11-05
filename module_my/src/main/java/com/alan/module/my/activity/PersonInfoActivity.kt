@@ -234,7 +234,9 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
     }
 
 
-
+    /**
+     * 更改地址
+     */
     fun changeAddress() {
         LocationPickerUtil.showPickerView(
             this,
@@ -243,7 +245,6 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
                     address = opt1 + "-" + opt2 + "-" + opt3
                     mBinding.tvHometownValue.setText(address)
                 }
-
             }
         )
     }

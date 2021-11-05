@@ -20,7 +20,7 @@ import org.json.JSONObject
  * 备注：数据上报工具类
  */
 class AmplitudeUtil private constructor() {
-    lateinit var amplitude: AmplitudeClient
+    var amplitude: AmplitudeClient? = null
 
     companion object {
         //通过@JvmStatic注解，使得在Java中调用instance直接是像调用静态函数一样，
@@ -57,7 +57,10 @@ class AmplitudeUtil private constructor() {
      * 设置用户ID
      */
     fun setUserId(userId: String?) {
-        amplitude.setUserId(userId)
+        if (amplitude == null) {
+            init(BaseApplication.mApplication)
+        }
+        amplitude?.setUserId(userId)
     }
 
 
@@ -65,6 +68,9 @@ class AmplitudeUtil private constructor() {
      * 上报
      */
     fun logEvent(event: String?, vararg args: String?) {
+        if (amplitude == null) {
+            init(BaseApplication.mApplication)
+        }
         if (args.size == 0) return
         val jsonObject = JSONObject()
         try {
@@ -92,6 +98,6 @@ class AmplitudeUtil private constructor() {
             e.printStackTrace()
         }
         KLog.e("log", "上报数据：${event}===${jsonObject.toString()}")
-        amplitude.logEvent(event, jsonObject)
+        amplitude?.logEvent(event, jsonObject)
     }
 }

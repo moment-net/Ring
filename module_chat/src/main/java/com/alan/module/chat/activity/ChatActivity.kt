@@ -4,6 +4,7 @@ import android.Manifest
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Rect
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -45,7 +46,6 @@ import com.hyphenate.EMValueCallBack
 import com.hyphenate.chat.*
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.exceptions.HyphenateException
-import com.jaeger.library.StatusBarUtil
 import com.permissionx.guolindev.PermissionX
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
@@ -93,18 +93,19 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
     override val mViewModel by viewModels<ChatDetailViewModel>()
 
     override fun setStatusBar() {
-        StatusBarUtil.setColor(this, com.alan.mvvm.common.R.color.white.getResColor(), 0)
+        super.setStatusBar()
+//        StatusBarUtil.setColor(this, com.alan.mvvm.common.R.color.white.getResColor(), 0)
         getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-        mViewModel.ld_state.observe(this) {
-            when {
-                it == StateLayoutEnum.LOADING -> {
-                    showDialog()
-                }
-                it == StateLayoutEnum.HIDE -> {
-                    dismissDialog()
-                }
-            }
-        }
+//        mViewModel.ld_state.observe(this) {
+//            when {
+//                it == StateLayoutEnum.LOADING -> {
+//                    showDialog()
+//                }
+//                it == StateLayoutEnum.HIDE -> {
+//                    dismissDialog()
+//                }
+//            }
+//        }
     }
 
     /**
@@ -319,6 +320,18 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             loadMoreServerMessages(PAGE_SIZE, false)
         }
         mBinding.srfList.setEnableLoadMore(false)
+
+
+        val decorView = window.decorView
+        decorView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            decorView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = decorView.rootView.height
+            val heightDiff = screenHeight - rect.bottom
+            val layoutParams = mBinding.clRoot.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.setMargins(0, 0, 0, heightDiff)
+            mBinding.clRoot.requestLayout()
+        }
     }
 
 
