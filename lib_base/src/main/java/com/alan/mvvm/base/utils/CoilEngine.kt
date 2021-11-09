@@ -1,101 +1,184 @@
 package com.alan.mvvm.base.utils
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.widget.ImageView
-import androidx.core.graphics.drawable.toBitmap
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
-import coil.imageLoader
 import coil.load
-import coil.request.ImageRequest
-import com.huantansheng.easyphotos.engine.ImageEngine
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.alan.mvvm.base.R
+import com.luck.picture.lib.engine.ImageEngine
+import com.luck.picture.lib.listener.OnImageCompleteCallback
+import com.luck.picture.lib.widget.longimage.SubsamplingScaleImageView
 
 object CoilEngine : ImageEngine {
 
+//    /**
+//     * 加载图片到ImageView
+//     *
+//     * @param context   上下文
+//     * @param uri 图片路径Uri
+//     * @param imageView 加载到的ImageView
+//     */
+//    //安卓10推荐uri，并且path的方式不再可用
+//    override fun loadPhoto(context: Context, uri: Uri, imageView: ImageView) {
+//        imageView.load(uri) {}
+//    }
+//
+//    /**
+//     * 加载gif动图图片到ImageView，gif动图不动
+//     *
+//     * @param context   上下文
+//     * @param gifUri   gif动图路径Uri
+//     * @param imageView 加载到的ImageView
+//     *                  <p>
+//     *                  备注：不支持动图显示的情况下可以不写
+//     */
+//    //安卓10推荐uri，并且path的方式不再可用
+//    override fun loadGifAsBitmap(context: Context, gifUri: Uri, imageView: ImageView) {
+//        val imageLoader = ImageLoader.Builder(context).componentRegistry {
+//            if (SDK_INT >= 28) {
+//                add(ImageDecoderDecoder(context))
+//            } else {
+//                add(GifDecoder())
+//            }
+//        }.build()
+//        imageView.load(gifUri, imageLoader)
+//    }
+//
+//    /**
+//     * 加载gif动图到ImageView，gif动图动
+//     *
+//     * @param context   上下文
+//     * @param gifUri   gif动图路径Uri
+//     * @param imageView 加载动图的ImageView
+//     *                  <p>
+//     *                  备注：不支持动图显示的情况下可以不写
+//     */
+//    //安卓10推荐uri，并且path的方式不再可用
+//    override fun loadGif(context: Context, gifUri: Uri, imageView: ImageView) {
+//        val imageLoader = ImageLoader.Builder(context).componentRegistry {
+//            if (SDK_INT >= 28) {
+//                add(ImageDecoderDecoder(context))
+//            } else {
+//                add(GifDecoder())
+//            }
+//        }.build()
+//        imageView.load(gifUri, imageLoader)
+//    }
+//
+//    /**
+//     * 获取图片加载框架中的缓存Bitmap
+//     *
+//     * @param context 上下文
+//     * @param uri    图片路径
+//     * @param width   图片宽度
+//     * @param height  图片高度
+//     * @return Bitmap
+//     * @throws Exception 异常直接抛出，EasyPhotos内部处理
+//     */
+//    //安卓10推荐uri，并且path的方式不再可用
+//    override fun getCacheBitmap(context: Context, uri: Uri, width: Int, height: Int): Bitmap {
+//        var bitmap: Bitmap? = null
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val request = ImageRequest.Builder(context)
+//                .data(uri)
+//                .size(width, height)
+//                .build()
+//            val drawable = context.imageLoader.execute(request).drawable
+//            if (drawable != null) {
+//                bitmap = drawable.toBitmap()
+//            }
+//        }
+//        return bitmap!!
+//    }
+
     /**
-     * 加载图片到ImageView
+     * 加载图片
      *
-     * @param context   上下文
-     * @param uri 图片路径Uri
-     * @param imageView 加载到的ImageView
+     * @param context
+     * @param url
+     * @param imageView
      */
-    //安卓10推荐uri，并且path的方式不再可用
-    override fun loadPhoto(context: Context, uri: Uri, imageView: ImageView) {
-        imageView.load(uri) {}
+    override fun loadImage(context: Context, url: String, imageView: ImageView) {
+        imageView.load(url) {}
     }
 
     /**
-     * 加载gif动图图片到ImageView，gif动图不动
+     * 加载网络图片适配长图方案
+     * # 注意：此方法只有加载网络图片才会回调
      *
-     * @param context   上下文
-     * @param gifUri   gif动图路径Uri
-     * @param imageView 加载到的ImageView
-     *                  <p>
-     *                  备注：不支持动图显示的情况下可以不写
+     * @param context
+     * @param url
+     * @param imageView
+     * @param longImageView
+     * @param callback      网络图片加载回调监听 {link after version 2.5.1 Please use the #OnImageCompleteCallback#}
      */
-    //安卓10推荐uri，并且path的方式不再可用
-    override fun loadGifAsBitmap(context: Context, gifUri: Uri, imageView: ImageView) {
-        val imageLoader = ImageLoader.Builder(context).componentRegistry {
-            if (SDK_INT >= 28) {
-                add(ImageDecoderDecoder(context))
-            } else {
-                add(GifDecoder())
-            }
-        }.build()
-        imageView.load(gifUri, imageLoader)
-    }
+    override fun loadImage(
+        context: Context,
+        url: String,
+        imageView: ImageView,
+        longImageView: SubsamplingScaleImageView?,
+        callback: OnImageCompleteCallback?
+    ) {
+        imageView.load(url) {
 
-    /**
-     * 加载gif动图到ImageView，gif动图动
-     *
-     * @param context   上下文
-     * @param gifUri   gif动图路径Uri
-     * @param imageView 加载动图的ImageView
-     *                  <p>
-     *                  备注：不支持动图显示的情况下可以不写
-     */
-    //安卓10推荐uri，并且path的方式不再可用
-    override fun loadGif(context: Context, gifUri: Uri, imageView: ImageView) {
-        val imageLoader = ImageLoader.Builder(context).componentRegistry {
-            if (SDK_INT >= 28) {
-                add(ImageDecoderDecoder(context))
-            } else {
-                add(GifDecoder())
-            }
-        }.build()
-        imageView.load(gifUri, imageLoader)
-    }
-
-    /**
-     * 获取图片加载框架中的缓存Bitmap
-     *
-     * @param context 上下文
-     * @param uri    图片路径
-     * @param width   图片宽度
-     * @param height  图片高度
-     * @return Bitmap
-     * @throws Exception 异常直接抛出，EasyPhotos内部处理
-     */
-    //安卓10推荐uri，并且path的方式不再可用
-    override fun getCacheBitmap(context: Context, uri: Uri, width: Int, height: Int): Bitmap {
-        var bitmap: Bitmap? = null
-        CoroutineScope(Dispatchers.IO).launch {
-            val request = ImageRequest.Builder(context)
-                .data(uri)
-                .size(width, height)
-                .build()
-            val drawable = context.imageLoader.execute(request).drawable
-            if (drawable != null) {
-                bitmap = drawable.toBitmap()
-            }
         }
-        return bitmap!!
+    }
+
+    /**
+     * 加载网络图片适配长图方案
+     * # 注意：此方法只有加载网络图片才会回调
+     *
+     * @param context
+     * @param url
+     * @param imageView
+     * @param longImageView
+     * @ 已废弃
+     */
+    override fun loadImage(
+        context: Context,
+        url: String,
+        imageView: ImageView,
+        longImageView: SubsamplingScaleImageView?
+    ) {
+        imageView.load(url) {}
+    }
+
+    /**
+     * 加载相册目录
+     *
+     * @param context   上下文
+     * @param url       图片路径
+     * @param imageView 承载图片ImageView
+     */
+    override fun loadFolderImage(context: Context, url: String, imageView: ImageView) {
+        imageView.load(url) {}
+    }
+
+    override fun loadAsGifImage(context: Context, url: String, imageView: ImageView) {
+        val imageLoader = ImageLoader.Builder(context).componentRegistry {
+            if (SDK_INT >= 28) {
+                add(ImageDecoderDecoder(context))
+            } else {
+                add(GifDecoder())
+            }
+        }.build()
+        imageView.load(url, imageLoader)
+    }
+
+    /**
+     * 加载图片列表图片
+     *
+     * @param context   上下文
+     * @param url       图片路径
+     * @param imageView 承载图片ImageView
+     */
+    override fun loadGridImage(context: Context, url: String, imageView: ImageView) {
+        imageView.load(url) {
+            placeholder(R.drawable.picture_image_placeholder)
+            size(200, 200)
+        }
     }
 }

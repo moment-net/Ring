@@ -205,7 +205,12 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
     fun setUserInfo() {
         val userInfo = SpHelper.getUserInfo()
-        CoilUtils.load(mBinding.ivAvatarBg, SpHelper.getUserInfo()?.avatar!!)
+        val url = if (SpHelper.getUserInfo()?.avatar!!.contains("?")) {
+            SpHelper.getUserInfo()?.avatar!!.split("?")[0]
+        } else {
+            SpHelper.getUserInfo()?.avatar!!
+        }
+        CoilUtils.load(mBinding.ivAvatarBg, url)
         CoilUtils.loadCircle(
             mBinding.ivAvatar,
             SpHelper.getUserInfo()?.avatar!!

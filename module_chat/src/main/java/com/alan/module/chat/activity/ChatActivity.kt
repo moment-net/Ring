@@ -40,12 +40,12 @@ import com.alan.mvvm.common.im.listener.EMClientListener
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.huantansheng.easyphotos.EasyPhotos
-import com.huantansheng.easyphotos.models.album.entity.Photo
 import com.hyphenate.EMValueCallBack
 import com.hyphenate.chat.*
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.exceptions.HyphenateException
+import com.luck.picture.lib.PictureSelector
+import com.luck.picture.lib.config.PictureConfig
 import com.permissionx.guolindev.PermissionX
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.IOException
@@ -493,12 +493,24 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
             when (requestCode) {
-                ImageSelectUtil.REQUESTCODE -> {
-                    //照片的回调
-                    val selectList =
-                        data?.getParcelableArrayListExtra<Photo>(EasyPhotos.RESULT_PHOTOS)
-                    val uri: Uri = selectList?.get(0)?.uri!!
-                    sendImageMessage(uri)
+                PictureConfig.CHOOSE_REQUEST -> {
+                    // 例如 LocalMedia 里面返回五种path
+                    // 1.media.getPath(); 原图path
+                    // 2.media.getCutPath();裁剪后path，需判断media.isCut();切勿直接使用
+                    // 3.media.getCompressPath();压缩后path，需判断media.isCompressed();切勿直接使用
+                    // 4.media.getOriginalPath()); media.isOriginal());为true时此字段才有值
+                    // 5.media.getAndroidQToPath();Android Q版本特有返回的字段，但如果开启了压缩或裁剪还是取裁剪或压缩路径；注意：.isAndroidQTransform 为false 此字段将返回空
+                    // 如果同时开启裁剪和压缩，则取压缩路径为准因为是先裁剪后压缩
+                    val selectList = PictureSelector.obtainMultipleResult(data)
+                    if (selectList != null && !selectList.isEmpty()) {
+                        val media = selectList.get(0)
+                        val url = if (media.isCompressed) {
+                            media.compressPath
+                        } else {
+                            media.getPath()
+                        }
+                        sendImageMessage(url)
+                    }
                 }
                 CAMERA_CODE -> {
                     val type = data?.getIntExtra("type", Constants.TYPE_IMAGE)
