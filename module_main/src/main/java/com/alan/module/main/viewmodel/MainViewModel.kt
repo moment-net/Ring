@@ -6,6 +6,7 @@ import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.http.requestbean.CallRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.http.model.CommonRepository
@@ -25,7 +26,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(private val mRepository: CommonRepository) :
     BaseViewModel() {
 
-    val data = MutableLiveData<String>()
+    val ldCard = MutableLiveData<Any>()
     val ldIM = MutableLiveData<BaseHttpException>()
 
     /**
@@ -59,6 +60,25 @@ class MainViewModel @Inject constructor(private val mRepository: CommonRepositor
                     onFailed = {
                     }
                 ))
+        }
+    }
+
+    /**
+     * 获取卡片列表
+     */
+    fun requestCardList(userId: String) {
+        viewModelScope.launch() {
+            mRepository.requestCardList(
+                userId,
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldCard.value = it
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
         }
     }
 

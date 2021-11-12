@@ -36,6 +36,7 @@ import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.im.EMClientHelper
 import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseFragment
+import com.alan.mvvm.common.views.GuideView
 import com.bigkoo.convenientbanner.ConvenientBanner
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator
 import com.bigkoo.convenientbanner.holder.Holder
@@ -43,6 +44,7 @@ import com.bigkoo.convenientbanner.listener.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+
 
 /**
  * 作者：alan
@@ -162,6 +164,27 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
         }
 
+//        val options = HighlightOptions.Builder()
+//            .setOnHighlightDrewListener { canvas, rectF ->
+//                val paint = Paint()
+//                paint.setColor(Color.WHITE)
+//                paint.setStyle(Paint.Style.STROKE)
+//                paint.setStrokeWidth(3f)
+//                paint.setPathEffect(DashPathEffect(floatArrayOf(10f, 10f), 0f))
+//                canvas.drawRoundRect(rectF,30f,30f, paint)
+//            }
+//            .build()
+//        NewbieGuide.with(requireActivity())
+//            .setLabel("0000")
+//            .setShowCounts(1)
+//            .alwaysShow(true)
+//            .addGuidePage(GuidePage()
+//                .addHighLight(mBinding.clMatch,HighLight.Shape.ROUND_RECTANGLE,30,10,
+//                    RelativeGuide(R.layout.layout_guide_match,Gravity.BOTTOM)
+//                )
+//                .addHighLightWithOptions(mBinding.clMatch,options)
+//            )
+//            .show()
 
 
         initRv()
@@ -232,7 +255,58 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initRequestData() {
+        showMatch()
+    }
 
+    fun showMatch() {
+        val guideView = GuideView.Builder
+            .newInstance(requireActivity())
+            .setTargetView(mBinding.clMatch) //设置目标
+            .setDirction(GuideView.Direction.BOTTOM)
+            .setShape(GuideView.MyShape.RECTANGULAR)
+            .setRoundRadius(dp2px(20f))
+            .setBgImage(R.drawable.icon_home_guide_one)
+            .setLayoutResId(R.layout.layout_guide_match)
+            .setOnclickExit(true)
+            .setOnclickListener {
+                showThink()
+            }
+            .build()
+        guideView.show()
+    }
+
+    fun showThink() {
+        val guideView = GuideView.Builder
+            .newInstance(requireActivity())
+            .setTargetView(mBinding.ivThink) //设置目标
+            .setDirction(GuideView.Direction.BOTTOM)
+            .setShape(GuideView.MyShape.RECTANGULAR)
+            .setRoundRadius(dp2px(20f))
+            .setBgImage(R.drawable.icon_home_guide_one)
+            .setLayoutResId(R.layout.layout_guide_think)
+            .setOnclickExit(true)
+            .setOnclickListener {
+                showPush()
+            }
+            .build()
+        guideView.show()
+    }
+
+    fun showPush() {
+        val guideView = GuideView.Builder
+            .newInstance(requireActivity())
+            .setTargetView(mBinding.ivAdd) //设置目标
+            .setDirction(GuideView.Direction.BOTTOM)
+            .setShape(GuideView.MyShape.RECTANGULAR)
+            .setRoundRadius(dp2px(20f))
+            .setBgImage(R.drawable.icon_home_guide_one)
+            .setLayoutResId(R.layout.layout_guide_push)
+            .setOnclickExit(true)
+            .setOnclickListener {
+
+            }
+            .build()
+        guideView.show()
     }
 
     fun changeTab(position: Int) {

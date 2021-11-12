@@ -2,8 +2,8 @@ package com.alan.mvvm.base.ktx
 
 import android.content.Context
 import android.os.Build
+import android.util.DisplayMetrics
 import android.view.WindowManager
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 
 /**
@@ -76,14 +76,24 @@ fun Fragment.px2sp(pxValue: Float): Int {
     return (pxValue / scale + 0.5f).toInt()
 }
 
-@RequiresApi(Build.VERSION_CODES.R)
 fun Context.getScreenWidth(): Int {
     val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    return wm.getCurrentWindowMetrics().bounds.width()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        return wm.getCurrentWindowMetrics().bounds.width()
+    } else {
+        val localDisplayMetrics = DisplayMetrics()
+        wm.defaultDisplay.getMetrics(localDisplayMetrics)
+        return localDisplayMetrics.widthPixels
+    }
 }
 
-@RequiresApi(Build.VERSION_CODES.R)
 fun Context.getScreenHeight(): Int {
     val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    return wm.getCurrentWindowMetrics().bounds.height()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        return wm.getCurrentWindowMetrics().bounds.height()
+    } else {
+        val localDisplayMetrics = DisplayMetrics()
+        wm.defaultDisplay.getMetrics(localDisplayMetrics)
+        return localDisplayMetrics.heightPixels
+    }
 }

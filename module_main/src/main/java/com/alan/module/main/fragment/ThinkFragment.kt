@@ -122,6 +122,9 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
 
     fun initRV() {
         mAdapter = ThinkAdapter()
+        //防止点击闪烁
+        mAdapter.setHasStableIds(true)
+        mBinding.rvList.itemAnimator = null
         mBinding.rvList.apply {
             addItemDecoration(
                 MyColorDecoration(

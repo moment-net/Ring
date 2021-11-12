@@ -128,12 +128,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_avatar" />
 
+    <com.alan.mvvm.common.views.MultiImageView
+        android:id="@+id/miv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/dimen10" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_constraintlayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_marginTop="@dimen/dimen16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/miv">
 
 
         <leifu.shapelibrary.ShapeView
@@ -164,10 +175,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen4"
             android:layout_marginEnd="@dimen/dimen8"
+            android:layout_marginBottom="@dimen/dimen1"
             android:text="玩游戏"
             android:textColor="@color/_9C9C9C"
             android:textSize="12sp"
-            android:layout_marginBottom="@dimen/dimen1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_label"
@@ -180,10 +191,9 @@
         android:id="@+id/tv_chat"
         android:layout_width="66dp"
         android:layout_height="26dp"
-        android:layout_marginTop="20dp"
         android:src="@drawable/icon_home_together"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/main_constraintlayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+        app:layout_constraintTop_toTopOf="@+id/main_constraintlayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

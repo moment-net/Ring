@@ -77,6 +77,7 @@ dependencies {
     api DependencyConfig.GitHub.EasyFloat
     api DependencyConfig.GitHub.Flexbox
     api DependencyConfig.GitHub.Pictureselector
+    api DependencyConfig.GitHub.NewGuide
 
 
     api DependencyConfig.SDK.WeChat
@@ -85,7 +86,6 @@ dependencies {
     api DependencyConfig.SDK.TencentTBSX5
     api DependencyConfig.SDK.OneLogin
     api DependencyConfig.SDK.IMChat
-//    api DependencyConfig.SDK.IMCall
     api DependencyConfig.SDK.Agora
     api DependencyConfig.SDK.JPush
     api DependencyConfig.SDK.JCore
@@ -95,6 +95,7 @@ dependencies {
     api DependencyConfig.SDK.Oppoplugin
     api DependencyConfig.SDK.Vivoplugin
     api DependencyConfig.SDK.Amplitude
+    api DependencyConfig.SDK.Aliyun
 
 
     kapt DependencyConfig.JetPack.HiltApt

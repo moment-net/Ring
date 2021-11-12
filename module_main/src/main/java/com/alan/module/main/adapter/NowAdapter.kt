@@ -1,6 +1,7 @@
 package com.alan.module.main.adapter
 
 import android.graphics.Color
+import android.os.Bundle
 import android.text.TextUtils
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,6 +10,11 @@ import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.NowBean
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
+import com.alan.mvvm.base.ktx.gone
+import com.alan.mvvm.base.ktx.visible
+import com.alan.mvvm.base.utils.jumpARoute
+import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.views.MultiImageView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -31,6 +37,7 @@ class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now),
         val tvLabelBg = holder.getView<ShapeView>(R.id.tv_label_bg)
         val ivLabel = holder.getView<ImageView>(R.id.iv_label)
         val tvLabel = holder.getView<TextView>(R.id.tv_label)
+        val miv = holder.getView<MultiImageView>(R.id.miv)
 
         val age = if (item.user.age > 0) {
             "${item.user.age}岁"
@@ -62,6 +69,26 @@ class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now),
 
         holder.setText(R.id.tv_time, item.createTimeDesc)
         holder.setText(R.id.tv_content, item.content)
+
+        val list = item.pic
+        if (list != null && list.size > 0) {
+            miv.visible()
+            miv.setList(list)
+            miv.setOnItemClickListener { view, position ->
+                val picList = arrayListOf<String>()
+                for (bean in list) {
+                    picList.add(bean.url)
+                }
+                val bundle = Bundle().apply {
+                    putStringArrayList("list", picList)
+                    putInt("position", position)
+                    putInt("type", 1)
+                }
+                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_PREVIEW, bundle)
+            }
+        } else {
+            miv.gone()
+        }
 
         //设置标签
         tvLabelBg.setShapeSolidColor(Color.parseColor(item.bgColor)).setUseShape()

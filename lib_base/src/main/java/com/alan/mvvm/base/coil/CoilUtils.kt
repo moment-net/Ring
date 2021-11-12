@@ -1,6 +1,7 @@
 package com.alan.mvvm.base.coil
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.ColorInt
@@ -50,6 +51,12 @@ object CoilUtils {
                 iv.load(url) {}
             }
             is String -> {
+                iv.load(url) {}
+            }
+            is Int -> {
+                iv.load(url) {}
+            }
+            is Drawable -> {
                 iv.load(url) {}
             }
         }

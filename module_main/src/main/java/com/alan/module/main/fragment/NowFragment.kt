@@ -175,7 +175,6 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                 requestList()
             }, 1000)
         }
-
 //        mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
 //            override fun onLoadMore(refreshLayout: RefreshLayout) {
 //                isLoad = true

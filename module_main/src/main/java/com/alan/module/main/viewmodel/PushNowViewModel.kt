@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.http.requestbean.NowRequestBean
+import com.alan.mvvm.base.http.responsebean.PicBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
@@ -46,14 +47,33 @@ class PushNowViewModel @Inject constructor(private val mRepository: CommonReposi
     /**
      * 发布正在
      */
-    fun requestPushNow(tag: String, content: String) {
-        val requestBean = NowRequestBean(tag, content)
+    fun requestPushNow(tag: String, content: String, pic: ArrayList<PicBean>) {
+        val requestBean = NowRequestBean(tag, content, pic)
         viewModelScope.launch() {
             mRepository.requestPushNow(
                 RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
                         ldData.value = true
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+
+    /**
+     * 获取token
+     */
+    fun requestToken() {
+        viewModelScope.launch() {
+            mRepository.requestSTSToken(
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = it.data!!
                     },
                     onFailed = {
                         toast(it.errorMessage)

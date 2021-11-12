@@ -24,10 +24,8 @@ class CreateTagFragmentDialog :
     BaseFrameDialogFragment<LayoutDialogCreateTagBinding, CreateTagViewModel>() {
 
     companion object {
-        fun newInstance(userId: String, userName: String): CreateTagFragmentDialog {
+        fun newInstance(): CreateTagFragmentDialog {
             val bundle = Bundle()
-            bundle.putString("userId", userId)
-            bundle.putString("userName", userName)
             val dialog = CreateTagFragmentDialog()
             dialog.setArguments(bundle)
             return dialog
@@ -40,6 +38,7 @@ class CreateTagFragmentDialog :
     override val mViewModel by viewModels<CreateTagViewModel>()
     lateinit var userId: String
     lateinit var userName: String
+    lateinit var listener: OnCompleteListener
 
     override fun initWindow() {
         setDimAmount(0f)
@@ -62,23 +61,29 @@ class CreateTagFragmentDialog :
 
 
     override fun LayoutDialogCreateTagBinding.initView() {
-        arguments?.apply {
-            userId = getString("userId", "")
-            userName = getString("userName", "")
-        }
-
         mBinding.tvSend.clickDelay {
             val content = etReply.text.toString()
             if (TextUtils.isEmpty(content)) {
                 toast("请输入标签内容")
                 return@clickDelay
             }
-            dismiss()
+            mViewModel.requestModifyTag(content)
         }
     }
 
 
     override fun initObserve() {
+        mViewModel.ldData.observe(this) {
+            when (it) {
+                is Boolean -> {
+                    toast("添加成功")
+                    if (listener != null) {
+                        listener.onComplete()
+                    }
+                    dismiss()
+                }
+            }
+        }
     }
 
     override fun initRequestData() {
@@ -104,5 +109,8 @@ class CreateTagFragmentDialog :
         inputManager.showSoftInput(editText, 0)
     }
 
+    interface OnCompleteListener {
+        fun onComplete()
+    }
 
 }

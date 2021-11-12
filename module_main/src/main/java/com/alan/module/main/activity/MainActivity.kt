@@ -19,6 +19,8 @@ import com.alan.module.main.fragment.HomeFragment
 import com.alan.module.main.fragment.MyFragment
 import com.alan.module.main.viewmodel.MainViewModel
 import com.alan.mvvm.base.BaseApplication
+import com.alan.mvvm.base.http.baseresp.BaseResponse
+import com.alan.mvvm.base.http.responsebean.CardInfoBean
 import com.alan.mvvm.base.http.responsebean.MatchSuccessBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.gone
@@ -90,7 +92,18 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
      * 订阅数据
      */
     override fun initObserve() {
-
+        mViewModel.ldCard.observe(this) {
+            when (it) {
+                is BaseResponse<*> -> {
+                    val list: ArrayList<CardInfoBean> = it.data as ArrayList<CardInfoBean>
+                    if (list != null && list.size > 0) {
+                        mBinding.ivRed.gone()
+                    } else {
+                        mBinding.ivRed.visible()
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -270,6 +283,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         super.onResume()
         handleConversations()
         EMClientHelper.showNotificationPermissionDialog()
+        mViewModel.requestCardList(SpHelper.getUserInfo()?.userId!!)
     }
 
     /**

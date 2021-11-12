@@ -1069,6 +1069,12 @@ interface HomeApiService {
     suspend fun requestNowTagList(@Query("type") type: String): BaseResponse<ArrayList<NowTagBean>>
 
     /**
+     * 自定义标签状态
+     */
+    @POST("doing/modifytag")
+    suspend fun requestModifyTag(@Body requestBody: RequestBody): BaseResponse<ArrayList<NowTagBean>>
+
+    /**
      * 屏蔽正在
      */
     @POST("doing/ban")
@@ -1196,5 +1202,12 @@ interface HomeApiService {
      */
     @GET("banner/list")
     suspend fun requestBanner(): BaseResponse<ArrayList<BannerBean>>
+
+    /**
+     * stsToken
+     */
+    @GET("user/common/refresh/stsToken")
+    suspend fun requestSTSToken(): BaseResponse<StsTokenBean>
+
 
 }

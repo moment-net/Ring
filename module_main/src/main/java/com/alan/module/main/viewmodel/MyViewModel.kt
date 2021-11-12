@@ -59,7 +59,7 @@ class MyViewModel @Inject constructor(private val mRepository: CommonRepository)
 
 
     /**
-     * 获取列表
+     * 获取想法列表
      */
     fun requestList(curson: Int, userId: String) {
         val map = hashMapOf<String, String>()
@@ -83,7 +83,7 @@ class MyViewModel @Inject constructor(private val mRepository: CommonRepository)
 
 
     /**
-     * 获取列表
+     * 获取卡片列表
      */
     fun requestCardList(userId: String) {
         viewModelScope.launch() {

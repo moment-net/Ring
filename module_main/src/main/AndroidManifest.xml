@@ -4,15 +4,18 @@
 
     <application>
         <activity
+            android:name=".activity.PreviewPicActivity"
+            android:exported="true" />
+        <activity
             android:name=".activity.SelectStateActivity"
             android:exported="true" />
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"
-            android:launchMode="singleTask">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -42,12 +45,12 @@
             android:name=".activity.NowActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysVisible" />
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".activity.ThinkActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysVisible" />
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".activity.SelectTypeActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"

@@ -44,7 +44,10 @@ object RouteUrl {
         const val ACTIVITY_MAIN_NOW: String = "/main/now"
 
         //我的页面
-        const val ACTIVITY_MAIN_MY: String = "/main/my";
+        const val ACTIVITY_MAIN_MY: String = "/main/my"
+
+        //图片展示页面
+        const val ACTIVITY_MAIN_PREVIEW: String = "/main/preview";
     }
 
     object HomeModule {

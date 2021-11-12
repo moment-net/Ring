@@ -10,7 +10,6 @@ import com.alan.module.main.R
 import com.alan.module.main.databinding.LayoutPushBinding
 import com.alan.module.main.viewmodel.PushViewModel
 import com.alan.mvvm.base.ktx.clickDelay
-import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.mvvm.v.BaseFrameDialogFragment
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
@@ -46,8 +45,8 @@ class PushFragmentDialog : BaseFrameDialogFragment<LayoutPushBinding, PushViewMo
             )
         )
         window.setBackgroundDrawable(colorDrawable)
-        params.width = dp2px(320f)
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT
+        params.width = WindowManager.LayoutParams.MATCH_PARENT
+        params.height = WindowManager.LayoutParams.MATCH_PARENT
         params.gravity = Gravity.CENTER
         setCanceledOnTouchOutside(false)
         isCancelable = false
@@ -60,12 +59,12 @@ class PushFragmentDialog : BaseFrameDialogFragment<LayoutPushBinding, PushViewMo
             dismiss()
         }
 
-        ivNow.clickDelay {
+        tvNow.clickDelay {
             dismiss()
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_NOW)
             DataPointUtil.reportPublishNow(SpHelper.getUserInfo()?.userId!!)
         }
-        ivThink.clickDelay {
+        tvThink.clickDelay {
             dismiss()
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_THINK)
             DataPointUtil.reportPublishThink(SpHelper.getUserInfo()?.userId!!)

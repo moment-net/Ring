@@ -288,6 +288,9 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
 
     fun initRv() {
         mAdapter = MyThinkAdapter()
+        //防止点击闪烁
+        mAdapter.setHasStableIds(true)
+        mBinding.rvList.itemAnimator = null
         mBinding.rvList.apply {
             addItemDecoration(
                 MyColorDecoration(

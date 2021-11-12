@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.http.requestbean.ThinkRequestBean
+import com.alan.mvvm.base.http.responsebean.PicBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
@@ -28,14 +29,32 @@ class PushThinkViewModel @Inject constructor(private val mRepository: CommonRepo
     /**
      * 发布想法
      */
-    fun requestPushThink(content: String) {
-        val requestBean = ThinkRequestBean(content)
+    fun requestPushThink(content: String, pic: ArrayList<PicBean>) {
+        val requestBean = ThinkRequestBean(content, pic)
         viewModelScope.launch() {
             mRepository.requestPushThink(
                 RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
                         ldData.value = true
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+    /**
+     * 获取token
+     */
+    fun requestToken() {
+        viewModelScope.launch() {
+            mRepository.requestSTSToken(
+                callback = RequestCallback(
+                    onSuccess = {
+                        ldData.value = it.data!!
                     },
                     onFailed = {
                         toast(it.errorMessage)

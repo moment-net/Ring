@@ -65,6 +65,7 @@ object DependencyConfig {
         const val EasyFloatVersion = "2.0.3"                // 悬浮窗权限框架
         const val FlexboxVersion = "3.0.0"                  // 流式排列框架
         const val PictureselectorVersion = "v2.7.3-rc09"    // 图片选择框架
+        const val NewGuideVersion = "v2.4.0"                // 新手引导框架
 
         // 第三方SDK--------------------------------------------------------------
         const val WeChat = "6.6.4"                          // 腾讯开放平台微信
@@ -82,6 +83,7 @@ object DependencyConfig {
         const val OppoPushVersion = "4.1.5"                 // oppo推送版本
         const val VivoPushVersion = "4.1.5"                 // vivo推送版本
         const val AmplitudeVersion = "2.32.1"               // amplitude数据上报版本
+        const val AliyunVersion = "2.9.5"                   // AliyunVersion版本
     }
 
     /**
@@ -178,6 +180,8 @@ object DependencyConfig {
         const val Flexbox = "com.google.android.flexbox:flexbox:${Version.FlexboxVersion}"
         const val Pictureselector =
             "io.github.lucksiege:pictureselector:${Version.PictureselectorVersion}"
+        const val NewGuide = "com.github.huburt-Hu:NewbieGuide:${Version.NewGuideVersion}"
+
     }
 
     /**
@@ -201,6 +205,7 @@ object DependencyConfig {
         const val Oppoplugin = "cn.jiguang.sdk.plugin:oppo:${Version.OppoPushVersion}"
         const val Vivoplugin = "cn.jiguang.sdk.plugin:vivo:${Version.VivoPushVersion}"
         const val Amplitude = "com.amplitude:android-sdk:${Version.AmplitudeVersion}"
+        const val Aliyun = "com.aliyun.dpa:oss-android-sdk:${Version.AliyunVersion}"
 
     }
 }

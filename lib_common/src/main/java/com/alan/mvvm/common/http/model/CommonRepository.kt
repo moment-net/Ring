@@ -452,6 +452,14 @@ class CommonRepository @Inject constructor() : BaseRepository() {
     ) = request(mApi, callback) { mApi.requestNowTagList(type) }
 
     /**
+     * 自定义标签状态
+     */
+    suspend fun requestModifyTag(
+        requestBody: RequestBody,
+        callback: RequestCallback<ArrayList<NowTagBean>>
+    ) = request(mApi, callback) { mApi.requestModifyTag(requestBody) }
+
+    /**
      * 屏蔽正在
      */
     suspend fun requestBanNow(
@@ -616,6 +624,14 @@ class CommonRepository @Inject constructor() : BaseRepository() {
     suspend fun requestBanner(
         callback: RequestCallback<ArrayList<BannerBean>>
     ) = request(mApi, callback) { mApi.requestBanner() }
+
+    /**
+     * stsToken
+     */
+    suspend fun requestSTSToken(
+        callback: RequestCallback<StsTokenBean>
+    ) = request(mApi, callback) { mApi.requestSTSToken() }
+
 
 }
 
