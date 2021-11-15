@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
-import com.alan.mvvm.base.ktx.DensityKtxKt;
 import com.alan.mvvm.common.R;
 
 /**
@@ -87,6 +86,14 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
      * 背景图片
      */
     private int bgImage;
+    /**
+     * 背景图片开始位置
+     */
+    private int[] bgLocation;
+    /**
+     * 上下左右padding
+     */
+    private int[] centerPadding;
 
     /**
      * 相对于targetView的位置.在target的那个方向
@@ -165,9 +172,16 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
         this.targetView = targetView;
     }
 
-
     public void setBgImage(int bgImage) {
         this.bgImage = bgImage;
+    }
+
+    public void setBgLocation(int[] bgLocation) {
+        this.bgLocation = bgLocation;
+    }
+
+    public void setCenterPadding(int[] centerPadding) {
+        this.centerPadding = centerPadding;
     }
 
     public void showOnce() {
@@ -271,10 +285,10 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
                     break;
                 case RECTANGULAR://圆角矩形
                     //RectF对象
-                    oval.left = centerLocation[0] - halfWidth - 10;                              //左边
-                    oval.top = centerLocation[1] - halfHeight - 10;                                   //上边
-                    oval.right = centerLocation[0] + halfWidth + 10;                             //右边
-                    oval.bottom = centerLocation[1] + halfHeight + 10;                                //下边
+                    oval.left = centerLocation[0] - halfWidth - centerPadding[0];                              //左边
+                    oval.top = centerLocation[1] - halfHeight - centerPadding[1];                                   //上边
+                    oval.right = centerLocation[0] + halfWidth + centerPadding[2];                             //右边
+                    oval.bottom = centerLocation[1] + halfHeight + centerPadding[3];                                //下边
                     canvas.drawRoundRect(oval, roundRadius, roundRadius, mCirclePaint);                   //绘制圆角矩形
                     break;
             }
@@ -286,7 +300,7 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
             int left = targetLocation[0];
             int top = targetLocation[1];
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), bgImage);
-            canvas.drawBitmap(bitmap, left - DensityKtxKt.dp2px(mContent, 23f), top - DensityKtxKt.dp2px(mContent, 22f), paint);
+            canvas.drawBitmap(bitmap, left - bgLocation[0], top - bgLocation[1], paint);
         }
     }
 
@@ -541,6 +555,16 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
 
         public Builder setBgImage(int imageResId) {
             guiderView.setBgImage(imageResId);
+            return instance;
+        }
+
+        public Builder setBgLocation(int[] bgLocation) {
+            guiderView.setBgLocation(bgLocation);
+            return instance;
+        }
+
+        public Builder setCenterPadding(int[] centerPadding) {
+            guiderView.setCenterPadding(centerPadding);
             return instance;
         }
 

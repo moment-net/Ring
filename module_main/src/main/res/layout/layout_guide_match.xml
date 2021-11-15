@@ -8,7 +8,7 @@
         android:id="@+id/tv_content"
         android:layout_width="201dp"
         android:layout_height="78dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="18dp"
         android:layout_marginEnd="41dp"
         android:background="@drawable/icon_guide_bg"
         android:gravity="center"

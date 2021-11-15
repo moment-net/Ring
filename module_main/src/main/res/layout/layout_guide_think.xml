@@ -9,7 +9,7 @@
         android:layout_width="201dp"
         android:layout_height="78dp"
         android:layout_marginStart="76dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/icon_guide_bg_left"
         android:gravity="center"
         android:text="奇思妙想都在这儿！"

@@ -90,4 +90,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@drawable/shape_circle_red"
+        app:layout_constraintTop_toTopOf="@+id/tv_add"
+        app:layout_constraintEnd_toEndOf="@+id/tv_add" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

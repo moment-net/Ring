@@ -255,7 +255,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initRequestData() {
+//        if (SpHelper.getNewUser()) {
         showMatch()
+//        }
     }
 
     fun showMatch() {
@@ -265,6 +267,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             .setDirction(GuideView.Direction.BOTTOM)
             .setShape(GuideView.MyShape.RECTANGULAR)
             .setRoundRadius(dp2px(20f))
+            .setBgLocation(intArrayOf(dp2px(25f), dp2px(24f)))
+            .setCenterPadding(intArrayOf(dp2px(2f), dp2px(4f), dp2px(2f), dp2px(0f)))
             .setBgImage(R.drawable.icon_home_guide_one)
             .setLayoutResId(R.layout.layout_guide_match)
             .setOnclickExit(true)
@@ -281,8 +285,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             .setTargetView(mBinding.ivThink) //设置目标
             .setDirction(GuideView.Direction.BOTTOM)
             .setShape(GuideView.MyShape.RECTANGULAR)
-            .setRoundRadius(dp2px(20f))
-            .setBgImage(R.drawable.icon_home_guide_one)
+            .setRoundRadius(dp2px(6f))
+            .setBgLocation(intArrayOf(dp2px(39f), dp2px(36f)))
+            .setCenterPadding(intArrayOf(dp2px(13f), dp2px(12f), dp2px(13f), dp2px(12f)))
+            .setBgImage(R.drawable.icon_home_guide_two)
             .setLayoutResId(R.layout.layout_guide_think)
             .setOnclickExit(true)
             .setOnclickListener {
@@ -298,8 +304,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             .setTargetView(mBinding.ivAdd) //设置目标
             .setDirction(GuideView.Direction.BOTTOM)
             .setShape(GuideView.MyShape.RECTANGULAR)
-            .setRoundRadius(dp2px(20f))
-            .setBgImage(R.drawable.icon_home_guide_one)
+            .setRoundRadius(dp2px(10f))
+            .setBgLocation(intArrayOf(dp2px(29f), dp2px(37f)))
+            .setCenterPadding(intArrayOf(dp2px(7f), dp2px(14f), dp2px(7f), dp2px(14f)))
+            .setBgImage(R.drawable.icon_home_guide_three)
             .setLayoutResId(R.layout.layout_guide_push)
             .setOnclickExit(true)
             .setOnclickListener {

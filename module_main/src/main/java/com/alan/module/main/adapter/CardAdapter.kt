@@ -29,13 +29,20 @@ class CardAdapter : BaseQuickAdapter<CardInfoBean, BaseViewHolder>(R.layout.item
         val tvLevel = holder.getView<TextView>(R.id.tv_level)
         val group = holder.getView<Group>(R.id.group)
         val tvAdd = holder.getView<TextView>(R.id.tv_add)
+        val ivRed = holder.getView<ImageView>(R.id.iv_red)
 
         if (itemPosition == data.size - 1) {
             group.gone()
             tvAdd.visible()
+            if (itemPosition == 0) {
+                ivRed.visible()
+            } else {
+                ivRed.gone()
+            }
         } else {
             group.visible()
             tvAdd.gone()
+            ivRed.gone()
 
             tvLabelBg.setShapeSolidColor(Color.parseColor(item.style?.bgColor)).setUseShape()
             tvLabelBg.alpha = item.style?.bgOpacity!!
