@@ -53,6 +53,7 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
     override val mViewModel by viewModels<PushNowViewModel>()
     lateinit var mAdapter: NowLabelAdapter
     lateinit var picAdapter: GridImageAdapter
+    var picMap = hashMapOf<Int, PicBean>()
     var picList: ArrayList<PicBean> = arrayListOf()
     var tag: String = ""
     var content: String = ""
@@ -152,12 +153,13 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
     fun initRv() {
         mAdapter = NowLabelAdapter()
         mBinding.rvList.apply {
-            addItemDecoration(
-                MyColorDecoration(
-                    0, 0, dp2px(10f), dp2px(10f),
-                    ContextCompat.getColor(context, R.color.white)
-                )
-            )
+            //添加这个会导致计算间距有问题
+//            addItemDecoration(
+//                MyColorDecoration(
+//                    0, 0, dp2px(10f), dp2px(10f),
+//                    ContextCompat.getColor(context, R.color.white)
+//                )
+//            )
             layoutManager = FlexboxLayoutManager(this@NowActivity, FlexDirection.ROW, FlexWrap.WRAP)
             adapter = mAdapter
         }
@@ -254,20 +256,34 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
 
     fun requestUploadPic(bean: StsTokenBean) {
         showDialog()
-
+        if (!picMap.isEmpty()) {
+            picMap.clear()
+        }
+        if (!picList.isEmpty()) {
+            picList.clear()
+        }
         val listener = object : OnUploadListener {
             override fun onProgress(position: Int, currentSize: Long, totalSize: Long) {
-                KLog.e("uploadPic", "上传进度${totalSize} ===$currentSize")
+//                KLog.e("uploadPic", "上传的第几个:${position}===上传进度${totalSize}===当前进度$currentSize")
             }
 
             override fun onSuccess(position: Int, item: LocalMedia, imageUrl: String?) {
-                picList.add(position, PicBean(imageUrl!!, item.width, item.height))
                 KLog.e(
                     "uploadPic",
-                    "上传成功${item.realPath} ==${picList.size}==${picAdapter.list.size}== ${imageUrl}"
+                    "当前线程${Thread.currentThread().name}==========上传成功${item.realPath}"
                 )
-                if (picList.size == picAdapter.list.size) {
-                    mViewModel.requestPushNow(tag, content, picList)
+                runOnUiThread {
+                    picMap.put(position, PicBean(imageUrl!!, item.width, item.height))
+                    KLog.e(
+                        "uploadPic",
+                        "上传成功${item.realPath} ==${picMap.size}==${picAdapter.list.size}== ${imageUrl}"
+                    )
+                    if (picMap.size == picAdapter.list.size) {
+                        for (i in 0..picMap.size - 1) {
+                            picList.add(picMap.get(i)!!)
+                        }
+                        mViewModel.requestPushNow(tag, content, picList)
+                    }
                 }
             }
 

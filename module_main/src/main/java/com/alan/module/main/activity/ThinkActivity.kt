@@ -44,6 +44,7 @@ class ThinkActivity : BaseActivity<ActivityThinkBinding, PushThinkViewModel>() {
     override val mViewModel by viewModels<PushThinkViewModel>()
     var content: String = ""
     lateinit var picAdapter: GridImageAdapter
+    var picMap = hashMapOf<Int, PicBean>()
     var picList: ArrayList<PicBean> = arrayListOf()
     private val selectMax = 9
 
@@ -195,21 +196,34 @@ class ThinkActivity : BaseActivity<ActivityThinkBinding, PushThinkViewModel>() {
     }
 
     fun requestUploadPic(bean: StsTokenBean) {
-        showDialog()
-
+        if (!picMap.isEmpty()) {
+            picMap.clear()
+        }
+        if (!picList.isEmpty()) {
+            picList.clear()
+        }
         val listener = object : OssManager.OnUploadListener {
             override fun onProgress(position: Int, currentSize: Long, totalSize: Long) {
-                KLog.e("uploadPic", "上传进度${totalSize} ===$currentSize")
+//                KLog.e("uploadPic", "上传的第几个:${position}===上传进度${totalSize}===当前进度$currentSize")
             }
 
             override fun onSuccess(position: Int, item: LocalMedia, imageUrl: String?) {
-                picList.add(position, PicBean(imageUrl!!, item.width, item.height))
                 KLog.e(
                     "uploadPic",
-                    "上传成功${item.realPath} ==${picList.size}==${picAdapter.list.size}== ${imageUrl}"
+                    "当前线程${Thread.currentThread().name}==========上传成功${item.realPath}"
                 )
-                if (picList.size == picAdapter.list.size) {
-                    mViewModel.requestPushThink(content, picList)
+                runOnUiThread {
+                    picMap.put(position, PicBean(imageUrl!!, item.width, item.height))
+                    KLog.e(
+                        "uploadPic",
+                        "上传成功${item.realPath} ==${picMap.size}==${picAdapter.list.size}== ${imageUrl}"
+                    )
+                    if (picMap.size == picAdapter.list.size) {
+                        for (i in 0..picMap.size - 1) {
+                            picList.add(picMap.get(i)!!)
+                        }
+                        mViewModel.requestPushThink(content, picList)
+                    }
                 }
             }
 

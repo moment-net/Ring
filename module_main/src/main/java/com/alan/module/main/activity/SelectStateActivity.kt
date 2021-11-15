@@ -2,7 +2,6 @@ package com.alan.module.main.activity
 
 import android.text.TextUtils
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import com.alan.module.main.R
 import com.alan.module.main.adapter.NowLabelAdapter
 import com.alan.module.main.databinding.ActivitySelectStateBinding
@@ -10,8 +9,6 @@ import com.alan.module.main.viewmodel.StateViewModel
 import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.NowTagBean
 import com.alan.mvvm.base.ktx.clickDelay
-import com.alan.mvvm.base.ktx.dp2px
-import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
@@ -93,12 +90,6 @@ class SelectStateActivity : BaseActivity<ActivitySelectStateBinding, StateViewMo
     fun initRv() {
         mAdapter = NowLabelAdapter()
         mBinding.rvList.apply {
-            addItemDecoration(
-                MyColorDecoration(
-                    0, 0, dp2px(10f), dp2px(10f),
-                    ContextCompat.getColor(context, R.color.white)
-                )
-            )
             layoutManager =
                 FlexboxLayoutManager(this@SelectStateActivity, FlexDirection.ROW, FlexWrap.WRAP)
             adapter = mAdapter

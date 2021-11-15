@@ -83,21 +83,7 @@ class OssManager {
             onUploadListener.onProgress(position, currentSize, totalSize)
         })
 
-//            try {
-//                val putResult = oss!!.putObject(put)
-//                KLog.d("PutObject", "UploadSuccess")
-//                KLog.d("ETag", putResult.eTag)
-//                KLog.d("RequestId", putResult.requestId)
-//            } catch (e: ClientException) {
-//                // 客户端异常，例如网络异常等。
-//                e.printStackTrace()
-//            } catch (e: ServiceException) {
-//                // 服务端异常。
-//                KLog.e("RequestId", e.requestId)
-//                KLog.e("ErrorCode", e.errorCode)
-//                KLog.e("HostId", e.hostId)
-//                KLog.e("RawMessage", e.rawMessage)
-//            }
+
         oss?.asyncPutObject(
             put,
             object : OSSCompletedCallback<PutObjectRequest, PutObjectResult?> {
@@ -107,7 +93,7 @@ class OssManager {
                 ) {
                     KLog.e(
                         "uploadPic",
-                        "上传成功：$position 是否是空:${onUploadListener == null} ${request.getObjectKey()}"
+                        "上传成功：$position ==== 是否是空:${onUploadListener == null} ==== imageUrl: ${request.objectKey}"
                     )
                     if (onUploadListener == null) {
                         return
