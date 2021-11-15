@@ -53,6 +53,7 @@ data class NowBean(
     val textOpacity: Float,
     val bgColor: String,
     val bgOpacity: Float,
+    var isShow: Boolean = false,
     val createTimeDesc: String,
     var pic: ArrayList<PicBean>
 )

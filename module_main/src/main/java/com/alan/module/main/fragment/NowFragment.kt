@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alan.module.main.R
 import com.alan.module.main.adapter.NowAdapter
 import com.alan.module.main.databinding.FragmentNowBinding
-import com.alan.module.main.dialog.InputFragmentDialog
 import com.alan.module.main.viewmodel.NowViewModel
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.base.http.baseresp.BaseResponse
@@ -95,10 +94,16 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
 
                 is Pair<*, *> -> {
                     val userId = it.first as String
-                    val userName = it.second as String
+                    val content = it.second as String
 
-                    val inputDialog = InputFragmentDialog.newInstance(userId, userName)
-                    inputDialog.show(requireActivity().supportFragmentManager)
+
+                    val bundle = Bundle().apply {
+                        putString("userId", userId)
+                        putString("content", content)
+                    }
+                    jumpARoute(RouteUrl.ChatModule.ACTIVITY_CHAT_DETAIL, bundle)
+//                    val inputDialog = InputFragmentDialog.newInstance(userId, userName)
+//                    inputDialog.show(requireActivity().supportFragmentManager)
                 }
             }
         }
@@ -140,21 +145,31 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                     showPopupWindow(view, id, userId, position)
                     DataPointUtil.reportHomeMenu(SpHelper.getUserInfo()?.userId!!)
                 }
-                R.id.tv_chat -> {
-                    DataPointUtil.reportTogether(SpHelper.getUserInfo()?.userId!!, userId)
-                    if (TextUtils.equals(userId, SpHelper.getUserInfo()?.userId)) {
-                        toast("不可以和自己一起，试试点击他人一起按钮吧！")
-                        return@setOnItemChildClickListener
-                    }
-                    EMClientHelper.saveUser(
-                        UserEntity(
-                            userId,
-                            userName,
-                            avatar
-                        )
-                    )
-                    mViewModel.requestIsReply(userId, userName)
+
+            }
+        }
+        mAdapter.listener = object : NowAdapter.OnReplyClickListener {
+            override fun onReply(position: Int, content: String) {
+                if (context == null) {
+                    toast("请输入回复内容")
+                    return
                 }
+                val userId = mAdapter.data.get(position).user.userId
+                val userName = mAdapter.data.get(position).user.userName
+                val avatar = mAdapter.data.get(position).user.avatar
+
+                DataPointUtil.reportTogether(SpHelper.getUserInfo()?.userId!!, userId)
+                if (TextUtils.equals(userId, SpHelper.getUserInfo()?.userId)) {
+                    toast("不可以和自己一起，试试点击他人一起按钮吧！")
+                }
+                EMClientHelper.saveUser(
+                    UserEntity(
+                        userId,
+                        userName,
+                        avatar
+                    )
+                )
+                mViewModel.requestIsReply(userId, content)
             }
         }
         mAdapter.setEmptyView(TextView(requireActivity()).apply {

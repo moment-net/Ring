@@ -1,19 +1,19 @@
 package com.alan.module.main.adapter
 
+import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.alan.module.main.R
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.NowBean
-import com.alan.mvvm.base.ktx.dp2px
-import com.alan.mvvm.base.ktx.getResColor
-import com.alan.mvvm.base.ktx.gone
-import com.alan.mvvm.base.ktx.visible
+import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.views.MultiImageView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
@@ -22,22 +22,31 @@ import leifu.shapelibrary.ShapeView
 
 
 class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now), LoadMoreModule {
+    var listener: OnReplyClickListener? = null
 
     init {
         addChildClickViewIds(R.id.iv_avatar)
         addChildClickViewIds(R.id.iv_more)
-        addChildClickViewIds(R.id.tv_chat)
     }
 
     override fun convert(holder: BaseViewHolder, item: NowBean) {
         val ivAvatar = holder.getView<ImageView>(R.id.iv_avatar)
-        CoilUtils.loadCircle(ivAvatar, item.user.avatar)
-        holder.setText(R.id.tv_name, item.user.userName)
         val tvAge = holder.getView<ShapeView>(R.id.tv_age)
         val tvLabelBg = holder.getView<ShapeView>(R.id.tv_label_bg)
         val ivLabel = holder.getView<ImageView>(R.id.iv_label)
         val tvLabel = holder.getView<TextView>(R.id.tv_label)
         val miv = holder.getView<MultiImageView>(R.id.miv)
+        val clInput = holder.getView<ConstraintLayout>(R.id.cl_input)
+        val ivAvatarMy = holder.getView<ImageView>(R.id.iv_avatar_my)
+        val etContent = holder.getView<ShapeView>(R.id.et_content)
+        val ivChat = holder.getView<ImageView>(R.id.iv_chat)
+
+        val itemPosition = getItemPosition(item)
+
+        CoilUtils.loadCircle(ivAvatar, item.user.avatar)
+        holder.setText(R.id.tv_name, item.user.userName)
+        CoilUtils.loadCircle(ivAvatarMy, SpHelper.getUserInfo()?.avatar!!)
+
 
         val age = if (item.user.age > 0) {
             "${item.user.age}岁"
@@ -96,7 +105,33 @@ class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now),
         tvLabel.setText(item.tag)
         tvLabel.setTextColor(Color.parseColor(item.textColor))
         CoilUtils.load(ivLabel, item.tagPicUrl)
+
+        ivChat.setOnClickListener {
+            if (!ivAvatarMy.isVisible) {
+                ivAvatarMy.visible()
+                etContent.visible()
+                startAnimal(clInput)
+            } else {
+                if (listener != null) {
+                    listener!!.onReply(itemPosition, etContent.text.toString())
+                }
+            }
+        }
     }
 
+    fun startAnimal(cl: ConstraintLayout) {
+        val animator = ValueAnimator.ofInt(context.dp2px(10f), context.dp2px(56f))
+        animator.addUpdateListener {
+            val animatedValue = it.animatedValue as Int
+            val layoutParams = cl.layoutParams as ConstraintLayout.LayoutParams
+            layoutParams.topMargin = animatedValue
+            cl.layoutParams = layoutParams
+        }
+        animator.setDuration(1000)
+        animator.start()
+    }
 
+    interface OnReplyClickListener {
+        fun onReply(position: Int, content: String)
+    }
 }

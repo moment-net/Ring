@@ -70,14 +70,14 @@ class NowViewModel @Inject constructor(private val mRepository: CommonRepository
     /**
      * 聊天检测（是否被已回复）
      */
-    fun requestIsReply(userId: String, userName: String) {
+    fun requestIsReply(userId: String, content: String) {
         val requestBean = ToUserIdRequestBean(userId)
         viewModelScope.launch() {
             mRepository.requestIsReply(
                 RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        ldData.value = Pair<String, String>(userId, userName)
+                        ldData.value = Pair<String, String>(userId, content)
                     },
                     onFailed = {
                         toast(it.errorMessage)

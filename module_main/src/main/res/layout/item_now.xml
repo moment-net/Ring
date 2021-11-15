@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/dimen15"
+    android:padding="@dimen/dimen10"
     android:background="@drawable/shape_white10">
 
     <ImageView
@@ -186,14 +186,64 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <ImageView
-        android:id="@+id/tv_chat"
-        android:layout_width="66dp"
-        android:layout_height="26dp"
-        android:src="@drawable/icon_home_together"
-        app:layout_constraintBottom_toBottomOf="@+id/main_constraintlayout2"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_input"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dimen36"
+        android:layout_marginTop="@dimen/dimen10"
+        app:layout_constraintTop_toBottomOf="@+id/miv"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_constraintlayout2" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <leifu.shapelibrary.ShapeView
+            android:id="@+id/et_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingStart="@dimen/dimen36"
+            android:paddingTop="@dimen/dimen0"
+            android:paddingBottom="@dimen/dimen0"
+            android:paddingEnd="@dimen/dimen76"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:textColorHint="@color/black50"
+            android:hint="和TA聊聊..."
+            app:isEditText="true"
+            app:sCorners="13dp"
+            app:sSolidColor="@color/_33FFD54A"
+            app:sStrokeWidth="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_avatar_my"
+            android:layout_width="@dimen/dimen26"
+            android:layout_height="@dimen/dimen26"
+            android:src="@drawable/icon_placeholder"
+            android:layout_marginStart="@dimen/dimen5"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/iv_chat"
+            android:layout_width="66dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="@dimen/dimen5"
+            android:src="@drawable/icon_home_together"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
