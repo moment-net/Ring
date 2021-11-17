@@ -8,6 +8,7 @@ import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
+import com.alan.mvvm.base.ktx.DensityKtxKt;
 import com.alan.mvvm.common.R;
 
 /**
@@ -90,6 +92,10 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
      * 背景图片开始位置
      */
     private int[] bgLocation;
+    /**
+     * 清空图片
+     */
+    private int clearImage;
     /**
      * 上下左右padding
      */
@@ -174,6 +180,10 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
 
     public void setBgImage(int bgImage) {
         this.bgImage = bgImage;
+    }
+
+    public void setClearImage(int clearImage) {
+        this.clearImage = clearImage;
     }
 
     public void setBgLocation(int[] bgLocation) {
@@ -285,11 +295,27 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
                     break;
                 case RECTANGULAR://圆角矩形
                     //RectF对象
-                    oval.left = centerLocation[0] - halfWidth - centerPadding[0];                              //左边
-                    oval.top = centerLocation[1] - halfHeight - centerPadding[1];                                   //上边
-                    oval.right = centerLocation[0] + halfWidth + centerPadding[2];                             //右边
-                    oval.bottom = centerLocation[1] + halfHeight + centerPadding[3];                                //下边
+                    oval.left = centerLocation[0] - centerPadding[0];                              //左边
+                    oval.top = centerLocation[1] - centerPadding[1];                                   //上边
+                    oval.right = centerLocation[0] + centerPadding[2];                             //右边
+                    oval.bottom = centerLocation[1] + centerPadding[3];                                //下边
                     canvas.drawRoundRect(oval, roundRadius, roundRadius, mCirclePaint);                   //绘制圆角矩形
+                    break;
+                case BITMAP:
+                    oval.left = centerLocation[0] - centerPadding[0];
+                    oval.top = centerLocation[1] - centerPadding[1];
+                    oval.right = centerLocation[0] + centerPadding[2];
+                    oval.bottom = centerLocation[1] + centerPadding[3];
+                    float roundSmall = DensityKtxKt.dp2px(mContent, 16);
+                    float roundBig = DensityKtxKt.dp2px(mContent, 30);
+                    Path path = new Path();
+                    float[] round = new float[]{roundSmall, roundSmall, roundBig, roundBig, roundSmall, roundSmall, roundBig, roundBig};
+                    path.addRoundRect(oval, round, Path.Direction.CW);
+                    canvas.drawPath(path, mCirclePaint);
+//                    int bitmapX = targetLocation[0];
+//                    int bitmapY = targetLocation[1];
+//                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), clearImage);
+//                    canvas.drawBitmap(bitmap, bitmapX, bitmapY, mCirclePaint);
                     break;
             }
         } else {
@@ -297,10 +323,10 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
         }
 
         if (bgImage != 0) {
-            int left = targetLocation[0];
-            int top = targetLocation[1];
+            int centerX = centerLocation[0];
+            int centerY = centerLocation[1];
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), bgImage);
-            canvas.drawBitmap(bitmap, left - bgLocation[0], top - bgLocation[1], paint);
+            canvas.drawBitmap(bitmap, centerX - bgLocation[0], centerY - bgLocation[1], paint);
         }
     }
 
@@ -490,7 +516,7 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
      * 定义目标控件的形状，共3种。圆形，椭圆，带圆角的矩形（可以设置圆角大小），不设置则默认是圆形
      */
     public enum MyShape {
-        CIRCULAR, ELLIPSE, RECTANGULAR
+        CIRCULAR, ELLIPSE, RECTANGULAR, BITMAP
     }
 
     /**
@@ -555,6 +581,11 @@ public class GuideView extends FrameLayout implements ViewTreeObserver.OnGlobalL
 
         public Builder setBgImage(int imageResId) {
             guiderView.setBgImage(imageResId);
+            return instance;
+        }
+
+        public Builder setClearImage(int imageResId) {
+            guiderView.setClearImage(imageResId);
             return instance;
         }
 

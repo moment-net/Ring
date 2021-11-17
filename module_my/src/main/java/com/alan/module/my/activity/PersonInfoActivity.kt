@@ -31,9 +31,11 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.permissionx.guolindev.PermissionX
+import com.socks.library.KLog
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.io.File
 import java.util.*
 
 
@@ -312,11 +314,31 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
                     val selectList = PictureSelector.obtainMultipleResult(data)
                     if (selectList != null && !selectList.isEmpty()) {
                         val media = selectList.get(0)
-                        val url = if (media.isCompressed) {
-                            media.compressPath
+                        val url = if (media.isCut) {
+                            media.cutPath
                         } else {
                             media.getPath()
                         }
+                        KLog.e("xujm", "原图地址::" + media.path)
+
+                        if (media.isCut) {
+                            KLog.e("xujm", "裁剪地址::" + media.cutPath)
+                        }
+                        if (media.isCompressed) {
+                            KLog.e("xujm", "压缩地址::" + media.compressPath)
+                            KLog.e(
+                                "xujm",
+                                "压缩后文件大小::" + File(media.compressPath).length() / 1024 + "k"
+                            )
+                        }
+                        if (!TextUtils.isEmpty(media.androidQToPath)) {
+                            KLog.e("xujm", "Android Q特有地址::" + media.androidQToPath)
+                        }
+                        if (media.isOriginal) {
+                            KLog.e("xujm", "是否开启原图功能::" + true)
+                            KLog.e("xujm", "开启原图功能后地址::" + media.originalPath)
+                        }
+                        KLog.e("xujm", "当前地址::" + url)
                         mViewModel.requestUploadPic(url)
                     }
                 }

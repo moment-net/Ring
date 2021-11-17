@@ -150,7 +150,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
         }
         mAdapter.listener = object : NowAdapter.OnReplyClickListener {
             override fun onReply(position: Int, content: String) {
-                if (context == null) {
+                if (TextUtils.isEmpty(context.toString())) {
                     toast("请输入回复内容")
                     return
                 }
@@ -161,6 +161,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
                 DataPointUtil.reportTogether(SpHelper.getUserInfo()?.userId!!, userId)
                 if (TextUtils.equals(userId, SpHelper.getUserInfo()?.userId)) {
                     toast("不可以和自己一起，试试点击他人一起按钮吧！")
+                    return
                 }
                 EMClientHelper.saveUser(
                     UserEntity(

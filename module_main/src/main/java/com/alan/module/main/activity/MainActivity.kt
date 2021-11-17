@@ -170,6 +170,17 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         }
     }
 
+    /**
+     * 处理红点
+     */
+    fun handleRed() {
+        if (SpHelper.isClickCard()) {
+            mBinding.ivRed.gone()
+        } else {
+            mBinding.ivRed.visible()
+        }
+    }
+
     //获取新消息
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun checkUnreadMsg(event: MessageEvent) {
@@ -283,7 +294,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         super.onResume()
         handleConversations()
         EMClientHelper.showNotificationPermissionDialog()
-        mViewModel.requestCardList(SpHelper.getUserInfo()?.userId!!)
+        handleRed()
     }
 
     /**

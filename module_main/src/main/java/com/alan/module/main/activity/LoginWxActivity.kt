@@ -402,8 +402,8 @@ class LoginWxActivity : BaseActivity<ActivityLoginWxBinding, LoginWxViewModel>()
                     val selectList = PictureSelector.obtainMultipleResult(data)
                     if (selectList != null && !selectList.isEmpty()) {
                         val media = selectList.get(0)
-                        val url = if (media.isCompressed) {
-                            media.compressPath
+                        val url = if (media.isCut) {
+                            media.cutPath
                         } else {
                             media.getPath()
                         }

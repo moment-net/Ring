@@ -59,13 +59,13 @@ object DependencyConfig {
         const val BannerVersion = "2.1.5"                   // Banner框架
         const val XPopupVersion = "2.5.6"                   // XPopupDialog框架
         const val PickerViewVersion = "4.1.9"               // PickerView框架
-        const val EasyPhotoVersion = "3.1.3"                // EasyPhoto框架
         const val LottieVersion = "3.5.0"                   // Lottie框架
         const val CameraVersion = "1.1.9"                   // Camera框架
         const val EasyFloatVersion = "2.0.3"                // 悬浮窗权限框架
         const val FlexboxVersion = "3.0.0"                  // 流式排列框架
         const val PictureselectorVersion = "v2.7.3-rc09"    // 图片选择框架
         const val NewGuideVersion = "v2.4.0"                // 新手引导框架
+        const val TransfereeVersion = "1.6.1"               // 图片预览框架
 
         // 第三方SDK--------------------------------------------------------------
         const val WeChat = "6.6.4"                          // 腾讯开放平台微信
@@ -173,7 +173,6 @@ object DependencyConfig {
         const val Banner = "com.bigkoo:convenientbanner:${Version.BannerVersion}"
         const val XPopup = "com.github.li-xiaojun:XPopup:${Version.XPopupVersion}"
         const val PickerView = "com.contrarywind:Android-PickerView:${Version.PickerViewVersion}"
-        const val EasyPhotos = "com.github.HuanTanSheng:EasyPhotos:${Version.EasyPhotoVersion}"
         const val Lottie = "com.airbnb.android:lottie:${Version.LottieVersion}"
         const val Camera = "cjt.library.wheel:camera:${Version.CameraVersion}"
         const val EasyFloat = "com.github.princekin-f:EasyFloat:${Version.EasyFloatVersion}"
@@ -181,7 +180,10 @@ object DependencyConfig {
         const val Pictureselector =
             "io.github.lucksiege:pictureselector:${Version.PictureselectorVersion}"
         const val NewGuide = "com.github.huburt-Hu:NewbieGuide:${Version.NewGuideVersion}"
-
+        const val Transferee =
+            "com.github.Hitomis.transferee:Transferee:${Version.TransfereeVersion}"
+        const val TransfereeGlide =
+            "com.github.Hitomis.transferee:GlideImageLoader:${Version.TransfereeVersion}"
     }
 
     /**

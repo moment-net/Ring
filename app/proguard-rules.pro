@@ -876,10 +876,6 @@ native <methods>;
     *;
 }
 
-#easyphotos
--keep class com.huantansheng.easyphotos.models.** { *; }
-
-
 #PictureSelector 2.0
 -keep class com.luck.picture.lib.** { *; }
 

@@ -130,4 +130,20 @@ object SpHelper {
     }
 
 
+    //上面是用户相关信息
+    /**
+     * 是否点击过社交卡片
+     */
+    fun isClickCard(): Boolean {
+        return SpUtils.getBoolean(SpKey.KEY_ISCLICKCARD, false)!!
+    }
+
+    /**
+     * 设置是否点击过社交卡片
+     */
+    fun setClickCard(isClick: Boolean) {
+        SpUtils.put(SpKey.KEY_ISCLICKCARD, isClick)
+    }
+
+
 }

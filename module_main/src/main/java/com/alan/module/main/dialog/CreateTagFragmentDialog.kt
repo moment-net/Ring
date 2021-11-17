@@ -67,6 +67,10 @@ class CreateTagFragmentDialog :
                 toast("请输入标签内容")
                 return@clickDelay
             }
+            if (content.length < 2) {
+                toast("请输入标签内容2-10个字")
+                return@clickDelay
+            }
             mViewModel.requestModifyTag(content)
         }
     }

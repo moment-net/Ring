@@ -68,12 +68,12 @@ class OssManager {
         context: Context, bean: StsTokenBean, position: Int, item: LocalMedia,
         onUploadListener: OnUploadListener?
     ) {
-        KLog.e("uploadPic", "FileName:${item.fileName}=====${item.realPath}")
+        KLog.e("uploadPic", "FileName:${item.fileName}=====${item.compressPath}")
         val oss = getOSS(context, bean)
         // 创建上传的对象
         val put = PutObjectRequest(
             bean.bucketName,
-            "image/${getUUIDByRules32Image()}", item.realPath
+            "image/${getUUIDByRules32Image()}", item.compressPath
         )
         // 上传的进度回调
         put.setProgressCallback(OSSProgressCallback<PutObjectRequest?> { request, currentSize, totalSize ->

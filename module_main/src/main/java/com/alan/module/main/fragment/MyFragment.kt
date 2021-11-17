@@ -279,6 +279,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
                 }
 
                 R.id.tv_add -> {
+                    SpHelper.setClickCard(true)
                     DataPointUtil.reportClickAddCard()
                     jumpARoute(RouteUrl.MyModule.ACTIVITY_MY_CARD)
                 }

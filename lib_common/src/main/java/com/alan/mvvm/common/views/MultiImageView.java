@@ -226,7 +226,7 @@ public class MultiImageView extends LinearLayout {
 
         imageView.setId(photoInfo.getUrl().hashCode());
         imageView.setOnClickListener(new ImageOnClickListener(position));
-        String imgUrl = photoInfo.getUrl() + "?x-oss-process=image/resize,l_300,m_lfit";
+        String imgUrl = photoInfo.getUrl() + "?x-oss-process=image/resize,l_600,m_lfit";
         KLog.e("图片地址", imgUrl);
         CoilUtils.INSTANCE.load(imageView, imgUrl);
 

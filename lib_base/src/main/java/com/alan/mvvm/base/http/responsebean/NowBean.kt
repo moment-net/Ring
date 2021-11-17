@@ -41,6 +41,7 @@ package com.alan.mvvm.base.http.responsebean
 "bgOpacity": "0.1", //背景透明度
 "createTimeDesc": "14分钟前发布"
 }
+增加一个自定义字段为了显示隐藏输入框
  */
 data class NowBean(
     val id: String,

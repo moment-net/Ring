@@ -1,13 +1,20 @@
 package com.alan.module.main.adapter
 
+import android.animation.ObjectAnimator
 import android.net.Uri
+import android.widget.ImageView
 import coil.load
 import com.alan.module.main.R
+import com.alan.mvvm.base.ktx.gone
+import com.alan.mvvm.base.ktx.visible
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.photoview.PhotoView
 import java.io.File
+
+
+
 
 /**
  * 作者：alan
@@ -22,6 +29,7 @@ class PicVPAdapter : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_pic_
 
     override fun convert(holder: BaseViewHolder, item: String) {
         val iv_pic = holder.getView<PhotoView>(R.id.iv_pic)
+        val iv_load = holder.getView<ImageView>(R.id.iv_load)
 
 //        val mScreenWidth = context.getScreenWidth()
 //        val mScreenHeight = context.getScreenHeight()
@@ -50,16 +58,37 @@ class PicVPAdapter : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_pic_
 //        }
 //
         if (item.startsWith("http") || item.startsWith("https")) {
+            val anim = ObjectAnimator.ofInt(iv_load, "ImageLevel", 0, 10000)
+            anim.duration = 800
+            anim.repeatCount = ObjectAnimator.INFINITE
+
+
             iv_pic.load(item) {
-                placeholder(R.drawable.icon_placeholder_rect)
+                placeholder(R.drawable.shape_trans)
+                crossfade(true)
+                listener(
+                    onStart = {
+                        iv_load.visible()
+                        anim.start()
+                    },
+                    onError = { request, error ->
+                        iv_load.gone()
+                        anim.cancel()
+                    },
+                    onSuccess = { request, metadata ->
+                        iv_load.gone()
+                        anim.cancel()
+                    })
             }
         } else if (PictureMimeType.isContent(item)) {
             iv_pic.load(Uri.parse(item)) {
-                placeholder(R.drawable.icon_placeholder_rect)
+                placeholder(R.drawable.shape_trans)
+                crossfade(true)
             }
         } else {
             iv_pic.load(File(item)) {
-                placeholder(R.drawable.icon_placeholder_rect)
+                placeholder(R.drawable.shape_trans)
+                crossfade(true)
             }
         }
     }

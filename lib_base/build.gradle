@@ -71,13 +71,14 @@ dependencies {
     api DependencyConfig.GitHub.Banner
     api DependencyConfig.GitHub.XPopup
     api DependencyConfig.GitHub.PickerView
-    api DependencyConfig.GitHub.EasyPhotos
     api DependencyConfig.GitHub.Lottie
     api DependencyConfig.GitHub.Camera
     api DependencyConfig.GitHub.EasyFloat
     api DependencyConfig.GitHub.Flexbox
     api DependencyConfig.GitHub.Pictureselector
     api DependencyConfig.GitHub.NewGuide
+    api DependencyConfig.GitHub.Transferee
+    api DependencyConfig.GitHub.TransfereeGlide
 
 
     api DependencyConfig.SDK.WeChat

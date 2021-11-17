@@ -8,9 +8,11 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.load
 import com.alan.mvvm.base.R
+import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.engine.ImageEngine
 import com.luck.picture.lib.listener.OnImageCompleteCallback
 import com.luck.picture.lib.widget.longimage.SubsamplingScaleImageView
+import java.io.File
 
 object CoilEngine : ImageEngine {
 
@@ -95,6 +97,7 @@ object CoilEngine : ImageEngine {
 //    }
 
     /**
+     * 预览大图页面
      * 加载图片
      *
      * @param context
@@ -102,10 +105,19 @@ object CoilEngine : ImageEngine {
      * @param imageView
      */
     override fun loadImage(context: Context, url: String, imageView: ImageView) {
-        imageView.load(url) {}
+        if (PictureMimeType.isContent(url)) {
+            imageView.load(url) {
+                placeholder(R.drawable.picture_image_placeholder)
+            }
+        } else {
+            imageView.load(File(url)) {
+                placeholder(R.drawable.picture_image_placeholder)
+            }
+        }
     }
 
     /**
+     * 网络图片
      * 加载网络图片适配长图方案
      * # 注意：此方法只有加载网络图片才会回调
      *
@@ -154,9 +166,22 @@ object CoilEngine : ImageEngine {
      * @param imageView 承载图片ImageView
      */
     override fun loadFolderImage(context: Context, url: String, imageView: ImageView) {
-        imageView.load(url) {}
+        if (PictureMimeType.isContent(url)) {
+            imageView.load(url) {
+                placeholder(R.drawable.picture_image_placeholder)
+                size(200, 200)
+            }
+        } else {
+            imageView.load(File(url)) {
+                placeholder(R.drawable.picture_image_placeholder)
+                size(200, 200)
+            }
+        }
     }
 
+    /**
+     * 加载GIF图
+     */
     override fun loadAsGifImage(context: Context, url: String, imageView: ImageView) {
         val imageLoader = ImageLoader.Builder(context).componentRegistry {
             if (SDK_INT >= 28) {
@@ -176,9 +201,16 @@ object CoilEngine : ImageEngine {
      * @param imageView 承载图片ImageView
      */
     override fun loadGridImage(context: Context, url: String, imageView: ImageView) {
-        imageView.load(url) {
-            placeholder(R.drawable.picture_image_placeholder)
-            size(200, 200)
+        if (PictureMimeType.isContent(url)) {
+            imageView.load(url) {
+                placeholder(R.drawable.picture_image_placeholder)
+                size(200, 200)
+            }
+        } else {
+            imageView.load(File(url)) {
+                placeholder(R.drawable.picture_image_placeholder)
+                size(200, 200)
+            }
         }
     }
 }

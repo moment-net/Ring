@@ -20,4 +20,7 @@ object SpKey {
 
     //用户信息
     const val KEY_USERINFO: String = "key_userinfo";
+
+    //是否点击过社交卡片
+    const val KEY_ISCLICKCARD: String = "key_isclickcard";
 }

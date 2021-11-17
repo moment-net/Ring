@@ -9,6 +9,7 @@ import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.CardInfoBean
 import com.alan.mvvm.base.ktx.gone
 import com.alan.mvvm.base.ktx.visible
+import com.alan.mvvm.common.helper.SpHelper
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import leifu.shapelibrary.ShapeView
@@ -34,10 +35,10 @@ class CardAdapter : BaseQuickAdapter<CardInfoBean, BaseViewHolder>(R.layout.item
         if (itemPosition == data.size - 1) {
             group.gone()
             tvAdd.visible()
-            if (itemPosition == 0) {
-                ivRed.visible()
-            } else {
+            if (SpHelper.isClickCard()) {
                 ivRed.gone()
+            } else {
+                ivRed.visible()
             }
         } else {
             group.visible()

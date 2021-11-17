@@ -10,6 +10,7 @@
         android:layout_height="78dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="41dp"
+        android:paddingTop="@dimen/dimen8"
         android:background="@drawable/icon_guide_bg"
         android:gravity="center"
         android:text="点击立马有人陪你聊天"
@@ -19,4 +20,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_guide_hand"
+        android:layout_marginTop="@dimen/dimen57"
+        android:layout_marginEnd="@dimen/dimen27"
+        app:layout_constraintEnd_toEndOf="@+id/tv_content"
+        app:layout_constraintTop_toTopOf="@+id/tv_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

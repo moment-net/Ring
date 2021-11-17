@@ -116,6 +116,12 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
                     val list = it.data as ArrayList<NowTagBean>
 
                     mAdapter.setList(list)
+
+                    if (mAdapter.selectPosition > 0) {
+                        tag = mAdapter.data.get(mAdapter.selectPosition).tag
+                        mBinding.etContent.setText(mAdapter.data.get(mAdapter.selectPosition).defaultText)
+                        mBinding.etContent.setSelection(mBinding.etContent.text.length)
+                    }
                 }
 
                 is Boolean -> {
@@ -172,6 +178,7 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
                         inputDialog.show(supportFragmentManager)
                         inputDialog.listener = object : CreateTagFragmentDialog.OnCompleteListener {
                             override fun onComplete() {
+                                mAdapter.selectPosition = position
                                 mViewModel.requestNowTagList()
                             }
                         }
@@ -255,7 +262,7 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
 
 
     fun requestUploadPic(bean: StsTokenBean) {
-        showDialog()
+        showDialog("上传中...")
         if (!picMap.isEmpty()) {
             picMap.clear()
         }
@@ -270,13 +277,13 @@ class NowActivity : BaseActivity<ActivityNowBinding, PushNowViewModel>() {
             override fun onSuccess(position: Int, item: LocalMedia, imageUrl: String?) {
                 KLog.e(
                     "uploadPic",
-                    "当前线程${Thread.currentThread().name}==========上传成功${item.realPath}"
+                    "当前线程${Thread.currentThread().name}==========上传成功${item.compressPath}"
                 )
                 runOnUiThread {
                     picMap.put(position, PicBean(imageUrl!!, item.width, item.height))
                     KLog.e(
                         "uploadPic",
-                        "上传成功${item.realPath} ==${picMap.size}==${picAdapter.list.size}== ${imageUrl}"
+                        "上传成功${item.compressPath} ==${picMap.size}==${picAdapter.list.size}== ${imageUrl}"
                     )
                     if (picMap.size == picAdapter.list.size) {
                         for (i in 0..picMap.size - 1) {

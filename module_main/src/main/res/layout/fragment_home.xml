@@ -395,6 +395,7 @@
         android:paddingTop="@dimen/dimen10"
         android:paddingBottom="@dimen/dimen10"
         android:visibility="gone"
+        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cl_top_hide">
@@ -426,7 +427,7 @@
         android:layout_width="@dimen/dimen60"
         android:layout_height="@dimen/dimen69"
         android:src="@drawable/icon_home_push"
-        android:layout_marginBottom="@dimen/dimen200"
+        android:layout_marginBottom="@dimen/dimen180"
         android:layout_marginEnd="@dimen/dimen15"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

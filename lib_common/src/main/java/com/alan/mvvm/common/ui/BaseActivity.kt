@@ -47,8 +47,8 @@ abstract class BaseActivity<VB : ViewBinding, VM : BaseViewModel> : BaseFrameAct
         }
     }
 
-    fun showDialog() {
-        loadingDialog = DialogHelper.showLoadingDialog(this, "加载中...")
+    fun showDialog(title: String? = "加载中...") {
+        loadingDialog = DialogHelper.showLoadingDialog(this, title)
     }
 
     fun dismissDialog() {

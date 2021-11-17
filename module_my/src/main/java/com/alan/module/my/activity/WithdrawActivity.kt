@@ -314,7 +314,7 @@ class WithdrawActivity : BaseActivity<ActivityWithdrawBinding, WithdrawViewModel
     /**
      * 显示确认弹框
      */
-    fun showDialog(wxName: String?) {
+    fun showCommitDialog(wxName: String?) {
         val wxCommitDialog: WxCommitFragmentDialog = WxCommitFragmentDialog.newInstance(wxName)
         wxCommitDialog.show(this.getSupportFragmentManager())
         wxCommitDialog.dialogListener = object : WxCommitFragmentDialog.DialogOnClickListener {

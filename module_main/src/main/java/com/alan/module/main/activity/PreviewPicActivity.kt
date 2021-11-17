@@ -45,7 +45,7 @@ class PreviewPicActivity : BaseActivity<ActivityPreviewPicBinding, EmptyViewMode
      */
     override val mViewModel by viewModels<EmptyViewModel>()
     var picList: ArrayList<String> = arrayListOf()
-    var position: Int = 0
+    var mPosition: Int = 0
     var mType: Int = 0//0是本地；1是网络图片
     private var mMimeType: String? = null
 
@@ -55,7 +55,7 @@ class PreviewPicActivity : BaseActivity<ActivityPreviewPicBinding, EmptyViewMode
     override fun ActivityPreviewPicBinding.initView() {
         intent.apply {
             mType = getIntExtra("type", 0)
-            position = getIntExtra("position", 0)
+            mPosition = getIntExtra("position", 0)
             val list = getStringArrayListExtra("list")
             if (list != null && !list.isEmpty()) {
                 picList.addAll(list)
@@ -67,8 +67,8 @@ class PreviewPicActivity : BaseActivity<ActivityPreviewPicBinding, EmptyViewMode
             PermissionX.init(this@PreviewPicActivity).permissions(REQUESTED_PERMISSIONS[0])
                 .request { allGranted, grantedList, deniedList ->
                     if (allGranted) {
-                        showDialog()
-                        val downloadPath = picList.get(position)
+                        showDialog("下载中...")
+                        val downloadPath = picList.get(mPosition)
                         val currentMimeType = PictureMimeType.getImageMimeType(downloadPath)
                         mMimeType =
                             if (PictureMimeType.isJPG(currentMimeType)) PictureMimeType.MIME_TYPE_JPEG else currentMimeType
@@ -105,15 +105,16 @@ class PreviewPicActivity : BaseActivity<ActivityPreviewPicBinding, EmptyViewMode
             ivDownload.visible()
         }
 
-        tvNum.setText("${position + 1}/${picList?.size}")
+        tvNum.setText("${mPosition + 1}/${picList?.size}")
 
         val picVPAdapter = PicVPAdapter()
         viewpager.adapter = picVPAdapter
         picVPAdapter.setList(picList)
-        viewpager.setCurrentItem(position, false)
+        viewpager.setCurrentItem(mPosition, false)
         viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                mPosition = position
                 tvNum.setText("${position + 1}/${picList?.size}")
             }
         })

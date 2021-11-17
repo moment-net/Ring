@@ -10,7 +10,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.alan.module.main.R
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.NowBean
-import com.alan.mvvm.base.ktx.*
+import com.alan.mvvm.base.ktx.dp2px
+import com.alan.mvvm.base.ktx.getResColor
+import com.alan.mvvm.base.ktx.gone
+import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.helper.SpHelper
@@ -21,8 +24,9 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import leifu.shapelibrary.ShapeView
 
 
-class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now), LoadMoreModule {
+class NowAdapter() : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now), LoadMoreModule {
     var listener: OnReplyClickListener? = null
+
 
     init {
         addChildClickViewIds(R.id.iv_avatar)
@@ -83,6 +87,10 @@ class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now),
         if (list != null && list.size > 0) {
             miv.visible()
             miv.setList(list)
+            val arrayListOf = arrayListOf<String>()
+            for (bean in list) {
+                arrayListOf.add(bean.url)
+            }
             miv.setOnItemClickListener { view, position ->
                 val picList = arrayListOf<String>()
                 for (bean in list) {
@@ -106,14 +114,30 @@ class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now),
         tvLabel.setTextColor(Color.parseColor(item.textColor))
         CoilUtils.load(ivLabel, item.tagPicUrl)
 
+        if (item.isShow) {
+            ivAvatarMy.visible()
+            etContent.visible()
+            val layoutParams = clInput.layoutParams as ConstraintLayout.LayoutParams
+            layoutParams.topMargin = context.dp2px(56f)
+            clInput.layoutParams = layoutParams
+        } else {
+            ivAvatarMy.gone()
+            etContent.gone()
+            val layoutParams = clInput.layoutParams as ConstraintLayout.LayoutParams
+            layoutParams.topMargin = context.dp2px(10f)
+            clInput.layoutParams = layoutParams
+        }
+
         ivChat.setOnClickListener {
-            if (!ivAvatarMy.isVisible) {
+            if (!item.isShow) {
+                item.isShow = true
                 ivAvatarMy.visible()
                 etContent.visible()
                 startAnimal(clInput)
             } else {
-                if (listener != null) {
+                if (listener != null && !TextUtils.isEmpty(etContent.text.toString())) {
                     listener!!.onReply(itemPosition, etContent.text.toString())
+                    etContent.setText("")
                 }
             }
         }
@@ -127,7 +151,7 @@ class NowAdapter : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now),
             layoutParams.topMargin = animatedValue
             cl.layoutParams = layoutParams
         }
-        animator.setDuration(1000)
+        animator.setDuration(500)
         animator.start()
     }
 

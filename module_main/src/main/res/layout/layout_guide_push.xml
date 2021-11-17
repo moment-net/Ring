@@ -8,15 +8,26 @@
         android:id="@+id/tv_content"
         android:layout_width="201dp"
         android:layout_height="98dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="18dp"
         android:layout_marginEnd="@dimen/dimen26"
         android:background="@drawable/icon_guide_bg"
         android:gravity="center"
         android:text="点击发布你正在做什么，\n马上就有人和你一起玩！"
         android:textColor="@color/white"
         android:textSize="16sp"
+        android:paddingTop="@dimen/dimen11"
+        android:paddingStart="@dimen/dimen20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_guide_hand"
+        android:layout_marginTop="@dimen/dimen84"
+        android:layout_marginEnd="@dimen/dimen28"
+        app:layout_constraintEnd_toEndOf="@+id/tv_content"
+        app:layout_constraintTop_toTopOf="@+id/tv_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

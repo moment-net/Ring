@@ -196,6 +196,7 @@ class ThinkActivity : BaseActivity<ActivityThinkBinding, PushThinkViewModel>() {
     }
 
     fun requestUploadPic(bean: StsTokenBean) {
+        showDialog("上传中...")
         if (!picMap.isEmpty()) {
             picMap.clear()
         }
@@ -210,13 +211,13 @@ class ThinkActivity : BaseActivity<ActivityThinkBinding, PushThinkViewModel>() {
             override fun onSuccess(position: Int, item: LocalMedia, imageUrl: String?) {
                 KLog.e(
                     "uploadPic",
-                    "当前线程${Thread.currentThread().name}==========上传成功${item.realPath}"
+                    "当前线程${Thread.currentThread().name}==========上传成功${item.compressPath}"
                 )
                 runOnUiThread {
                     picMap.put(position, PicBean(imageUrl!!, item.width, item.height))
                     KLog.e(
                         "uploadPic",
-                        "上传成功${item.realPath} ==${picMap.size}==${picAdapter.list.size}== ${imageUrl}"
+                        "上传成功${item.compressPath} ==${picMap.size}==${picAdapter.list.size}== ${imageUrl}"
                     )
                     if (picMap.size == picAdapter.list.size) {
                         for (i in 0..picMap.size - 1) {
