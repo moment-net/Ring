@@ -136,6 +136,7 @@ class NowAdapter() : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now
                 startAnimal(clInput)
             } else {
                 if (listener != null && !TextUtils.isEmpty(etContent.text.toString())) {
+                    etContent.requestFocus()
                     listener!!.onReply(itemPosition, etContent.text.toString())
                     etContent.setText("")
                 }

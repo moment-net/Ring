@@ -1,6 +1,7 @@
 package com.alan.mvvm.base.utils
 
 import android.content.Context
+import android.text.TextUtils
 import com.alan.mvvm.base.http.responsebean.StsTokenBean
 import com.alibaba.sdk.android.oss.*
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback
@@ -19,6 +20,7 @@ import java.util.*
  */
 class OssManager {
     private var mOSS: OSS? = null
+    private var lastAccessKeyId: String = ""
 
     companion object {
         //通过@JvmStatic注解，使得在Java中调用instance直接是像调用静态函数一样，
@@ -35,12 +37,13 @@ class OssManager {
      * 创建OSS对象
      */
     private fun getOSS(context: Context, bean: StsTokenBean): OSS? {
-        if (mOSS == null) {
+        if (mOSS == null || !TextUtils.equals(lastAccessKeyId, bean.accessKeyId)) {
 //            val provider: OSSCredentialProvider = object : OSSCustomSignerCredentialProvider() {
 //                override fun signContent(content: String): String {
 //                    return OSSUtils.sign(bean.accessKeyId, bean.accessKeySecret, content)
 //                }
 //            }
+            lastAccessKeyId = bean.accessKeyId
             val provider: OSSCredentialProvider = OSSStsTokenCredentialProvider(
                 bean.accessKeyId,
                 bean.accessKeySecret,
@@ -49,9 +52,8 @@ class OssManager {
             val conf = ClientConfiguration()
             conf.setConnectionTimeout(15 * 1000) // 连接超时，默认15秒
             conf.setSocketTimeout(15 * 1000) // socket超时，默认15秒
-            conf.setMaxConcurrentRequest(5) // 最大并发请求书，默认5个
+            conf.setMaxConcurrentRequest(9) // 最大并发请求书，默认5个
             conf.setMaxErrorRetry(2) // 失败后最大重试次数，默认2次
-//            mOSS = OSSClient(context, bean.endPoint, provider, conf)
             mOSS = OSSClient(context, bean.endPoint, provider, conf)
         }
         return mOSS

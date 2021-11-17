@@ -2,10 +2,7 @@ package com.alan.module.main.fragment
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.viewModels
@@ -57,6 +54,8 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
     }
 
     override fun FragmentNowBinding.initView() {
+        requireActivity().getWindow()
+            ?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         initRV()
     }
 

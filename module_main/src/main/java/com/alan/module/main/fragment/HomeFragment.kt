@@ -255,9 +255,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     override fun initRequestData() {
-//        if (SpHelper.getNewUser()) {
-        showMatch()
-//        }
+        if (SpHelper.getNewUser()) {
+            showMatch()
+        }
     }
 
     fun showMatch() {

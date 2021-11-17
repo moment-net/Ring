@@ -282,8 +282,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         SoundPoolUtil.instance.playSound(BaseApplication.mContext, R.raw.voice_ring)
         VibrateUtil.starVibrate()
         val bean = GsonUtil.jsonToBean(event.data, MatchSuccessBean::class.java)!!
-        val currentActivity = ActivityStackManager.getCurrentActivity() as FragmentActivity
+        var currentActivity = ActivityStackManager.getCurrentActivity() as FragmentActivity
         KLog.e("RingIM", "服务器下发消息：$currentActivity")
+        val annotation = currentActivity.javaClass.getAnnotation(AndroidEntryPoint::class.java)
+        if (annotation == null) {
+            currentActivity = this
+        }
         val dialog = MatchFragmentDialog.newInstance(bean)
         dialog.show(currentActivity.supportFragmentManager)
         EventBusUtils.removeStickyEvent(MatchEvent::class.java)
