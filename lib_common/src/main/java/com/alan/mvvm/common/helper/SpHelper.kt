@@ -125,6 +125,7 @@ object SpHelper {
         setLogin(false)
         setToken("")
         setUserInfo(null)
+        setClickCard(false)
         EMClientHelper.logoutEM(null)
         DbHelper.instance.closeDb()
     }
