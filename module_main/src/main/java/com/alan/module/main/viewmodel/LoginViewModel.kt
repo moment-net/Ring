@@ -11,6 +11,7 @@ import com.alan.mvvm.base.http.requestbean.LoginThirdRequestBean
 import com.alan.mvvm.base.http.requestbean.PhoneCheckRequestBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
+import com.alan.mvvm.base.utils.AESUtils
 import com.alan.mvvm.base.utils.DeviceUtil
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
@@ -56,7 +57,7 @@ class LoginViewModel @Inject constructor(private val mRepository: CommonReposito
      * 登录
      */
     fun requestLogin(phone: String, installParam: String) {
-        val requestBean = LoginRequestBean(phone, "123456", installParam, 1)
+        val requestBean = LoginRequestBean(AESUtils.encrypt(phone), "123456", installParam, 1)
         viewModelScope.launch {
             mRepository.requestLogin(RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(

@@ -245,7 +245,7 @@
         android:layout_width="@dimen/dimen0"
         android:layout_height="@dimen/dimen172"
         android:visibility="gone"
-        android:alpha="0"
+        android:alpha="1"
         android:clickable="true"
         android:background="@drawable/icon_home_top_bg"
         app:layout_constraintEnd_toEndOf="parent"

@@ -143,13 +143,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
 
         scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            var scale = scrollY / dp2px(112f).toFloat()
-            if (scale >= 1) {
-                scale = 1f
-            }
-            clTopHide.alpha = scale
-            clTop.alpha = 1 - scale
-            if (scrollY >= dp2px(56f)) {
+//            var scale = scrollY / dp2px(112f).toFloat()
+//            if (scale >= 1) {
+//                scale = 1f
+//            }
+//            clTopHide.alpha = scale
+//            clTop.alpha = 1 - scale
+            if (scrollY >= dp2px(116f)) {
                 clTopHide.visible()
             } else {
                 clTopHide.gone()
