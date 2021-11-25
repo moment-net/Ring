@@ -1,9 +1,9 @@
 package com.alan.module.main.fragment
 
-import android.os.Build
-import android.os.Bundle
+import android.os.*
 import android.view.View
 import android.widget.ImageView
+import android.widget.ScrollView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -41,6 +41,7 @@ import com.bigkoo.convenientbanner.ConvenientBanner
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator
 import com.bigkoo.convenientbanner.holder.Holder
 import com.bigkoo.convenientbanner.listener.OnItemClickListener
+import com.socks.library.KLog
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -143,17 +144,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
 
         scrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-//            var scale = scrollY / dp2px(112f).toFloat()
-//            if (scale >= 1) {
-//                scale = 1f
-//            }
-//            clTopHide.alpha = scale
-//            clTop.alpha = 1 - scale
-            if (scrollY >= dp2px(116f)) {
+            var scale = scrollY / dp2px(116f).toFloat()
+            if (scale >= 1) {
+                scale = 1f
+            }
+            clTopHide.alpha = scale
+            clTop.alpha = 1 - scale
+            if (scrollY >= dp2px(58f)) {
                 clTopHide.visible()
             } else {
                 clTopHide.gone()
             }
+
+//            if (scrollY >= dp2px(116f)) {
+//                clTopHide.visible()
+//            } else {
+//                clTopHide.gone()
+//            }
             val location = IntArray(2)
             mBinding.clTab.getLocationOnScreen(location)
             val locationY = location[1]
@@ -162,33 +169,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             } else {
                 mBinding.clTabHide.visible()
             }
+            mHandler.removeCallbacksAndMessages(null);
+            mHandler.sendEmptyMessageDelayed(0x01, 50);
         }
-
-//        val options = HighlightOptions.Builder()
-//            .setOnHighlightDrewListener { canvas, rectF ->
-//                val paint = Paint()
-//                paint.setColor(Color.WHITE)
-//                paint.setStyle(Paint.Style.STROKE)
-//                paint.setStrokeWidth(3f)
-//                paint.setPathEffect(DashPathEffect(floatArrayOf(10f, 10f), 0f))
-//                canvas.drawRoundRect(rectF,30f,30f, paint)
-//            }
-//            .build()
-//        NewbieGuide.with(requireActivity())
-//            .setLabel("0000")
-//            .setShowCounts(1)
-//            .alwaysShow(true)
-//            .addGuidePage(GuidePage()
-//                .addHighLight(mBinding.clMatch,HighLight.Shape.ROUND_RECTANGLE,30,10,
-//                    RelativeGuide(R.layout.layout_guide_match,Gravity.BOTTOM)
-//                )
-//                .addHighLightWithOptions(mBinding.clMatch,options)
-//            )
-//            .show()
 
 
         initRv()
         initFragment()
+    }
+
+    private val mHandler: Handler = object : Handler(Looper.myLooper()!!) {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            when (msg.what) {
+                0x01 -> {
+                    val scrollY = mBinding.scrollView.scrollY
+                    KLog.e("xujm", "当前滑动距离为：$scrollY")
+                    if (scrollY < dp2px(58f)) {
+                        mBinding.scrollView.fullScroll(ScrollView.FOCUS_UP);
+                    } else if (scrollY < dp2px(116f)) {
+                        mBinding.scrollView.smoothScrollTo(0, dp2px(116f));
+                    }
+                }
+            }
+        }
     }
 
     override fun initObserve() {
