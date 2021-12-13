@@ -121,7 +121,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
     }
 
     fun initRV() {
-        mAdapter = ThinkAdapter()
+        mAdapter = ThinkAdapter(requireActivity())
         //防止点击闪烁
         mAdapter.setHasStableIds(true)
         mBinding.rvList.itemAnimator = null

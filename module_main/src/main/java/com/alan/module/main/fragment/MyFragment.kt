@@ -288,7 +288,7 @@ class MyFragment : BaseFragment<FragmentMyBinding, MyViewModel>() {
     }
 
     fun initRv() {
-        mAdapter = MyThinkAdapter()
+        mAdapter = MyThinkAdapter(requireActivity())
         //防止点击闪烁
         mAdapter.setHasStableIds(true)
         mBinding.rvList.itemAnimator = null

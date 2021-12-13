@@ -66,10 +66,12 @@ dependencies {
     api DependencyConfig.GitHub.CoilGIF
     api DependencyConfig.GitHub.CoilSVG
     api DependencyConfig.GitHub.CoilVideo
+    api DependencyConfig.GitHub.Glide
     api DependencyConfig.GitHub.KLog
     api DependencyConfig.GitHub.ShapeView
     api DependencyConfig.GitHub.Banner
     api DependencyConfig.GitHub.XPopup
+    api DependencyConfig.GitHub.SubImageView
     api DependencyConfig.GitHub.PickerView
     api DependencyConfig.GitHub.Lottie
     api DependencyConfig.GitHub.Camera
@@ -79,6 +81,7 @@ dependencies {
     api DependencyConfig.GitHub.NewGuide
     api DependencyConfig.GitHub.Transferee
     api DependencyConfig.GitHub.TransfereeGlide
+    //api DependencyConfig.GitHub.ImageViewer
 
 
     api DependencyConfig.SDK.WeChat

@@ -54,10 +54,12 @@ object DependencyConfig {
         const val LeakCanary = "2.7"                        // 检测内存泄漏
         const val AutoService = "1.0"                       // 自动生成SPI暴露服务文件
         const val Coil = "1.4.0"                            // Kotlin图片加载框架
+        const val GlideVersion = "4.12.0"                   // Glide图片加载框架
         const val KlogVersion = "1.6.0"                     // Klog日志框架
         const val ShapeViewVersion = "1.0.1"                // ShapeView框架
         const val BannerVersion = "2.1.5"                   // Banner框架
-        const val XPopupVersion = "2.5.6"                   // XPopupDialog框架
+        const val XPopupVersion = "2.6.8"                   // XPopupDialog框架
+        const val SubImageViewVersion = "3.10.0"            // SubImageViewVersion框架
         const val PickerViewVersion = "4.1.9"               // PickerView框架
         const val LottieVersion = "3.5.0"                   // Lottie框架
         const val CameraVersion = "1.1.9"                   // Camera框架
@@ -66,6 +68,7 @@ object DependencyConfig {
         const val PictureselectorVersion = "v2.7.3-rc09"    // 图片选择框架
         const val NewGuideVersion = "v2.4.0"                // 新手引导框架
         const val TransfereeVersion = "1.6.1"               // 图片预览框架
+        const val ImageViewerVersion = "3.0.1"              // 图片预览框架
 
         // 第三方SDK--------------------------------------------------------------
         const val WeChat = "6.6.4"                          // 腾讯开放平台微信
@@ -168,10 +171,13 @@ object DependencyConfig {
         const val CoilGIF = "io.coil-kt:coil-gif:${Version.Coil}"
         const val CoilSVG = "io.coil-kt:coil-svg:${Version.Coil}"
         const val CoilVideo = "io.coil-kt:coil-video:${Version.Coil}"
+        const val Glide = "com.github.bumptech.glide:glide:${Version.GlideVersion}"
         const val KLog = "com.github.zhaokaiqiang.klog:library:${Version.KlogVersion}"
         const val ShapeView = "com.github.leifu1107:ShapeView:${Version.ShapeViewVersion}"
         const val Banner = "com.bigkoo:convenientbanner:${Version.BannerVersion}"
         const val XPopup = "com.github.li-xiaojun:XPopup:${Version.XPopupVersion}"
+        const val SubImageView =
+            "com.davemorrissey.labs:subsampling-scale-image-view-androidx:${Version.SubImageViewVersion}"
         const val PickerView = "com.contrarywind:Android-PickerView:${Version.PickerViewVersion}"
         const val Lottie = "com.airbnb.android:lottie:${Version.LottieVersion}"
         const val Camera = "cjt.library.wheel:camera:${Version.CameraVersion}"
@@ -184,6 +190,7 @@ object DependencyConfig {
             "com.github.Hitomis.transferee:Transferee:${Version.TransfereeVersion}"
         const val TransfereeGlide =
             "com.github.Hitomis.transferee:GlideImageLoader:${Version.TransfereeVersion}"
+        const val ImageViewer = "indi.liyi.view:image-viewer:${Version.ImageViewerVersion}"
     }
 
     /**

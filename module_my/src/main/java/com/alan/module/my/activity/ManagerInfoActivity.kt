@@ -239,7 +239,7 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
     }
 
     fun initRv() {
-        mAdapter = TaThinkAdapter()
+        mAdapter = TaThinkAdapter(this@ManagerInfoActivity)
         //防止点击闪烁
         mAdapter.setHasStableIds(true)
         mBinding.rvList.itemAnimator = null

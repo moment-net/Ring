@@ -2,11 +2,11 @@ package com.alan.module.main.adapter
 
 import android.animation.ValueAnimator
 import android.graphics.Color
-import android.os.Bundle
 import android.text.TextUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentActivity
 import com.alan.module.main.R
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.NowBean
@@ -14,17 +14,20 @@ import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.ktx.gone
 import com.alan.mvvm.base.ktx.visible
-import com.alan.mvvm.base.utils.jumpARoute
-import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.views.MultiImageView
+import com.alan.mvvm.common.views.SmartGlideImageLoader
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.lxj.xpopup.XPopup
+import com.lxj.xpopup.core.ImageViewerPopupView
+import com.lxj.xpopup.interfaces.OnSrcViewUpdateListener
 import leifu.shapelibrary.ShapeView
 
 
-class NowAdapter() : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now), LoadMoreModule {
+class NowAdapter(var activity: FragmentActivity) :
+    BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now), LoadMoreModule {
     var listener: OnReplyClickListener? = null
 
 
@@ -87,21 +90,32 @@ class NowAdapter() : BaseQuickAdapter<NowBean, BaseViewHolder>(R.layout.item_now
         if (list != null && list.size > 0) {
             miv.visible()
             miv.setList(list)
-            val arrayListOf = arrayListOf<String>()
-            for (bean in list) {
-                arrayListOf.add(bean.url)
-            }
+
             miv.setOnItemClickListener { view, position ->
                 val picList = arrayListOf<String>()
                 for (bean in list) {
                     picList.add(bean.url)
                 }
-                val bundle = Bundle().apply {
-                    putStringArrayList("list", picList)
-                    putInt("position", position)
-                    putInt("type", 1)
-                }
-                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_PREVIEW, bundle)
+
+                XPopup.Builder(activity).asImageViewer(
+                    view as ImageView?, position,
+                    picList as List<String>?, object : OnSrcViewUpdateListener {
+                        override fun onSrcViewUpdate(
+                            popupView: ImageViewerPopupView,
+                            position: Int
+                        ) {
+                            popupView.updateSrcView(miv.imageViewList.get(position))
+                        }
+                    }, SmartGlideImageLoader()
+                ).show()
+
+
+//                val bundle = Bundle().apply {
+//                    putStringArrayList("list", picList)
+//                    putInt("position", position)
+//                    putInt("type", 1)
+//                }
+//                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_PREVIEW, bundle)
             }
         } else {
             miv.gone()

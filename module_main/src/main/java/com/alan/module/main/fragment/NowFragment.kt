@@ -113,7 +113,7 @@ class NowFragment : BaseFragment<FragmentNowBinding, NowViewModel>() {
     }
 
     fun initRV() {
-        mAdapter = NowAdapter()
+        mAdapter = NowAdapter(requireActivity())
         mBinding.rvList.apply {
             addItemDecoration(
                 MyColorDecoration(
