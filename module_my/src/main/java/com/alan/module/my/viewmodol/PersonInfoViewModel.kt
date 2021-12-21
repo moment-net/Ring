@@ -32,12 +32,11 @@ class PersonInfoViewModel @Inject constructor(private val mRepository: CommonRep
     fun requestEditUserInfo(
         userName: String,
         desc: String,
-        url: String,
         birthday: String,
         address: String
     ) {
         val requestBean = EditRequestBean(
-            userName, desc, avatar = url, birthday = birthday, address = address
+            userName, desc, birthday = birthday, address = address
         )
 
         viewModelScope.launch {

@@ -205,6 +205,22 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
             mBinding.etMsg.setText("")
             sendTextMessage(msg)
         }
+        mBinding.ivLeft.clickDelay {
+            mBinding.ivLeft.gone()
+            mBinding.ivRight.visible()
+            mBinding.llChat.smoothScrollTo(0, 0)
+//            mBinding.llChat.scrollX = dp2px(0f)
+        }
+        mBinding.ivRight.clickDelay {
+            mBinding.ivLeft.visible()
+            mBinding.ivRight.gone()
+            mBinding.llChat.smoothScrollTo(dp2px(360f), 0)
+//            mBinding.llChat.scrollX = -dp2px(360f)
+        }
+
+        mBinding.llChat.setOnTouchListener { v, event ->
+            false
+        }
 
         mBinding.llPress.setOnTouchListener { v, event ->
             mBinding.rlRecording.onPressToSpeakBtnTouch(

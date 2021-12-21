@@ -13,6 +13,7 @@ import java.io.File
 object RequestUtil {
     const val PART_TYPE_IMAGE = "image"
     const val PART_TYPE_AUDIO = "audio"
+    const val PART_TYPE_VOICE = "voice"
 
     /**
      * 将对象转为请求体

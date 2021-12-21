@@ -3,11 +3,12 @@
     package="com.alan.module.my">
 
     <application>
+
         <activity
             android:name=".activity.CardSetActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:configChanges="keyboardHidden|screenSize|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".activity.SelectCardActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"

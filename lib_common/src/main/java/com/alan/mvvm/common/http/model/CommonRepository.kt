@@ -633,5 +633,72 @@ class CommonRepository @Inject constructor() : BaseRepository() {
     ) = request(mApi, callback) { mApi.requestSTSToken() }
 
 
+    /**
+     * 获取明星声音（按用户性别）
+     */
+    suspend fun requestSystemModel(
+        callback: RequestCallback<ArrayList<SystemModelBean>>
+    ) = request(mApi, callback) { mApi.requestSystemModel() }
+
+    /**
+     * 上传用户采样声音
+     */
+    suspend fun requestUploadAudio(
+        voice: MultipartBody.Part,
+        callback: RequestCallback<SoundResultBean>
+    ) = request(mApi, callback) { mApi.requestUploadAudio(voice) }
+
+    /**
+     * 声音测试结果
+     */
+    suspend fun requestAnalyzeResult(
+        callback: RequestCallback<SoundResultBean>
+    ) = request(mApi, callback) { mApi.requestAnalyzeResult() }
+
+    /**
+     * 聊天背景列表
+     */
+    suspend fun requestChatBgList(
+        callback: RequestCallback<ArrayList<ChatBgBean>>
+    ) = request(mApi, callback) { mApi.requestChatBgList() }
+
+    /**
+     * 获取用户聊天背景
+     */
+    suspend fun requestChatBg(
+        callback: RequestCallback<ChatBgBean>
+    ) = request(mApi, callback) { mApi.requestChatBg() }
+
+    /**
+     * 设置聊天背景
+     */
+    suspend fun requestSetChatBg(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestSetChatBg(requestBody) }
+
+    /**
+     * 设置模型列表
+     */
+    suspend fun requestModeList(
+        callback: RequestCallback<AppearanceListBean>
+    ) = request(mApi, callback) { mApi.requestModeList() }
+
+    /**
+     * 设置模型（修改）
+     */
+    suspend fun requestModelSet(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestModelSet(requestBody) }
+
+    /**
+     * 配置
+     */
+    suspend fun requestConfigByName(
+        name: String,
+        callback: RequestCallback<ConfigBean>
+    ) = request(mApi, callback) { mApi.requestConfigByName(name) }
+
 }
 

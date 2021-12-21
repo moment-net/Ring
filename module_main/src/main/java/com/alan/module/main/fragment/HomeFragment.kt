@@ -5,15 +5,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ScrollView
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.alan.module.home.dialog.MatchingFragmentDialog
 import com.alan.module.main.R
-import com.alan.module.main.adapter.HomeMatchAdapter
 import com.alan.module.main.adapter.TabAdapter
 import com.alan.module.main.databinding.FragmentHomeBinding
 import com.alan.module.main.dialog.FilterFragmentDialog
@@ -21,10 +17,12 @@ import com.alan.module.main.dialog.PushFragmentDialog
 import com.alan.module.main.viewmodel.HomeViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.baseresp.BaseResponse
-import com.alan.mvvm.base.http.responsebean.*
+import com.alan.mvvm.base.http.responsebean.BannerBean
+import com.alan.mvvm.base.http.responsebean.MatchInfoBean
+import com.alan.mvvm.base.http.responsebean.TabItemBean
+import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.EventBusRegister
-import com.alan.mvvm.base.utils.MyColorDecoration
 import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
@@ -65,7 +63,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     private val mFragments = arrayListOf<Fragment>()
     override val mViewModel by viewModels<HomeViewModel>()
-    lateinit var mAdapter: HomeMatchAdapter
     lateinit var matchInfoBean: MatchInfoBean
     var gender: Int = 1
     var isOpenRing: Boolean = false
@@ -116,26 +113,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
             DataPointUtil.reportClickRing(isOpenRing)
         }
-        ivNow.clickDelay {
-            changeTab(0)
-            viewpager.setCurrentItem(0, true)
-            DataPointUtil.reportHomeNow(SpHelper.getUserInfo()?.userId!!)
+
+        ivTest.clickDelay {
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_SOUND)
         }
-        ivNowHide.clickDelay {
-            changeTab(0)
-            viewpager.setCurrentItem(0, true)
-            DataPointUtil.reportHomeNow(SpHelper.getUserInfo()?.userId!!)
+
+        ivChange.clickDelay {
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_APPEARANCE)
+//            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_SOUNDCHANGE)
         }
-        ivThink.clickDelay {
-            changeTab(1)
-            viewpager.setCurrentItem(1, true)
-            DataPointUtil.reportHomeThink(SpHelper.getUserInfo()?.userId!!)
-        }
-        ivThinkHide.clickDelay {
-            changeTab(1)
-            viewpager.setCurrentItem(1, true)
-            DataPointUtil.reportHomeThink(SpHelper.getUserInfo()?.userId!!)
-        }
+
         ivAdd.clickDelay {
             val dialog = PushFragmentDialog.newInstance()
             dialog.show(requireActivity().supportFragmentManager)
@@ -161,20 +148,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 //            } else {
 //                clTopHide.gone()
 //            }
-            val location = IntArray(2)
-            mBinding.clTab.getLocationOnScreen(location)
-            val locationY = location[1]
-            if (locationY >= dp2px(172f)) {
-                mBinding.clTabHide.gone()
-            } else {
-                mBinding.clTabHide.visible()
-            }
+
             mHandler.removeCallbacksAndMessages(null);
             mHandler.sendEmptyMessageDelayed(0x01, 50);
         }
 
 
-        initRv()
         initFragment()
     }
 
@@ -235,16 +214,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
         }
 
-        mViewModel.ldCard.observe(this) {
-            when (it) {
-                is BaseResponse<*> -> {
-                    val list = it.data as ArrayList<CardTagBean>
 
-                    mAdapter.setList(list)
-                }
-
-            }
-        }
 
         mViewModel.ldBanner.observe(this) {
             when (it) {
@@ -286,7 +256,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     fun showThink() {
         val guideView = GuideView.Builder
             .newInstance(requireActivity())
-            .setTargetView(mBinding.ivThink) //设置目标
+            .setTargetView(mBinding.ivTest) //设置目标
             .setDirction(GuideView.Direction.BOTTOM)
             .setShape(GuideView.MyShape.RECTANGULAR)
             .setRoundRadius(dp2px(6f))
@@ -321,19 +291,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         guideView.show()
     }
 
-    fun changeTab(position: Int) {
-        if (position == 0) {
-            mBinding.ivNow.setImageResource(R.drawable.icon_home_title_now_big)
-            mBinding.ivNowHide.setImageResource(R.drawable.icon_home_title_now_big)
-            mBinding.ivThink.setImageResource(R.drawable.icon_home_title_think)
-            mBinding.ivThinkHide.setImageResource(R.drawable.icon_home_title_think)
-        } else {
-            mBinding.ivNow.setImageResource(R.drawable.icon_home_title_now)
-            mBinding.ivNowHide.setImageResource(R.drawable.icon_home_title_now)
-            mBinding.ivThink.setImageResource(R.drawable.icon_home_title_think_big)
-            mBinding.ivThinkHide.setImageResource(R.drawable.icon_home_title_think_big)
-        }
-    }
 
     fun changeStatus(isOpen: Boolean) {
         if (isOpen) {
@@ -352,10 +309,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         if (mFragments.isNotEmpty()) {
             mFragments.clear()
         }
-        mFragments.add(NowFragment.newInstance())
         mFragments.add(ThinkFragment.newInstance())
         val mData = arrayListOf<TabItemBean>()
-        mData.add(TabItemBean("正在", NowFragment::class.java.getName()))
         mData.add(TabItemBean("想法", ThinkFragment::class.java.getName()))
         mBinding.viewpager.adapter =
             TabAdapter(requireActivity(), requireActivity().supportFragmentManager, mData)
@@ -369,7 +324,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
 
             override fun onPageSelected(position: Int) {
-                changeTab(position)
                 mBinding.viewpager.requestLayout()
             }
 
@@ -432,30 +386,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         }
     }
 
-    fun initRv() {
-        mAdapter = HomeMatchAdapter()
-        mBinding.rvMatch.apply {
-            addItemDecoration(
-                MyColorDecoration(
-                    0, 0, dp2px(10f), 0,
-                    ContextCompat.getColor(context, R.color.transparent)
-                )
-            )
-            layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-            adapter = mAdapter
-        }
 
-        mAdapter.setOnItemChildClickListener { adapter, view, position ->
-            val bean = mAdapter.data.get(position)
-            when (view.id) {
-                R.id.tv_label_bg -> {
-                    val dialog = MatchingFragmentDialog.newInstance(bean.tag)
-                    dialog.show(requireActivity().supportFragmentManager)
-                    DataPointUtil.reportClickFastMatch(bean.tag)
-                }
-            }
-        }
-    }
 
 
     fun setUserInfo() {

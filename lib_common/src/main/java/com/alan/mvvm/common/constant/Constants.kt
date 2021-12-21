@@ -39,7 +39,7 @@ object Constants {
 
     //自我介绍招呼音频
     var PATH_GREET_SELF = "${StorageUtil.getExternalFileDir()}/greet_self.wav"
-
+    var PATH_SOUND_TEST = "${StorageUtil.getExternalFileDir()}/sound_test.wav"
 
     //跳转拍照页面返回类型
     const val TYPE_IMAGE = 11

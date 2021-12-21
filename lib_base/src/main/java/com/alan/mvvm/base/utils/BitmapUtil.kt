@@ -2,10 +2,7 @@ package com.alan.mvvm.base.utils
 
 import android.content.Context
 import android.graphics.Bitmap
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 
 object BitmapUtil {
 
@@ -39,5 +36,18 @@ object BitmapUtil {
         return ""
     }
 
-
+    fun bmpToByteArray(bmp: Bitmap, needRecycle: Boolean): ByteArray? {
+        val output = ByteArrayOutputStream()
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, output)
+        if (needRecycle) {
+            bmp.recycle()
+        }
+        val result = output.toByteArray()
+        try {
+            output.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return result
+    }
 }

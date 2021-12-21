@@ -28,11 +28,14 @@ object RouteUrl {
         //我的提醒
         const val ACTIVITY_MAIN_MYREMIND: String = "/main/myremind"
 
-        //选择标签喜好
-        const val ACTIVITY_MAIN_TARGET: String = "/main/target"
+        //选择形象
+        const val ACTIVITY_MAIN_APPEARANCE: String = "/main/appearance"
 
-        //选择标签类型
-        const val ACTIVITY_MAIN_TYPE: String = "/main/type"
+        //选择形象
+        const val ACTIVITY_MAIN_CHANGEAPPEARANCE: String = "/main/changeappearance"
+
+        //创建名字
+        const val ACTIVITY_MAIN_CREATE: String = "/main/create"
 
         //选择状态标签
         const val ACTIVITY_MAIN_STATE: String = "/main/state"
@@ -48,6 +51,15 @@ object RouteUrl {
 
         //图片展示页面
         const val ACTIVITY_MAIN_PREVIEW: String = "/main/preview";
+
+        //声音测试页面
+        const val ACTIVITY_MAIN_SOUND: String = "/main/sound";
+
+        //声音测试结果页面
+        const val ACTIVITY_MAIN_SOUNDRESULT: String = "/main/soundresult";
+
+        //声音修改页面
+        const val ACTIVITY_MAIN_SOUNDCHANGE: String = "/main/soundchange";
     }
 
     object HomeModule {

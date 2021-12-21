@@ -1209,5 +1209,60 @@ interface HomeApiService {
     @GET("user/common/refresh/stsToken")
     suspend fun requestSTSToken(): BaseResponse<StsTokenBean>
 
+    /**
+     * 获取明星声音（按用户性别）
+     */
+    @GET("voice/getSystemModel")
+    suspend fun requestSystemModel(): BaseResponse<ArrayList<SystemModelBean>>
+
+    /**
+     * 上传用户采样声音
+     */
+    @Multipart
+    @POST("voice/upload")
+    suspend fun requestUploadAudio(@Part voice: MultipartBody.Part): BaseResponse<SoundResultBean>
+
+    /**
+     * 声音测试结果
+     */
+    @GET("voice/analyze")
+    suspend fun requestAnalyzeResult(): BaseResponse<SoundResultBean>
+
+    /**
+     * 聊天背景列表
+     */
+    @GET("chat/getBgList")
+    suspend fun requestChatBgList(): BaseResponse<ArrayList<ChatBgBean>>
+
+    /**
+     * 获取用户聊天背景
+     */
+    @GET("chat/getBackground")
+    suspend fun requestChatBg(): BaseResponse<ChatBgBean>
+
+    /**
+     * 设置聊天背景
+     */
+    @GET("chat/setBackground")
+    suspend fun requestSetChatBg(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 用户形象列表
+     */
+    @GET("model/list")
+    suspend fun requestModeList(): BaseResponse<AppearanceListBean>
+
+    /**
+     * 用户形象设置
+     */
+    @POST("model/set")
+    suspend fun requestModelSet(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * 配置
+     */
+    @GET("user/common/getConfigByName")
+    suspend fun requestConfigByName(@Query("name") name: String): BaseResponse<ConfigBean>
+
 
 }

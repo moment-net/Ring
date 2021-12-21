@@ -20,6 +20,7 @@ import com.alan.mvvm.base.ktx.getResColor
 import com.alan.mvvm.base.ktx.getResDrawable
 import com.alan.mvvm.base.utils.*
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.dialog.DialogHelper
 import com.alan.mvvm.common.event.ChangeThinkEvent
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -127,6 +128,15 @@ class ThinkActivity : BaseActivity<ActivityThinkBinding, PushThinkViewModel>() {
             mBinding.tvRight.setTextColor(R.color._80393939.getResColor())
             mBinding.tvRight.background = R.drawable.icon_push_bt_disenable.getResDrawable()
         }
+    }
+
+
+    fun showDialog() {
+        DialogHelper.showMultipleDialog(this, "先去测测你的声音吧", "测一测", "我再想想", {
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_SOUND)
+        }, {
+
+        })
     }
 
     fun initRvPic() {

@@ -18,8 +18,6 @@ import com.alan.mvvm.base.http.responsebean.FileBean
 import com.alan.mvvm.base.http.responsebean.TargetInfoBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
-import com.alan.mvvm.base.ktx.gone
-import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.utils.*
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.event.TagRefreshEvent
@@ -68,7 +66,8 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
     override fun ActivityPersonInfoBinding.initView() {
         ivBack.clickDelay { finish() }
         ivAvator.clickDelay {
-            ImageSelectUtil.singlePicCrop(this@PersonInfoActivity)
+//            ImageSelectUtil.singlePicCrop(this@PersonInfoActivity)
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_CHANGEAPPEARANCE)
         }
 
         tvBirthdayValue.clickDelay {
@@ -226,13 +225,13 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
         mBinding.tvBirthdayValue.setText("${birthday}")
         address = userInfo?.address
         mBinding.tvHometownValue.setText("${address}")
-        if (userInfo?.greeting == null) {
-            mBinding.tvVoiceValue.setText("录制语音签名")
-            mBinding.tvPlay.gone()
-        } else {
-            mBinding.tvVoiceValue.setText("重新录制")
-            mBinding.tvPlay.visible()
-        }
+//        if (userInfo?.greeting == null) {
+//            mBinding.tvVoiceValue.setText("录制语音签名")
+//            mBinding.tvPlay.gone()
+//        } else {
+//            mBinding.tvVoiceValue.setText("重新录制")
+//            mBinding.tvPlay.visible()
+//        }
     }
 
 
@@ -351,7 +350,6 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
         mViewModel.requestEditUserInfo(
             mBinding.etName.text.toString(),
             mBinding.etDesc.text.toString(),
-            imgUrl ?: "",
             birthday ?: "",
             address ?: ""
         )
