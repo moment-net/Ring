@@ -336,7 +336,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 val bundle = Bundle().apply {
                     putInt("type", 1)
                 }
-                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_WXINFO, bundle)
+                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_APPEARANCE, bundle)
                 DataPointUtil.reportRegister(SpHelper.getUserInfo()?.userId!!, 3)
             } else {
                 jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)

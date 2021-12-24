@@ -55,6 +55,8 @@ data class ThinkBean(
     var createTime: String,
     var favoriteCount: Int,
     var commentCount: String,
+    var audio: String,
+    var audioDuration: Int,
     var isFavorite: Boolean,
     var pic: ArrayList<PicBean>
 )

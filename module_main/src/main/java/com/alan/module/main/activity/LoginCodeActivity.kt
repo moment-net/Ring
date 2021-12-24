@@ -131,7 +131,7 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
                 val bundle = Bundle().apply {
                     putInt("type", type)
                 }
-                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_WXINFO, bundle)
+                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_APPEARANCE, bundle)
             } else {
                 jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
             }
@@ -173,7 +173,7 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
             val bundle = Bundle().apply {
                 putInt("type", type)
             }
-            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_WXINFO, bundle)
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_APPEARANCE, bundle)
             DataPointUtil.reportRegister(SpHelper.getUserInfo()?.userId!!, 1)
         } else {
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)

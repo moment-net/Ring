@@ -86,56 +86,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/ll_chat"
-        android:layout_width="wrap_content"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="horizontal"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/cl_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_title">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="720dp"
-            android:layout_height="match_parent">
-            <!--形象界面-->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_appear"
-                android:layout_width="@dimen/dimen360"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:paddingTop="@dimen/dimen0"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/srf_list"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.scwang.smart.refresh.layout.SmartRefreshLayout
-                android:id="@+id/srf_list"
-                android:layout_width="@dimen/dimen360"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:paddingTop="@dimen/dimen0"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/cl_appear"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_msg"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-
-            </com.scwang.smart.refresh.layout.SmartRefreshLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </HorizontalScrollView>
+        app:layout_constraintTop_toBottomOf="@+id/cl_title" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -148,7 +108,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_chat">
+        app:layout_constraintTop_toBottomOf="@+id/viewpager">
 
         <EditText
             android:id="@+id/et_msg"

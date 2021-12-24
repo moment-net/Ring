@@ -1,6 +1,9 @@
 package com.alan.module.main.fragment
 
+import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +16,7 @@ import com.alan.module.main.R
 import com.alan.module.main.adapter.ThinkAdapter
 import com.alan.module.main.databinding.FragmentThinkBinding
 import com.alan.module.main.viewmodel.ThinkViewModel
+import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.base.http.baseresp.BaseResponse
 import com.alan.mvvm.base.http.responsebean.ThinkBean
@@ -30,9 +34,11 @@ import com.alan.mvvm.common.event.ChangeThinkEvent
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.exception.BaseHttpException
 import com.alan.mvvm.common.im.EMClientHelper
+import com.alan.mvvm.common.im.utils.VoicePlayerUtil
 import com.alan.mvvm.common.report.DataPointUtil
 import com.alan.mvvm.common.ui.BaseFragment
 import com.hyphenate.chat.EMMessage
+import com.socks.library.KLog
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -51,6 +57,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
     var isLoad = false
     var mCursor: Int = 0
     lateinit var popupWindow: PopupWindow
+    lateinit var voicePlayerUtil: VoicePlayerUtil
 
 
     companion object {
@@ -61,6 +68,8 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
     }
 
     override fun FragmentThinkBinding.initView() {
+        voicePlayerUtil = VoicePlayerUtil.getInstance(BaseApplication.mContext)
+
         initRV()
     }
 
@@ -120,6 +129,7 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
         requestList()
     }
 
+    @SuppressLint("NewApi")
     fun initRV() {
         mAdapter = ThinkAdapter(requireActivity())
         //防止点击闪烁
@@ -179,6 +189,17 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
                 requestList()
             }, 1000)
         }
+
+//        mBinding.rvList.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+//            val layoutManager = mBinding.rvList.layoutManager as LinearLayoutManager
+//            val findFirstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+//            val findLastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+//            val middlePosition = (findFirstVisibleItemPosition+findLastVisibleItemPosition)/2
+//
+//            mHandler.removeCallbacksAndMessages(null);
+//            val message = mHandler.obtainMessage(0x01, middlePosition)
+//            mHandler.sendMessageDelayed(message, 50);
+//        }
 //        mBinding.srfList.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
 //            override fun onLoadMore(refreshLayout: RefreshLayout) {
 //                isLoad = true
@@ -190,6 +211,56 @@ class ThinkFragment : BaseFragment<FragmentThinkBinding, ThinkViewModel>() {
 //            }
 //        })
     }
+
+//    private val mHandler: Handler = object : Handler(Looper.myLooper()!!) {
+//        override fun handleMessage(msg: Message) {
+//            super.handleMessage(msg)
+//            when (msg.what) {
+//                0x01 -> {
+//                    val position = msg.obj as Int
+//                    KLog.e("xujm", "当前滑动位置：$position")
+//                    startPlay(position)
+//                }
+//            }
+//        }
+//    }
+
+    fun startPlay() {
+        if (mBinding.rvList == null) {
+            return
+        }
+        val layoutManager = mBinding.rvList.layoutManager as LinearLayoutManager
+        val findFirstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+        val findLastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+        val position = (findFirstVisibleItemPosition + findLastVisibleItemPosition) / 2
+
+        val bean = mAdapter.data.get(position)
+        if (voicePlayerUtil.isPlaying) {
+            //无论播放的语音项是这个还是其他，都先停止语音播放
+            voicePlayerUtil.stop()
+            // 停止语音播放动画。
+//            stopVoicePlayAnimation()
+
+            // 如果正在播放的语音项是此项，则只需停止播放即可。
+            val playingUrl: String = voicePlayerUtil.url
+            if (TextUtils.equals(bean.audio, playingUrl)) {
+                return
+            }
+        }
+        if (!TextUtils.isEmpty(bean.audio)) {
+//            val viewHolderView = mBinding.rvList.getChildAt(position)
+//            val tv_content = viewHolderView.findViewById<TextView>(R.id.tv_content)
+
+//            ivVoice = iv_voice
+            voicePlayerUtil.play(bean.audio, MediaPlayer.OnCompletionListener {
+                KLog.e("xujm", "开始播放声音")
+//                stopVoicePlayAnimation()
+            })
+            // 启动语音播放动画
+//            startVoicePlayAnimation()
+        }
+    }
+
 
     /**
      * 显示菜单项

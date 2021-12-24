@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_top"
+        android:layout_width="@dimen/dimen0"
+        android:layout_height="@dimen/dimen288"
+        android:background="@drawable/icon_home_top_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="@dimen/dimen64"
+            android:background="@drawable/icon_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="@dimen/dimen20"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="今天也要吃"
+            android:textColor="@color/_3A3A3A"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+            app:layout_constraintEnd_toStartOf="@+id/iv_filter"
+            app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+            app:layout_constraintTop_toTopOf="@+id/iv_avatar" />
+
+        <ImageView
+            android:id="@+id/iv_filter"
+            android:layout_width="@dimen/dimen66"
+            android:layout_height="@dimen/dimen35"
+            android:layout_marginEnd="@dimen/dimen17"
+            android:src="@drawable/icon_home_filter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_avatar" />
+
+        <com.bigkoo.convenientbanner.ConvenientBanner
+            android:id="@+id/banner"
+            android:layout_width="160dp"
+            android:layout_height="155dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/icon_home_banner_bg"
+            android:padding="@dimen/dimen10"
+            app:autoTurningTime="3000"
+            app:canLoop="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_avatar" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_match"
+            android:layout_width="160dp"
+            android:layout_height="@dimen/dimen74"
+            android:layout_marginEnd="@dimen/dimen16"
+            android:background="@drawable/icon_home_match_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/banner">
+
+            <ImageView
+                android:id="@+id/main_imageview3"
+                android:layout_width="@dimen/dimen30"
+                android:layout_height="@dimen/dimen30"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="19dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_home_match" />
+
+            <ImageView
+                android:id="@+id/main_imageview6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                app:layout_constraintStart_toEndOf="@+id/main_imageview3"
+                app:layout_constraintTop_toTopOf="@+id/main_imageview3"
+                app:srcCompat="@drawable/icon_home_title_fastmatch" />
+
+            <TextView
+                android:id="@+id/tv_ring_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen2"
+                android:text="今日剩余5次"
+                android:textColor="@color/_B33A3A3A"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/main_imageview6"
+                app:layout_constraintTop_toBottomOf="@+id/main_imageview6" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_ring"
+            android:layout_width="160dp"
+            android:layout_height="@dimen/dimen74"
+            android:layout_marginEnd="@dimen/dimen16"
+            android:background="@drawable/icon_home_match_bg"
+            app:layout_constraintBottom_toBottomOf="@+id/banner"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/main_imageview71"
+                android:layout_width="@dimen/dimen30"
+                android:layout_height="@dimen/dimen30"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="19dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_home_ring" />
+
+            <ImageView
+                android:id="@+id/main_imageview81"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                app:layout_constraintStart_toEndOf="@+id/main_imageview71"
+                app:layout_constraintTop_toTopOf="@+id/main_imageview71"
+                app:srcCompat="@drawable/icon_home_title_ring" />
+
+            <TextView
+                android:id="@+id/main_textview90"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen2"
+                android:text="发现有趣的人会Ring"
+                android:textColor="@color/_B33A3A3A"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/main_imageview81"
+                app:layout_constraintTop_toBottomOf="@+id/main_imageview81" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen3"
+                android:background="@drawable/icon_home_status_bg"
+                android:gravity="center"
+                android:text="ON"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/iv_test"
+        android:layout_width="@dimen/dimen150"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_top"
+        app:srcCompat="@drawable/icon_home_test" />
+
+
+    <ImageView
+        android:id="@+id/iv_change"
+        android:layout_width="@dimen/dimen150"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_top"
+        app:srcCompat="@drawable/icon_home_change" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

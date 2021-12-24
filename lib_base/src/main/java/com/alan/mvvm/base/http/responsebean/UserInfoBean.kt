@@ -42,6 +42,7 @@ data class UserInfoBean(
     var headsetStatus: String? = "",
     var onlineStatusDesc: String? = "",
     var age: Int = 0,
+    var setVoice: Boolean? = false,
     var bindApple: Boolean? = false,
     var eduRight: Int = 0,
     var hasHeadset: Boolean? = false,

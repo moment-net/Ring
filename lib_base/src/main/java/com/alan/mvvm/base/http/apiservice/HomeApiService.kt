@@ -1232,19 +1232,19 @@ interface HomeApiService {
      * 聊天背景列表
      */
     @GET("chat/getBgList")
-    suspend fun requestChatBgList(): BaseResponse<ArrayList<ChatBgBean>>
+    suspend fun requestChatBgList(@Query("toUserId") userId: String): BaseResponse<ArrayList<ChatBgBean>>
 
     /**
      * 获取用户聊天背景
      */
     @GET("chat/getBackground")
-    suspend fun requestChatBg(): BaseResponse<ChatBgBean>
+    suspend fun requestChatBg(@Query("toUserId") userId: String): BaseResponse<ChatBgBean>
 
     /**
      * 设置聊天背景
      */
-    @GET("chat/setBackground")
-    suspend fun requestSetChatBg(@Body requestBody: RequestBody): BaseResponse<String>
+    @POST("chat/setBackground")
+    suspend fun requestSetChatBg(@Body requestBody: RequestBody): BaseResponse<ChatBgBean>
 
     /**
      * 用户形象列表
@@ -1263,6 +1263,12 @@ interface HomeApiService {
      */
     @GET("user/common/getConfigByName")
     suspend fun requestConfigByName(@Query("name") name: String): BaseResponse<ConfigBean>
+
+    /**
+     * 文字转语音
+     */
+    @POST("voice/tts")
+    suspend fun requestVoiceTTS(@Body requestBody: RequestBody): BaseResponse<String>
 
 
 }

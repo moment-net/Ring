@@ -659,22 +659,24 @@ class CommonRepository @Inject constructor() : BaseRepository() {
      * 聊天背景列表
      */
     suspend fun requestChatBgList(
+        userId: String,
         callback: RequestCallback<ArrayList<ChatBgBean>>
-    ) = request(mApi, callback) { mApi.requestChatBgList() }
+    ) = request(mApi, callback) { mApi.requestChatBgList(userId) }
 
     /**
      * 获取用户聊天背景
      */
     suspend fun requestChatBg(
+        userId: String,
         callback: RequestCallback<ChatBgBean>
-    ) = request(mApi, callback) { mApi.requestChatBg() }
+    ) = request(mApi, callback) { mApi.requestChatBg(userId) }
 
     /**
      * 设置聊天背景
      */
     suspend fun requestSetChatBg(
         requestBody: RequestBody,
-        callback: RequestCallback<String>
+        callback: RequestCallback<ChatBgBean>
     ) = request(mApi, callback) { mApi.requestSetChatBg(requestBody) }
 
     /**
@@ -699,6 +701,14 @@ class CommonRepository @Inject constructor() : BaseRepository() {
         name: String,
         callback: RequestCallback<ConfigBean>
     ) = request(mApi, callback) { mApi.requestConfigByName(name) }
+
+    /**
+     * 文字转语音
+     */
+    suspend fun requestVoiceTTS(
+        requestBody: RequestBody,
+        callback: RequestCallback<String>
+    ) = request(mApi, callback) { mApi.requestVoiceTTS(requestBody) }
 
 }
 

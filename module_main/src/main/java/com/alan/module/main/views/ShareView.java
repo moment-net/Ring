@@ -20,7 +20,9 @@ import com.alan.mvvm.base.http.responsebean.SoundResultBean;
 import com.alan.mvvm.base.http.responsebean.UserInfoBean;
 import com.alan.mvvm.common.helper.SpHelper;
 import com.alan.mvvm.common.views.SpiderView;
+import com.bumptech.glide.Glide;
 import com.hyphenate.util.DensityUtil;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 
@@ -86,7 +88,9 @@ public class ShareView extends FrameLayout {
         tv_attr.setText(attribute);
         CoilUtils.INSTANCE.loadRoundBorder(iv_avatar, userInfo.getAvatar(), 32f,
                 1f, ContextCompat.getColor(mContext, R.color.white));
-//        CoilUtils.INSTANCE.load(iv_code,path);
+        KLog.e("xujm", "codeUrl:" + bean.getDownloadQr());
+//        CoilUtils.INSTANCE.load(iv_code,bean.getDownloadQr());
+        Glide.with(mContext).load(bean.getDownloadQr()).into(iv_code);
         spiderview.setRankData(doubleArrayOf, stringArrayOf);
     }
 

@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.alibaba.android.arouter.launcher.ARouter
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.BindingReflex
 import com.alan.mvvm.base.utils.EventBusRegister
 import com.alan.mvvm.base.utils.EventBusUtils
 import com.alan.mvvm.base.utils.ViewRecreateHelper
+import com.alibaba.android.arouter.launcher.ARouter
 
 /**
  * 作者：alan
