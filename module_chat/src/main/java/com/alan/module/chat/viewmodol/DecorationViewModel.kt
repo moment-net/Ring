@@ -48,7 +48,9 @@ class DecorationViewModel @Inject constructor(private val mRepository: CommonRep
                 RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        ldSuccess.value = it.data!!
+                        if (it.data != null) {
+                            ldSuccess.value = it.data!!
+                        }
                     },
                     onFailed = {
                         toast(it.errorMessage)

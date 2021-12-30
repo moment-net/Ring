@@ -48,7 +48,7 @@ class ChangeAppearanceViewModel @Inject constructor(private val mRepository: Com
                 RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        requestUserInfo(SpHelper.getUserInfo()?.userId!!)
+                        requestUserInfo(SpHelper?.getUserInfo()?.userId!!)
                     },
                     onFailed = {
                         toast(it.errorMessage)

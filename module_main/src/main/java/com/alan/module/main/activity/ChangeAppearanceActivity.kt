@@ -15,9 +15,11 @@ import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.ktx.gone
 import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.utils.MyColorDecoration
+import com.alan.mvvm.base.utils.jumpARoute
 import com.alan.mvvm.common.constant.RouteUrl
 import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.ui.BaseActivity
+import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,6 +44,11 @@ class ChangeAppearanceActivity :
     var currentName: String = ""
     var isBoy: Boolean = true
 
+    //1是个人信息更改，2是登录跳转
+    @JvmField
+    @Autowired(name = "type")
+    var type = 1
+
     /**
      * 初始化View
      */
@@ -50,6 +57,12 @@ class ChangeAppearanceActivity :
 
         ivNext.clickDelay {
             mViewModel.requestModelSet(currentName)
+        }
+
+        if (type == 1) {
+            mBinding.ivBack.visible()
+        } else {
+            mBinding.ivBack.gone()
         }
 
         initRvBoy()
@@ -69,24 +82,39 @@ class ChangeAppearanceActivity :
                     girlAdapter?.setList(girl)
 
                     if (isBoy) {
-                        val model = SpHelper.getUserInfo()?.model
-                        val position = boy.indexOf(model)
-                        boyAdapter?.currentCheck = position
-                        boyAdapter?.notifyDataSetChanged()
-                        CoilUtils.load(mBinding.ivPic, model?.url!!)
-                        currentName = model.name
+                        var model = SpHelper.getUserInfo()?.model
+                        if (model == null) {
+                            model = boyAdapter?.data?.get(0)
+                            CoilUtils.load(mBinding.ivPic, model?.url!!)
+                            currentName = model.name
+                        } else {
+                            val position = boy.indexOf(model)
+                            boyAdapter?.currentCheck = position
+                            boyAdapter?.notifyDataSetChanged()
+                            CoilUtils.load(mBinding.ivPic, model?.url!!)
+                            currentName = model.name
+                        }
                     } else {
-                        val model = SpHelper.getUserInfo()?.model
-                        val position = girl.indexOf(model)
-                        girlAdapter?.currentCheck = position
-                        girlAdapter?.notifyDataSetChanged()
-                        CoilUtils.load(mBinding.ivPic, model?.url!!)
-                        currentName = model.name
+                        var model = SpHelper.getUserInfo()?.model
+                        if (model == null) {
+                            model = girlAdapter?.data?.get(0)
+                            CoilUtils.load(mBinding.ivPic, model?.url!!)
+                            currentName = model.name
+                        } else {
+                            val position = girl.indexOf(model)
+                            girlAdapter?.currentCheck = position
+                            girlAdapter?.notifyDataSetChanged()
+                            CoilUtils.load(mBinding.ivPic, model?.url!!)
+                            currentName = model.name
+                        }
                     }
                 }
 
                 is UserInfoBean -> {
                     finish()
+                    if (type == 2) {
+                        jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+                    }
                 }
             }
         }

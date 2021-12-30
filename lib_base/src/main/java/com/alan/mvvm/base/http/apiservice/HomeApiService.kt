@@ -1256,7 +1256,7 @@ interface HomeApiService {
      * 用户形象设置
      */
     @POST("model/set")
-    suspend fun requestModelSet(@Body requestBody: RequestBody): BaseResponse<String>
+    suspend fun requestModelSet(@Body requestBody: RequestBody): BaseResponse<AppearanceBean>
 
     /**
      * 配置

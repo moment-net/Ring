@@ -2,6 +2,7 @@ package com.alan.module.my.activity
 
 import android.Manifest
 import android.content.Intent
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -67,7 +68,10 @@ class PersonInfoActivity : BaseActivity<ActivityPersonInfoBinding, PersonInfoVie
         ivBack.clickDelay { finish() }
         ivAvator.clickDelay {
 //            ImageSelectUtil.singlePicCrop(this@PersonInfoActivity)
-            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_CHANGEAPPEARANCE)
+            val bundle = Bundle().apply {
+                putInt("type", 1)
+            }
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_CHANGEAPPEARANCE, bundle)
         }
 
         tvBirthdayValue.clickDelay {

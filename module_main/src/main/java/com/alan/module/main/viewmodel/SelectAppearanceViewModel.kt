@@ -7,6 +7,7 @@ import com.alan.mvvm.base.http.requestbean.NameRequestBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.http.model.CommonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -47,13 +48,31 @@ class SelectAppearanceViewModel @Inject constructor(private val mRepository: Com
                 RequestUtil.getPostBody(requestBean),
                 callback = RequestCallback(
                     onSuccess = {
-                        ldSuccess.value = true
+                        requestUserInfo(SpHelper?.getUserInfo()?.userId!!)
                     },
                     onFailed = {
                         toast(it.errorMessage)
                     },
                 )
             )
+        }
+    }
+
+    /**
+     * 获取个人信息
+     */
+    fun requestUserInfo(userId: String) {
+        viewModelScope.launch {
+            mRepository.requestUserInfo(
+                userId,
+                callback = RequestCallback(
+                    onSuccess = {
+                        SpHelper.updateUserInfo(it.data)
+                        ldSuccess.value = it.data!!
+                    },
+                    onFailed = {
+                    }
+                ))
         }
     }
 

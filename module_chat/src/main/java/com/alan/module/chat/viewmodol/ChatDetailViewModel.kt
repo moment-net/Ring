@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
 import com.alan.mvvm.base.http.requestbean.CallRequestBean
 import com.alan.mvvm.base.http.requestbean.FollowRequestBean
+import com.alan.mvvm.base.http.requestbean.TextRequestBean
 import com.alan.mvvm.base.http.requestbean.ToUserIdRequestBean
+import com.alan.mvvm.base.http.responsebean.SpeakVoiceBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
 import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
@@ -120,6 +122,28 @@ class ChatDetailViewModel @Inject constructor(private val mRepository: CommonRep
                 callback = RequestCallback(
                     onSuccess = {
 
+                    },
+                    onFailed = {
+                        toast(it.errorMessage)
+                    },
+                )
+            )
+        }
+    }
+
+
+    /**
+     * 文字转语音
+     */
+    fun requestVoiceTTS(content: String) {
+        val requestBean = TextRequestBean(content)
+        viewModelScope.launch {
+            mRepository.requestVoiceTTS(
+                RequestUtil.getPostBody(requestBean),
+                callback = RequestCallback(
+                    onSuccess = {
+                        val speakVoiceBean = SpeakVoiceBean(content, it.data!!)
+                        ldSuccess.value = speakVoiceBean
                     },
                     onFailed = {
                         toast(it.errorMessage)

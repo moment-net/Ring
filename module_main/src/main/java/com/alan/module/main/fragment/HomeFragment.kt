@@ -20,7 +20,6 @@ import com.alan.module.main.R
 import com.alan.module.main.adapter.ThinkAdapter
 import com.alan.module.main.databinding.FragmentHomeBinding
 import com.alan.module.main.dialog.FilterFragmentDialog
-import com.alan.module.main.dialog.PushFragmentDialog
 import com.alan.module.main.viewmodel.HomeViewModel
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.coil.CoilUtils
@@ -97,7 +96,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     private lateinit var tvRingNum: TextView
     private lateinit var tvStatus: TextView
     private lateinit var banner: ConvenientBanner<BannerBean>
-
+    var tv_content: TextView? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun FragmentHomeBinding.initView() {
@@ -123,9 +122,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             DataPointUtil.reportClickRing(isOpenRing)
         }
         ivAdd.clickDelay {
-            val dialog = PushFragmentDialog.newInstance()
-            dialog.show(requireActivity().supportFragmentManager)
-            DataPointUtil.reportPublish(SpHelper.getUserInfo()?.userId!!)
+            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_THINK)
+            DataPointUtil.reportPublishThink(SpHelper.getUserInfo()?.userId!!)
+//            val dialog = PushFragmentDialog.newInstance()
+//            dialog.show(requireActivity().supportFragmentManager)
+//            DataPointUtil.reportPublish(SpHelper.getUserInfo()?.userId!!)
         }
 
         initRV()
@@ -440,7 +441,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
                         )
                         true
                     }
-                    mAdapter.notifyItemChanged(position)
+                    mAdapter.notifyItemChanged(position + 1)
                 }
             }
         }
@@ -478,30 +479,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             .setLayoutResId(R.layout.layout_guide_match)
             .setOnclickExit(true)
             .setOnclickListener {
-                showThink()
-            }
-            .build()
-        guideView.show()
-    }
-
-    fun showThink() {
-        val guideView = GuideView.Builder
-            .newInstance(requireActivity())
-            .setTargetView(ivTest) //设置目标
-            .setDirction(GuideView.Direction.BOTTOM)
-            .setShape(GuideView.MyShape.RECTANGULAR)
-            .setRoundRadius(dp2px(6f))
-            .setBgLocation(intArrayOf(dp2px(54f), dp2px(44f)))
-            .setCenterPadding(intArrayOf(dp2px(33f), dp2px(21f), dp2px(33f), dp2px(21f)))
-            .setBgImage(R.drawable.icon_home_guide_two)
-            .setLayoutResId(R.layout.layout_guide_think)
-            .setOnclickExit(true)
-            .setOnclickListener {
                 showPush()
             }
             .build()
         guideView.show()
     }
+
+//    fun showThink() {
+//        val guideView = GuideView.Builder
+//            .newInstance(requireActivity())
+//            .setTargetView(ivTest) //设置目标
+//            .setDirction(GuideView.Direction.BOTTOM)
+//            .setShape(GuideView.MyShape.RECTANGULAR)
+//            .setRoundRadius(dp2px(6f))
+//            .setBgLocation(intArrayOf(dp2px(54f), dp2px(44f)))
+//            .setCenterPadding(intArrayOf(dp2px(33f), dp2px(21f), dp2px(33f), dp2px(21f)))
+//            .setBgImage(R.drawable.icon_home_guide_two)
+//            .setLayoutResId(R.layout.layout_guide_think)
+//            .setOnclickExit(true)
+//            .setOnclickListener {
+//                showPush()
+//            }
+//            .build()
+//        guideView.show()
+//    }
 
     fun showPush() {
         val guideView = GuideView.Builder
@@ -641,12 +642,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         val findLastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
         val position = (findFirstVisibleItemPosition + findLastVisibleItemPosition) / 2
         KLog.e("xujm", "当前位置：$position")
-        val bean = mAdapter.data.get(position)
+        val bean = mAdapter.data.get(position - 1)
         if (voicePlayerUtil.isPlaying) {
             //无论播放的语音项是这个还是其他，都先停止语音播放
             voicePlayerUtil.stop()
             // 停止语音播放动画。
-//            stopVoicePlayAnimation()
+            stopVoicePlayAnimation()
 
             // 如果正在播放的语音项是此项，则只需停止播放即可。
             val playingUrl: String = voicePlayerUtil.url
@@ -655,17 +656,32 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
             }
         }
         if (!TextUtils.isEmpty(bean.audio)) {
-//            val viewHolderView = mBinding.rvList.getChildAt(position)
-//            val tv_content = viewHolderView.findViewById<TextView>(R.id.tv_content)
-
-//            ivVoice = iv_voice
             voicePlayerUtil.play(bean.audio, MediaPlayer.OnCompletionListener {
                 KLog.e("xujm", "开始播放声音")
-//                stopVoicePlayAnimation()
+                stopVoicePlayAnimation()
             })
+
+            val viewHolderView = layoutManager.findViewByPosition(position)
+//            val viewHolderView = mBinding.rvList.getChildAt(position)
+            if (viewHolderView == null) {
+                return
+            }
+            tv_content = viewHolderView.findViewById<TextView>(R.id.tv_content)
+
             // 启动语音播放动画
-//            startVoicePlayAnimation()
+            startVoicePlayAnimation()
         }
+    }
+
+    fun startVoicePlayAnimation() {
+        KLog.e("xujm", "开始显示")
+        tv_content?.setTextColor(R.color._FED231.getResColor())
+//        tv_content?.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.icon_home_voice,0,0,0)
+    }
+
+    fun stopVoicePlayAnimation() {
+        tv_content?.setTextColor(R.color._3A3A3A.getResColor())
+//        tv_content?.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,0,0)
     }
 
 
@@ -747,6 +763,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
         mViewModel.requestMatchInfo()
         requestRefresh()
         setUserInfo()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        voicePlayerUtil.stop()
     }
 
     /**

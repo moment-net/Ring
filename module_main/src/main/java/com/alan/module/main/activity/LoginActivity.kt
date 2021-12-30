@@ -339,7 +339,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_APPEARANCE, bundle)
                 DataPointUtil.reportRegister(SpHelper.getUserInfo()?.userId!!, 3)
             } else {
-                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+                val model = SpHelper.getUserInfo()?.model
+                if (model == null) {
+                    val bundle = Bundle().apply {
+                        putInt("type", 2)
+                    }
+                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_CHANGEAPPEARANCE, bundle)
+                } else {
+                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+                }
             }
             finish()
         } else if (loginType == 2) {
@@ -355,7 +363,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             //4跳转逻辑
             if (loginBean!!.user!!.bindPhone!!) {
                 finish()
-                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+                val model = SpHelper.getUserInfo()?.model
+                if (model == null) {
+                    val bundle = Bundle().apply {
+                        putInt("type", 2)
+                    }
+                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_CHANGEAPPEARANCE, bundle)
+                } else {
+                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+                }
             } else {
                 //绑定微信
                 val bundle = Bundle().apply {

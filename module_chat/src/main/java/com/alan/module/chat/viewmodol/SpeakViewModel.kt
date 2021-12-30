@@ -3,13 +3,9 @@ package com.alan.module.chat.viewmodol
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alan.mvvm.base.http.callback.RequestCallback
-import com.alan.mvvm.base.http.requestbean.TextRequestBean
-import com.alan.mvvm.base.http.responsebean.SpeakVoiceBean
 import com.alan.mvvm.base.mvvm.vm.BaseViewModel
-import com.alan.mvvm.base.utils.RequestUtil
 import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.http.model.CommonRepository
-import com.hyphenate.chat.EMMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,27 +30,6 @@ class SpeakViewModel @Inject constructor(private val mRepository: CommonReposito
                 callback = RequestCallback(
                     onSuccess = {
                         ldSuccess.value = it.data!!
-                    },
-                    onFailed = {
-                        toast(it.errorMessage)
-                    },
-                )
-            )
-        }
-    }
-
-    /**
-     * 文字转语音
-     */
-    fun requestVoiceTTS(content: String, msg: EMMessage) {
-        val requestBean = TextRequestBean(content)
-        viewModelScope.launch {
-            mRepository.requestVoiceTTS(
-                RequestUtil.getPostBody(requestBean),
-                callback = RequestCallback(
-                    onSuccess = {
-                        val speakVoiceBean = SpeakVoiceBean(it.data!!, msg)
-                        ldSuccess.value = speakVoiceBean
                     },
                     onFailed = {
                         toast(it.errorMessage)

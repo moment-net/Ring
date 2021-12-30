@@ -77,7 +77,7 @@ public class ShareView extends FrameLayout {
         for (int i = 0; i < list.size(); i++) {
             SimilarityBean itemBean = list.get(i);
             double sims = itemBean.getSims();
-            String userName = itemBean.getUserName();
+            String userName = itemBean.getName();
 
             doubleArrayOf[i] = sims;
             stringArrayOf[i] = userName;

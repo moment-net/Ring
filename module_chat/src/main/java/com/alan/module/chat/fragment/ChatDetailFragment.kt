@@ -3,6 +3,7 @@ package com.alan.module.chat.fragment
 import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -60,7 +61,9 @@ class ChatDetailFragment : BaseFragment<FragmentChatDetailBinding, ChatViewModel
     var userId = ""
 
 
+
     override fun FragmentChatDetailBinding.initView() {
+
         arguments?.apply {
             userId = getString("userId")!!
         }
@@ -99,7 +102,10 @@ class ChatDetailFragment : BaseFragment<FragmentChatDetailBinding, ChatViewModel
                 refreshToLatest()
                 for (msg in messages) {
                     sendReadAck(msg)
-                    EventBusUtils.postEvent(EMMsgEvent(msg))
+                    //只有在这个页面的才会播放语音
+                    if (TextUtils.equals(msg.from, userId)) {
+                        EventBusUtils.postEvent(EMMsgEvent(msg))
+                    }
                 }
             }
 

@@ -125,9 +125,17 @@ class SplashActivity : BaseActivity<ActivitySplashBinding, SplashViewModel>() {
             delay(3000)
             withContext(Dispatchers.Main) {
                 if (SpHelper.isLogin()!!) {
-                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN);
+                    val model = SpHelper.getUserInfo()?.model
+                    if (model == null) {
+                        val bundle = Bundle().apply {
+                            putInt("type", 2)
+                        }
+                        jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_CHANGEAPPEARANCE, bundle)
+                    } else {
+                        jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+                    }
                 } else {
-                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_LOGIN);
+                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_LOGIN)
                 }
                 finish()
             }

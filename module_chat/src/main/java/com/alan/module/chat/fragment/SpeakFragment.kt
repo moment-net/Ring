@@ -10,12 +10,12 @@ import com.alan.module.chat.viewmodol.SpeakViewModel
 import com.alan.mvvm.base.BaseApplication
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.ChatBgBean
-import com.alan.mvvm.base.http.responsebean.SpeakVoiceBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
-import com.alan.mvvm.base.ktx.gone
+import com.alan.mvvm.base.ktx.invisible
 import com.alan.mvvm.base.ktx.visible
 import com.alan.mvvm.base.utils.EventBusRegister
+import com.alan.mvvm.common.constant.IMConstant
 import com.alan.mvvm.common.event.DecorationEvent
 import com.alan.mvvm.common.event.EMMsgEvent
 import com.alan.mvvm.common.helper.SpHelper
@@ -42,7 +42,7 @@ class SpeakFragment : BaseFragment<FragmentSpeakBinding, SpeakViewModel>() {
     var chatBgBean: ChatBgBean? = null
     var userId = ""
     lateinit var voicePlayerUtil: VoicePlayerUtil
-    var voiceList: LinkedList<SpeakVoiceBean> = LinkedList<SpeakVoiceBean>()
+    var voiceList: LinkedList<EMMessage> = LinkedList<EMMessage>()
 
     companion object {
         @JvmStatic
@@ -75,16 +75,13 @@ class SpeakFragment : BaseFragment<FragmentSpeakBinding, SpeakViewModel>() {
                     chatBgBean = it
                     CoilUtils.load(mBinding.ivBg, it.url)
                 }
-
-                is SpeakVoiceBean -> {
-                    //语音
-                    addVoiceList(it)
-                }
             }
         }
 
         val userInfo = SpHelper.getUserInfo()
-        CoilUtils.load(mBinding.ivSelf, userInfo?.model?.url!!)
+        if (userInfo?.model != null) {
+            CoilUtils.load(mBinding.ivSelf, userInfo.model?.url!!)
+        }
     }
 
     override fun initRequestData() {
@@ -97,7 +94,7 @@ class SpeakFragment : BaseFragment<FragmentSpeakBinding, SpeakViewModel>() {
         }
     }
 
-    //收到消息
+    //更改背景
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun updateChatBg(event: DecorationEvent) {
 //        mViewModel.requestChatBg()
@@ -111,14 +108,13 @@ class SpeakFragment : BaseFragment<FragmentSpeakBinding, SpeakViewModel>() {
         KLog.e("xujm", "准备播放消息")
         val msg = event.msg
         if (msg.type == EMMessage.Type.TXT) {
-            val txtBody = msg.getBody() as EMTextMessageBody
-            mViewModel.requestVoiceTTS(txtBody.message, msg)
+            addVoiceList(msg)
         }
     }
 
 
-    fun addVoiceList(voiceBean: SpeakVoiceBean) {
-        voiceList.add(voiceBean)
+    fun addVoiceList(emMessage: EMMessage) {
+        voiceList.add(emMessage)
         if (voiceList.size == 1) {
             startPlay()
         }
@@ -127,11 +123,14 @@ class SpeakFragment : BaseFragment<FragmentSpeakBinding, SpeakViewModel>() {
 
     fun startPlay() {
         if (voiceList.size <= 0) return
-        val voiceBean = voiceList.removeFirst()
-        val audio = voiceBean.audio
-        val msg = voiceBean.msg
-        KLog.e("xujm", "当前播放音频：$audio")
+        val msg = voiceList.removeFirst()
 
+        val audio = msg.getStringAttribute(IMConstant.MESSAGE_ATTR_VOICE)
+
+        KLog.e("xujm", "当前播放音频：$audio")
+        if (TextUtils.isEmpty(audio)) {
+            startPlay()
+        }
         if (voicePlayerUtil.isPlaying) {
             //无论播放的语音项是这个还是其他，都先停止语音播放
             voicePlayerUtil.stop()
@@ -157,21 +156,21 @@ class SpeakFragment : BaseFragment<FragmentSpeakBinding, SpeakViewModel>() {
 
     fun startVoicePlayAnimation(msg: EMMessage) {
         if (msg.direct() == EMMessage.Direct.RECEIVE) {
-            mBinding.clSelf.gone()
+            mBinding.clSelf.invisible()
             mBinding.clOther.visible()
             val txtBody = msg.getBody() as EMTextMessageBody
             mBinding.tvOther.setText(txtBody.message)
         } else {
             mBinding.clSelf.visible()
-            mBinding.clOther.gone()
+            mBinding.clOther.invisible()
             val txtBody = msg.getBody() as EMTextMessageBody
-            mBinding.tvOther.setText(txtBody.message)
+            mBinding.tvSelf.setText(txtBody.message)
         }
     }
 
     fun stopVoicePlayAnimation() {
-        mBinding.clSelf.gone()
-        mBinding.clOther.gone()
+        mBinding.clSelf.invisible()
+        mBinding.clOther.invisible()
     }
 
 

@@ -1,6 +1,5 @@
 package com.alan.module.home.activity
 
-import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -276,11 +275,11 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
     }
 
     fun startAnimator() {
-        val objectAnimator =
-            ObjectAnimator.ofFloat(mBinding.tvDoing, "translationY", 0f, dp2px(10f).toFloat(), 0f)
-        objectAnimator.repeatCount = ObjectAnimator.INFINITE
-        objectAnimator.duration = 2000
-        objectAnimator.start()
+//        val objectAnimator =
+//            ObjectAnimator.ofFloat(mBinding.tvDoing, "translationY", 0f, dp2px(10f).toFloat(), 0f)
+//        objectAnimator.repeatCount = ObjectAnimator.INFINITE
+//        objectAnimator.duration = 2000
+//        objectAnimator.start()
     }
 
     fun setUserInfo() {
@@ -304,12 +303,12 @@ class ManagerInfoActivity : BaseActivity<ActivityManagerInfoBinding, ManagerInfo
         CoilUtils.loadCircle(mBinding.ivAvatar, userInfoBean?.avatar!!)
         mBinding.tvTitle.setText(userInfoBean?.userName)
         mBinding.tvName.setText(userInfoBean?.userName)
-        if (TextUtils.isEmpty(userInfoBean?.recentDoing)) {
-            mBinding.tvDoing.gone()
-        } else {
-            mBinding.tvDoing.visible()
-            mBinding.tvDoing.setText(userInfoBean?.recentDoing)
-        }
+//        if (TextUtils.isEmpty(userInfoBean?.recentDoing)) {
+//            mBinding.tvDoing.gone()
+//        } else {
+//            mBinding.tvDoing.visible()
+//            mBinding.tvDoing.setText(userInfoBean?.recentDoing)
+//        }
         var address = ""
         if (!TextUtils.isEmpty(userInfoBean?.address) && userInfoBean?.address!!.split("-").size == 3) {
             address = userInfoBean?.address!!.split("-")[1]

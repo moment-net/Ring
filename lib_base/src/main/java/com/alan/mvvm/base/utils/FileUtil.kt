@@ -1,16 +1,22 @@
 package com.alan.mvvm.base.utils
 
 import android.graphics.Bitmap
+import android.os.Environment
 import android.text.TextUtils
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.Exception
 import java.math.BigDecimal
 import java.util.*
 
 object FileUtil {
+    //原始文件(不能播放)
+    private const val AUDIO_PCM_BASEPATH = "/pcm/"
+
+    //可播放的高质量音频文件
+    private const val AUDIO_WAV_BASEPATH = "/wav/"
+
 
     /**
      * 获取随机的文件名
@@ -131,6 +137,7 @@ object FileUtil {
     }
 
     /**
+     * 文件是否存在
      * @param strFile
      * @return
      */
@@ -146,6 +153,9 @@ object FileUtil {
         return true
     }
 
+    /**
+     * 创建文件夹
+     */
     fun createDir(file: String?): File {
         val appDir = File(file)
         if (!appDir.exists()) {
@@ -154,6 +164,9 @@ object FileUtil {
         return appDir
     }
 
+    /**
+     * 获取路径
+     */
     fun getPath(parent: File?, fileName: String?): String? {
         return File(parent, fileName).absolutePath
     }
@@ -247,5 +260,65 @@ object FileUtil {
             e.printStackTrace()
         }
         return file.absolutePath
+    }
+
+
+    /**
+     * pcm文件夹
+     */
+    fun getPcmFileAbsolutePath(fileName: String): String? {
+        var fileName = fileName
+        if (TextUtils.isEmpty(fileName)) {
+            throw NullPointerException("fileName isEmpty")
+        }
+        check(isSdcardExit()) { "sd card no found" }
+        var mAudioRawPath = ""
+        if (isSdcardExit()) {
+            if (!fileName.endsWith(".pcm")) {
+                fileName = "$fileName.pcm"
+            }
+            val fileBasePath = StorageUtil.getExternalFileDir()?.absolutePath + AUDIO_PCM_BASEPATH
+            val file = File(fileBasePath)
+            //创建目录
+            if (!file.exists()) {
+                file.mkdirs()
+            }
+            mAudioRawPath = fileBasePath + fileName
+        }
+        return mAudioRawPath
+    }
+
+    /**
+     * wav文件夹
+     */
+    fun getWavFileAbsolutePath(fileName: String?): String? {
+        var fileName = fileName
+        if (fileName == null) {
+            throw NullPointerException("fileName can't be null")
+        }
+        check(isSdcardExit()) { "sd card no found" }
+        var mAudioWavPath = ""
+        if (isSdcardExit()) {
+            if (!fileName.endsWith(".wav")) {
+                fileName = "$fileName.wav"
+            }
+            val fileBasePath = StorageUtil.getExternalFileDir()?.absolutePath + AUDIO_WAV_BASEPATH
+            val file = File(fileBasePath)
+            //创建目录
+            if (!file.exists()) {
+                file.mkdirs()
+            }
+            mAudioWavPath = fileBasePath + fileName
+        }
+        return mAudioWavPath
+    }
+
+    /**
+     * 判断是否有外部存储设备sdcard
+     *
+     * @return true | false
+     */
+    fun isSdcardExit(): Boolean {
+        return if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) true else false
     }
 }

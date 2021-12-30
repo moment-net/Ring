@@ -14,7 +14,9 @@ import com.alan.mvvm.base.http.responsebean.ConfigBean
 import com.alan.mvvm.base.http.responsebean.SoundResultBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.utils.jumpARoute
+import com.alan.mvvm.base.utils.toast
 import com.alan.mvvm.common.constant.RouteUrl
+import com.alan.mvvm.common.helper.SpHelper
 import com.alan.mvvm.common.ui.BaseActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.permissionx.guolindev.PermissionX
@@ -36,6 +38,7 @@ class SoundTestActivity : BaseActivity<ActivitySoundTestBinding, SoundTestViewMo
     val RECORD_LIMIT = 15
     var isRecording = false
     var MESSAGE_START: Int = 100
+    var currentTime: Int = 0
     var dialog: EvaluateFragmentDialog? = null
     private val handler: TimeHandler = TimeHandler(Looper.myLooper()!!)
 
@@ -57,6 +60,10 @@ class SoundTestActivity : BaseActivity<ActivitySoundTestBinding, SoundTestViewMo
             if (!isRecording) {
                 requestPermissions()
             } else {
+                if (currentTime < 6) {
+                    toast("录制声音应不低于6秒")
+                    return@clickDelay
+                }
                 handler.removeMessages(MESSAGE_START)
                 stopRecorder()
             }
@@ -72,6 +79,9 @@ class SoundTestActivity : BaseActivity<ActivitySoundTestBinding, SoundTestViewMo
             when (it) {
                 is SoundResultBean -> {
                     dialog?.dismiss()
+                    val userInfo = SpHelper.getUserInfo()
+                    userInfo?.setVoice = true
+                    SpHelper.setUserInfo(userInfo)
                     finish()
                     val bundle = Bundle().apply {
                         putParcelable("bean", it)
@@ -81,6 +91,10 @@ class SoundTestActivity : BaseActivity<ActivitySoundTestBinding, SoundTestViewMo
 
                 is ConfigBean -> {
                     mBinding.tvContent.setText(it.content)
+                }
+
+                is Boolean -> {
+                    dialog?.dismiss()
                 }
             }
         }
@@ -147,13 +161,13 @@ class SoundTestActivity : BaseActivity<ActivitySoundTestBinding, SoundTestViewMo
         setTime(RECORD_LIMIT)
         mViewModel.stopRecorder()
         showDialog()
-        mViewModel.requestUploadAudio()
     }
 
     /**
      * 控制时间按钮显示
      */
     fun setTime(time: Int) {
+        currentTime = time
         if (time == RECORD_LIMIT) {
             mBinding.tvTip.setText("点击录音")
         } else {

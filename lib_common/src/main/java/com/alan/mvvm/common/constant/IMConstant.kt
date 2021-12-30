@@ -32,6 +32,8 @@ object IMConstant {
     //点赞内容
     const val MESSAGE_ATTR_ZANCONTENT = "zancontent"
 
+    //语音连接
+    const val MESSAGE_ATTR_VOICE = "voice"
 
     //强制推送通知和发送静默消息（不推送）
     const val MESSAGE_ATTR_FORCEPUSH = "em_force_notification"

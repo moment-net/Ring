@@ -78,7 +78,7 @@ class SoundResultActivity : BaseActivity<ActivitySoundResultBinding, SoundResult
             if (similarity != null) {
                 for (bean in similarity) {
                     val sims = bean.sims
-                    val userName = bean.userName
+                    val userName = bean.name
                     doubleList.add(sims)
                     stringList.add(userName)
                 }

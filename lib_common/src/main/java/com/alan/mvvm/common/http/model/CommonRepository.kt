@@ -691,7 +691,7 @@ class CommonRepository @Inject constructor() : BaseRepository() {
      */
     suspend fun requestModelSet(
         requestBody: RequestBody,
-        callback: RequestCallback<String>
+        callback: RequestCallback<AppearanceBean>
     ) = request(mApi, callback) { mApi.requestModelSet(requestBody) }
 
     /**

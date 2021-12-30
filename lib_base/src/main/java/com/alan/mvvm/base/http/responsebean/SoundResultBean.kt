@@ -16,5 +16,6 @@ data class SoundResultBean(
 @Parcelize
 data class SimilarityBean(
     var sims: Double,
-    var userName: String,
+    var name: String,
+    var voiceType: String,
 ) : Parcelable

@@ -4,6 +4,7 @@ import com.hyphenate.chat.EMMessage
 
 
 data class SpeakVoiceBean(
+    var content: String,
     var audio: String,
-    var msg: EMMessage,
+    var msg: EMMessage? = null,
 )

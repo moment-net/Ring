@@ -11,6 +11,7 @@ import com.alan.module.main.databinding.ActivitySelectAppearanceBinding
 import com.alan.module.main.viewmodel.SelectAppearanceViewModel
 import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.responsebean.AppearanceListBean
+import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.clickDelay
 import com.alan.mvvm.base.ktx.dp2px
 import com.alan.mvvm.base.utils.MyColorDecoration
@@ -40,7 +41,8 @@ class SelectAppearanceActivity :
     var currentName: String = ""
     var currentBoyPosition: Int = 0
     var currentGirlPosition: Int = 0
-    var maxHeight: Int = 0
+    var maxBoyHeight: Int = 0
+    var maxGirlHeight: Int = 0
     var boyAdapter: OptionAdapter? = null
     var girlAdapter: OptionAdapter? = null
 
@@ -89,14 +91,15 @@ class SelectAppearanceActivity :
                     val girl = bean?.girl
                     boyAdapter?.setList(boy)
                     girlAdapter?.setList(girl)
-                    maxHeight = (boy?.size!! + 1) * dp2px(46f)
+                    maxBoyHeight = (boy?.size!! + 1) * dp2px(46f)
+                    maxGirlHeight = (girl?.size!! + 1) * dp2px(46f)
 
                     currentBoyPosition = 0
                     currentName = boy?.get(currentBoyPosition).name
                     CoilUtils.load(mBinding.ivPic, boy?.get(currentBoyPosition).url)
                 }
 
-                is Boolean -> {
+                is UserInfoBean -> {
                     finish()
                     jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_CREATE)
                 }
@@ -115,6 +118,11 @@ class SelectAppearanceActivity :
      * 动画
      */
     fun translate(cl: ConstraintLayout, isOpen: Boolean) {
+        val maxHeight = if (isBoy) {
+            maxBoyHeight
+        } else {
+            maxGirlHeight
+        }
         KLog.e("xujm", "maxHeight:$maxHeight")
         var start = 0
         var end = 0

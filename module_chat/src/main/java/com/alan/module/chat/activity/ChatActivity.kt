@@ -27,6 +27,7 @@ import com.alan.mvvm.base.coil.CoilUtils
 import com.alan.mvvm.base.http.apiservice.HttpBaseUrlConstant
 import com.alan.mvvm.base.http.responsebean.CallBean
 import com.alan.mvvm.base.http.responsebean.MatchStatusBean
+import com.alan.mvvm.base.http.responsebean.SpeakVoiceBean
 import com.alan.mvvm.base.http.responsebean.UserInfoBean
 import com.alan.mvvm.base.ktx.*
 import com.alan.mvvm.base.utils.*
@@ -89,7 +90,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
     override fun setStatusBar() {
         super.setStatusBar()
 //        StatusBarUtil.setColor(this, com.alan.mvvm.common.R.color.white.getResColor(), 0)
-        getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
     /**
@@ -184,7 +184,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                 return@clickDelay
             }
             mBinding.etMsg.setText("")
-            sendTextMessage(msg)
+            transVoice(msg)
         }
         mBinding.ivLeft.clickDelay {
             mBinding.ivLeft.gone()
@@ -218,6 +218,11 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                 mBinding.tvSend.visible()
             } else {
                 mBinding.tvSend.gone()
+            }
+        }
+        mBinding.etMsg.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                checkVoice()
             }
         }
 //        mBinding.etMsg.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
@@ -263,10 +268,12 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                     0 -> {
                         mBinding.ivLeft.gone()
                         mBinding.ivRight.visible()
+                        getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
                     }
                     1 -> {
                         mBinding.ivLeft.visible()
                         mBinding.ivRight.gone()
+                        getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
                     }
                 }
             }
@@ -392,6 +399,11 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
                     EMClientHelper.setUserInfoCallKit(userId, userName, avatar)
                     EMClientHelper.startSingleVoiceCall(userId, map)
                 }
+
+                is SpeakVoiceBean -> {
+                    //语音
+                    sendTextMessage(it.content, it.audio)
+                }
             }
         }
     }
@@ -403,7 +415,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         mViewModel.requestUserInfo(userId)
         mViewModel.requestCheckMatch(userId)
         if (!TextUtils.isEmpty(content)) {
-            sendTextMessage(content)
+            transVoice(content)
         }
     }
 
@@ -465,7 +477,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
     override fun onResume() {
         super.onResume()
         checkNotifi()
-        checkVoice()
     }
 
 
@@ -477,6 +488,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         val userInfo = SpHelper.getUserInfo()
         if (!userInfo?.setVoice!!) {
             DialogHelper.showMultipleDialog(this, "先去测测你的声音吧", "测一测", "我再想想", {
+                mBinding.etMsg.clearFocus()
                 jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_SOUND)
             }, {
                 finish()
@@ -485,15 +497,19 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
     }
 
 
+    fun transVoice(content: String) {
+        mViewModel.requestVoiceTTS(content)
+    }
+
 
     //==================================== 发送消息模块 start ======================================
     /**
      * 发送文本消息
      * @param content
      */
-    protected fun sendTextMessage(content: String?) {
+    protected fun sendTextMessage(content: String?, audio: String?) {
         val message = EMMessage.createTxtSendMessage(content, userId)
-        sendMessage(message)
+        sendMessage(message, audio)
     }
 
 
@@ -551,7 +567,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
      * 最终发送消息
      * @param message
      */
-    protected fun sendMessage(message: EMMessage?) {
+    protected fun sendMessage(message: EMMessage?, audio: String? = "") {
         if (message == null) {
             toast("请检查消息附件是否存在！")
             return
@@ -559,6 +575,7 @@ class ChatActivity : BaseActivity<ActivityChatBinding, ChatDetailViewModel>() {
         // 增加自己特定的属性
         message.setAttribute(IMConstant.MESSAGE_ATTR_AVATAR, SpHelper.getUserInfo()?.avatar);
         message.setAttribute(IMConstant.MESSAGE_ATTR_USERNAME, SpHelper.getUserInfo()?.userName);
+        message.setAttribute(IMConstant.MESSAGE_ATTR_VOICE, audio);
 
         // 设置自定义扩展字段-强制推送
 //        message.setAttribute(IMConstant.MESSAGE_ATTR_FORCEPUSH, true);

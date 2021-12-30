@@ -133,7 +133,15 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
                 }
                 jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_APPEARANCE, bundle)
             } else {
-                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+                val model = SpHelper.getUserInfo()?.model
+                if (model == null) {
+                    val bundle = Bundle().apply {
+                        putInt("type", 2)
+                    }
+                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_CHANGEAPPEARANCE, bundle)
+                } else {
+                    jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+                }
             }
             ActivityStackManager.finishActivity(LoginActivity::class.java)
             ActivityStackManager.finishActivity(LoginPhoneActivity::class.java)
@@ -176,7 +184,15 @@ class LoginCodeActivity : BaseActivity<ActivityLoginCodeBinding, LoginCodeViewMo
             jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_APPEARANCE, bundle)
             DataPointUtil.reportRegister(SpHelper.getUserInfo()?.userId!!, 1)
         } else {
-            jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+            val model = SpHelper.getUserInfo()?.model
+            if (model == null) {
+                val bundle = Bundle().apply {
+                    putInt("type", 2)
+                }
+                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_CHANGEAPPEARANCE, bundle)
+            } else {
+                jumpARoute(RouteUrl.MainModule.ACTIVITY_MAIN_MAIN)
+            }
         }
         ActivityStackManager.finishActivity(LoginActivity::class.java)
         ActivityStackManager.finishActivity(LoginPhoneActivity::class.java)
